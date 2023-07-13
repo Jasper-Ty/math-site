@@ -1,1 +1,8 @@
+
+*.fdb_latexmk
+*.log
+*.aux
+*.synctex.gz
+*.fls
+
 packages/
