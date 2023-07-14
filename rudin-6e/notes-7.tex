@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=0.5in]{geometry}
+
+\newenvironment{myboxed}{\bigskip\noindent\begin{tabular}{|p{.975\textwidth}|}\hline \\}{\\\\\hline\end{tabular}\bigskip}
+\newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
+
+\begin{document}
+
+\begin{mytitle}
+    Principles of Mathematical Analysis \\
+    Chapter 7 \\
+    \normalsize Jasper Ty
+\end{mytitle}
+
+\section{Pointwise Convergence}
+
+\begin{myboxed}
+    \textsc{Pointwise convergence of functions}
+
+    \textbf{Definition}
+
+    Let $f_n: E \rightarrow \mathbb{R}$ be a sequence of functions. If $f$ is a function such that $f_n(x) \to f(x)$ as $n \to \infty$ for all $x \in E$, then we say $f_n$ converges \textit{pointwise} to $f$.
+\end{myboxed}
+
+This type of convergence is very \textit{weak}. It guarantees very little in the way of actually \textit{working with} the limit.
+
+This definition is readily adapted to infinite sums of functions.
+
+\begin{myboxed}
+    \textsc{Infinite sums of functions}
+
+    \textbf{Definition}
+
+    If $f$ is a function such that 
+    \[\sum_{n=1}^\infty f_n(x) = f(x)\] 
+    for all $x \in E$, then we say $f$ is the \textit{sum} of the series $f_n$.
+\end{myboxed}
+
+An example of the weakness of pointwise convergence is
+
+\begin{myboxed}
+    \textsc{Continuity is not preserved}
+
+    \textbf{Example} 
+
+    Let $f_n: [0, 1] \rightarrow [0, 1]$ be defined by
+    \[f_n(x) := x^n\]
+
+    Then $f := \lim f_n$ is 
+    \[f(x) = \begin{cases}
+        0 & x < 1 \\
+        1 & x = 1
+    \end{cases}\]
+
+    by Theorem 3.20(e)
+\end{myboxed}
+
+In this case, a sequence of continuous functions converges to a function that is eminently discontinuous. We use the preceding idea of ``letting $f < 0$ sink and letting $f = 1$ float using the $n^{th}$ power limit'' to show the following.
+
+\begin{myboxed}
+    \textsc{Integrability is not preserved}
+
+    \textbf{Example}
+
+    \[\lim_{m \to \infty} \lim_{n \to \infty} (\cos m!\pi x ) ^{2n} = \begin{cases}
+        0 & x\text{ irrational} \\
+        1 & x\text{ rational}
+    \end{cases}\]
+
+    If we let 
+    \[f_m (x) := \lim_{n \to \infty} (\cos m!\pi x)^{2n}\]
+    the above shows that a limit of integrable functions ($\int f_m dx = 0$ for all $m$) may fail to be integrable.
+
+    \textbf{Proof}
+
+    By a similar argument as in the previous example,
+    \[\lim_{n \to \infty} (\cos m!x)^{2n} = \begin{cases}
+        0 & m!x\text{ is not an integer} \\
+        1 & m!x\text{ is an integer} \\
+    \end{cases}\]
+
+    Let $x = p/q$ be rational. Then $m!x$ is rational for all $m \geq q$. Let $x$ be irrational, $m!x$ cannot be an integer for any $m$, otherwise we can show a contradiction. Then
+
+    \[\lim_{m \to \infty} \begin{cases}
+        0 & m!x\text{ is not an integer} \\
+        1 & m!x\text{ is an integer} \\
+        \end{cases} = \begin{cases}
+        0 & x \text{ irrational} \\
+        1 & x \text{ rational} \\
+    \end{cases}\]
+\end{myboxed}
+
+These two examples show that \textit{properties} of $f_n$ may not be pass through the limit to $f$. 
+
+Next, we show that \textit{operations} on $f_n$ may not be passed through the limit to $f$.
+
+\begin{myboxed}
+    \textsc{A limit of differentiated functions may not be the differentiated limit of functions}
+
+    \textbf{Example}
+
+    Let 
+    \[f_n(x) := \frac{\sin nx}{\sqrt{n}}\]
+    Then,
+    \[0 = \frac{d}{dx}\left[\lim_{n \to \infty} f_n \right]\neq \lim_{n \to \infty} \left[\frac{d}{dx} f_n\right] = \sqrt{n}\cos nx\]
+\end{myboxed}
+
+\begin{myboxed}
+    \textsc{A limit of integrated functions may not be the integral of a limit of functions}
+
+    \textbf{Example}
+
+    Let 
+    \[f_n(x) := n x(1-x^2)^n\]
+    Then
+    \[0 = \int_0^1 \left[\lim_{n \to \infty} f_n \right] \neq \lim_{n \to \infty} \left[\int_0^1 f_n \right] = \frac{1}{2} \]
+        
+\end{myboxed}
+
+\newpage
+\section{Uniform convergence}
+
+\begin{myboxed}
+    \textsc{Uniform convergence of functions}
+
+    \textbf{Definition}
+
+    Let $f_n: E \rightarrow \mathbb{R}$ be a sequence of functions. 
+
+    If $f$ is a function such that for all $\varepsilon$ there exists $N$ such that
+    \[|f_n(x) - f(x)| \leq \varepsilon\]
+    for all $x$, we say that $f$ converges \textit{uniformly}.
+\end{myboxed}
+\end{document}
