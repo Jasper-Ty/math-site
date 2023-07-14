@@ -1,4 +1,5 @@
 \documentclass{article}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[margin=0.5in]{geometry}
@@ -41,7 +42,7 @@ This definition is readily adapted to infinite sums of functions.
 An example of the weakness of pointwise convergence is
 
 \begin{myboxed}
-    \textsc{Continuity is not preserved}
+    \textsc{Continuity is not preserved under pointwise convergence}
 
     \textbf{Example} 
 
@@ -60,7 +61,7 @@ An example of the weakness of pointwise convergence is
 In this case, a sequence of continuous functions converges to a function that is eminently discontinuous. We use the preceding idea of ``letting $f < 0$ sink and letting $f = 1$ float using the $n^{th}$ power limit'' to show the following.
 
 \begin{myboxed}
-    \textsc{Integrability is not preserved}
+    \textsc{Integrability is not preserved under pointwise convergence}
 
     \textbf{Example}
 
@@ -92,7 +93,7 @@ In this case, a sequence of continuous functions converges to a function that is
     \end{cases}\]
 \end{myboxed}
 
-These two examples show that \textit{properties} of $f_n$ may not be pass through the limit to $f$. 
+These two examples show that \textit{properties} of $f_n$ may not pass through the limit to $f$. 
 
 Next, we show that \textit{operations} on $f_n$ may not be passed through the limit to $f$.
 
@@ -132,5 +133,64 @@ Next, we show that \textit{operations} on $f_n$ may not be passed through the li
     If $f$ is a function such that for all $\varepsilon$ there exists $N$ such that
     \[|f_n(x) - f(x)| \leq \varepsilon\]
     for all $x$, we say that $f$ converges \textit{uniformly}.
+
+    This definition carries over to sums of functions (the partial sums must converge to the limit function uniformly).
 \end{myboxed}
+
+This is a \textit{much stronger} notion of convergence, as it, in a sense, ``tethers'' together convergence of of all points in the domain. 
+
+There are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which will be made precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) in a certain space of functions. 
+
+\begin{myboxed}
+    \textsc{Cauchy criterion for uniform convergence}
+
+    \textbf{Theorem}
+
+    $f_n$ converges uniformly on $E$ if and only if there exists an integer $N$ such that for all $m, n \geq N$,
+    \[\sup_{x \in E}|f_n(x) - f_m(x)| \leq \varepsilon\]
+
+    \textbf{Proof}
+
+    For the forward implication, let $f_n \rightarrow f$ uniformly, then choose $N$ such that $n \geq N$ implies 
+    \[|f_n(x) - f(x)| \leq \frac{\varepsilon}{2}\]
+    Then use the triangle inequality.
+
+    For the converse, we note that the criterion is strong enough itself to guarantee $f_n \rightarrow f$ pointwise, hence if we take the inequality
+    \[|f_n(x) - f_m(x)| \leq \varepsilon\]
+    and let $m \rightarrow \infty$, we recover the original condition for uniform convergence
+\end{myboxed}
+
+The next criterion is just a rephrasing of the original definition in similar terms. It tells us that uniform convergence corresponds to the ``distance'' between two functions vanishing.
+
+\begin{myboxed}
+    \textsc{Supremum criterion for uniform convergence}
+
+    \textbf{Theorem}
+
+    $f_n \rightarrow f$ uniformly on $E$ if and only if 
+    \[\sup_{x \in E}|f_n(x) - f(x)| \rightarrow 0 \:\text{ as }\: n \rightarrow \infty\]
+\end{myboxed}
+
+Next, we show that uniform convergence does not share the same failures as pointwise convergence when it comes to passing through important properties and operations.
+
+\begin{myboxed}
+    \textsc{Continuity is preserved under uniform convergence}
+
+    \textbf{Theorem}
+
+    Let $f_n$ be a sequence of continuous functions and let $f_n \rightarrow f$ uniformly. Then $f$ is continuous.
+
+    \textbf{Proof}
+
+    We want to show that, for all $x$,
+    \[\lim_{t \to x} \lim_{n \to \infty} f_n(t) = f(x)\] 
+    If we were allowed to interchange this limit, we can use the continuity of $f_n$ to achieve what we want
+    \[\lim_{n \to \infty} \lim_{t \to x} f_n(x) = \lim_{n \to \infty} f_n(x) = f(x)\]
+    
+
+
+\end{myboxed}
+
+
+
 \end{document}
