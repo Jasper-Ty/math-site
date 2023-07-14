@@ -1,5 +1,6 @@
 \documentclass{article}
 
+\usepackage{mathrsfs}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[margin=0.5in]{geometry}
@@ -139,7 +140,7 @@ Next, we show that \textit{operations} on $f_n$ may not be passed through the li
 
 This is a \textit{much stronger} notion of convergence, as it, in a sense, ``tethers'' together convergence of of all points in the domain. 
 
-There are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which will be made precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) in a certain space of functions. 
+There are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which Rudin makes precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) in a certain space of functions. 
 
 \begin{myboxed}
     \textsc{Cauchy criterion for uniform convergence}
@@ -173,6 +174,8 @@ The next criterion is just a rephrasing of the original definition in similar te
 
 Next, we show that uniform convergence does not share the same failures as pointwise convergence when it comes to passing through important properties and operations.
 
+We first take continuity.
+
 \begin{myboxed}
     \textsc{Continuity is preserved under uniform convergence}
 
@@ -182,15 +185,84 @@ Next, we show that uniform convergence does not share the same failures as point
 
     \textbf{Proof}
 
-    We want to show that, for all $x$,
-    \[\lim_{t \to x} \lim_{n \to \infty} f_n(t) = f(x)\] 
-    If we were allowed to interchange this limit, we can use the continuity of $f_n$ to achieve what we want
-    \[\lim_{n \to \infty} \lim_{t \to x} f_n(x) = \lim_{n \to \infty} f_n(x) = f(x)\]
+    Let $\varepsilon > 0$. Let $x \in E$. Consider the inequality
+    \[|f(x) - f(t)| \leq |f(x) - f_n(x)| + |f_n(x) - f_n(t)| + |f_n(t) - f(t)|\]
+First use uniform convergence to choose $n$ such that $|f(x) - f_n(x)|$ and $|f(t) - f_n(t)|$ are arbitrarily small. 
+
+Then use continuity to choose $\delta$ such that $|f_n(x) - f_n(t)|$ can be made arbitrarily small by letting $|x-t| \leq \delta$.
+\end{myboxed}
+
+This however is not an ``if and only if''. A continuous function can be the non-uniform limit of continuous functions. In one case, however, we can use compactness and monotonicity to take enough control such that a sequence of functions can \textit{only} converge uniformly.
+
+\begin{myboxed}
+    \textsc{Inferring uniform convergence from pointwise convergence}
+
+    \textbf{Example}
     
+    Let $f_n: K \rightarrow \mathbb{R}$ be a sequence of continuous functions, and let $f_n \rightarrow f$ pointwise. Let $f$ be continuous. Impose the two conditions
+    \begin{itemize}
+        \item Let $K$ be compact
+        \item Let $f_n(x) \geq f_{n+1}(x)$ for all $x$ and all $n$
+    \end{itemize}
+    Then $f_n \rightarrow f$ uniformly.
+
+    \textbf{Proof}
+
+    We must show that, as $n \rightarrow \infty$,
+    \[\sup_{x \in E}|f_n(x) - f(x)| \rightarrow 0\]
+
+    To do this, we choose $\varepsilon$ and argue that the set of points for which $|f_n(x) - f(x)| \geq \varepsilon$ can be made empty if we take $n$ large enough. Let this set of exceptional points be $K_n$.
+
+
+    $K$'s compactness tells us that $K_n$ is compact:
+    \begin{itemize}
+        \item Because $f_n - f$ is a continuous function and $(\infty, \varepsilon]$ is closed, $K_n$ is closed. (Theorem 4.8; inverse images of closed sets under continuous functions are closed) 
+        \item Because $K_n$ is closed, and $K$ is compact, $K_n$ is compact. (Theorem 2.35; closed subsets of compact spaces are compact).
+    \end{itemize}
+
+    Moreover, because of the monotonicity of $f_n$, $K_n \supseteq K_{n+1}$. Hence $K_n$ is a sequence of nested compact sets.
+
+    It must be that $\bigcap K_n$ is empty, as $f_n$ converges pointwise to $f$, and so for each $x$, the fact that $|f_n(x) - f| < \varepsilon$ for some $n$ means there must be some $K_n$ it is not a member of.
+
+    But an intersection of nonempty nested compact sets must be nonempty (Theorem 2.36), so there has to be an empty set somewhere in the sequence. Let this set be $K_N$. Then for all $n \geq N$, $K_n$ is empty. This is precisely the $N$ we need to keep the distance between $f_n$ and $f$ below $\varepsilon$.
+\end{myboxed}
+
+Restricting our study to continuous, bounded functions (the functions above were bounded because $K$ was compact) gives rise to a very nice structure, one we're already very familiar with: a metric space. (More importantly, a vector space!)
+
+The concept of distance here corresponds with how it has been used in the previous theorems and examples.
+
+\begin{myboxed}
+    \textsc{The space of continuous and bounded functions on $X$}
+
+    \textbf{Definition}
+
+    Let $X$ be a metric space. Let $\mathscr{C}(X)$ denote the set of all continuous, bounded, complex-valued functions on $X$.
+
+    Let $f \in \mathscr{C}(X)$. Define the \textit{supremum norm} as follows.
+    \[\Vert f \Vert = \sup_{x \in X} |f(x)|\]
+    Let $d(f, g)$ for $f, g \in \mathscr{C}(X)$ be induced by the norm; i.e
+    \[d(f, g) = \Vert f - g \Vert\]
+    This turns $\mathscr{C}(X)$ into a metric space.
+\end{myboxed}
+
+This space is complete, and the fact that it is so can be bootstrapped with the previous theorems.
+
+\begin{myboxed}
+    \textsc{$\mathscr{C}(X)$ is complete}
+
+    \textbf{Proof}
+
+\end{myboxed}
+
+Next, we tackle integration.
+
+\begin{myboxed}
+    \textsc{The integral of a uniformly convergent limit is a uniformly convergent limit of integrals}
 
 
 \end{myboxed}
 
 
+\section{Equicontinuous families of functions}
 
 \end{document}
