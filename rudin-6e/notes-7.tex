@@ -5,7 +5,7 @@
 \usepackage{amssymb}
 \usepackage[margin=0.5in]{geometry}
 
-\newenvironment{myboxed}{\bigskip\noindent\begin{tabular}{|p{.975\textwidth}|}\hline \\}{\\\\\hline\end{tabular}\bigskip}
+\newenvironment{myboxed}{\bigskip\noindent\begin{tabular}{|p{.975\linewidth}|}\hline \\}{\\\\\hline\end{tabular}\bigskip}
 \newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
 
 \begin{document}
@@ -340,6 +340,76 @@ Now with the machinery of limits of function sequences, we can explore a wider v
 \end{myboxed}
 
 
+\newpage 
 \section{Equicontinuous families of functions}
+
+Now we go up another level. How do we \textit{produce} these uniformly convergent sequences of functions out of existing sequences? The same way we have conditions (boundedness in $\mathbb{R}^n$) for squeezing out convergent sequences of numbers? First consider two different kinds of boundedness.
+
+\begin{myboxed}
+    \textsc{Pointwise and uniform boundedness}
+    
+    \textbf{Definition}
+    
+    Let $f_n: E \rightarrow \mathbb{R}$ be a sequence of functions.
+
+    $f_n$ is \textit{pointwise bounded} if for some $\varphi: E \rightarrow \mathbb{R}$,
+    \[|f_n(x)| < \varphi(x)\]
+    $f_n$ is \textit{uniformly bounded} if for some $M \geq 0$,
+    \[|f_n(x)| < M\]
+\end{myboxed}
+
+A sequence of functions being pointwise bounded has an important consequence
+
+\begin{myboxed}
+    \textsc{Every pointwise bounded sequence has a subsequence that converges pointwise on a countable set}
+
+    \textbf{Theorem}
+
+    Let $f_n$ be defined on a countable set $E$. (Or define it on an arbitrary set, and let $f_n$ be the restriction on a countable set $E$).
+
+    Then there exists a subsequence $f_{n_k}$ of $f_n$ such that $f_{n_k}$ converges pointwise on $E$.
+
+    \textbf{Proof}
+
+    We will construct a table of $f_n$ of which taking the diagonal will give us the subsequence we want. To do so, we introduce a lemma
+
+    \begin{myboxed}
+    \textbf{Lemma}
+
+    Let $s_n$ be a bounded sequence. Then it contains a convergent subsequence $s_{n_k}$ that may be obtained by simply deleting entries in $s_n$.
+
+    \textbf{Proof}
+
+    $s_n$ as a set has a limit point $L$ (Theorem 2.42). Let $\varepsilon_1 > 0$. Choose $s_{n_1} \neq L$ such that $d(L, s_{n_1}) < \varepsilon_1$. Since $L$ is a limit point, we can find this point. 
+
+    Choose $\varepsilon_2$ such that $d(L, s_{n_1}) > \varepsilon_2 > 0$ and that $\frac{\varepsilon_1}{2} > \varepsilon_2$. Choose $s_{n_2}$ such that $n_2 > n_1$ and $d(L, s_{n_2}) < \varepsilon_2$. This is possible because again $L$ is a limit point of $s_n$, and there are only finitely many entries before $n_1$ to be excluded. 
+
+    Continue recursively to construct the two sequences $\varepsilon_k$ and $s_{n_k}$. $\varepsilon_k \to 0$ and $d(L, s_{n_k}) < \varepsilon_k$, so $s_{n_k} \to L$. Moreover, $i > j$ implies $n_i > n_j$. Which implies $s_{n_k}$ is constructed by simply skipping entries in $s_n$.
+    \end{myboxed}
+
+    This table will be defined row-by-row
+    Let $x_i$ be an enumeration of $E$. Since $f_n$ is pointwise bounded, we can produce a subsequence $f_{n_k}$ such that $f_{n_k}(x_1)$ converges as $k \to \infty$. Denote this sequence by $f^1_k$. 
+
+    Then in a similar fashion, we recursively construct the following sequences $f^{i+1}_k$ out of $f^i_k$ using the above lemma. This results in a table of functions
+    \[\begin{matrix}
+        f^1_1 & f^1_2 & f^1_3 & \cdots \\
+        f^2_1 & f^2_2 & f^2_3 & \cdots \\
+        f^3_1 & f^3_2 & f^3_3 & \cdots \\
+        \vdots & \vdots & \vdots & \ddots
+    \end{matrix}\]
+
+    which satisfy the properties
+    \begin{itemize}
+        \item[(a)] $f^{i+1}_k$ is a subsequence of $f^i_k$
+        \item[(b)] $f^i_k(x_i)$ converges as $k \to \infty$
+        \item[(c)] $f^{i+1}_k$, as a subsequence of $f^i_k$, is simply $f^i_k$ with entries deleted.
+    \end{itemize}
+
+    Then, if we take the diagonal
+    \[f^1_1, f^2_2,  f^3_3, \ldots\] 
+    (c) implies that this sequence is a subsequence of all $f^i_k$, thus (b) implies that this sequence converges for all $x_i$.
+\end{myboxed}
+
+
 
 \end{document}
