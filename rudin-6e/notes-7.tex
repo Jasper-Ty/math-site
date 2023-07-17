@@ -140,7 +140,7 @@ Next, we show that \textit{operations} on $f_n$ may not be passed through the li
 
 This is a \textit{much stronger} notion of convergence, as it, in a sense, ``tethers'' together convergence of of all points in the domain. 
 
-There are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which Rudin makes precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) in a certain space of functions. 
+There are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which Rudin makes precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) with respect to a certain kind of metric. 
 
 \begin{myboxed}
     \textsc{Cauchy criterion for uniform convergence}
@@ -161,7 +161,7 @@ There are useful criteria for uniform convergence. These hint at the idea of bei
     and let $m \rightarrow \infty$, we recover the original condition for uniform convergence
 \end{myboxed}
 
-The next criterion is just a rephrasing of the original definition in similar terms. It tells us that uniform convergence corresponds to the ``distance'' between two functions vanishing.
+The next criterion is just a rephrasing of the first definition of uniform convergence in similar terms. It tells us that uniform convergence corresponds to the ``distance'' between two functions vanishing.
 
 \begin{myboxed}
     \textsc{Supremum criterion for uniform convergence}
@@ -286,8 +286,58 @@ Next, we tackle integration. Uniform convergence allows us to bound $f$ in a, we
 
 \newpage
     
-Finally, we look at differentiation. This is not as nice as integration.
+Finally, we look at differentiation.
 
+\begin{myboxed}
+    \textsc{A sequence of functions whose derivatives converge uniformly converges uniformly to a limit with the correct derivative}
+
+    \textbf{Theorem}
+
+    Let $f_n: [a,b] \rightarrow \mathbb{R}$ be a sequence of differentiable functions that converge pointwise for at least \textit{some} point $x_0$. Then if $f_n'$ converge uniformly, there is a function $f$ such that $f_n \rightarrow f$ uniformly and such that $f_n' \rightarrow f'$.
+
+    \textbf{Proof}
+
+    Let $\varepsilon > 0$. Use the Cauchy criterion for both ordinary sequences in $\mathbb{R}$ and for uniformly convergent sequences of functions to produce $N$ such that $n, m \geq N$ implies
+    \[|f_n(x_0) - f_m(x_0)| \leq \frac{\varepsilon}{2}\]
+    \[\sup_{t \in [a,b]}|f'_n(t) - f'_m(t)| \leq \frac{\varepsilon}{2(b-a)}\]
+    Consider the function $f_n - f_m$, whose derivative is $f'_n - f'_m$. The mean value theorem gives us a $c$ with which we can show
+    \[\left|\frac{[f_n(x) - f_m(x)] - [f_n(y) - f_m(y)]}{x-y}\right| = |f'_n(c) - f'_m(c)| \leq \sup_{t \in [a, b]} |f'_n(t) - f'_m(t)| \leq \frac{\varepsilon}{2(b-a)}\]
+    Then, since $a \leq x < y \leq b$
+    \[\left|[f_n(x) - f_m(x)] - [f_n(y) - f_m(y)]\right| \leq \frac{\varepsilon|x-y|}{2(b-a)} \leq \frac{\varepsilon}{2}\]
+    for any $x, y \in [a, b]$. Then, by the triangle inequality,
+    \[|f_n(x) - f_m(x)| \leq |[f_n(x) - f_m(x)] - [f_n(x_0) - f_m(x_0)]| + |f_n(x_0) - f_m(x_0)| \leq \varepsilon\]
+    Then $f_n$ converges uniformly by the Cauchy criterion.
+
+    Next we prove that the derivative of the limit is the limit of the derivatives. Let $f_n \rightarrow f$. Define the difference quotients
+    \[\phi_n(t) := \frac{f_n(t) - f_n(x)}{t-x}\]
+    \[\phi(t) := \frac{f(t) - f(x)}{t-x}\]
+    Reusing the same inequality, we know that for $n, m \geq N$
+    \[|\phi_n(t) - \phi_m(t)| \leq \frac{\varepsilon}{2(b-a)}\]
+    So that $\phi_n \rightarrow \phi$ uniformly. Then, by Theorem 7.11, the limits we are interested in commute:
+    \[\lim_{t \to x} \lim_{n \to \infty} \phi_n(t) = \lim_{n \to \infty} \lim_{t \to x} \phi_n(t)\]
+    The left hand side is
+    \[\lim_{t \to x} \lim_{n \to \infty} \phi_n(t) = \lim_{t \to x} \phi(t) = f'(x)\]
+    The right hand side is
+    \[\lim_{n \to \infty} \lim_{t \to x} \phi_n(t) = \lim_{n \to \infty} f'_n(t)\]
+    Hence $f'_n \rightarrow f_n$.
+\end{myboxed}
+
+Now with the machinery of limits of function sequences, we can explore a wider variety of functions. As an example.
+
+\begin{myboxed}
+    \textsc{A nowhere differentiable continuous function}
+
+    \textbf{Example}
+
+    Define the periodic triangle function $\varphi$ to be
+    \[\varphi(x) := |x|\]
+    for $0 < x \leq 1$, and let its periodicity be defined by
+    \[\varphi(x+2) := \varphi(x)\] 
+    Then $\varphi$ is continuous. Define $f$ as
+    \[f(x) := \sum_{n=0}^\infty \left(\frac{3}{4}\right)^n \varphi(4^nx)\]
+    By Theorem 7.10, the series converges uniformly. Then $f$ is continuous, as it is a uniformly convergent sequence of continuous functions.
+     To prove it is not differentiable, we construct a sequence $x_n \rightarrow x$ such that the difference quotient diverges.
+\end{myboxed}
 
 
 \section{Equicontinuous families of functions}
