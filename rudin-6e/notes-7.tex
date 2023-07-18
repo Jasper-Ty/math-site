@@ -336,8 +336,8 @@ Now with the machinery of limits of function sequences, we can explore a wider v
     Then $\varphi$ is continuous. Define $f$ as
     \[f(x) := \sum_{n=0}^\infty \left(\frac{3}{4}\right)^n \varphi(4^nx)\]
     By Theorem 7.10, the series converges uniformly. Then $f$ is continuous, as it is a uniformly convergent sequence of continuous functions.
-     To prove it is not differentiable, we construct a sequence $x_n \rightarrow x$ such that the difference quotient diverges.
-\end{myboxed}
+     To prove it is not differentiable, we construct a sequence $x_n \rightarrow x$ such that the difference quotient diverges. I haven't looked into it deeply yet.
+ \end{myboxed}
 
 
 \newpage 
@@ -358,7 +358,42 @@ Now we go up another level. How do we \textit{produce} these uniformly convergen
     \[|f_n(x)| < M\]
 \end{myboxed}
 
-A sequence of functions being pointwise bounded has an important consequence
+There are, however, no easy analogues, even when we put together all the restrictions we've considered so far:
+
+\begin{myboxed}
+    \textsc{A uniformly bounded sequence of continuous functions on a compact set without a convergent subsequence}
+    
+    \textbf{Example}
+
+    Let $f_n: [0, 2\pi] \to \mathbb{R}$ be defined 
+    \[f_n(x) := \sin nx\]
+    Suppose this sequence has a subsequence $f_{n_k}$ that converges pointwise. Then it must be that
+    \[\lim_{k \to \infty} (\sin n_k x - \sin n_{k+1}x) = 0\]
+    therefore it must be the case that
+    \[\lim_{k \to \infty} (\sin n_k x - \sin n_{k+1}x)^2 = 0\]
+    By Lebesgue's theorem concerning integration of boundedly convergent sequences (Theorem 11.32), this implies
+    \[\lim_{k \to \infty} \int_0^{2\pi} (\sin n_k x - \sin n_{k+1} x)^2 dx = 0\]
+    But 
+    \[\int_0^{2\pi} (\sin n_k x - \sin n_{k+1} x)^2 dx = 2\pi\]
+    which is a contradiction.
+\end{myboxed}
+
+Even if we have a (pointwise) convergent sequence, we cannot produce a uniformly convergent subsequence necessarily, even with uniform boundedness on a compact set.
+
+\begin{myboxed}
+    \textsc{A uniformly bounded pointwise converging sequence on a compact set without a uniformly convergent subsequence}
+
+    \textbf{Example}
+
+    Let $f_n: [0, 1] \rightarrow \mathbb{R}$ be
+    \[f_n(x) = \frac{x^2}{x^2+(1-nx)^2}\]
+    Then $|f_n| \leq 1$ for all $n$, and $f_n$ is a uniformly bounded sequence. $f_n(x) \to 0$ for all $x$ as $n \to \infty$ as well, so this sequence converges pointwise.
+    However,
+    \[f_n\left(\frac{1}{n}\right) = 1\]
+    so that no subsequence can possibly converge uniformly.
+\end{myboxed}
+
+However, we know that compact sets are separable (have a dense countable subset), hence the following consequence of pointwise boundedness will be useful:
 
 \begin{myboxed}
     \textsc{Every pointwise bounded sequence has a subsequence that converges pointwise on a countable set}
@@ -410,6 +445,19 @@ A sequence of functions being pointwise bounded has an important consequence
     (c) implies that this sequence is a subsequence of all $f^i_k$, thus (b) implies that this sequence converges for all $x_i$.
 \end{myboxed}
 
+The missing ingredient is an extra condition on $f_n$
+
+\begin{myboxed}
+    \textsc{Equicontinuous families of functions}
+
+    \textbf{Definition}
+
+    Let $\mathscr{F}$ be a family of complex-valued functions $f$ defined on a set $E$. $\mathscr{F}$ is \textit{equicontinuous} if for every $\varepsilon > 0$ there exists $\delta > 0$ such that
+    \[|f(x) - f(y)| < \varepsilon\]
+    whenever $d(x, y) < \delta$.
+\end{myboxed}
+
+First 
 
 
 \end{document}

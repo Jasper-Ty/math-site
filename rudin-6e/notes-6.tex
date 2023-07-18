@@ -22,8 +22,20 @@
 
 \begin{myboxed}
     \textsc{Riemann integral of $f \alpha'$ is equal to Riemann-Stieltjes integral of $f$ with integrator $\alpha$}
-    
+ 
     \textbf{Theorem}
+
+    Let $\alpha: [a,b] \rightarrow \mathbb{R}$ be a differentiable monotonic function such that $\alpha' \in \mathscr{R}$. Let $f: [a, b] \rightarrow \mathbb{R}$ be a bounded function. 
+
+    Then $f \in \mathscr{R}(\alpha)$ if and only if $f\alpha' \in \mathscr{R}$. And
+    \[\int_a^b fd\alpha = \int_a^b f(x) \alpha'(x) dx\]
+
+    \textbf{Proof}
+
+    Let $\varepsilon > 0$ and choose a partition $P$ such that
+    \[U(P, \alpha') - L(P, \alpha') < \varepsilon\]
+
+
 \end{myboxed}
 
 \begin{myboxed}
