@@ -11,7 +11,7 @@
 \usepackage{amssymb}
 \usepackage[margin=0.5in]{geometry}
 
-\newenvironment{myboxed}{\noindent\begin{tabular}{|p{.975\textwidth}|}\hline \\}{\\\\\hline\end{tabular}}
+\newenvironment{myboxed}{\noindent\begin{tabular}{|p{.975\linewidth}|}\hline \\}{\\\\\hline\end{tabular}}
 \newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
 
 \newcounter{Question}
@@ -305,10 +305,100 @@
 
 
 \begin{Question}
-    Suppose $f$ is a real function on $(0, 1]$ and $f \in \mathscr{R}$ on $[c, 1]$ for every $c > 0$. Define 
-    \[\int_0^1 f(x) dx = \lim_{c \to 0} \int_c^1 f(x) dx\]
-    if this limit exists (and is finite)
+    Let $p$ and $q$ be positive real numbers such that
+    \[\frac{1}{q} + \frac{1}{q} = 1\]
+    Prove the following statements.
     \begin{itemize}
+        \item[(a)] 
+            If $u \geq 0$ and $v \geq 0$, then
+            \[uv \leq \frac{u^p}{p} + \frac{v^q}{q}\]
+            Equality holds if and only if $u^p = v^q$.
+        \item[(b)]
+            If $f \in \mathscr{R}(\alpha)$, $g \in \mathscr{R}(\alpha)$, $f \geq 0$, $g \geq 0$, and
+            \[\int_a^b f^p \: d\alpha = 1 = \int_a^b g^q \: d\alpha\]
+            then
+            \[\int_a^b fg \: d\alpha \leq 1\]
+        \item[(c)] 
+            If $f$ and $g$ are complex functions in $\mathscr{R}(\alpha)$, then 
+            \[\left|\int_a^b fg \: d\alpha\right| \leq \left\{\int_a^b |f|^p \: d\alpha \right\}^{\frac{1}{p}}\left\{\int_a^b |g|^q \: d\alpha\right\}^{\frac{1}{q}}\]
+            This is \textit{Hölder's inequality}. When $p = q = 2$ it is usually called the Schwarz inequality. (Note that Theorem 1.35 is a very special case of this.)
+        \item[(d)]
+            Show that Hölder's inequality is also true for the ``improper'' integrals described in Exercises $7$ and $8$.
     \end{itemize}
 \end{Question}
+\begin{Answer}
+    \begin{itemize}
+        \item[(a)]
+            Let, for $x \geq 0$ and $y \geq 0$,
+            \[f(x) := x^{p-1}\]
+            \[g(y) := y^{q-1}\]
+            Then $f$ and $g$ are both strictly increasing functions. Furthermore, since $(p-1)(q-1) = 1$, they are inverses to one another.
+
+        \textsc{Lemma}
+        
+        Let $f$ be a strictly increasing, invertible function on $[a, b]$ that is also $\mathscr{R}(\alpha)$ on $[a ,b]$. Then
+        \[(b-a)(f(b)-f(a)) = \int_a^b f dx + \int_{f(a)}^{f(b)}f^{-1} dx - (b-a)(f(a)) - (f(b)-f(a))(a)\]
+
+        \textbf{Proof}
+
+        Let $P$ be any partition at all of $[a, b]$. Construct a corresponding partition $P'$ of $[f(a), f(b)]$ made of points $y_i := f(x_i)$. This is a valid partition as $f$ is increasing, and the endpoints map correctly. 
+        Now consider the facts 
+        \[b-a = \sum_{i=1}^n \Delta x_i\]
+        \[f(b)-f(a) = \sum_{i=1}^n \Delta y_i\]
+        Hence 
+        \[(b-a)(f(b)-f(a)) = \sum_{1 \leq i , j \leq n} \Delta x_i \Delta y_j\]
+        Let $m_i$ denote the inf of $f$ in $[x_{i-1}, x_i]$, and let $m'_i$ denote the inf of $f^{-1}$ on $[y_{i-1}, y_i]$. Define $M_i$ and $M'_i$ similarly.
+        By the monotonicity of $f$, we know that 
+        \[m_i = y_{i-1} = f(x_{i-1})\]
+        \[m'_i = x_{i-1} = f^{-1}(y_{i-1})\]
+        \[M_i = y_i = f(x_i)\]
+        \[M'_i = x_i = f^{-1}(y_i)\]
+        We also know that
+        \[x_i - a = \sum_{j=1}^i \Delta x_j\]
+        \[y_i - f(a) = \sum_{j=1}^i \Delta y_j\]
+        Hence $U(P, f)$ may be written as
+        \[U(P, f) = \sum_{i=1}^n M_i \Delta x_i = \sum_{i=1}^n y_i \Delta x_i = \sum_{i=1}^n \left[\sum_{j=1}^i \Delta y_j + f(a)\right] \Delta x_i\]
+        Simplifying the sums
+        \[U(P, f) = \left[\sum_{1 \leq j \leq i \leq n} \Delta x_i \Delta y_j \right] + (b-a)(f(a))\]
+    Similarly,
+    \[U(P', f^{-1}) = \left[\sum_{1 \leq i \leq j \leq n} \Delta x_i \Delta y_j \right] + (f(b)-f(a))(a)\]
+    Consider the term $\Delta x_i \Delta y_k$. Either $j < i$, in which case it is part of the sum of $U(P, f)$ but not of $U(P', f^{-1})$, or $i > j$ in which case it is part of the sum of $U(P',f^{-1})$ but not of $U(P, f)$. Or $i = j$, in which case it is part of both.
+    Hence, by inclusion-exclusion,
+\[U(P, f) + U(P', f^{-1}) = \left[ \sum_{1 \leq i , j \leq n} \Delta x_i \Delta y_j - \sum_{k=1}^n \Delta x_k \Delta y_k \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+    But since $\Delta y_k = y_k - y_{k-1} = M_k - m_k$, 
+    \[\sum_{k=1}^n \Delta x_k \Delta y_k = U(P, f) - L(P,f)\]
+    And in the same way, with $\Delta x_k = x_k - x_{k-1} = M'_i - m'i$
+    \[\sum_{k=1}^n \Delta x_k \Delta y_k = U(P', f^{-1}) - L(P',f^{-1})\]
+    Hence choose a partition $P$ such that 
+    \[U(P, f) - L(P,f) \leq \varepsilon\]
+    We automatically get a partition such that
+    \[U(P', f) - L(P',f) \leq \varepsilon\]
+    and we show that
+\[U(P, f) + U(P', f^{-1}) = \left[ (b-a)(f(b)-f(a)) - \varepsilon \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+
+    Hence
+    \[\int_a^b f dx + \int_{f(a)}^{f(b)} f^{-1} dx = (b-a)(f(b)-f(a)) + (b-a)\cdot f(a) + (f(b) - f(a))\cdot a\]
+    Which is the result we wanted.
+
+        Consider the quantities $u^{p-1}$ and $v^{q-1}$. If they are not equal, then there are two possibilities:
+        \[u^{p-1} > v \text{ and } u > v^{q-1}\]
+        \[u^{p-1} < v \text{ and } u < v^{q-1}\]
+    Suppose, without loss of generality, that $u^{p-1} \geq v$
+
+    Then 
+    \[ uv = (u - v^{q-1} + v^{q-1}) v = v^{q-1} \cdot v + (u-v^{q-1})v\] 
+    By the lemma,
+    \[v^{q-1} \cdot v = \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy\]
+    so
+    \[uv = \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy + (u - v^{q-1}) v\]
+    By the monotonicity of $x^{p-1}$, the $\inf$ of $x^{p-1}$ on $[v^{q-1}, u]$ is $v^{(q-1)(p-1)} = v$, so 
+    \[(u - v^{q-1})v \leq \int_{v^{q-1}}^u x^{p-1}dx\]
+    Then 
+    \[uv \leq \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy + \int_{v^{q-1}}^u x^{p-1} dx\] 
+    Combining the integrals with the common integrand $x^{p-1}$,
+    \[uv \leq \int_0^u x^{p-1} + \int_0^v y^{q-1} dy\]
+    Finally, evaluating the integrals,
+    \[uv \leq \frac{u^p}{p} + \frac{y^q}{q}\]
+    \end{itemize}
+\end{Answer}
 \end{document}
