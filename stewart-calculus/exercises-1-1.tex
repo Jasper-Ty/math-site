@@ -8,7 +8,6 @@
 \newenvironment{myboxed}{\noindent\begin{tabular}{|p{.975\linewidth}|}\hline \\}{\\\\\hline\end{tabular}}
 \newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
 
-
 \def\theChapter{1}
 
 \newcounter{Answer}
@@ -298,7 +297,133 @@
 \end{Answer}
 
 \begin{Answer}
+    The area of any triangle is the length of a side times the length of the altitude whose base is that side, divided by two. Let the length of a side be $s$. By symmetry, any altitude will bisect a side. Hence an altitude's height can be found by the Pythagorean theorem, with side lengths $s$ and $s/2$. The relationship between $s$ and $h$ is then
+    \[ s^2 = h^2 + \left(\frac{s}{2}\right)^2\]
+    So 
+    \[h = \sqrt{s^2 - \frac{s^2}{4}} = \sqrt{\frac{3s^2}{4}} = \frac{s}{2}\sqrt{3}\]
+    Then the area of the triangle is 
+    \[f(s) = \frac{sh}{2} = \frac{s^2}{4}\sqrt{3}\]
+\end{Answer}
 
+\begin{Answer}
+    The volume of a cube with edge length $s$ is $V = s^3$. The surface area is $6s^2$. We have that
+    \[6s^2 = 6 \cdot (s^3)^{\frac{2}{3}}\]
+    So 
+    \[f(V) = 6V^{\frac{2}{3}}\]
+\end{Answer}
+
+\begin{Answer}
+    Let $s$ be the length of a side of the base. Then its volume is $s^2 \cdot h$, where $h$ is the height of the box, so we have that
+    \[2 = s^2h\]
+    The surface of this box, since it is open topped, is $s^2 + 4sh$. We can write $h$ in terms of $s$ by solving the volume constraint for it. This gives us $h = 2/s^2$. Then
+    \[f(s) = s^2 + 4s\left(\frac{2}{s^2}\right) = s^2 + \frac{8}{s}\]
+\end{Answer}
+
+\begin{Answer}
+    The perimeter of the window is $30 = x + 2h + x\pi/2$, where $h$ is the height of the rectangular region. Then $h = 30 - x(1+\pi/2)$. The area of the window is $xh + \pi(x/2)^2$. Then
+    \begin{align*} 
+        f(x) &= x(30 - x(1+\pi/2)) + \pi\left(\frac{x}{2}\right)^2 \\
+             &= 30x - \frac{2+\pi}{2}x^2 + \frac{\pi}{4}x^2 \\
+             &= 30x + \frac{\pi - 2\pi - 4}{4} x^2 \\
+             &= 30x - \frac{\pi + 4}{4}x^2
+    \end{align*}
+\end{Answer}
+
+\begin{Answer}
+    The volume of the box is $xlw$, where $l = 20 - 2x$ and $w = 12 - 2x$. Then our volume function is
+    \[f(x) = x(20-2x)(12-2x)\]
+\end{Answer}
+
+\begin{Answer}
+    \[f(x) = \begin{cases}
+        2 & 0 < x \leq 1 \\
+        2.2 & 1 < x \leq 1.1 \\
+        2.4 & 1.1 < x \leq 1.2 \\
+        2.6 & 1.2 < x \leq 1.3 \\
+        2.8 & 1.3 < x \leq 1.4 \\
+        3 & 1.4 < x \leq 1.5 \\
+        3.2 & 1.5 < x \leq 1.6 \\
+        3.4 & 1.6 < x \leq 1.7 \\
+        3.6 & 1.7 < x \leq 1.8 \\
+        3.8 & 1.8 < x \leq 1.9 \\
+        4 & 1.9 < x < 2 \\
+        \end{cases} = \begin{cases}
+        2 & 0 < x \leq 1 \\
+        2 + 0.2 \cdot\text{ceil}(10(x-1)) & 1 < x < 2
+    \end{cases}\]
+\end{Answer}
+
+\begin{Answer}
+    \begin{itemize}
+        \item[(a)] 
+            \[R(I) = \begin{cases}
+                0 & I \leq 10000 \\
+                \frac{I - 0.1\cdot(I-10000)}{I} & 10000 < I \leq 20000  \\
+                \frac{I - 0.1\cdot(10000) - 0.15(I - 20000)}{I} & 20000 < I 
+            \end{cases}\]
+        \item[(b)]
+            The amount of tax for $14000$ is $4000\cdot 0.1 = 400$ dollars. For $26000$ it's $10000\cdot 0.1 + 6000\cdot 0.15 = 1000 + 900 = 1900$ dollars.
+        \item[(c)]
+            \[T(I) = \begin{cases}
+                0 & I \leq 10000 \\
+                0.1(I-10000) & 10000 < I \leq 20000 \\
+                1000 + 0.15(I-20000) & 20000 < I
+            \end{cases}\]
+
+    \end{itemize}
+
+\end{Answer}
+
+\begin{Answer}
+    Skip
+\end{Answer}
+
+\begin{Answer}
+    \begin{itemize}
+        \item[(a)] 
+            $g$ is even and $f$ is odd.
+        \item[(a)] 
+            $f$ is neither and $g$ is odd.
+    \end{itemize}
+\end{Answer}
+
+\begin{Answer}
+    The point $(-5, 3)$
+\end{Answer}
+
+\begin{Answer}
+    The point $(-5, -3)$
+\end{Answer}
+
+\begin{Answer}
+    \begin{itemize}
+        \item[(a)] Mirror along $y$ axis
+        \item[(b)] Mirror along $y$ axis and flip (the copy) along $x$ axis.
+    \end{itemize}
+\end{Answer}
+
+\begin{Answer}
+    Even. $f(-x) = (-x)^{-2} = ((-x)^2)^{-1} = (x^2)^{-1} = x^{-2}= f(x)$.
+\end{Answer}
+
+\begin{Answer}
+    Odd. $f(-x) = (-x)^{-3} = ((-x)^3)^{-1} = (-(x^3))^{-1} = -x^{-3} = -f(x)$.
+\end{Answer}
+
+\begin{Answer}
+    Neither. $f(1) = 2$, but $f(-1) = 0$.
+\end{Answer}
+
+\begin{Answer}
+    Even.
+\end{Answer}
+
+\begin{Answer}
+    Odd.
+\end{Answer}
+
+\begin{Answer}
+    Neither.
 \end{Answer}
 
 \end{document}
