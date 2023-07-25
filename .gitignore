@@ -1,8 +1,10 @@
-
 *.fdb_latexmk
 *.log
 *.aux
 *.synctex.gz
 *.fls
+
+*.out
+*.toc
 
 packages/
