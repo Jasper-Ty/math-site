@@ -1,0 +1,12 @@
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=0.5in]{geometry}
+
+\newenvironment{myboxed}{\noindent\begin{tabular}{|p{.975\linewidth}|}\hline \\}{\\\\\hline\end{tabular}}
+\newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
+
+\def\theChapter{1.4}
+
+\newcounter{Answer}
+\newenvironment{Answer} {\refstepcounter{Answer}\par\noindent\textbf{A\theChapter.\theAnswer:}} {\bigskip}
