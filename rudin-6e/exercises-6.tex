@@ -262,7 +262,7 @@
             \[f(x) = \begin{cases}
                 (-1)^{n+1}n+1 & \text{if } \frac{1}{n+1} \leq x < \frac{1}{n}
             \end{cases}\]
-            Then the graph of $f$ consists of boxes of width $1/n - 1/(n+1)$ and height $n+1$. The area of each box is then $1/n$. Then as the lower bound of the integral approaches $0$, the integral approximates the alternating sum $S = 1 - 1/2 + 1/3 - 1/4 + \cdots$, which converges to $\ln 2$.
+            Then the graph of $f$ consists of boxes of width $(1/n) - (1/(n+1))$ and height $n+1$. The area of each box is then $1/n$. Then as the lower bound of the integral approaches $0$, the integral approximates the alternating sum $S = 1 - 1/2 + 1/3 - 1/4 + \cdots$, which converges to $\ln 2$.
             However, in the case of $|f|$, the integral apporximates the sum $S = 1 + 1/2 + 1/3 + 1/4 + \cdots$, which diverges.
     \end{itemize}
 \end{Answer}
@@ -360,45 +360,87 @@
         \[U(P, f) = \sum_{i=1}^n M_i \Delta x_i = \sum_{i=1}^n y_i \Delta x_i = \sum_{i=1}^n \left[\sum_{j=1}^i \Delta y_j + f(a)\right] \Delta x_i\]
         Simplifying the sums
         \[U(P, f) = \left[\sum_{1 \leq j \leq i \leq n} \Delta x_i \Delta y_j \right] + (b-a)(f(a))\]
-    Similarly,
-    \[U(P', f^{-1}) = \left[\sum_{1 \leq i \leq j \leq n} \Delta x_i \Delta y_j \right] + (f(b)-f(a))(a)\]
-    Consider the term $\Delta x_i \Delta y_k$. Either $j < i$, in which case it is part of the sum of $U(P, f)$ but not of $U(P', f^{-1})$, or $i > j$ in which case it is part of the sum of $U(P',f^{-1})$ but not of $U(P, f)$. Or $i = j$, in which case it is part of both.
-    Hence, by inclusion-exclusion,
-\[U(P, f) + U(P', f^{-1}) = \left[ \sum_{1 \leq i , j \leq n} \Delta x_i \Delta y_j - \sum_{k=1}^n \Delta x_k \Delta y_k \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
-    But since $\Delta y_k = y_k - y_{k-1} = M_k - m_k$, 
-    \[\sum_{k=1}^n \Delta x_k \Delta y_k = U(P, f) - L(P,f)\]
-    And in the same way, with $\Delta x_k = x_k - x_{k-1} = M'_i - m'i$
-    \[\sum_{k=1}^n \Delta x_k \Delta y_k = U(P', f^{-1}) - L(P',f^{-1})\]
-    Hence choose a partition $P$ such that 
-    \[U(P, f) - L(P,f) \leq \varepsilon\]
-    We automatically get a partition such that
-    \[U(P', f) - L(P',f) \leq \varepsilon\]
-    and we show that
-\[U(P, f) + U(P', f^{-1}) = \left[ (b-a)(f(b)-f(a)) - \varepsilon \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+        Similarly,
+        \[U(P', f^{-1}) = \left[\sum_{1 \leq i \leq j \leq n} \Delta x_i \Delta y_j \right] + (f(b)-f(a))(a)\]
+        Consider the term $\Delta x_i \Delta y_k$. Either $j < i$, in which case it is part of the sum of $U(P, f)$ but not of $U(P', f^{-1})$, or $i > j$ in which case it is part of the sum of $U(P',f^{-1})$ but not of $U(P, f)$. Or $i = j$, in which case it is part of both.
+        Hence, by inclusion-exclusion,
+    \[U(P, f) + U(P', f^{-1}) = \left[ \sum_{1 \leq i , j \leq n} \Delta x_i \Delta y_j - \sum_{k=1}^n \Delta x_k \Delta y_k \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+        But since $\Delta y_k = y_k - y_{k-1} = M_k - m_k$, 
+        \[\sum_{k=1}^n \Delta x_k \Delta y_k = U(P, f) - L(P,f)\]
+        And in the same way, with $\Delta x_k = x_k - x_{k-1} = M'_i - m'i$
+        \[\sum_{k=1}^n \Delta x_k \Delta y_k = U(P', f^{-1}) - L(P',f^{-1})\]
+        Hence choose a partition $P$ such that 
+        \[U(P, f) - L(P,f) \leq \varepsilon\]
+        We automatically get a partition such that
+        \[U(P', f) - L(P',f) \leq \varepsilon\]
+        and we show that
+    \[U(P, f) + U(P', f^{-1}) = \left[ (b-a)(f(b)-f(a)) - \varepsilon \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+        Similarly,
+        \[L(P, f) + L(P', f^{-1}) = \left[ (b-a)(f(b)-f(a)) + \varepsilon \right] + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+        Then we have the inequalities
+    \[U(P, f) + U(P', f^{-1}) \leq (b-a)(f(b)-f(a)) + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
+        \[L(P, f) + L(P', f^{-1}) \geq (b-a)(f(b)-f(a)) + (b-a)\cdot f(a) + (f(b)-f(a))\cdot a\]
 
-    Hence
-    \[\int_a^b f dx + \int_{f(a)}^{f(b)} f^{-1} dx = (b-a)(f(b)-f(a)) + (b-a)\cdot f(a) + (f(b) - f(a))\cdot a\]
-    Which is the result we wanted.
+        Hence
+        \[\int_a^b f dx + \int_{f(a)}^{f(b)} f^{-1} dx = (b-a)(f(b)-f(a)) + (b-a)\cdot f(a) + (f(b) - f(a))\cdot a\]
+        Which is the result we wanted.
 
-        Consider the quantities $u^{p-1}$ and $v^{q-1}$. If they are not equal, then there are two possibilities:
-        \[u^{p-1} > v \text{ and } u > v^{q-1}\]
-        \[u^{p-1} < v \text{ and } u < v^{q-1}\]
-    Suppose, without loss of generality, that $u^{p-1} \geq v$
+            Consider the quantities $u^{p-1}$ and $v^{q-1}$. If they are not equal, then there are two possibilities:
+            \[u^{p-1} > v \text{ and } u > v^{q-1}\]
+            \[u^{p-1} < v \text{ and } u < v^{q-1}\]
+        Suppose, without loss of generality, that $u^{p-1} \geq v$
 
-    Then 
-    \[ uv = (u - v^{q-1} + v^{q-1}) v = v^{q-1} \cdot v + (u-v^{q-1})v\] 
-    By the lemma,
-    \[v^{q-1} \cdot v = \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy\]
-    so
-    \[uv = \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy + (u - v^{q-1}) v\]
-    By the monotonicity of $x^{p-1}$, the $\inf$ of $x^{p-1}$ on $[v^{q-1}, u]$ is $v^{(q-1)(p-1)} = v$, so 
-    \[(u - v^{q-1})v \leq \int_{v^{q-1}}^u x^{p-1}dx\]
-    Then 
-    \[uv \leq \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy + \int_{v^{q-1}}^u x^{p-1} dx\] 
-    Combining the integrals with the common integrand $x^{p-1}$,
-    \[uv \leq \int_0^u x^{p-1} + \int_0^v y^{q-1} dy\]
-    Finally, evaluating the integrals,
-    \[uv \leq \frac{u^p}{p} + \frac{y^q}{q}\]
+        Then 
+        \[ uv = (u - v^{q-1} + v^{q-1}) v = v^{q-1} \cdot v + (u-v^{q-1})v\] 
+        By the lemma,
+        \[v^{q-1} \cdot v = \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy\]
+        so
+        \[uv = \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy + (u - v^{q-1}) v\]
+        By the monotonicity of $x^{p-1}$, the $\inf$ of $x^{p-1}$ on $[v^{q-1}, u]$ is $v^{(q-1)(p-1)} = v$, so 
+        \[(u - v^{q-1})v \leq \int_{v^{q-1}}^u x^{p-1}dx\]
+        Then 
+        \[uv \leq \int_0^{v^{q-1}} x^{p-1} dx + \int_0^v y^{q-1} dy + \int_{v^{q-1}}^u x^{p-1} dx\] 
+        Combining the integrals with the common integrand $x^{p-1}$,
+        \[uv \leq \int_0^u x^{p-1} + \int_0^v y^{q-1} dy\]
+        Finally, evaluating the integrals,
+        \[uv \leq \frac{u^p}{p} + \frac{y^q}{q}\]
+
+    \item[(b)]
+        By the previous part, we have that
+        \[fg \leq \frac{f^p}{p} + \frac{g^q}{q}\]
+        Then
+        \[\int_a^b fg \: d\alpha \leq \int_a^b \left[\frac{f^p}{p} + \frac{g^q}{q}\right]dx\]
+        Using properties of the integral,
+        \[\int_a^b fg \: d\alpha \leq \frac{1}{p} \int_a^b f^p \: dx + \frac{1}{q}\int_a^b g^q \: dx\]
+        Since the integrals on the right hand side equal $1$
+        \[\int_a^b fg \: d\alpha \leq \frac{1}{p} + \frac{1}{q} = 1\]
+
+    \item[(c)]
+        Let $f$ and $g$ be any $\mathscr{R}(\alpha)$ functions at all. Then $|f|$ and $|g|$ are also $\mathscr{R}(\alpha)$. Then the integrals.
+        \[\int_a^b |f|^p \: d\alpha\]
+        \[\int_a^b |g|^q \: d\alpha\]
+        exist and are finite.  Suppose they are both positive. Define 
+        \[P := \int_a^b |f|^p \: d\alpha\]
+        \[Q := \int_a^b |g|^q \: d\alpha\]
+        Then define the functions
+        \[h := \frac{|f|}{P^{\frac{1}{p}}}\]
+        \[k := \frac{|g|}{Q^{\frac{1}{q}}}\]
+        We also have that $\overline{f}$ and $\overline{g}$ are nonnegative, hence the inequality in (b) applies, and
+        \[\int_a^b hk \: d\alpha \leq 1\]
+        Then
+        \[\int_a^b \frac{|f||g|}{P^{\frac{1}{p}}Q^{\frac{1}{q}}} \: d\alpha \leq 1\]
+        \[\frac{1}{P^{\frac{1}{p}}Q^{\frac{1}{q}}}\int_a^b |f||g| d\alpha \leq 1\]
+        \[\int_a^b |f||g| d\alpha \leq P^{\frac{1}{p}}Q^{\frac{1}{q}} \]
+        Since we know that
+        \[\left|\int_a^b fg \: d\alpha \right| \leq \int_a^b |fg| \: d\alpha \leq \int_a^b |f||g| \: d\alpha\]
+        and that
+        \[P^{\frac{1}{p}}Q^{\frac{1}{q}} = \left\{\int_a^b |f|^p \: d\alpha \right\}^{\frac{1}{p}}\left\{\int_a^b |g|^q \: d\alpha\right\}^{\frac{1}{q}}\]
+        we conclude that
+        \[\left|\int_a^b fg d\alpha\right| \leq \left\{\int_a^b |f|^p \: d\alpha \right\}^{\frac{1}{p}}\left\{\int_a^b |g|^q \: d\alpha\right\}^{\frac{1}{q}} \]
+
+    \item[(d)]
+
+        
     \end{itemize}
 \end{Answer}
 \end{document}
