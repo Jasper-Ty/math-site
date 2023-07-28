@@ -49,17 +49,17 @@ Consider the subsets $K = \{2,4,6,8\}$, $L=\{1,2,3,4\}$, $M=\{3,4,5,6,8\}$ of $U
 \end{itemize}
 
 
-\exercise \\
-\exercise \\
-\exercise \\
-\exercise
+\exercise Skip \\
+\exercise Skip \\
+\exercise Skip \\
+\exercise Skip
 
 
 \exercise 
 Prove $(A \cup B) \cup C = A \cup (B \cup C)$
 
 \answer 
-Any element $x$ belongs to the left hand side if $(x \in A \vee x \in B) \vee x \in C$. It belongs to the right hand side if $x \in A \vee (x \in B \vee x \in C)$. Both expressions are logically equivalent.
+Any element $x$ belongs to the left hand side if $(x \in A \vee x \in B) \vee x \in C$. It belongs to the right hand side if $x \in A \vee (x \in B \vee x \in C)$. Both expressions are logically equivalent. Then the left set is equal to the right set by the axiom of extensionality.
 
 
 \exercise
@@ -94,4 +94,99 @@ Follows from $\vee$ distributing over $\wedge$
 Prove $A - (B \cup C) = (A - B) \cap (A - C)$
 
 \answer
-Follows again from DeMorgan's laws
+Follows again from DeMorgan's laws (for classical logic): $x$ belongs to the left hand side if
+\[x \in A \wedge \neg(x \in B \vee x \in C)\] 
+Which is equivalent to 
+\[x \in A \wedge (x \notin B \wedge x \notin C)\] 
+Then, since $\wedge$ distributes over itself, we can rewrite this as
+\[(x \in A \wedge x \notin B) \wedge (x \in A \wedge x \notin C)\] 
+Which is the right hand side.
+
+
+\exercise
+Prove: $(A \cup B) \cap B' = A$ if and only if $A \cap B = \varnothing$
+
+\answer
+By distributivity,
+\[B' \cap (A \cup B) = (B' \cap A) \cup (B' \cap B)\]
+Then,
+\[(B' \cap A) \cup (B' \cap B) = (B' \cup A) \cap \varnothing = B' \cap A\ = A - B\]
+Hence the equation is equivalent to 
+\[A- B = A\]
+Which is only true if and only if $A \cap B = \varnothing$
+
+
+\exercise
+Prove that $X \subseteq Y$ if and only if $Y' \subseteq X$
+
+\answer
+$X \subseteq Y$ when $a \in X \implies a \in Y$. By contraposition, this is equivalent to $a \notin Y \implies a \notin X$, which is the definition of $Y' \subseteq X'$
+
+
+\exercise
+Prove the identity $(A - B) \cup (B- A) = (A \cup B) - (A \cap B)$ of Example 10 using the identity $A - B = A \cap B'$ of Example 9
+
+\answer
+\begin{align*}
+    (A \cup B) - (A \cap B) &= (A \cup B) \cap (A \cap B)' \\
+                            &= (A \cup B) \cap (A' \cup B') \\
+                            &= ((A \cup B) \cap A') \cup ((A \cup B) \cap B') \\
+                            &= ((A \cap A') \cup (B \cap A')) \cup ((A \cap B') \cup (B \cap B')) \\
+                            &= (\varnothing \cup (B-A)) \cup ((A-B) \cup \varnothing) \\
+                            &= (A-B) \cup (B-A)
+\end{align*}
+
+
+\exercise
+In Fig. 1-8, show that any two line segments have the same number of points.
+
+\answer
+Book has a geometric solution. 
+
+
+\exercise
+Prove: 
+\begin{itemize}
+    \item[(a)]
+        $x \to x+2$ is a mapping of $\mathbb{N}$ into, but not onto, $\mathbb{N}$.
+    \item[(b)]
+        $x \to 3x - 2$ is a one-to-one mapping of $\mathbb{Q}$ onto $\mathbb{Q}$
+    \item[(c)]
+        $x \to x^3 - x^2 - x$ is a mapping of $\mathbb{R}$ onto $\mathbb{R}$ but not one-to-one.
+\end{itemize}
+
+\answer
+\begin{itemize}
+    \item[(a)]
+        By the cancellation law in $\mathbb{N}$, $x + 2 = y + 2$ implies $x = y$, so the map is injective. But there is no natural number $x$ such that $x+2 = 1$. Hence the map cannot be onto.
+    \item[(b)]
+        By the cancellation laws again for $\mathbb{Q}$, $3x - 2 = 3y - 2$ imply $x = y$, so this map is into. Moreover, for all $h \in \mathbb{Q}$, the map sends the number $(h+2)/3$ to $h$, hence the map is surjective.
+    \item[(c)]
+        The map is equivalent to 
+        \[x \to (x)(x - \phi^+)(x - \phi^-)\]
+        where $\phi^+$ and $\phi^-$ are the roots to the equation $x^2 - x - 1 = 0$. Hence the map is not injective, as multiple $x$ map to $0$.
+        The map is surjective, because the equation $x^3 - x^2 - x - r = 0$ always has a real root.
+\end{itemize}
+
+
+\exercise
+Prove: If $\alpha$ is a one-to-one mapping of a set $S$ onto a set $T$, then $\alpha$ has a unique inverse and conversely.
+
+\answer
+Suppose $\alpha$ is one-to-one. Let $t \in T$. There must exist $s \in S$ such that $\alpha(s) = t$, since $\alpha$ is onto. Suppose another such element $s' \in S$ existed, then $\alpha(s') = t = \alpha(s)$, so it must be that $s = s'$, hence $s$ is unique. Define $a^{-1}(t) = s$ for all $t \in T$. Then $\alpha \circ \alpha^{-1} = \text{id}$. 
+
+$\alpha$ must be unique, since inverse elements in any binary operation are unique.
+
+
+\exercise 
+Prove: If $\alpha$ is a one-to-one mapping of a set $S$ onto a set $T$ and $\beta$ is a one-to-one mapping of $T$ onto a set $U$, then $(\alpha\beta)^{-1} = \beta^{-1} \alpha^{-1}$
+
+\answer
+
+
+\subsection*{Supplementary Problems}
+
+\exercise
+Exhibit each of the following in tabular form:
+
+\answer
