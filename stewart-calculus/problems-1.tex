@@ -1,0 +1,47 @@
+\documentclass{article}
+
+\usepackage{mystyle}
+
+\begin{document}
+
+\begin{mytitle}
+    Calculus \\
+    Problems 1.1 \\
+    \normalsize Jasper Ty
+\end{mytitle}
+
+\begin{Answer}
+    Let $a$ be the side of length $4$. Let the adjacent side be $b$ and the hypotenuse $c$.
+    The altitude perpendicular to the hypotenuse splits the triangle into two similar triangles (proof via the angle sum) that are similar to the original triangle. $s$ is the hypotenuse of one of them, $a$ is the hypotenuse of the other. Hence, if the length of the altitude is $x$, we have the relationship
+    \[x / a = b / c\]
+    Simplifiying
+    \[x = \frac{4\sqrt{c^2-16}}{c}\]
+\end{Answer}
+
+\begin{Answer}
+    The perimeter of a triangle is 
+    \[P = a + b + c\]
+    Then
+    \[P^2 = a^2 + b^2 + c^2 + 2ab + 2ac + 2bc\]
+    Replacing $a^2 + b^2 = c^2$,
+    \[P^2 = c^2 + c^2 + 2ab + 2ac + 2bc = 2c^2 + 2ab + 2ac + 2bc\]
+    Collecting a common $c$,
+    \[P^2 = 2c(a + b + c) + 2ab\]
+    Replacing $a + b + c = P$
+    \[P^2 = 2Pc + 2ab\]
+    Using the previously found identity for the altitude perpendicular to the hypotenuse $A = ab/c$,
+    \[P^2 = 2Pc + 2(12c)\]
+    Then 
+    \[P^2 = 2c \cdot P + 2c \cdot 12\]
+    \[P^2 = 2c(P + 12)\]
+    Solving for $c$,
+    \[\frac{P^2}{2(P+12)} = c\]
+\end{Answer}
+
+\begin{Answer}
+    We find the different regions of interest:
+
+\end{Answer}
+
+
+\end{document}

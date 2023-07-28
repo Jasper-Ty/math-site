@@ -182,11 +182,116 @@ $\alpha$ must be unique, since inverse elements in any binary operation are uniq
 Prove: If $\alpha$ is a one-to-one mapping of a set $S$ onto a set $T$ and $\beta$ is a one-to-one mapping of $T$ onto a set $U$, then $(\alpha\beta)^{-1} = \beta^{-1} \alpha^{-1}$
 
 \answer
+$\alpha \beta \beta^{-1} \alpha^{-1} = \text{id}$
 
 
 \subsection*{Supplementary Problems}
 
 \exercise
 Exhibit each of the following in tabular form:
+\begin{enumerate}
+    \item[(a)]
+        the set of negative integers greater than $-6$
+    \item[(b)]
+        the set of integers between $-3$ and $4$,
+    \item[(c)]
+        the set of integers whose squares are less than $20$,
+    \item[(d)]
+        the set of all positive factors of $18$,
+    \item[(e)]
+        the set of all common factors of $16$ and $24$,
+    \item[(f)]
+        $\{p:p \in \mathbb{N}, p^2 < 10\}$
+    \item[(g)]
+        $\{b: b \in \mathbb{N}, 3 \leq b \leq 8\}$
+    \item[(h)]
+        $\{x: x \in \mathbb{Z}, 3x^2 + 7x + 2 = 0\}$
+    \item[(i)]
+        $\{x: x \in \mathbb{Q}, 2x^2 + 5x + 3 = 0\}$
+\end{enumerate}
+
+\answer
+\begin{enumerate}
+    \item[(a)]
+        $\{-5, -4, -3, -2, -1\}$
+    \item[(b)]
+        $\{-2, -1, 0, 1, 2, 3\}$
+    \item[(c)]
+        $\{-4, -3, -2, -1, 0, 1, 2, 3, 4\}$
+    \item[(d)]
+        $\{1, 2, 3, 6, 9, 18\}$
+    \item[(e)]
+        $\{1, 2, 4, 8\}$
+    \item[(f)]
+        $\{1, 2, 3\}$
+    \item[(g)]
+        $\{3, 4, 5, 6, 7, 8\}$
+    \item[(h)]
+        $3x^2 + 7x + 2 = (3x+1)(x+2)$, so the roots are $-2$ and $-1/3$. So our set in tabular form is $\{-2\}$
+    \item[(i)]
+        $2x^2 + 5x + 3 = (2x + 3)(x + 1)$, so the roots are $-3/2$ and $-1$. So our set in tabular form is $\{-3/2, -1\}$
+\end{enumerate}
+
+
+\exercise
+Verify: 
+\begin{itemize}
+    \item[(a)]
+        $\{x : x \in \mathbb{N}, x < 1\} = \varnothing$
+    \item[(a)]
+        $\{x : x \in \mathbb{Z}, 6x^2 + 5x - 4\} = \varnothing$
+\end{itemize}
+
+\answer
+\begin{itemize}
+    \item[(a)]
+        $x \geq 1$ for all $x \in \mathbb{N}$. 
+    \item[(a)]
+        $6x^2 + 5x - 4 = (3x + 4)(2x - 1)$. So the roots are $1/2$ and $-4/3$, which are non-integers.
+\end{itemize}
+
+
+\exercise
+Exhibit the 15 proper subsets of $S = \{a,b,c,d\}$
+
+\answer
+$\varnothing$, $\{a\}$,  $\{b\}$,  $\{c\}$,  $\{d\}$,  $\{a, b\}$,  $\{a, c\}$,  $\{a, d\}$,  $\{b, c\}$,  $\{b, d\}$,  $\{c, d\}$, $\{a, b, c\}$, $\{a, b, d\}$, $\{a, c, d\}$, $\{b, c, d\}$ 
+
+
+\exercise
+Show that the number of proper subsets of $S = \{a_1, a_2, \ldots, a_n\}$ is $2^n-1$. 
+
+\answer
+The number of subsets of $S$ is counted by the number of functions from $S$ to $\{0, 1\}$, which is the set $2^S$, whose cardinality is $2^{|S|} = 2^n$. Minus the set $S$ itself, we have $2^n - 1$.
+
+
+\exercise
+Using the sets of Problem 1.2, verify
+\begin{itemize}
+    \item[(a)]
+        $(A \cup B) \cup C = A \cup (B \cup C)$
+    \item[(b)]
+        $(A \cap B) \cap C = A \cap (B \cap C)$
+    \item[(c)]
+        $(A \cup B) \cap C \neq A \cup (B \cap C)$
+\end{itemize}
+
+\answer
+\begin{itemize}
+    \item[(a)]
+        \begin{align*}
+            (A \cup B) \cup C &= \{a, b, c, d, g\} \cup \{c, g, m, n, p\} \\
+                              &= \{a, b, c, g, m, n, p\} \\
+                              &= \{a, b, c, d\} \cup \{a, c, g, m, n, p\} \\
+                              &= A \cup (B \cup C)
+        \end{align*}
+    \item[(b)]
+        $(A \cap B) \cap C = A \cap (B \cap C)$
+    \item[(c)]
+        $(A \cup B) \cap C \neq A \cup (B \cap C)$
+\end{itemize}
+
+
+\exercise
 
 \answer
