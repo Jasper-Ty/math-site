@@ -293,5 +293,210 @@ Using the sets of Problem 1.2, verify
 
 
 \exercise
+Using the sets of Problem 1.3, verify:
+\begin{itemize}
+    \item[(a)]
+        $(K')' = LK$
+    \item[(b)]
+        $(K \cap L)' = K' \cup L'$
+    \item[(c)]
+        $(K \cup L \cup M)' = K' \cap L' \cap M'$
+    \item[(d)]
+        $K \cap (L \cup M) = (K \cap L) \cup (K \cap M)$
+\end{itemize}
 
 \answer
+\begin{itemize}
+    \item[(a)]
+        $(K')' = \{1, 3, 5, 7, 9, 10\}' = \{2, 4, 6, 8\}$
+    \item[(b)]
+        \begin{align*}
+            (K \cap L)' &= (\{2, 4, 6, 8\} \cup \{1, 2, 3, 4\})'\\
+                        &= \{1, 2, 3, 4, 6, 8\}' \\
+                        &= \{5, 7, 9, 10\} \\
+            K' \cap L' &= \{1, 3, 5, 7, 9, 10\} \cap \{5, 6, 7, 8, 9, 10\} \\
+                        &= \{5, 7, 9, 10\}
+        \end{align*}
+    \item[(c)]
+        \begin{align*}
+            (K \cap L \cap M)' &= (\{2, 4, 6, 8\} \cup \{1, 2, 3, 4\} \cup \{3, 4, 5, 6, 8\})'\\
+                        &= \{1, 2, 3, 4, 5, 6, 8\}' \\
+                        &= \{7, 9, 10\} \\
+            K' \cap L' &= \{1, 3, 5, 7, 9, 10\} \cap \{5, 6, 7, 8, 9, 10\} \cap \{1, 2, 7, 9, 10\}\\
+                        &= \{7, 9, 10\}
+        \end{align*}
+    \item[(d)]
+        \begin{align*}
+            K \cap (L \cup M) &= \{2, 4, 6, 8\} \cap (\{1, 2, 3, 4\} \cup \{3, 4, 5, 6, 8\}) \\
+                              &= \{2,4,6,8\} \cap \{1,2,3,4,5,6,8\} \\
+                              &= \{2,4,6,8\} \\
+            (K \cap L) \cup (K \cap M) &= \{2, 4\} \cup \{6, 8\} \\
+                                       &= \{2, 4, 6, 8\}
+        \end{align*}
+\end{itemize}
+
+
+\exercise
+By ``$n|m$'' mean ``$n$ is a factor of $m$.''. Given $A = \{x : x \in \mathbb{N}, 3|x\}$ and $B = \{x:x \in \mathbb{N}, 5|x\}$, list $4$ elements of each of the sets $A'$, $B'$, $A \cup B$, $A \cap B$, $A \cup B'$, $A' \cup B'$ where $A'$ and $B'$ are the respective complements of $A$ and $B$ in $\mathbb{N}$
+
+\answer
+We have that $A = \{3, 6, 9, \ldots\}$ and $B = \{5, 10, 15, \ldots\}$.
+
+\begin{itemize}
+    \item[$A'$]
+        $1, 2, 4, 5$
+    \item[$B'$]
+        $1, 2, 3, 4$
+    \item[$A \cup B$]
+        $3, 5, 6, 9$
+    \item[$A \cap B$]
+        $15, 30, 45, 60$
+    \item[$A \cup B'$]
+        $3, 6, 9, 12$
+    \item[$A' \cup B'$]
+        $1, 2, 4, 5$
+\end{itemize}
+
+
+\exercise
+Prove the laws of ($1.8$)-($1.12'$), which were not treated in Problems $1.8$--$1.13$
+
+\answer
+\begin{itemize}
+    \item[(1.9)] 
+        $A \cup B = B \cup A$ and $A \cap B = B \cap A$ are obvious
+    \item[($1.11'$)]
+        $(A \cap B)' = A' \cup B')$ follows from DeMorgan's laws in the case $\neg(P \wedge Q) \iff \neg P \vee \neg Q$.
+    \item[($1.12'$)]
+        \begin{align*}
+            (A - B) \cup (A - C) &= (A \cap B') \cup (A \cap C') \\
+                                 &= ((A \cap B') \cup A) \cap ((A \cap B') \cup C') \\
+                                 &= ((A \cup A) \cap (B' \cup A)) \cap ((A \cup C') \cap (B' \cup C')) \\
+                                 &= A \cap (A \cup C') \cap (B \cap C)' \\
+                                 &= A \cap (B \cap C)' \\
+                                 &= A - (B \cap C)
+        \end{align*}
+\end{itemize}
+
+
+\exercise
+Let $A$ and $B$ be subsets of a universal set $U$, Prove:
+\begin{itemize}
+    \item[(a)]
+        $A \cup B = A \cap B$ if and only if $A = B$
+    \item[(b)]
+        $A \cap B = A$ if and only if $A \subseteq B$
+    \item[(c)]
+        $(A \cap B') \cup (A' \cap B) = A \cup B$ if and only if $A \cap B = \varnothing$
+\end{itemize}
+
+\answer
+\begin{itemize}
+    \item[(a)]
+        Let $A \cup B = A \cap B$. Then $A \subseteq A \cup B = A \cap B \subseteq B$ as well as $B \subseteq A \cup B = A \cap B \subseteq A$. Then $A = B$. The reverse implication is obvious.
+    \item[(b)]
+        Suppose $A \cap B = A$. Then $A = A \cap B \subseteq B$. Suppose that $A \subseteq B$. Then $A \cap A \subseteq B \cap A$, so that $A \subseteq A \cap B$. That $A \cap B \subseteq A$ is obvious. Then we have that $A \cap B = A$
+    \item[(c)]
+        \begin{align*}
+            (A \cap B') \cup (A' \cap B) &= ((A \cap B') \cup A') \cap ((A \cap B') \cup B) \\
+                                         &= ((A' \cup A) \cap (A' \cup B') \cap ((B \cup A) \cap (B \cup B')) \\
+                                         &= (U \cap (A \cap B)') \cap ((A \cup B) \cap U) \\
+                                         &= (A \cap B)' \cap (A \cup B) \\
+                                         &= (A \cup B) - (A \cap B)
+        \end{align*}
+        Then evidently the equality only holds if and only of $A \cap B = \varnothing$
+\end{itemize}
+
+
+\exercise
+Given $|U| = 692$, $|A| = 300$, $|B| = 230$, $|C| = 370$, $|A \cap B| = 150$, $|A \cap C| = 180$, $|B \cap C| = 90$, $|A \cap B' \cap C'| = 10$, find
+\begin{itemize}
+    \item[(a)]
+        $|A \cap B \cap C| = 40$
+    \item[(b)]
+        $|A' \cap B \cap C'| = 30$
+    \item[(c)]
+        $|A' \cap B' \cap C'| = 172$
+    \item[(d)]
+        $|(A \cap B) \cup (A \cap C) \cup (B \cap C)| = 340$
+\end{itemize}
+
+\answer
+I drew a diagram for all of these.
+
+
+\exercise
+Given the mappings $\alpha: n \to n^2+1$ and $\beta: n\to 3n+2$ of $\mathbb{N}$ into $\mathbb{N}$, find: $\alpha\alpha = n^2+2n^2+2$, $\beta\beta = 3n^2+5$ and $\beta\alpha$
+
+\answer
+$\alpha\alpha = (n^2+1)^2+1 = (n^4 + 2n^2 + 1) + 1 = n^4 + 2n^2 + 2$\\
+$\beta\beta = 3(3n+2)+2 = (9n+6)+2 = 9n+8$ \\
+$\beta\alpha = 3(n^2+1) + 2 = (3n^2 + 3) + 2 = 3n^2 + 5$ \\
+$\alpha\beta = (3n+2)^2+1 = (9n^2 + 12n + 4) + 1 = 9n^2 + 12n + 5$
+
+
+\exercise
+Which of the following mappings of $\mathbb{Z}$ into $\mathbb{Z}$:
+\begin{itemize}
+    \item[(a)]
+        $x \to x +2$
+    \item[(b)]
+        $x \to 3x$
+    \item[(c)]
+        $x \to x^2$
+    \item[(d)]
+        $x \to 4-x$
+    \item[(e)]
+        $x \to x^3$
+    \item[(f)]
+        $x \to x^2-x$
+\end{itemize}
+are 
+\begin{itemize}
+    \item[(i)]
+        mappings of $\mathbb{Z}$ onto $\mathbb{Z}$
+    \item[(ii)]
+        one-to-one mappings of $\mathbb{Z}$ onto $\mathbb{Z}$
+\end{itemize}
+
+\answer
+(a) and (d) for both.
+
+
+\exercise
+Problem 32 but with $\mathbb{Z}$ replaced by $\mathbb{Q}$
+
+\answer
+(a), (b), and (d), for both since $\mathbb{Q}$ features multiplicative inverses.
+
+
+\exercise
+Problem 32 but with $\mathbb{Z}$ replaced by $\mathbb{R}$
+
+\answer
+(a), (b), (d), (e) for both, since $\mathbb{R}$ features solutions to the equation $ax^n = b$
+
+
+\exercise
+\begin{itemize}
+    \item[(a)]
+        If $E$ is the set of all even positive integers, show that $x \to x+1$, $x \in E$ is not a mapping of $E$ onto the set $F$ of all odd positive integers.
+    \item[(b)]
+        If $E^*$ is the set consisting of zero and all even positive integers (i.e, the non-negative integers), show that $x \to x+1$, $x \in E^*$ is a mapping of $E^*$ onto $F$.
+\end{itemize}
+
+\answer
+\begin{itemize}
+    \item[(a)]
+        There is no positive integer $n$ such that $n+1 = 1$, as that directly implies $n = 0$.
+    \item[(b)]
+        Let $o$ be an odd positive integer. Then $o-1$ is even. In the case that $o \neq 1$, $o-1 > 0$, so the map sends $o-1$ to $o$. The case that $o = 1$ is handled by the image of $0$.
+\end{itemize}
+
+
+\exercise
+Given the one-to-one-mappings
+\begin{center}
+    *crazy long table of functions*
+\end{center}
+of $S  = \{1, 2, 3, 4\}$ onto itself, verify:
