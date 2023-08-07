@@ -1,7 +1,24 @@
 \section{Rings}
 
 \definition 
-A non-empty set $\mathcal{R}$ is a $\textit{ring}$ if it satisfies 
+A non-empty set $R$ equipped with two operations $+$ and $\cdot$ is a $\textit{ring}$ if
+\begin{itemize}
+    \item[(a)]
+        $(R, +)$ is an abelian group
+    \item[(b)]
+        $(R, \cdot)$ is a monoid
+    \item[(c)]
+        $+$ distributes over $\cdot$, i.e
+        \[a(b+c) = ab + ac\]
+        \[(b+c)a = ba + ca\]
+        for all $a, b, c \in R$
+\end{itemize}
+
+\example
+$\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$, are rings.
+
+
+\example $S = \{x + y\sqrt[3]{3} + \}$
 
 
 \section{Properties of Rings}

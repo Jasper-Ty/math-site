@@ -2,6 +2,17 @@
 \contentsline {chapter}{\numberline {1}Sets}{7}{chapter.1}%
 \contentsline {section}{Exercises}{7}{section*.2}%
 \contentsline {chapter}{\numberline {2}Relations and Operations}{17}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Relations}{17}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Properties of binary relations}{17}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Equivalence relations}{17}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Equivalence sets}{17}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Ordering in sets}{17}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Operations}{17}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Types of binary operations}{17}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Well-defined operations}{17}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Isomorphisms}{17}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Permutations}{17}{section.2.10}%
+\contentsline {section}{\numberline {2.11}Transpositions}{17}{section.2.11}%
 \contentsline {part}{II\hspace {1em}Number Systems}{19}{part.2}%
 \contentsline {chapter}{\numberline {3}The Natural Numbers}{21}{chapter.3}%
 \contentsline {chapter}{\numberline {4}The Integers}{23}{chapter.4}%

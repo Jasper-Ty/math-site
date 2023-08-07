@@ -147,9 +147,36 @@ Lemma: If a finite group has proper normal subgroups, it contains a maximal norm
 
 Then just use induction.
 
-\exercise
 
+\exercise
+Consider two composition series of the cyclic group of order $60$: $G = \{1, a^1, a^2, \ldots, a^{59}\}$:
+\[G, 
+H = \{1,a^2, a^4, \ldots, a^{58}\}, 
+J=\{1, a^4, a^8, \ldots, a^{56}\}, 
+K = \{1, a^{12}, a^{24}, a^{36}, a^{48}\}, 
+U = \{1\}\]
+and
+\[G,
+    M = \{1, a^3, a^6, \ldots, a^{57}\},
+N = \{1, a^{15}, a^{30}, a^{45}\},
+P = \{1, a^{30}\},
+U\]
 
 \answer
+The quotient groups are 
+\[G/H = \{H, Ha\},
+H/J = \{J, Ja^2\},
+J/K = \{K, Ka^4, Ka^8\},
+K/U = \{U, Ua^{12}, Ua^{24}, Ua^{36}, Ua^{48}\}\]
+
+and
+\[G/M = \{M, Ma, Ma^2\},
+M/N = \{N, Na^3, Na^6, Na^9, Na^{12}\},
+N/P = \{P, Pa^{15}\},
+K/U = \{U, Ua^{30}\}\]
+
+Then both series produce cyclic quotient groups of orders $2, 2, 3, 5$. Since cyclic groups of the same order are isomorphic, we may put both sets of quotient groups in correspondence.
 
 
+\exercise
+Prove: Let $G$ be a group of order $n = rpt$, $K$ be a subgroup of order $rp$ of $G$, and $H$ be an normal subgroup of order $R$ of both $K$ and $G$. Then $K$ is an normal subgroup of $G$ if and only if $P = K/H$ is an normal subgroup of $S = G/H$
