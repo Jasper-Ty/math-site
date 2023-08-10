@@ -1,51 +1,30 @@
-\documentclass{article}
-
-\usepackage{mathrsfs}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage[margin=0.5in]{geometry}
-
-\newenvironment{myboxed}{\bigskip\noindent\begin{tabular}{|p{.975\linewidth}|}\hline \\}{\\\\\hline\end{tabular}\bigskip}
-\newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
-
-\begin{document}
-
-\begin{mytitle}
-    Principles of Mathematical Analysis \\
-    Chapter 7 \\
-    \normalsize Jasper Ty
-\end{mytitle}
-
 \section{Pointwise Convergence}
 
-\begin{myboxed}
-    \textsc{Pointwise convergence of functions}
-
-    \textbf{Definition}
+\begin{result}
+    {Pointwise convergence of functions}
+    {Definition}
 
     Let $f_n: E \rightarrow \mathbb{R}$ be a sequence of functions. If $f$ is a function such that $f_n(x) \to f(x)$ as $n \to \infty$ for all $x \in E$, then we say $f_n$ converges \textit{pointwise} to $f$.
-\end{myboxed}
+\end{result}
 
 This type of convergence is very \textit{weak}. It guarantees very little in the way of actually \textit{working with} the limit.
 
 This definition is readily adapted to infinite sums of functions.
 
-\begin{myboxed}
-    \textsc{Infinite sums of functions}
-
-    \textbf{Definition}
-
+\begin{result}
+    {Infinite sums of functions}
+    {Definition}
+    
     If $f$ is a function such that 
     \[\sum_{n=1}^\infty f_n(x) = f(x)\] 
     for all $x \in E$, then we say $f$ is the \textit{sum} of the series $f_n$.
-\end{myboxed}
+\end{result}
 
 An example of the weakness of pointwise convergence is
 
-\begin{myboxed}
-    \textsc{Continuity is not preserved under pointwise convergence}
-
-    \textbf{Example} 
+\begin{result}
+    {Continuity is not preserved under pointwise convergence}
+    {Example} 
 
     Let $f_n: [0, 1] \rightarrow [0, 1]$ be defined by
     \[f_n(x) := x^n\]
@@ -57,14 +36,13 @@ An example of the weakness of pointwise convergence is
     \end{cases}\]
 
     by Theorem 3.20(e)
-\end{myboxed}
+\end{result}
 
 In this case, a sequence of continuous functions converges to a function that is eminently discontinuous. We use the preceding idea of ``letting $f < 0$ sink and letting $f = 1$ float using the $n^{th}$ power limit'' to show the following.
 
-\begin{myboxed}
-    \textsc{Integrability is not preserved under pointwise convergence}
-
-    \textbf{Example}
+\begin{result}
+    {Integrability is not preserved under pointwise convergence}
+    {Example}
 
     \[\lim_{m \to \infty} \lim_{n \to \infty} (\cos m!\pi x ) ^{2n} = \begin{cases}
         0 & x\text{ irrational} \\
@@ -92,60 +70,54 @@ In this case, a sequence of continuous functions converges to a function that is
         0 & x \text{ irrational} \\
         1 & x \text{ rational} \\
     \end{cases}\]
-\end{myboxed}
+\end{result} 
 
 These two examples show that \textit{properties} of $f_n$ may not pass through the limit to $f$. 
 
 Next, we show that \textit{operations} on $f_n$ may not be passed through the limit to $f$.
 
-\begin{myboxed}
-    \textsc{A limit of differentiated functions may not be the differentiated limit of functions}
-
-    \textbf{Example}
+\begin{result}
+    {A limit of differentiated functions may not be the differentiated limit of functions}
+    {Example}
 
     Let 
     \[f_n(x) := \frac{\sin nx}{\sqrt{n}}\]
     Then,
     \[0 = \frac{d}{dx}\left[\lim_{n \to \infty} f_n \right]\neq \lim_{n \to \infty} \left[\frac{d}{dx} f_n\right] = \sqrt{n}\cos nx\]
-\end{myboxed}
+\end{result}
 
-\begin{myboxed}
-    \textsc{A limit of integrated functions may not be the integral of a limit of functions}
-
-    \textbf{Example}
+\begin{result}
+    {A limit of integrated functions may not be the integral of a limit of functions}
+    {Example}
 
     Let 
     \[f_n(x) := n x(1-x^2)^n\]
     Then
     \[0 = \int_0^1 \left[\lim_{n \to \infty} f_n \right] \neq \lim_{n \to \infty} \left[\int_0^1 f_n \right] = \frac{1}{2} \]
-        
-\end{myboxed}
+\end{result}
 
-\newpage
 \section{Uniform convergence}
 
-\begin{myboxed}
-    \textsc{Uniform convergence of functions}
-
-    \textbf{Definition}
+\begin{result}
+    {Uniform convergence of functions}
+    {Definition}
 
     Let $f_n: E \rightarrow \mathbb{R}$ be a sequence of functions. 
 
     If $f$ is a function such that for all $\varepsilon$ there exists $N$ such that
     \[|f_n(x) - f(x)| \leq \varepsilon\]
     for all $x$, we say that $f$ converges \textit{uniformly}.
+\end{result}
 
     This definition carries over to sums of functions (the partial sums must converge to the limit function uniformly).
-\end{myboxed}
 
-This is a \textit{much stronger} notion of convergence, as it, in a sense, ``tethers'' together convergence of of all points in the domain. 
+This is a \textit{much stronger} notion of convergence, as it ``tethers'' together convergence of of all points in the domain. 
 
-There are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which Rudin makes precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) with respect to a certain kind of metric. 
+The following are useful criteria for uniform convergence. These hint at the idea of being able to make sense of the idea of ``distance'' between two functions, which Rudin makes precise later. The first one tells us that uniform convergence of functions corresponds to convergence (via the Cauchy criterion) with respect to a certain kind of metric. 
 
-\begin{myboxed}
-    \textsc{Cauchy criterion for uniform convergence}
-
-    \textbf{Theorem}
+\begin{result}
+    {Cauchy criterion for uniform convergence}
+    {Theorem}
 
     $f_n$ converges uniformly on $E$ if and only if there exists an integer $N$ such that for all $m, n \geq N$,
     \[\sup_{x \in E}|f_n(x) - f_m(x)| \leq \varepsilon\]
@@ -156,30 +128,26 @@ There are useful criteria for uniform convergence. These hint at the idea of bei
     \[|f_n(x) - f(x)| \leq \frac{\varepsilon}{2}\]
     Then use the triangle inequality.
 
-    For the converse, we note that the criterion is strong enough itself to guarantee $f_n \rightarrow f$ pointwise, hence if we take the inequality
+    For the converse, we note that the above criterion is strong enough itself to guarantee $f_n \rightarrow f$ pointwise, hence if we take the inequality
     \[|f_n(x) - f_m(x)| \leq \varepsilon\]
     and let $m \rightarrow \infty$, we recover the original condition for uniform convergence
-\end{myboxed}
+\end{result}
 
-The next criterion is just a rephrasing of the first definition of uniform convergence in similar terms. It tells us that uniform convergence corresponds to the ``distance'' between two functions vanishing.
+The next criterion is just a rephrasing of the first definition of uniform convergence. It tells us that uniform convergence corresponds to the ``distance'' between two functions vanishing.
 
-\begin{myboxed}
-    \textsc{Supremum criterion for uniform convergence}
-
-    \textbf{Theorem}
+\begin{result}
+    {Supremum criterion for uniform convergence}
+    {Theorem}
 
     $f_n \rightarrow f$ uniformly on $E$ if and only if 
     \[\sup_{x \in E}|f_n(x) - f(x)| \rightarrow 0 \:\text{ as }\: n \rightarrow \infty\]
-\end{myboxed}
+\end{result}
 
-Next, we show that uniform convergence does not share the same failures as pointwise convergence when it comes to passing through important properties and operations.
+Next, we show that uniform convergence does not share the same failures as pointwise convergence when it comes to passing through important properties and operations. We first take continuity.
 
-We first take continuity.
-
-\begin{myboxed}
-    \textsc{Continuity is preserved under uniform convergence}
-
-    \textbf{Theorem}
+\begin{result}
+    {Continuity is preserved under uniform convergence}
+    {Theorem}
 
     Let $f_n$ be a sequence of continuous functions and let $f_n \rightarrow f$ uniformly. Then $f$ is continuous.
 
@@ -190,14 +158,13 @@ We first take continuity.
 First use uniform convergence to choose $n$ such that $|f(x) - f_n(x)|$ and $|f(t) - f_n(t)|$ are arbitrarily small. 
 
 Then use continuity to choose $\delta$ such that $|f_n(x) - f_n(t)|$ can be made arbitrarily small by letting $|x-t| \leq \delta$.
-\end{myboxed}
+\end{result}
 
 This however is not an ``if and only if''. A continuous function can be the non-uniform limit of continuous functions. In one case, however, we can use compactness and monotonicity to take enough control such that a sequence of functions can \textit{only} converge uniformly.
 
-\begin{myboxed}
-    \textsc{Inferring uniform convergence from pointwise convergence}
-
-    \textbf{Example}
+\begin{result}
+    {Inferring uniform convergence from pointwise convergence}
+    {Example}
     
     Let $f_n: K \rightarrow \mathbb{R}$ be a sequence of continuous functions, and let $f_n \rightarrow f$ pointwise. Let $f$ be continuous. Impose the two conditions
     \begin{itemize}
@@ -216,7 +183,7 @@ This however is not an ``if and only if''. A continuous function can be the non-
 
     $K$'s compactness tells us that $K_n$ is compact:
     \begin{itemize}
-        \item Because $f_n - f$ is a continuous function and $(\infty, \varepsilon]$ is closed, $K_n$ is closed. (Theorem 4.8; inverse images of closed sets under continuous functions are closed) 
+        \item Because $f_n - f$ is a continuous function and $[\varepsilon, \infty)$ is closed, $K_n = (f_n-f)^{-1}([\varepsilon, \infty))$ is closed. (Theorem 4.8; inverse images of closed sets under continuous functions are closed) 
         \item Because $K_n$ is closed, and $K$ is compact, $K_n$ is compact. (Theorem 2.35; closed subsets of compact spaces are compact).
     \end{itemize}
 
@@ -225,16 +192,15 @@ This however is not an ``if and only if''. A continuous function can be the non-
     It must be that $\bigcap K_n$ is empty, as $f_n$ converges pointwise to $f$, and so for each $x$, the fact that $|f_n(x) - f| < \varepsilon$ for some $n$ means there must be some $K_n$ it is not a member of.
 
     But an intersection of nonempty nested compact sets must be nonempty (Theorem 2.36), so there has to be an empty set somewhere in the sequence. Let this set be $K_N$. Then for all $n \geq N$, $K_n$ is empty. This is precisely the $N$ we need to keep the distance between $f_n$ and $f$ below $\varepsilon$.
-\end{myboxed}
+\end{result}
 
 Restricting our study to continuous, bounded functions (the functions above were bounded because $K$ was compact) gives rise to a very nice structure, one we're already very familiar with: a metric space. (More importantly, a vector space!)
 
 The concept of distance here corresponds with how it has been used in the previous theorems and examples.
 
-\begin{myboxed}
-    \textsc{The space of continuous and bounded functions on $X$}
-
-    \textbf{Definition}
+\begin{result}
+    {The space of continuous and bounded functions on $X$}
+    {Definition}
 
     Let $X$ be a metric space. Let $\mathscr{C}(X)$ denote the set of all continuous, bounded, complex-valued functions on $X$.
 
@@ -243,27 +209,26 @@ The concept of distance here corresponds with how it has been used in the previo
     Let $d(f, g)$ for $f, g \in \mathscr{C}(X)$ be induced by the norm; i.e
     \[d(f, g) = \Vert f - g \Vert\]
     This turns $\mathscr{C}(X)$ into a metric space.
-\end{myboxed}
+\end{result}
 
 This space is complete, and the fact that it is so can be bootstrapped with the previous theorems.
 
-\begin{myboxed}
-    \textsc{$\mathscr{C}(X)$ is complete}
-
-    \textbf{Proof}
+\begin{result}
+    {$\mathscr{C}(X)$ is complete}
+    {Proof}
 
     Let $f_n$ be a Cauchy sequence in $\mathscr{C}(X)$. Then $f_n$ converges uniformly to a function $f$. Moreover, since each $f_n$ is continuous, $f$ is continuous. That $f$ is bounded follows from the fact that $f = f_n + (f - f_n)$, so $\Vert f \Vert \leq \Vert f_n \Vert + \Vert f - f_n \Vert = \Vert f_n \Vert + \varepsilon$. 
 
     Hence $f \in \mathscr{C}(X)$. Since $f_n \rightarrow f$ uniformly, $\Vert f - f_n \Vert \rightarrow 0$.
+\end{result}
 
-\end{myboxed}
 
 Next, we tackle integration. Uniform convergence allows us to bound $f$ in a, well, uniform way. This, along with a version of the squeeze theorem for integrals, shows us that uniform convergence plays nicely with integration.
 
-\begin{myboxed}
-    \textsc{The integral of a uniformly convergent limit is a uniformly convergent limit of integrals}
+\begin{result}
+    {The integral of a uniformly convergent limit is a uniformly convergent limit of integrals}
+    {Theorem}
 
-    \textbf{Theorem}
     Let $f_n \in \mathscr{R}(\alpha)$ on $[a, b]$ for all $n$. Let $f_n \rightarrow f$ uniformly. Then $f \in \mathscr{R}(\alpha)$, and
     \[\int_a^b f d\alpha = \lim_{n \to \infty} \int_a^b f_n d\alpha\]
 
@@ -272,7 +237,7 @@ Next, we tackle integration. Uniform convergence allows us to bound $f$ in a, we
     The idea is that you can ``squeeze'' $f$ with two $f_n$ shaped calipers, and that the gap decreases as $n$ goes to infinity.
 
     Let this gap be 
-    \[\varepsilon_n = \sup_{x \in [a,b]} |f_n(x) - f(x)|\]
+    \[\varepsilon_n = \Vert f_n - f\Vert\]
     Then
     \[f_n - \varepsilon_n \leq f \leq f_n + \varepsilon_n\]
     Then this bounds $f$'s lower and upper integrals.
@@ -282,16 +247,13 @@ Next, we tackle integration. Uniform convergence allows us to bound $f$ in a, we
     So $f \in \mathscr{R}(\alpha)$. From the inequality we can also read off 
     \[\left| \int_a^b fd\alpha - \int_a^b f_nd\alpha\right| \leq \varepsilon_n (\alpha(b) - \alpha(a))\]
     Which proves the equality of the integral and the limit.
-\end{myboxed}
-
-\newpage
+\end{result}
     
 Finally, we look at differentiation.
 
-\begin{myboxed}
-    \textsc{A sequence of functions whose derivatives converge uniformly converges uniformly to a limit with the correct derivative}
-
-    \textbf{Theorem}
+\begin{result}
+    {A sequence of functions whose derivatives converge uniformly converges uniformly to a limit with the correct derivative}
+    {Theorem}
 
     Let $f_n: [a,b] \rightarrow \mathbb{R}$ be a sequence of differentiable functions that converge pointwise for at least \textit{some} point $x_0$. Then if $f_n'$ converge uniformly, there is a function $f$ such that $f_n \rightarrow f$ uniformly and such that $f_n' \rightarrow f'$.
 
@@ -299,9 +261,9 @@ Finally, we look at differentiation.
 
     Let $\varepsilon > 0$. Use the Cauchy criterion for both ordinary sequences in $\mathbb{R}$ and for uniformly convergent sequences of functions to produce $N$ such that $n, m \geq N$ implies
     \[|f_n(x_0) - f_m(x_0)| \leq \frac{\varepsilon}{2}\]
-    \[\sup_{t \in [a,b]}|f'_n(t) - f'_m(t)| \leq \frac{\varepsilon}{2(b-a)}\]
+    \[\Vert f'_n - f'_m \Vert \leq \frac{\varepsilon}{2(b-a)}\]
     Consider the function $f_n - f_m$, whose derivative is $f'_n - f'_m$. The mean value theorem gives us a $c$ with which we can show
-    \[\left|\frac{[f_n(x) - f_m(x)] - [f_n(y) - f_m(y)]}{x-y}\right| = |f'_n(c) - f'_m(c)| \leq \sup_{t \in [a, b]} |f'_n(t) - f'_m(t)| \leq \frac{\varepsilon}{2(b-a)}\]
+    \[\left|\frac{[f_n(x) - f_m(x)] - [f_n(y) - f_m(y)]}{x-y}\right| = |f'_n(c) - f'_m(c)| \leq \Vert f'_n - f'_m \Vert \leq \frac{\varepsilon}{2(b-a)}\]
     Then, since $a \leq x < y \leq b$
     \[\left|[f_n(x) - f_m(x)] - [f_n(y) - f_m(y)]\right| \leq \frac{\varepsilon|x-y|}{2(b-a)} \leq \frac{\varepsilon}{2}\]
     for any $x, y \in [a, b]$. Then, by the triangle inequality,
@@ -315,19 +277,18 @@ Finally, we look at differentiation.
     \[|\phi_n(t) - \phi_m(t)| \leq \frac{\varepsilon}{2(b-a)}\]
     So that $\phi_n \rightarrow \phi$ uniformly. Then, by Theorem 7.11, the limits we are interested in commute:
     \[\lim_{t \to x} \lim_{n \to \infty} \phi_n(t) = \lim_{n \to \infty} \lim_{t \to x} \phi_n(t)\]
-    The left hand side is
+    The left hand side is $f'(x)$
     \[\lim_{t \to x} \lim_{n \to \infty} \phi_n(t) = \lim_{t \to x} \phi(t) = f'(x)\]
-    The right hand side is
-    \[\lim_{n \to \infty} \lim_{t \to x} \phi_n(t) = \lim_{n \to \infty} f'_n(t)\]
+    The right hand side is $\lim_{n\to\infty} f'_n(x)$
+    \[\lim_{n \to \infty} \lim_{t \to x} \phi_n(t) = \lim_{n \to \infty} f'_n(x)\]
     Hence $f'_n \rightarrow f_n$.
-\end{myboxed}
+\end{result}
 
 Now with the machinery of limits of function sequences, we can explore a wider variety of functions. As an example.
 
-\begin{myboxed}
-    \textsc{A nowhere differentiable continuous function}
-
-    \textbf{Example}
+\begin{result}
+    {A nowhere differentiable continuous function}
+    {Example}
 
     Define the periodic triangle function $\varphi$ to be
     \[\varphi(x) := |x|\]
@@ -337,18 +298,16 @@ Now with the machinery of limits of function sequences, we can explore a wider v
     \[f(x) := \sum_{n=0}^\infty \left(\frac{3}{4}\right)^n \varphi(4^nx)\]
     By Theorem 7.10, the series converges uniformly. Then $f$ is continuous, as it is a uniformly convergent sequence of continuous functions.
      To prove it is not differentiable, we construct a sequence $x_n \rightarrow x$ such that the difference quotient diverges. I haven't looked into it deeply yet.
- \end{myboxed}
+ \end{result}
 
 
-\newpage 
 \section{Equicontinuous families of functions}
 
 Now we go up another level. How do we \textit{produce} these uniformly convergent sequences of functions out of existing sequences? The same way we have conditions (boundedness in $\mathbb{R}^n$) for squeezing out convergent sequences of numbers? First consider two different kinds of boundedness.
 
-\begin{myboxed}
-    \textsc{Pointwise and uniform boundedness}
-    
-    \textbf{Definition}
+\begin{result}
+    {Pointwise and uniform boundedness}
+    {Definition}
     
     Let $f_n: E \rightarrow \mathbb{R}$ be a sequence of functions.
 
@@ -356,14 +315,14 @@ Now we go up another level. How do we \textit{produce} these uniformly convergen
     \[|f_n(x)| < \varphi(x)\]
     $f_n$ is \textit{uniformly bounded} if for some $M \geq 0$,
     \[|f_n(x)| < M\]
-\end{myboxed}
+    It is clear that uniform boundedness implies pointwise boundedness, by letting $\phi(x) := M$.
+\end{result}
 
 There are, however, no easy analogues, even when we put together all the restrictions we've considered so far:
 
-\begin{myboxed}
-    \textsc{A uniformly bounded sequence of continuous functions on a compact set without a convergent subsequence}
-    
-    \textbf{Example}
+\begin{result}
+    {A uniformly bounded sequence of continuous functions on a compact set without a convergent subsequence}
+    {Example}
 
     Let $f_n: [0, 2\pi] \to \mathbb{R}$ be defined 
     \[f_n(x) := \sin nx\]
@@ -376,14 +335,13 @@ There are, however, no easy analogues, even when we put together all the restric
     But 
     \[\int_0^{2\pi} (\sin n_k x - \sin n_{k+1} x)^2 dx = 2\pi\]
     which is a contradiction.
-\end{myboxed}
+\end{result}
 
 Even if we have a (pointwise) convergent sequence, we cannot produce a uniformly convergent subsequence necessarily, even with uniform boundedness on a compact set.
 
-\begin{myboxed}
-    \textsc{A uniformly bounded pointwise converging sequence on a compact set without a uniformly convergent subsequence}
-
-    \textbf{Example}
+\begin{result}
+    {A uniformly bounded pointwise converging sequence on a compact set without a uniformly convergent subsequence}
+    {Example}
 
     Let $f_n: [0, 1] \rightarrow \mathbb{R}$ be
     \[f_n(x) = \frac{x^2}{x^2+(1-nx)^2}\]
@@ -391,14 +349,13 @@ Even if we have a (pointwise) convergent sequence, we cannot produce a uniformly
     However,
     \[f_n\left(\frac{1}{n}\right) = 1\]
     so that no subsequence can possibly converge uniformly.
-\end{myboxed}
+\end{result}
 
 However, we know that compact sets are separable (have a dense countable subset), hence the following consequence of pointwise boundedness will be useful:
 
-\begin{myboxed}
-    \textsc{Every pointwise bounded sequence has a subsequence that converges pointwise on a countable set}
-
-    \textbf{Theorem}
+\begin{result}
+    {Every pointwise bounded sequence has a subsequence that converges pointwise on a countable set}
+    {Theorem}
 
     Let $f_n$ be defined on a countable set $E$. (Or define it on an arbitrary set, and let $f_n$ be the restriction on a countable set $E$).
 
@@ -436,28 +393,43 @@ However, we know that compact sets are separable (have a dense countable subset)
 
     which satisfy the properties
     \begin{itemize}
-        \item[(a)] $f^{i+1}_k$ is a subsequence of $f^i_k$
+        \item[(a)] $f^{i+1}_k$ is a subsequence of $f^i_k$, moreover it is simply $f^i_k$ with entries deleted. 
         \item[(b)] $f^i_k(x_i)$ converges as $k \to \infty$
-        \item[(c)] $f^{i+1}_k$, as a subsequence of $f^i_k$, is simply $f^i_k$ with entries deleted.
     \end{itemize}
 
     Then, if we take the diagonal
     \[f^1_1, f^2_2,  f^3_3, \ldots\] 
-    (c) implies that this sequence is a subsequence of all $f^i_k$, thus (b) implies that this sequence converges for all $x_i$.
-\end{myboxed}
+    (a) implies that this sequence is a subsequence of all $f^i_k$, thus (b) implies that this sequence converges for all $x_i$.
+\end{result}
 
 The missing ingredient is an extra condition on $f_n$
 
-\begin{myboxed}
-    \textsc{Equicontinuous families of functions}
-
-    \textbf{Definition}
+\begin{result}
+    {Equicontinuous families of functions}
+    {Definition}
 
     Let $\mathscr{F}$ be a family of complex-valued functions $f$ defined on a set $E$. $\mathscr{F}$ is \textit{equicontinuous} if for every $\varepsilon > 0$ there exists $\delta > 0$ such that
     \[|f(x) - f(y)| < \varepsilon\]
     whenever $d(x, y) < \delta$.
-\end{myboxed}
+\end{result}
 
-First 
+We get one result almost ``for free'' with this definition
 
-\end{document}
+\begin{result}
+    {Uniformly convergent continuous function sequences on a compact domain form an equicontinuous family}
+    {Theorem}
+
+    Let $K$ be a compact metric space, and let $f_n \in \mathscr{C}(K)$ be a uniformly convergent sequence on $K$. Then $f_n$ is equicontinuous on $K$
+
+    \textbf{Proof}
+
+    Let $\varepsilon > 0$. Since $f_n$ converges in $\mathscr{C}(K)$, we can choose $N$ such that
+    \[\Vert f_n - f_N \Vert < \varepsilon\]
+    whenever $n > N$. Now, use the fact that continuous functions on compact sets are uniformly continuous (Theorem 4.19) to find $\delta_N > 0$ such that 
+    \[|f_N(x) - f_N(y)| < \varepsilon\]
+    whenever $d(x, y) < \delta_N$. This alone evidently covers the case $n = N$. For $n > N$, we have the following inequality,
+    \[|f_n(x) - f_n(y)| \leq |f_n(x) - f_N(x)| + |f_N(x) - f_N(y)| + |f_N(y) - f_n(y)| < 3\varepsilon\]
+    Hence we have shown that $\delta_N$ suffices for $n \geq N$. For $n < N$, use uniform continuity for each $f_n$ to get $\delta_n$ be such that $d(x, y) < \delta_n$ implies
+    \[|f_i(x) - f_i(y)| < \varepsilon\]
+    Finally, let $\delta = \min \{\delta_1, \ldots, \delta_N\}$. This $\delta$ satisfies the condition for all $n > 0$.
+\end{result}

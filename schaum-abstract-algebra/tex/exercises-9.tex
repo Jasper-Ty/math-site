@@ -179,4 +179,15 @@ Then both series produce cyclic quotient groups of orders $2, 2, 3, 5$. Since cy
 
 
 \exercise
-Prove: Let $G$ be a group of order $n = rpt$, $K$ be a subgroup of order $rp$ of $G$, and $H$ be an normal subgroup of order $R$ of both $K$ and $G$. Then $K$ is an normal subgroup of $G$ if and only if $P = K/H$ is an normal subgroup of $S = G/H$
+Prove: Let $G$ be a group of order $n = rpt$, $K$ be a subgroup of order $rp$ of $G$, and $H$ be an normal subgroup of order r of both $K$ and $G$. Then $K$ is an normal subgroup of $G$ if and only if $P = K/H$ is an normal subgroup of $S = G/H$
+
+\answer
+Let $g \in G$, and let $K = \{b_1, b_2, \ldots, b_{rp}\}$.
+
+Suppose $K/H \triangleleft G/H$. Then there exists $i, j$ such that
+\[[b_i] = [g^{-1}][b_j][g] = [g^{-1}b_jg]\]
+Then, passing to cosets,
+\[Hb_i = H(g^{-1}b_jg)\]
+By $H$'s normality,
+\[Hb_i = g^{-1}HHHb_jg = g^{-1}Hb_jg\]
+
