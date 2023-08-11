@@ -369,14 +369,6 @@ However, we know that compact sets are separable (have a dense countable subset)
     \textbf{Lemma}
 
     Let $s_n$ be a bounded sequence. Then it contains a convergent subsequence $s_{n_k}$ that may be obtained by simply deleting entries in $s_n$.
-
-    \textbf{Proof}
-
-    $s_n$ as a set has a limit point $L$ (Theorem 2.42). Let $\varepsilon_1 > 0$. Choose $s_{n_1} \neq L$ such that $d(L, s_{n_1}) < \varepsilon_1$. Since $L$ is a limit point, we can find this point. 
-
-    Choose $\varepsilon_2$ such that $d(L, s_{n_1}) > \varepsilon_2 > 0$ and that $\frac{\varepsilon_1}{2} > \varepsilon_2$. Choose $s_{n_2}$ such that $n_2 > n_1$ and $d(L, s_{n_2}) < \varepsilon_2$. This is possible because again $L$ is a limit point of $s_n$, and there are only finitely many entries before $n_1$ to be excluded. 
-
-    Continue recursively to construct the two sequences $\varepsilon_k$ and $s_{n_k}$. $\varepsilon_k \to 0$ and $d(L, s_{n_k}) < \varepsilon_k$, so $s_{n_k} \to L$. Moreover, $i > j$ implies $n_i > n_j$. Which implies $s_{n_k}$ is constructed by simply skipping entries in $s_n$.
     \end{myboxed}
 
     This table will be defined row-by-row
@@ -402,7 +394,7 @@ However, we know that compact sets are separable (have a dense countable subset)
     (a) implies that this sequence is a subsequence of all $f^i_k$, thus (b) implies that this sequence converges for all $x_i$.
 \end{result}
 
-The missing ingredient is an extra condition on $f_n$
+Now we introduce an important property 
 
 \begin{result}
     {Equicontinuous families of functions}
@@ -433,3 +425,164 @@ We get one result almost ``for free'' with this definition
     \[|f_i(x) - f_i(y)| < \varepsilon\]
     Finally, let $\delta = \min \{\delta_1, \ldots, \delta_N\}$. This $\delta$ satisfies the condition for all $n > 0$.
 \end{result}
+
+The next result uses the earlier theorem about pointwise converging subsequences on a countable set.
+
+\begin{result}
+    {A pointwise bounded and equicontinuous sequence of continuous functions on a compact domain is uniformly bounded and has a uniformly convergent subsequence}
+    {Theorem}
+    Let $K$ be a compact metric space. Let $f_n \in \mathscr{C}(K)$ be a pointwise bounded and equicontinuous sequence on $K$. Then
+    \begin{itemize}
+        \item[(a)] $f_n$ is uniformly bounded on $K$
+        \item[(b)] $f_n$ contains a uniformly convergent subsequence
+    \end{itemize}
+
+    \textbf{Proof}
+
+    Let $\varepsilon >0$ be given and choose $\delta > 0$. Since $f_n$ is equicontinuous, choose $\delta$ such that
+    \[|f_n(x) - f_n(y)| < \varepsilon\]
+    for all $n$ and $d(x, y) < \varepsilon$. Since $K$ is compact, we can cover it with finitely many $\delta$-balls centered at $p_1, \ldots p_r$. 
+
+    Since $f_n$ is pointwise convergent, we may bound each $|f_n(p_i)|$ by some $\varphi(p_i)$. Since we have only finitely many $p_i$, we may take $M := \max \{\varphi(p_1), \ldots, \varphi(p_r)\}$Then $|f_n(p_i)| < M$ for all $i$, hence $|f_n(x)| < M + \varepsilon$ for all $x \in K$ by the triangle inequality. Hence $f_n$ is uniformly bounded.
+
+    Now, for (b), let $E$ be a countable dense subset of $K$. (Existence is guaranteed-- compact metric spaces are separable)
+
+    Now use the previous theorem that tells us there is a subsequence $f_{n_k}$ that converges pointwise on $E$.
+
+    Denote this subsequence by $g_k := f_{n_k}$. Now let $\varepsilon > 0$ and $\delta > 0$ be the same as before. Since $E$ is dense and $K$ is compact, we may cover $K$ with finitely many open balls $B(x_i; \delta)$ centered at points $x_1, \ldots, x_m$ of radius $\delta$. In other words,
+    \[K \subset B(x_1; \delta) \cup \cdots \cup B(x_m; \delta)\]
+    Then we can use $x_i$ as a bridge to connect $g_j(x)$ and $g_k(x)$: By the pointwise convergence of $g_k$, we know that we can choose $N$ such that $j, k \geq N$ implies 
+    \[|g_j(x_i) - g_k(x_i)| < \varepsilon\]
+    Let $x$ belong to $B(x_i; \delta)$, then
+    \[|g_j(x) - g_j(x_i)| < \varepsilon\]
+    Then we construct a big triangle inequality:
+    \[|g_j(x) - g_k(x)| \leq |g_j(x) - g_j(x_i)| + |g_j(x_i) - g_k(x_i)| + |g_k(x_i) - g_k(x)| < 3\varepsilon\]
+    Which proves that $\Vert g_j - g_k \Vert < 3\varepsilon$, hence $g_k$ is uniformly convergent.
+\end{result}
+
+WOOHOO!
+
+Now we approach the big theorem this chapter is leading up to: the \textit{Stone-Weierstrass Theorem}.
+
+\begin{result}
+    {The Stone-Weierstrass Theorem}
+    {Theorem}
+
+    Let $f: [a, b] \to \mathbb{C}$ be a continuous function. Then there exists a sequence of polynomials $P_n$ such that $P_n \to f$ uniformly on $[a, b]$. Moreover, if $f$ is real, then each $P_n$ is real.
+\end{result}
+
+First, some housekeeping is in order.
+
+\begin{result}
+    {Proof of Stone-Weierstrass, Part 0: Setup}
+    {Theorem}
+
+    It suffices to prove the theorem for functions $f \in \mathscr{C}([a, b])$ such that 
+    \begin{itemize}
+        \item[(a)] $[a, b] = [0,1]$
+        \item[(b)] $f(0) = f(1) = 0$
+    \end{itemize}
+    to prove the theorem in general.
+
+    \textbf{Proof}
+
+     The first is justified via horizontal shifts and dilations, the second is justified by shears on the $y$ axis. 
+\end{result}
+
+Then, we start the proof
+
+\begin{result}
+    {Proof of Stone-Weierstrass, Part 1: Strategy}
+    {Outline}
+
+    We use \textit{convolution}, which is a tool that analyzes a function $f$ by multiplying it with a function $g$ at the point of interest. 
+
+    One use of convolution is to isolate segments of $f$ by using a $g$ that is zero, or very close to zero, outside a neighborhood of the point we wish to study. An example of this would be using very tall Gaussians. Moreover, if the integral of this $g$ is $1$, the value of the convolution integral will almost be $f(x)$ itself!
+
+    Luckily, there is a sequence of polynomials $Q_n$ which do this task well. More luckily, the convolution of \textit{any function at all} with a polynomial results in a polynomial! This gives us an on-the-nose way of \textit{constructing} the polynomials we want-- taking the convolution of $f$ and $Q_n$.
+    
+    Finally, we show that this sequence really works-- that it really does converge to $f$ in the uniform limit.
+\end{result}
+
+We have to define convolution
+
+\begin{result}
+    {Convolution}
+    {Definition}
+
+    Let $f \in \mathscr{C}([a,b])$ and $g \in \mathscr{C}([c, d])$. Assume that $f$ and $g$ are defined to be $0$ outside their domains. The \textit{convolution} $f \ast g$ is defined to be
+    \[(f \ast g)(x) := \int_a^b f(t)g(x-t) dt\]
+    This is guaranteed to exist, by Theorem 6.13. 
+\end{result}
+
+\begin{result}
+    {Proof of Stone-Weierstrass, Part 2: Constructing the sequence}
+    {Theorem}
+
+    Define the polynomial $Q_n := c_n(1-x^2)^n$, where $c_n$ is chosen such that
+    \[\int_{-1}^1 Q_n(x)dx = 1\]
+
+    Then define
+    \[P_n := f \ast Q_n\]
+
+    Then $P_n$ is a sequence of polynomials.
+
+    \textbf{Proof}
+
+    \begin{result}
+        {Convolution with a polynomial is a polynomial}
+        {Lemma}
+
+        Let $P \in \mathscr{C}([-1, 1])$ be a polynomial, and $f \in \mathscr{C}([0, 1])$, then $f \ast P$ is a polynomial.
+        \textbf{Proof}
+
+        By linearity of convolution, we can consider the case $P(x) := x^n$ without loss of generality. Then
+        \[(f \ast P) = \int_0^1 f(t)(x-t)^ndt = \int_0^1 f(t) \left[\sum_{k=0}^n \binom{n}{k}x^{n}(-t)^{n-k}\right]dt\]
+        \[= \sum_{k=0}^n x^n \left[\binom{n}{k}\int_0^1 f(t) (-t)^{n-k}dt\right]\]
+        \[= \sum_{k=0}^n x^n \left[(-1)^{n-k}\binom{n}{k}\int_0^1 f(t)t^{n-k}dt\right]\]
+        Which is evidently a polynomial. The coefficient is guaranteed to exist, as $f(t) \cdot t^{n-k}$ is continuous on $[a, b]$, hence the integral in the brackets is defined.
+    \end{result}
+
+\end{result}
+
+
+\begin{result}
+    {Proof of Stone-Weierstrass, Part 3: Convergence}
+    {Theorem}
+
+    $P_n \rightarrow f$ uniformly on $[0, 1]$.
+
+    \textbf{Proof}
+    
+    By symmetry of convolution (change of variables), we have that
+    \[P_n = \int_{-1}^1 Q_n(t)f(x-t)dt\]
+    Then,
+    \[|P_n(x) - f(x)| = \left|\int_{-1}^1 Q_n(t) f(x-t) - f(x)\right|\] 
+    Since $\int_{-1}^1 Q_n(t)dt = 1$,
+\[|P_n(x) - f(x)| =\left|\int_{-1}^1 Q_n(t)f(x-t) dt - \left[\int_{-1}^1 Q_n(t)dt\right]f(x)\right|\]
+Hence
+\[|P_n(x) - f(x)| =\left|\int_{-1}^1 Q_n(t)[f(x-t)-f(x)] dt\right|\]
+Using the Schwarz inequality and the fact that $Q_n$ is nonnegative, 
+\[|P_n(x) - f(x)| \leq \int_{-1}^1 Q_n(t)\big|f(x-t)-f(x)\big| dt\]
+The idea now is to divide this integral, which measures the error of the polynomial approximation, into a ``local'' and a ``non-local'' part. The local error's can be bounded by $f$'s uniform continuity, the non-local part can be bounded by $Q_n$ shrinking outside of $t$.
+
+Now, choose $\varepsilon > 0$. We can find $\delta$ such that 
+\[|f(y) - f(x)| < \varepsilon/2\]
+for all $x, y$ such that $|y-x| < \delta$. This tells us that 
+\[|f(x-t) - f(x)| < \varepsilon/2\]
+for all $t \in (-\delta, \delta)$. Hence
+\[\int_{-\delta}^\delta |f(x-t) - f(x)| Q_n(t) dt < \frac{\varepsilon}{2}\int_{-\delta}^\delta Q_n(t) < \frac{\varepsilon}{2}\]
+
+This is our ``local" error. Our ``non-local'' error is then
+\[\int_{-1}^{-\delta} |f(x-t)-f(x)|Q_n(t)dt + \int_{\delta}^1 |f(x-t)-f(x)|Q_n(t)dt\]
+\end{result}
+
+\begin{myboxed}
+    The book uses the inequality $c_n < \sqrt{n}$ to derive
+    \[Q_n(x) \leq \sqrt{n}(1-\delta^2)^n\]
+    Which we will just use at face-value because life is too short. Letting $M = \sup |f(x)|$, we have that $|f(x-t) - f(x)| \leq 2M$, hence, taking it all together, 
+\[\int_{-1}^{-\delta} |f(x-t)-f(x)|Q_n(t)dt + \int_{\delta}^1 |f(x-t)-f(x)|Q_n(t)dt\]
+\[\leq 2M \int_{-1}^{-\delta}Q_n(t)dt + 2M \int_{\delta}^{1}Q_n(t)dt\]
+\[\leq 4M \sqrt{n}(1-\delta^2)^n\]
+Which can be made to be less than $\varepsilon/2$ by making $n$ large enough.
+\end{myboxed}
