@@ -1,0 +1,454 @@
+\documentclass{article}
+
+\usepackage[garamond]{jaspercommon}
+\usepackage{ebgaramond}
+\usepackage{ytableau}
+
+\newcommand{\frkS}{\mathfrak{S}}
+
+\DeclareMathOperator{\Par}{Par}
+\DeclareMathOperator{\SSYT}{SSYT}
+\DeclareMathOperator{\Dom}{Dom}
+
+\title{Symmetric Functions}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+These are notes based on my self-study of Chapter 7 in R.P Stanley's ``Enumerative Combinatorics'', mixed in with readings of various other expositions. 
+
+\hide{I currently have a weak foundation in algebra, but am very comfortable with combinatorial arguments, so you might find that the algebraic aspects are over-explained while the combinatorial aspects are under-explained.}
+
+\tableofcontents
+
+\section{Notation}
+We take $\NN$ to be the set of natural numbers \textit{including} zero,
+\[
+    \NN := \{0,1,2,\ldots\}.
+\]
+We take $\PP$ to be the set of \textit{positive integers},
+\[
+    \PP := \{1,2,\ldots\}.
+\]
+$\ZZ,\QQ,\RR,\CC$ are defined as usual.
+
+A \textit{weak composition} $\alpha$ of $n \in \NN$ is an infinite tuple of nonnegative integers 
+\[
+    (\alpha_1, \alpha_2, \ldots)
+\]
+such that $\sum_i \alpha_i = n$.
+
+A \textit{partition} $\lambda$ of $n$ is a weak composition whose entries are \textit{weakly decreasing}. That a particular partition $\lambda$ is a partition of a particular $n$ is denoted $\lambda \vdash n$.
+
+All rings considered are commutative and unital. An arbitrary ring will be denoted $\KK$.
+
+$\KK[[t]]$ will denote the formal power series ring over $\KK$ in the indeterminate $t$.
+
+Let $\KK[[x_1,x_2,\ldots]]$ be a formal power series ring. With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} $x^\alpha$ as the following monomial in $\KK[[x_1,x_2,\ldots]]$:
+\[
+    x^\alpha := x_1^{\alpha_1}x_2^{\alpha_2}x_3^{\alpha_3}\cdots.
+\]
+
+$\frkS_n$ denotes the symmetric group on $n$ letters.
+
+\section{Symmetric Functions}
+\subsection{As a subring of formal power series in countably many indeterminates}
+
+\subsubsection{Homogeneous symmetric functions}
+
+\begin{definition}[Homogeneous symmetric functions]
+    A \textit{A homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
+    \[
+        \sum_\alpha c_\alpha x^\alpha \in \KK[[x_1,x_2\ldots]],
+    \]
+    where we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar.
+    
+    We denote the set of all such functions by $\Lambda_\KK^n$.
+\end{definition}
+
+These form a $\KK$-module.
+
+\subsubsection{The ring of symmetric functions}
+
+\begin{definition}
+    The \textit{ring} (algebra over $\QQ$) of symmetric functions $\Lambda_\QQ$ is the infinite direct sum
+    \[
+        \Lambda_\QQ := \Lambda_\QQ^0 \oplus\Lambda_\QQ^1 \oplus \cdots.
+    \]
+    We will suppress $\QQ$ and refer to $\Lambda_\QQ^n$ and $\Lambda_\QQ$ as $\Lambda^n$ and $\Lambda$ respectively.
+\end{definition}
+
+
+The \textit{definition} of a symmetric function arises from the study of \textit{symmetric polynomials}. Specifically, it is a limit of
+
+
+\subsection{As a limit of graded rings}
+
+Th
+
+\section{Partitions}
+\subsection{Definition}
+\begin{definition}
+    A partition $\lambda$ of $n \in \NN$, which we denote $\lambda \vdash n$, is a sequence of numbers 
+    \[
+        (\lambda_1,\lambda_2,\ldots)
+    \]
+    such that 
+    \[
+        \sum_{i\in\NN}\lambda_i = n
+    \]
+    and 
+    \[
+        \lambda_j \leq \lambda_k
+    \]
+    for all $j\geq k$.
+\end{definition}
+
+In other words, $\lambda_k$ is weakly decreasing and has only finitely many nonzero entries. 
+
+The set of all partitions $\lambda$ such that $\lambda \vdash n$ is denoted $\Par(n)$. We define the set of \textit{all} partitions to be just $\Par$.
+
+\subsection{Young diagrams}
+Partitions are often drawn as either 
+
+\subsection{Orders}
+
+\begin{definition}[Containment order]
+    Young diagrams, as subsets of $\NN^2$, have a partial order induced by containment. \textit{Containment order} for partitions is precisely this order when you pull back Young diagrams to partitions.
+\end{definition}
+
+\begin{definition}[Dominance order]
+    Let $\lambda$ and $\nu$ be two partitions. We say that $\lambda$ \textit{dominates} or \textit{majorizes} $\nu$ if
+    \[
+        \sum_{k=1}^i \lambda_k \geq \sum_{k=1}^i \nu_k \qquad \forall i\in\NN.
+    \]
+    We denote this relation $\lambda \leq_{\Dom} \nu$.
+\end{definition}
+
+\begin{theorem}[The covering relation for dominance order]
+    $\lambda$ covers $\nu$ if
+\end{theorem}
+
+\begin{definition}[Lexicographic order]
+    We define the \textit{lexicographic order} on $\Par$ to be
+\end{definition}
+
+\begin{theorem}[Lexicographic order is a total order]
+\end{theorem}
+
+\begin{theorem}[Dominance order embeds into lexicographic order]
+\end{theorem}
+
+\section{Distinguished bases of symmetric functions}
+
+\subsection{Monomial symmetric functions}
+
+\begin{definition}[Monomial symmetric functions]
+    The \textit{monomial symmetric function}
+\end{definition}
+\subsection{Elementary symmetric functions}
+
+\begin{definition}[Elementary symmetric functions]
+    Let $n\in\NN$. The elementary symmetric function $e_n$ is defined to be
+    \[
+        e_n := \sum_{i_1<i_2<\ldots<i_n} x_{i_1}x_{i_2}\cdots x_{i_n}.
+    \]
+    And if we let $\lambda \vdash n$, the elementary symmetric function $e_\lambda$ is defined to be
+    \[
+        e_\lambda := e_{\lambda_1}e_{\lambda_2}\cdots.
+    \]
+\end{definition}
+
+\begin{theorem}
+    The coefficient $M_{\lambda\nu}$ is counted by zero
+\end{theorem}
+
+\subsubsection{The fundamental theorem of symmetric functions}
+\begin{theorem}[Gale-Ryser] \label{galeryser} Let $M = [a_{ij}]$ be a zero-one matrix, whose row sums are given by the composition $\alpha$ and whose column sums are given by composition $\beta$. Then it must be that $\alpha \leq_{\Dom} \beta^T$. Moreover, there is only \textit{one} zero-one matrix such that $\alpha = \beta^T$.
+\end{theorem}
+
+\begin{proof}
+    We demonstrate this algorithmically.
+\end{proof}
+\begin{theorem}[Fundamental theorem of symmetric functions] The $e$'s form a $\ZZ$-basis for the ring of symmetric functions.
+\end{theorem}
+
+\begin{proof}
+    By Theorem \ref{galeryser}, the transition matrix $M_{\lambda\nu}$ is upper-triangular and has $1$'s on the diagonal, hence it is invertible. 
+\end{proof}
+
+\subsection{Complete homogeneous symmetric functions}
+
+\begin{definition}[Complete homogeneous symmetric functions]
+    Let $n\in\NN$. The complete homogeneous symmetric function $h_n$ is defined to be
+    \[
+        h_n := \sum_{i_1\leq i_2\leq\ldots\leq i_n} x_{i_1}x_{i_2}\cdots x_{i_n}.
+    \]
+    And if we let $\lambda \vdash n$, the elementary symmetric function $h_\lambda$ is defined to be
+    \[
+        h_\lambda := h_{\lambda_1}h_{\lambda_2}\cdots.
+    \]
+\end{definition}
+\subsection{Power sum symmetric functions}
+
+\section{Some theorems}
+
+\subsection{The Newton-Girard formulas}
+
+\begin{theorem}[Newton-Girard formulas]
+    Let $n \in \PP$. Then
+    \begin{align}
+        \sum_{k=0}^n (-1)^k e_kh_{n-k} &= 0 \label{ng1} \\
+        \sum_{k=0}^n (-1)^{k-1} e_{n-k}p_k &= ne_n  \label{ng2} \\
+        \sum_{k=0}^n h_{n-k}p_k &= nh_n \label{ng3}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    First, we ``upgrade'' to proving certain power series identities, from which the Newton-Girard formulas can be read off. Consider the power series
+    \[
+        H(t) := \sum_{n\in\NN}h_n t^n \in \Lambda[[t]]
+    \]
+    and 
+    \[
+        E(t) := \sum_{n\in\NN}e_n t^n \in \Lambda[[t]].
+    \]
+    Combintorially, we can see that 
+    \[
+        H(t) = \prod_{n\in\NN}\frac{1}{1-x_nt}
+    \]
+    and
+    \[
+        E(t) = \prod_{n\in\NN}(1+x_nt).
+    \]
+    So we have that
+    \[
+        H(t)E(-t) = \prod_{n\in\NN}\frac{1-x_nt}{1-x_nt} = 1.
+    \]
+    Then $[t^n] H(t)E(-t) = 0$ for all $n \geq 1$, giving us
+    \[
+        \sum_{k=0}^n (-1)^k e_k h_{n-k} = 0 \qquad \forall n\geq 1.
+    \]
+    This proves the first Newton-Girard formula \eqref{ng1}.
+
+    For the next, we define a new power series
+    \[
+        P(t) := \sum_{n\geq1}p_nt^n \in \Lambda[[t]].
+    \]
+    Which has the following formula
+    \[
+        P(t) = t\sum_{n\in\NN}\frac{x_n}{1-x_nt}
+    \]
+    Doing the same thing,
+    \begin{align*}
+        E(-t)P(t) &= \left[\prod_{n\in\NN}(1-x_nt)\right]\left[t\sum_{m\in\NN}\frac{x_m}{1-x_mt}\right] \\
+                  &= t\sum_{m\in\NN}\left[\frac{x_m}{1-x_mt}\prod_{n\in\NN}(1-x_nt)\right] \\
+                  &= t\sum_{m\in\NN} \left[x_m\prod_{\substack{n\in\NN \\ n\neq m}}(1-x_nt)\right] \\
+                  &= -t\sum_{m\in\NN} \left[-x_m\prod_{\substack{n\in\NN \\ n\neq m}}(1-x_nt)\right].
+    \end{align*}
+    The sum can be expressed as the derivative of an infinite product, and we can continue the simplification
+    \begin{align*}
+                  &= -t\frac{d}{dt}\left[\prod_{m\in\NN}(1-x_mt)\right] \\
+                  &= -t\frac{d}{dt}E(-t) \\
+                  &= -t\frac{d}{dt}\left[\sum_{n\in\NN}(-1)^n e_nt^n\right] \\
+                  &= -t\left[\sum_{n\geq 1}n(-1)^n e_nt^{n-1}\right] \\
+                  &= \sum_{n\geq 1}n(-1)^{n-1} e_nt^n.
+    \end{align*}
+    Then, the formula for $[t^n]E(-t)P(t)$ given $n \geq 1$ is
+    \[
+        \sum_{k=0}^n (-1)^k e_{n-k}p_k = n(-1)^{n-1}e_n \qquad \forall n \geq 1.
+    \]
+    And after moving the $-1$ factors,
+    \[
+        \sum_{k=0}^n (-1)^{k-1} e_{n-k}p_k = ne_n.
+    \]
+    This proves the second Newton-Girard formula, \eqref{ng2}.
+
+    The proof of the third is very similar and actually even easier, since
+    \begin{align*}
+        \frac{d}{dt}H(t) &= \frac{d}{dt}\left[\prod_{n\in\NN}\frac{1}{1-x_nt}\right] \\
+                         &= \sum_{m\in\NN}\left[\frac{x_m}{(1-x_mt)^2}\prod_{\substack{n\in\NN \\ n \neq m}}\frac{1}{1-x_nt}\right] \\ 
+                         &= \sum_{m\in\NN}\left[\frac{x_m}{1-x_mt}\prod_{n\in\NN}\frac{1}{1-x_nt}\right]
+    \end{align*}
+    Then
+    \begin{align*}
+        H(t)P(t) &= \left[\prod_{n\in\NN}\frac{1}{1-x_nt}\right]\left[t\sum_{m\in\NN}\frac{x_m}{1-x_mt}\right] \\
+                 &= t\sum_{m\in\NN}\left[\frac{x_m}{1-x_mt}\prod{n\in\NN}\frac{1}{1-x_nt}\right] \\
+                 &= t\frac{d}{dt}H(t) \\
+                 &= t\frac{d}{dt}\left[\sum_{n\in\NN}h_nt^n\right] \\
+                 &= t\sum_{n\geq 1}nh_nt^{n-1} \\
+                 &= \sum_{n\geq 1}nh_nt^n,
+    \end{align*}
+    which proves the third Newton-Girard formula, \eqref{ng3}.
+\end{proof}
+
+\subsection{Vieta's formulas}
+
+\subsection{Power series identities}
+
+\section{\texorpdfstring{$\omega$}{w}-involution}
+
+
+\begin{theorem}
+    For all $n$,
+    \[
+        \omega(h_n) = e_n.
+    \]
+    Thus, $\omega$ is an involution.
+\end{theorem}
+
+\begin{proof}
+    We will use the first Newton-Girard formula \eqref{ng1}.
+\end{proof}
+
+\section{The Hall inner product}
+
+We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the following rule
+
+\section{Schur functions}
+\subsection{Combinatorial definitions}
+\subsubsection{Schur functions via semistandard Young tableaux}
+
+\begin{definition}
+    A semistandard Young Tableau is a Young diagram filled in with entries which increase \textit{weakly} along rows but \textit{strongly} along columns. The set of all semistandard Young tableau of shape $\lambda$ is denoted $\SSYT(\lambda)$.
+\end{definition}
+
+\begin{example}
+    The following Young tableau is semistandard:
+    \[
+        \begin{ytableau}
+            1 & 1 & 2 & 4 \\
+            2 & 3 & 3  \\
+            4 \\
+            5 \\ 
+        \end{ytableau}
+    \]
+\end{example}
+
+\begin{definition}
+    Let $T$ be a semistandard Young tableau.  Then define the \textit{weight} of $T$, $x^T$, to be the monomial
+    \[
+        x^T := x_1^{a_1}x_2^{a_2}\cdots,
+    \]
+    where $a_1$ is the number of occurrences of $1$ in $T$, $a_2$ is the number of occurrences of $2$ in $T$, and so on.
+\end{definition}
+
+\begin{definition}[Schur functions via tableaux]
+    Let $\lambda \vdash n$. The \textit{Schur function} $s_\lambda$ is defined to be
+    \[
+        s_\lambda := \sum_{T \in SSYT(\lambda)} x^T.
+    \]
+\end{definition}
+
+
+
+\begin{example}
+    For the partition \ydiagram{2,2}, we compute $s_\lambda(x_1,x_2,x_3)$.
+    We have the following fillings that are semistandard Young tableaux:
+    \[
+        \begin{ytableau}
+            1 & 1 \\
+            2 & 2
+        \end{ytableau}\:,\:
+        \begin{ytableau}
+            1 & 1 \\
+            2 & 3
+        \end{ytableau}\:,\:
+        \begin{ytableau}
+            1 & 2 \\
+            2 & 3
+        \end{ytableau}\:,\:
+        \begin{ytableau}
+            1 & 1 \\
+            3 & 3
+        \end{ytableau}\:,\:
+        \begin{ytableau}
+            1 & 2 \\
+            3 & 3
+        \end{ytableau}\:,\:
+        \begin{ytableau}
+            2 & 2 \\
+            3 & 3
+        \end{ytableau}\:.
+    \]
+    These have the weights
+    \[
+        x_1^2x_2^2, \qquad 
+        x_1^2x_2x_3, \qquad 
+        x_1x_2^2x_3, \qquad 
+        x_1^2x_3^2, \qquad 
+        x_1x_2x_3^2, \qquad 
+        x_2^2x_3^2
+    \]
+    respectively. Hence we have computed that
+    \ytableausetup{boxsize=4pt}
+    \[
+        s_{\:\ydiagram{2,2}}(x_1,x_2,x_3) = x_1^2x_2^2 + x_1^2x_3^2 + x_2^2x_3^2 + x_1^2x_2x_3 + x_1x_2^2x_3 + x_1x_2x_3^2.
+    \]
+\end{example}
+
+\subsubsection{Skew Schur functions}
+\begin{definition}
+    Let $\lambda, \nu$ be partitions such that $\lambda$ contains $\nu$. Then the pair $(\lambda, \nu)$ is referred to as a \textit{skew shape} and is denoted $\lambda \setminus \nu$.
+
+    The \textit{skew diagram} of $\lambda \setminus \nu$ is the diagram obtained by taking $\lambda$'s Young diagram and removing all boxes that would be contained in $\nu$'s Young diagram.
+
+    Finally, a \textit{skew tableau of shape $\lambda \setminus \nu$} or a \textit{tableau of skew shape $\lambda \setminus \nu$} is a filling of the skew diagram of $\lambda \setminus \nu$. 
+
+    Such a tableau will still be called \textit{semistandard} if it weakly increases along rows and strongly increases along columns.
+\end{definition}
+
+\begin{example}
+    Let $\lambda = \ydiagram{4,4,3,2}$ and $\nu = \ydiagram{3,2,2}$. Then $\lambda \setminus \nu$ is
+    \ytableausetup{boxsize=normal}
+    \[\ydiagram{3+1,2+2,2+1,2}.\]
+\end{example}
+
+\begin{theorem} The skew Schurs, and therefore also the Schurs, are symmetric functions.
+\end{theorem}
+
+\begin{proof}
+    We will prove that $s_{\lambda\setminus\nu}$ is invariant under the action of simple transpositions.
+
+
+\end{proof}
+
+\subsection{Jacobi-Trudi identities}
+
+\begin{theorem}[Lindstr\"om-Gessel-Viennot] 
+    Let $D$ be a simple, finite, acyclic, weighted digraph, whose edge weights are given by the function $w$.
+
+    Let $A, B$ be two sets of $n$ vertices in $D$.
+
+    I'll finish this later--- this is a really annoying theorem to write down which is unfortunate because its main idea is so simple!
+\end{theorem}
+
+\begin{theorem}[The Jacobi-Trudi identity] Let $\lambda$ be a partition. Then
+    \[
+        s_\lambda = \det(h_{\lambda_i+j-i})_{i,j=1}^{|\lambda|}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Consider the lattice, $\ZZ^2$. We assign weights to the edges so that going vertically, you pick up a $1$, and going horizontally at the height $i$, you pick up a $x_i$.
+
+    We lay out the parts of $\lambda$ in ascending order at $x=1$.
+\end{proof}
+
+\begin{theorem}[The dual Jacobi-Trudi identity] Let $\lambda$ be a partition. 
+\end{theorem}
+
+\begin{theorem}[Jacobi-Trudi for skew shapes] Let $\lambda$ be a partition. 
+\end{theorem}
+
+\begin{proof}
+    Very similarly done using the LGV lemma.
+\end{proof}
+
+
+\end{document}
