@@ -4,11 +4,20 @@
 \usepackage{ebgaramond}
 \usepackage{ytableau}
 
-\newcommand{\frkS}{\mathfrak{S}}
+\newcommand{\frkS}{\ensuremath\mathfrak{S}}
+\newcommand{\rskarrow}{\ensuremath\xrightarrow{\text{RSK}}}
 
+\DeclareMathOperator{\RowInsert}{RowInsert}
+\DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\shape}{shape}
+\DeclareMathOperator{\type}{type}
 \DeclareMathOperator{\Par}{Par}
 \DeclareMathOperator{\SSYT}{SSYT}
 \DeclareMathOperator{\Dom}{Dom}
+
+
+\setcounter{MaxMatrixCols}{20}
 
 \title{Symmetric Functions}
 \author{Jasper Ty}
@@ -119,7 +128,10 @@ Partitions are often drawn as either
 \subsection{Orders}
 
 \begin{definition}[Containment order]
-    Young diagrams, as subsets of $\NN^2$, have a partial order induced by containment. \textit{Containment order} for partitions is precisely this order when you pull back Young diagrams to partitions.
+    Young diagrams, as subsets of $\NN^2$, have a partial order induced by containment. 
+    \textit{Containment order} for partitions is precisely this order when you pull back Young diagrams to partitions.
+
+    We will use $\subseteq$ to denote this order.
 \end{definition}
 
 \begin{definition}[Dominance order]
@@ -127,7 +139,7 @@ Partitions are often drawn as either
     \[
         \sum_{k=1}^i \lambda_k \geq \sum_{k=1}^i \nu_k \qquad \forall i\in\NN.
     \]
-    We denote this relation $\lambda \leq_{\Dom} \nu$.
+    We denote this relation $\lambda \leq \nu$.
 \end{definition}
 
 \begin{theorem}[The covering relation for dominance order]
@@ -146,15 +158,40 @@ Partitions are often drawn as either
 
 \section{Distinguished bases of symmetric functions}
 
+We will cover bases of the ring of symmetric functions. These are all indexed by partitions.
+
 \subsection{Monomial symmetric functions}
 
-\begin{definition}[Monomial symmetric functions]
-    The \textit{monomial symmetric function}
+\begin{definition}
+    Let $\lambda \vdash n$. The \textit{monomial symmetric function} $m_\lambda$ is 
+    \[
+        m_\lambda := \sum_{\alpha \sim \lambda} x^\alpha.
+    \]
+    where $\alpha \sim \lambda$ means that $\alpha$ may be obtained by permuting the parts of $\lambda$.
 \end{definition}
+
+\begin{example}
+    Let $\lambda = 5322$. Then
+    \begin{align*}
+        m_\lambda = \sum_{i_1<i_2<i_3<i_4} \Big(&x_{i_1}^5x_{i_2}^3x_{i_3}^2x_{i_4}^2 + x_{i_1}^5x_{i_2}^2x_{i_3}^3x_{i_4}^2 + x_{i_1}^5x_{i_2}^2x_{i_3}^2x_{i_4}^3 \\ 
+                                           &+ x_{i_1}^2x_{i_2}^5x_{i_3}^3x_{i_4}^2 + x_{i_1}^2x_{i_2}^5x_{i_3}^2x_{i_4}^3 + x_{i_1}^2x_{i_2}^2x_{i_3}^5x_{i_4}^3  \\
+                                           &+ x_{i_1}^3x_{i_2}^5x_{i_3}^2x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^5x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^2x_{i_4}^5  \\
+                                           &+ x_{i_1}^2x_{i_2}^3x_{i_3}^5x_{i_4}^2 + x_{i_1}^2x_{i_2}^3x_{i_3}^2x_{i_4}^5 + x_{i_1}^2x_{i_2}^2x_{i_3}^3x_{i_4}^5 \Big).
+    \end{align*}
+\end{example}
+
+\begin{theorem}
+    The monomial symmetric funtions form a basis for $\Lambda$.
+\end{theorem}
+
+\begin{proof}
+    It's impossible to form a nontrivial linear combination of monomial symmetric functions that sum to zero.
+\end{proof}
+
 \subsection{Elementary symmetric functions}
 
-\begin{definition}[Elementary symmetric functions]
-    Let $n\in\NN$. The elementary symmetric function $e_n$ is defined to be
+\begin{definition}
+    Let $n\in\NN$. The \textit{elementary symmetric function} $e_n$ is defined to be
     \[
         e_n := \sum_{i_1<i_2<\ldots<i_n} x_{i_1}x_{i_2}\cdots x_{i_n}.
     \]
@@ -164,12 +201,24 @@ Partitions are often drawn as either
     \]
 \end{definition}
 
+
 \begin{theorem}
-    The coefficient $M_{\lambda\nu}$ is counted by zero
+    The coefficient $M_{\lambda\nu}$ is counted by zero-one matrices whose row-sums are $\lambda$ and whose column sums are $\nu$.
 \end{theorem}
 
+\begin{theorem} \label{e2msymmetric}
+    Let $\lambda,\nu \vdash n$, then
+    \[
+        M_{\lambda\nu} = M_{\nu\lambda}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Matrix transposition is a bijection between the sets the two numbers count.
+\end{proof}
+
 \subsubsection{The fundamental theorem of symmetric functions}
-\begin{theorem}[Gale-Ryser] \label{galeryser} Let $M = [a_{ij}]$ be a zero-one matrix, whose row sums are given by the composition $\alpha$ and whose column sums are given by composition $\beta$. Then it must be that $\alpha \leq_{\Dom} \beta^T$. Moreover, there is only \textit{one} zero-one matrix such that $\alpha = \beta^T$.
+\begin{theorem}[Gale-Ryser] \label{galeryser} Let $M = [a_{ij}]$ be a zero-one matrix, whose row sums are given by the composition $\alpha$ and whose column sums are given by composition $\beta$. Then it must be that $\alpha \leq \beta^T$. Moreover, there is only \textit{one} zero-one matrix such that $\alpha = \beta^T$.
 \end{theorem}
 
 \begin{proof}
@@ -179,13 +228,13 @@ Partitions are often drawn as either
 \end{theorem}
 
 \begin{proof}
-    By Theorem \ref{galeryser}, the transition matrix $M_{\lambda\nu}$ is upper-triangular and has $1$'s on the diagonal, hence it is invertible. 
+    By Theorem \ref{galeryser}, the transition matrix is upper-triangular and has $1$'s on the diagonal, hence it is invertible. 
 \end{proof}
 
 \subsection{Complete homogeneous symmetric functions}
 
-\begin{definition}[Complete homogeneous symmetric functions]
-    Let $n\in\NN$. The complete homogeneous symmetric function $h_n$ is defined to be
+\begin{definition}
+    Let $n\in\NN$. The \textit{complete homogeneous symmetric function} $h_n$ is defined to be
     \[
         h_n := \sum_{i_1\leq i_2\leq\ldots\leq i_n} x_{i_1}x_{i_2}\cdots x_{i_n}.
     \]
@@ -194,7 +243,34 @@ Partitions are often drawn as either
         h_\lambda := h_{\lambda_1}h_{\lambda_2}\cdots.
     \]
 \end{definition}
+
+\begin{theorem}
+    $N_{\lambda\nu}$ is counted by $\NN$-matrices with row sums $\lambda$ and column sums $\nu$.
+\end{theorem}
+
+\begin{theorem}
+    Let $\lambda, \nu \vdash n$, then
+    \[
+        N_{\lambda\nu} = N_{\nu\lambda}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    The exact same as with Theorem \ref{e2msymmetric}.
+\end{proof}
+    
 \subsection{Power sum symmetric functions}
+
+\begin{definition}
+    Let $n\in\NN$. The \textit{power sum symmetric function} $p_n$ is defined to be
+    \[
+        p_n := \sum_{i} x_i^n
+    \]
+    And if we let $\lambda \vdash n$, the elementary symmetric function $p_\lambda$ is defined to be
+    \[
+        p_\lambda := p_{\lambda_1}p_{\lambda_2}\cdots.
+    \]
+\end{definition}
 
 \section{Some theorems}
 
@@ -308,18 +384,31 @@ Partitions are often drawn as either
 
 \section{The Hall inner product}
 
-We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the following rule
+We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the following rule:
+
+\begin{definition} Let $\langle\cdot,\cdot\rangle$ be the scalar product defined by the relationship
+    \[
+        \langle m_\lambda, h_\nu \rangle = \delta_{\lambda\nu}.
+    \]
+    This scalar product is called the \textit{Hall inner product}. It is well defined since the $m$'s and $h$'s form a basis for $\Lambda$.
+\end{definition}
 
 \section{Schur functions}
 \subsection{Combinatorial definitions}
 \subsubsection{Schur functions via semistandard Young tableaux}
 
 \begin{definition}
-    A semistandard Young Tableau is a Young diagram filled in with entries which increase \textit{weakly} along rows but \textit{strongly} along columns. The set of all semistandard Young tableau of shape $\lambda$ is denoted $\SSYT(\lambda)$.
+    A semistandard Young tableau is a Young diagram filled in with entries which increase \textit{weakly} along rows but \textit{strongly} along columns. 
+    The set of all semistandard Young tableau of shape $\lambda$ is denoted $\SSYT(\lambda)$.
+
+    The \textit{type} of a semistandard Young tableau $T$, $\type(T)$ is its set of entries counted with multiplicities. Equivalently, it's the tuple $(a_1, a_2, \ldots)$ defined by
+    \[
+        a_i = (\#\text{of times }i\text{ appears in }T)
+    \]
 \end{definition}
 
 \begin{example}
-    The following Young tableau is semistandard:
+    The following Young tableau is semistandard, of shape $4311$ and type $22221$.
     \[
         \begin{ytableau}
             1 & 1 & 2 & 4 \\
@@ -348,9 +437,10 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
 
 
 \begin{example}
-    For the partition \ydiagram{2,2}, we compute $s_\lambda(x_1,x_2,x_3)$.
+    For the partition $22$, we compute $s_\lambda(x_1,x_2,x_3)$.
     We have the following fillings that are semistandard Young tableaux:
     \[
+        \ytableausetup{boxsize=normal}
         \begin{ytableau}
             1 & 1 \\
             2 & 2
@@ -386,15 +476,14 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
         x_2^2x_3^2
     \]
     respectively. Hence we have computed that
-    \ytableausetup{boxsize=4pt}
     \[
-        s_{\:\ydiagram{2,2}}(x_1,x_2,x_3) = x_1^2x_2^2 + x_1^2x_3^2 + x_2^2x_3^2 + x_1^2x_2x_3 + x_1x_2^2x_3 + x_1x_2x_3^2.
+        s_{22}(x_1,x_2,x_3) = x_1^2x_2^2 + x_1^2x_3^2 + x_2^2x_3^2 + x_1^2x_2x_3 + x_1x_2^2x_3 + x_1x_2x_3^2.
     \]
 \end{example}
 
 \subsubsection{Skew Schur functions}
 \begin{definition}
-    Let $\lambda, \nu$ be partitions such that $\lambda$ contains $\nu$. Then the pair $(\lambda, \nu)$ is referred to as a \textit{skew shape} and is denoted $\lambda \setminus \nu$.
+    Let $\lambda, \nu$ be partitions such that $\nu \subseteq \lambda$. Then the pair $(\lambda, \nu)$ is referred to as a \textit{skew shape} and is denoted $\lambda \setminus \nu$.
 
     The \textit{skew diagram} of $\lambda \setminus \nu$ is the diagram obtained by taking $\lambda$'s Young diagram and removing all boxes that would be contained in $\nu$'s Young diagram.
 
@@ -413,22 +502,120 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
 \end{theorem}
 
 \begin{proof}
-    We will prove that $s_{\lambda\setminus\nu}$ is invariant under the action of simple transpositions.
+    We will prove that $s_{\lambda\setminus\nu}$ is invariant under the action of simple transpositions. Consider the simple transposition which swaps $i$ and $i+1$. 
 
+    The key fact is that \textit{if $i$ and $i+1$ appear in the same column, they must be vertically adjacent}.
 
+    Let $T\in\SSYT(\lambda \setminus \nu)$. 
+
+    Take all the columns of $T$ which contain $i$ or $i+1$ but not both. 
+    These will form rows consisting of consecutive $i$'s followed by consecutive $i+1$'s. 
+    In these rows, swap the number of consecutive $i$'s with the number of consecutive $i+1$'s. 
+    This swap works because the $i$'s that become $i+1$'s will not break column strictness since there is no $i+1$ in the same column, similarly $i+1$'s that become $i$'s will not break column strictness since there is no $i$ in the same column.
+
+    This correspondence is involutive and therefore bijective. 
+    We've bijected SSYT of a given type to another whose type is a permutation of the original type.
+    This tells us that $s$ is symmetric.
+
+    For example, if $T$ looked like
+
+    \ytableausetup{boxsize=20pt}
+    \[
+        \begin{ytableau}
+            \none & \none & \none & \none & \none & \none & \none & \none & & & i & i+1 & i+1 \\
+            \none & \none & \none & \none & \none & \none & \none &  & i & i &  \\
+            \none & \none & \none & \none & \none & \none & \none & i & i+1 & i+1\\
+            \none & \none & \none & i & i+1 & i+1 & i+1 & i+1 & & \\
+            \none & \none & \none & i+1 &   \\
+            i & i & i+1
+        \end{ytableau},
+    \]
+    then we ignore all other entries with both $i$ and $i+1$.
+    \[
+        \begin{ytableau}
+            \none & \none & \none & \none & \none & \none & \none & \none & & & i & i+1 & i+1 \\
+            \none & \none & \none & \none & \none & \none & \none &  & *(red) i & *(red) i &  \\
+            \none & \none & \none & \none & \none & \none & \none & *(red) i & *(red) i+1 & *(red) i+1\\
+            \none & \none & \none & *(red)i & i+1 & i+1 & i+1 & *(red) i+1 & & \\
+            \none & \none & \none & *(red)i+1 &   \\
+            i & i & i+1
+        \end{ytableau}
+    \]
+    and consider the remaining ones. Then, we keep track of the rows of consecutive $i$ and $i+1$'s.
+    \[
+        \begin{ytableau}
+            \none & \none & \none & \none & \none & \none & \none & \none & & & *(green) i & *(yellow) i+1 & *(yellow) i+1 \\
+            \none & \none & \none & \none & \none & \none & \none &  & *(red) i & *(red) i &  \\
+            \none & \none & \none & \none & \none & \none & \none & *(red) i & *(red) i+1 & *(red) i+1\\
+            \none & \none & \none & *(red) i & *(yellow) i+1 & *(yellow) i+1 & *(yellow) i+1 & *(red) i+1 & & \\
+            \none & \none & \none & *(red)i+1 &   \\
+            *(green) i & *(green) i & *(yellow) i+1
+        \end{ytableau}
+    \]
+    Then, we flip the number of consecutive $i$ and $i+1$'s for each row.
+    \[
+        \begin{ytableau}
+            \none & \none & \none & \none & \none & \none & \none & \none & & & *(green) i & *(green) i & *(yellow) i+1 \\
+            \none & \none & \none & \none & \none & \none & \none &  & *(red) i & *(red) i &  \\
+            \none & \none & \none & \none & \none & \none & \none & *(red) i & *(red) i+1 & *(red) i+1\\
+            \none & \none & \none & *(red) i & *(green) i & *(green) i & *(green) i & *(red) i+1 & & \\
+            \none & \none & \none & *(red)i+1 &   \\
+            *(green) i & *(yellow) i+1 & *(yellow) i+1
+        \end{ytableau}
+    \]
 \end{proof}
 
 \subsection{Jacobi-Trudi identities}
 
+\subsubsection{The Lindstr\"om-Gessel-Viennot lemma}
+
+\begin{definition} A \textit{digraph} $D$ is a pair consisting of a vertex set $V(D)$ and an arc set $A(D)$ which consists of ordered pairs of vertices. We will suppress the $D$ and refer to the vertex and arc sets as $V$ and $A$.
+\end{definition}
+
+\begin{definition}
+    A \textit{path} $p$ in a digraph $D$ is an ordered list of arcs $(a_1, \ldots, a_k)$ which are connected end-to-end.
+\end{definition}
+
+\begin{definition}
+    A \textit{cycle} is a path which starts and ends at the same vertex.
+\end{definition}
+
+\begin{definition}
+    Let $D$ be a digraph.
+    \begin{itemize}
+        \item We say that $D$ is acyclic if it contains no cycles.
+        \item We say that $D$ is path-finite whenever there exist only finitely many paths from $u$ to $v$ for all $u,v \in V$.
+        \item Let $\KK$ be a ring. We say that $D$ is \textit{weighted} when we have a function $w: A \to \KK$ that assigns a \textit{weight} to each arc of $D$.
+    \end{itemize}
+\end{definition}
+
 \begin{theorem}[Lindstr\"om-Gessel-Viennot] 
-    Let $D$ be a simple, finite, acyclic, weighted digraph, whose edge weights are given by the function $w$.
+    Let $D$ be an weighted, acyclic path-finite, digraph.
 
-    Let $A, B$ be two sets of $n$ vertices in $D$.
+    Let $U, V$ be two sets of $n$ vertices in $D$. Define the \textit{weight} of a path $p$ to be 
+    \[
+        w(p) = \prod_{a \in p} a
+    \]
+    For any two vertices $u, v$ of $D$, define the quantity $\phi(u, v)$ to be
+    \[
+        \phi(u,v) = \sum_{p:u \rightarrow v} w(p),
+    \]
+    where $p: u \rightarrow v$ means that $p$ is a path from $u$ to $v$.
 
-    I'll finish this later--- this is a really annoying theorem to write down which is unfortunate because its main idea is so simple!
+    Consider now the determinant 
+    \[
+        \det \begin{bmatrix}
+            \phi(u_1, v_1) & \cdots & \phi(u_n, v_1) \\
+             \vdots & \ddots & \vdots \\
+            \phi(u_1, v_n) & \cdots & \phi(u_n, v_n)
+        \end{bmatrix}
+    \]
+    \textcolor{red}{Finish this later.}
 \end{theorem}
 
-\begin{theorem}[The Jacobi-Trudi identity] Let $\lambda$ be a partition. Then
+\subsubsection{Jacobi-Trudi statement and proof}
+
+\begin{theorem} Let $\lambda$ be a partition. Then
     \[
         s_\lambda = \det(h_{\lambda_i+j-i})_{i,j=1}^{|\lambda|}.
     \]
@@ -438,17 +625,171 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
     Consider the lattice, $\ZZ^2$. We assign weights to the edges so that going vertically, you pick up a $1$, and going horizontally at the height $i$, you pick up a $x_i$.
 
     We lay out the parts of $\lambda$ in ascending order at $x=1$.
+
+    \textcolor{red}{Finish this later.}
 \end{proof}
 
-\begin{theorem}[The dual Jacobi-Trudi identity] Let $\lambda$ be a partition. 
-\end{theorem}
+\section{The Robinson-Schensted-Knuth correspondence}
 
-\begin{theorem}[Jacobi-Trudi for skew shapes] Let $\lambda$ be a partition. 
+I'm going to define RSK functionally instead of imperatively. 
+
+(After the fact, I think this was a waste of time and was more or less a cacophony of notation, but it was interesting regardless.)
+
+\subsection{Row insertion}
+
+\begin{definition}[Row insertion]
+    Let $P = (P_{ij})$ be a SSYT of shape $\lambda$. And let $t \in \NN$. We will define the \textit{insertion path} $I(P\leftarrow t)$ now.
+    We write that $t \geq P_m$ whenever $t \geq \max P_m$ or $P_m$ is empty and $t < P_m$ otherwise. 
+    If $t < P_m$, define
+    \begin{align*}
+        (P_m \leftarrow t) := \begin{cases}
+            \lambda_m + 1 & t \geq P_m \\
+            \min\{n:P_{mn} > t\} & t < P_m 
+        \end{cases}.
+    \end{align*}
+    We note that $(P_m \leftarrow t) \leq \lambda_m + 1$ always.
+    We will define a recursive function $\RowInsert$ as follows.
+    \begin{align*}
+        &\RowInsert(P,m,t) \\
+        &:= \begin{cases}
+            [(P_m \leftarrow t)] & t \geq P_m \\
+            [(P_m \leftarrow t)] + \RowInsert(P, m+1, P_{m(P_m \leftarrow t)}) & t < P_m
+        \end{cases}.
+    \end{align*}
+    Where $+$ denotes list concatenation.
+    Now, define $I(P\leftarrow t) := \RowInsert(P,1,t).$
+\end{definition}
+
+Now we define the tableau that results from row insertion, $(P \leftarrow t)$.
+
+\begin{definition}
+    Let $P$ be a SSYT and let $t \in \NN$. Let $I(P \leftarrow t) = [j_1, j_2, \ldots, j_M]$.
+    \[
+        (P \leftarrow t)_{rs} := \begin{cases}
+            t & \text{if } (r,s) = (1, j_1) \\
+            P_{m-1,j_{m-1}} & \text{if }(r,s) = (m, j_m) \\
+            P_{rs} & \text{otherwise}.
+        \end{cases}.
+    \]
+\end{definition}
+
+We state a property of insertion paths that will allow us to prove that row insertion gives us SSYT.
+
+\begin{theorem}
+    Let $P$ be a SSYT of shape $\lambda$, let $t \in \PP$, and let $I(P\leftarrow t) = [j_1,j_2,\ldots,j_M]$. Then $I(P\leftarrow t)$ is weakly decreasing.
 \end{theorem}
 
 \begin{proof}
-    Very similarly done using the LGV lemma.
+    Let $1 \leq m < M$.
+    Suppose that $\lambda_{m+1} < j_m$. Then 
+    \[
+        j_{m+1} = (P_m \leftarrow k) \leq \lambda_m+1 \leq j_m.
+    \]
+    Now suppose that $\lambda_{m+1} \geq j_m$. 
+    Then $P_{m+1,j_m}$ exists, and it must be that $P_{mj_m} < P_{m+1,j_m}$ due to column strictness. Then
+    \[
+        j_{m+1} = (P_{m+1} \leftarrow P_{mj_m}) = \min \{n:P_{m+1,n}>P_{mj_m}\} \leq j_m.
+    \]
+    Either way $j_{m+1} \leq j_m$.
 \end{proof}
 
+\begin{corollary}
+    If $P$ is a SSYT and $t \in \PP$, then $(P \leftarrow t)$ is a SSYT.
+\end{corollary}
+
+\begin{proof}
+    By the definition of row insertion, the rows are weakly increasing. Consider inserting a bumped number. By the previous theorem, it can only be moved down or down left, which means that it will always be inserted below a smaller number. This continues for the whole insertion path.
+\end{proof}
+
+\subsection{Generalized two-line notation}
+
+\begin{definition}
+    Let $A = (a_{ij})$ be a $\NN$-matrix. Let $i, j \in \NN$, and write a \textit{two-line entry} to be
+    \[
+        \binom{i}{j}.
+    \]
+    We concatenate two-line entries as follows
+    \[
+        \binom{i}{j} + \binom{k}{l} := \binom{i\:k}{j\:l}.
+    \]
+    Now consider the following two-line array:
+    \[
+        w_A = \sum_{i=1}^\infty \sum_{j=1}^\infty \binom{i}{j}^{a_{ij}}.
+    \]
+    If $A$ has finite support, $w_A$ is well-defined. 
+    $w_A$ is the \textit{two-line array} or \textit{generalized permutation} corresponding to the matrix $A$.
+\end{definition}
+
+\begin{example}
+    Let $A$ be the matrix
+    \[
+        \begin{bmatrix}
+            1 & 0 & 3 & 2 \\
+            0 & 1 & 0 & 0 \\
+            2 & 4 & 1 & 0 \\
+            0 & 0 & 1 & 0
+        \end{bmatrix}.
+    \]
+    Then 
+    \[
+        w_A = \begin{pmatrix}
+            1 & 1 & 1 & 1 & 1 & 1 \
+              & 2 \
+              & 3 & 3 & 3 & 3 & 3 & 3 & 3\
+              & 4 \\
+            1 \
+              & 2 & 2 & 2 \
+              & 4 & 4 \
+              & 2 \
+              & 1 & 1 \
+              & 2 & 2 & 2 & 2 \
+              & 3 \
+              & 3
+        \end{pmatrix}
+    \]
+\end{example}
+
+\subsection{The RSK algorithm}
+
+\begin{definition}
+    We define the \textit{RSK correspondence} to be a rule that assigns to $\NN$-matrices of finite support to pairs of SSYT $(P, Q)$, which we notate
+    \[
+        A \rskarrow (P, Q).
+    \]
+    To compute $(P, Q)$, let 
+    \[
+        w_A = \begin{pmatrix}
+            i_1 & i_2 & \cdots & i_m \\
+            j_1 & j_2 & \cdots & j_m
+        \end{pmatrix},
+    \]
+    and begin with $(P_0, Q_0) = (\varnothing, \varnothing)$. Iteratively construct $(P_{t+1}, Q_{t+1})$ from $(P_t,Q_t)$ as follows
+    \begin{enumerate}[label=(\alph*)]
+        \item $P_{t+1} = P_t \leftarrow j_{t+1}$
+        \item Add a new box to $Q_t$ where a new box to $P_t$ was added, and fill it with $i_{t+1}$.
+    \end{enumerate}
+    This process continues until $t=m$, and we take $(P, Q) = (P_m, Q_m)$.
+
+    $P$ is referred to as the \textit{insertion tableau} and $Q$ is referred to as the \textit{recording tableau}.
+\end{definition}
+
+\begin{example}
+    Let 
+    \[
+        A := \begin{bmatrix}
+            1 & 0 & 2 \\
+            0 & 2 & 0 \\
+            1 & 1 & 0
+        \end{bmatrix}.
+    \]
+\end{example}
+
+\begin{theorem}
+    RSK is a bijection between $\NN$-matrices $A$ of finite support and pairs of SSYT $(P,Q)$ such that
+    \begin{align*}
+        \type(P) &= \col(A), \\
+        \type(Q) &= \row(A).
+    \end{align*}
+\end{theorem}
 
 \end{document}
