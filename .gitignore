@@ -4,6 +4,8 @@
 *.synctex.gz
 *.fls
 
+aux/**/*
+
 *.out
 *.toc
 
