@@ -1,21 +1,21 @@
 \documentclass{article}
 
-\usepackage[garamond]{jaspercommon}
-\usepackage{ebgaramond}
-\usepackage{ytableau}
+\usepackage[garamond, tableau]{jaspercommon}
 
-\newcommand{\frkS}{\ensuremath\mathfrak{S}}
-\newcommand{\rskarrow}{\ensuremath\xrightarrow{\text{RSK}}}
-
+\DeclareMathOperator{\RSK}{RSK}
 \DeclareMathOperator{\RowInsert}{RowInsert}
 \DeclareMathOperator{\row}{row}
 \DeclareMathOperator{\col}{col}
 \DeclareMathOperator{\shape}{shape}
+\DeclareMathOperator{\len}{len}
 \DeclareMathOperator{\type}{type}
 \DeclareMathOperator{\Par}{Par}
 \DeclareMathOperator{\SSYT}{SSYT}
 \DeclareMathOperator{\Dom}{Dom}
+\DeclareMathOperator{\Lex}{Lex}
 
+\newcommand{\frkS}{\ensuremath\mathfrak{S}}
+\newcommand{\rskarrow}{\ensuremath\xrightarrow{\RSK}}
 
 \setcounter{MaxMatrixCols}{20}
 
@@ -35,7 +35,11 @@ These are notes based on my self-study of Chapter 7 in R.P Stanley's ``Enumerati
 
 \tableofcontents
 
-\section{Notation}
+\section*{Notation and conventions}
+\addcontentsline{toc}{section}{Notation and conventions}
+
+\subsection*{Sets}
+
 We take $\NN$ to be the set of natural numbers \textit{including} zero,
 \[
     \NN := \{0,1,2,\ldots\}.
@@ -46,59 +50,125 @@ We take $\PP$ to be the set of \textit{positive integers},
 \]
 $\ZZ,\QQ,\RR,\CC$ are defined as usual.
 
+\subsection*{Partitions and compositions}
+
 A \textit{weak composition} $\alpha$ of $n \in \NN$ is an infinite tuple of nonnegative integers 
 \[
     (\alpha_1, \alpha_2, \ldots)
 \]
-such that $\sum_i \alpha_i = n$.
+such that $\sum_i \alpha_i = n$. 
+We define $|\alpha| = \sum_i \alpha_i$ to have notation for recovering $n$ given $\alpha$.
 
-A \textit{partition} $\lambda$ of $n$ is a weak composition whose entries are \textit{weakly decreasing}. That a particular partition $\lambda$ is a partition of a particular $n$ is denoted $\lambda \vdash n$.
+When more convenient (most of the time), we will omit brackets and commas, and write compositions as strings of digits. For example we will write $(1,1,4,3)$ as $1143$.
 
-All rings considered are commutative and unital. An arbitrary ring will be denoted $\KK$.
+A \textit{partition} $\lambda$ of $n$ is a weak composition whose entries are \textit{weakly decreasing}. 
+That a particular partition $\lambda$ is a partition of a particular $n$ is denoted $\lambda \vdash n$. 
+
+I use English notation when drawing diagrams and tableaux, meaning, rows are drawn further downward as the index increases.
+
+\subsection*{Rings, polynomials, and formal power series}
+
+All rings considered are commutative and unital. An arbitrary ring will be denoted $\KK$. 
 
 $\KK[[t]]$ will denote the formal power series ring over $\KK$ in the indeterminate $t$.
 
-Let $\KK[[x_1,x_2,\ldots]]$ be a formal power series ring. With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} $x^\alpha$ as the following monomial in $\KK[[x_1,x_2,\ldots]]$:
+We will fix notation for the following sets of indeterminates:
+\begin{enumerate}[label=(\alph*)]
+    \item $X_N := (x_1, x_2, \ldots x_N)$ for a set of $N$ indeterminates.
+    \item $X := (x_1, x_2, \ldots)$ for a set of countably many indeterminates.
+    \item $Y$, $Y_N$, $Z$, $Z_N$, $Q$, $Q_N$ and so on are defined similarly.
+\end{enumerate}
+
+Let $\KK[[X]]$ be a formal power series ring. With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} for compactly writing down monomials in $\KK[[X]]$.
 \[
     x^\alpha := x_1^{\alpha_1}x_2^{\alpha_2}x_3^{\alpha_3}\cdots.
 \]
+In the context of multi-index notation, $\alpha$ will also be called $x$'s \textit{exponent vector}.
+We will let $[x^\alpha]f$ denote the coefficient of $[x^\alpha]$ in the formal power series $f$.
 
-$\frkS_n$ denotes the symmetric group on $n$ letters.
+\subsection*{Permutations and the symmetric group}
+
+$\frkS_n$ will denote the symmetric group on $n$ letters. I chose this symbol mostly because I think it looks insanely cool.
+
+I use cycle notation, so e.g the cycle that sends $1$ to $7$, $7$ to $4$, and $4$ to $1$ will be written as $(174)$.
+
+The simple transpositions $(i\:i+1)$ will be denoted $s_i$.
+
+Permutations will act on functions by permuting places, so if $w \in \frkS_n$ and $f$ is a function, then
+
+\[
+    wf(x_1,\ldots,x_n) = f(x_{w(1)},\ldots,x_{w(n)}).
+\]
 
 \section{Symmetric Functions}
-\subsection{As a subring of formal power series in countably many indeterminates}
 
-\subsubsection{Homogeneous symmetric functions}
+The first definition is exactly how the ring of symmetric functions is defined in \\
+\cite{StanleyEC2}, which is was my primary reference on this topic.
 
-\begin{definition}[Homogeneous symmetric functions]
+\subsection{As a certain subring of FPS in countably many indeterminates}
+
+\subsubsection{Definition}
+
+\begin{definition}
     A \textit{A homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
     \[
-        \sum_\alpha c_\alpha x^\alpha \in \KK[[x_1,x_2\ldots]],
+        \sum_\alpha c_\alpha x^\alpha \in \KK[[X]],
     \]
     where we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar.
     
-    We denote the set of all such functions by $\Lambda_\KK^n$.
+    We denote the set of all such formal power series by $\Lambda_\KK^n$.
 \end{definition}
 
-These form a $\KK$-module.
+These form a $\KK$-module, as a submodule of $\KK[[X]]$. 
+The following is a simple example:
+
+\begin{example}
+    The formal power series 
+    \[
+        f = \sum_i x_i^2 + 10\sum_{i < j} x_ix_j
+    \]
+    is a symmetric function that is homogeneous of degree $2$. In this case $c_\alpha = 1$ whenever $\alpha = \ldots 2 \ldots$, and $c_\alpha = 10$ whenever $\alpha = \ldots 1 \ldots 1 \ldots$. 
+\end{example}
+
+
+We note that multiplying any two homogeneous symmetric functions $f$, $g$ of degree $m$ and $n$ respectively give us a homogeneous symmetric function of degree $m+n$.
+The following definition gives us the space in which this multiplication makes sense.
 
 \subsubsection{The ring of symmetric functions}
 
 \begin{definition}
-    The \textit{ring} (algebra over $\QQ$) of symmetric functions $\Lambda_\QQ$ is the infinite direct sum
+    The \textit{ring of symmetric functions} $\Lambda_\KK$ is the infinite direct sum
     \[
-        \Lambda_\QQ := \Lambda_\QQ^0 \oplus\Lambda_\QQ^1 \oplus \cdots.
+        \Lambda_\KK := \Lambda_\KK^0 \oplus\Lambda_\KK^1 \oplus \cdots.
     \]
-    We will suppress $\QQ$ and refer to $\Lambda_\QQ^n$ and $\Lambda_\QQ$ as $\Lambda^n$ and $\Lambda$ respectively.
+    In the case when $\KK = \QQ$, we will suppress $\QQ$ and refer to $\Lambda_\QQ^n$ and $\Lambda_\QQ$ as $\Lambda^n$ and $\Lambda$ respectively.
 \end{definition}
 
+This direct sum is \textit{internal}, happening within $\KK[[X]]$. 
+This is a $\KK$-algebra, being a subalgebra of $\KK[[X]]$.
 
-The \textit{definition} of a symmetric function arises from the study of \textit{symmetric polynomials}. Specifically, it is a limit of
+This greatly broadens the possible definitions for symmetric functions. 
+For example, the following demonstrates a symmetric function that arises from an infinite product, which evidently contains many monomials of different degrees and is not at all homogeneous.
+
+\begin{example}
+    The formal power series 
+    \[
+        f = \prod_i (1 + 5x_i^2 + 7x_i^5)
+    \]
+    is a symmetric function.
+\end{example}
+
+And in fact, we will find many such symmetric functions, usually in the form of \textit{Cauchy identities}.
 
 
 \subsection{As a limit of graded rings}
 
-Th
+The \textit{definition} of a symmetric function arises from the study of \textit{symmetric polynomials}. Specifically, it is a limit of
+
+Consider the polynomial ring $\KK[x_1,\ldots,x_n]$.
+
+We denote this subring by $\KK[x_1,\ldots,x_n]^{\frkS_n}$.
+
 
 \section{Partitions}
 \subsection{Definition}
@@ -123,7 +193,9 @@ In other words, $\lambda_k$ is weakly decreasing and has only finitely many nonz
 The set of all partitions $\lambda$ such that $\lambda \vdash n$ is denoted $\Par(n)$. We define the set of \textit{all} partitions to be just $\Par$.
 
 \subsection{Young diagrams}
-Partitions are often drawn as either 
+Partitions can be drawn as \textit{Ferrers diagrams} and \textit{Young diagrams}. 
+
+Both have the same underlying data structure: they encode the partition $\lambda$ as a subset of $\NN^2$.
 
 \subsection{Orders}
 
@@ -148,6 +220,8 @@ Partitions are often drawn as either
 
 \begin{definition}[Lexicographic order]
     We define the \textit{lexicographic order} on $\Par$ to be
+
+    We denote this relation $\lambda \prec \nu$.
 \end{definition}
 
 \begin{theorem}[Lexicographic order is a total order]
@@ -158,9 +232,13 @@ Partitions are often drawn as either
 
 \section{Distinguished bases of symmetric functions}
 
-We will cover bases of the ring of symmetric functions. These are all indexed by partitions.
+We will cover several interesting bases of the ring of symmetric functions. These are \textit{all} indexed by partitions.
 
 \subsection{Monomial symmetric functions}
+
+The first basis, the monomials, has the amazing property where it's \textit{remarkably obvious the fact that it even is a basis}.
+
+This is in total analogy to taking the \textit{monomial basis of a polynomial ring}. In this case, we group together monomials by the orbits of the place-permuting $\frkS_n$ action.
 
 \begin{definition}
     Let $\lambda \vdash n$. The \textit{monomial symmetric function} $m_\lambda$ is 
@@ -170,6 +248,8 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
     where $\alpha \sim \lambda$ means that $\alpha$ may be obtained by permuting the parts of $\lambda$.
 \end{definition}
 
+The above definition involves permuting around the exponent vector $\alpha$. I think it's actually much easier to think of the monomial symmetric functions as \textit{permuting the subscripts}. 
+
 \begin{example}
     Let $\lambda = 5322$. Then
     \begin{align*}
@@ -178,7 +258,10 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
                                            &+ x_{i_1}^3x_{i_2}^5x_{i_3}^2x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^5x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^2x_{i_4}^5  \\
                                            &+ x_{i_1}^2x_{i_2}^3x_{i_3}^5x_{i_4}^2 + x_{i_1}^2x_{i_2}^3x_{i_3}^2x_{i_4}^5 + x_{i_1}^2x_{i_2}^2x_{i_3}^3x_{i_4}^5 \Big).
     \end{align*}
+    \todo{Add extra expression for monomial example}
 \end{example}
+
+Now we prove the main result. 
 
 \begin{theorem}
     The monomial symmetric funtions form a basis for $\Lambda$.
@@ -189,6 +272,8 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
 \end{proof}
 
 \subsection{Elementary symmetric functions}
+
+Our next basis will be the \textit{elementary symmetric functions}, which we will refer to as the \textit{elementaries} or the $e$'s.
 
 \begin{definition}
     Let $n\in\NN$. The \textit{elementary symmetric function} $e_n$ is defined to be
@@ -201,15 +286,52 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
     \]
 \end{definition}
 
+Now we examine the relationship between the elementaries and the monomials.
+
+\begin{definition}
+    Let $\lambda \vdash n$. We define $M_{\lambda\mu}$ to be the coefficient of $m_\mu$ in the expansion of $e_\lambda$ in the monomial basis. That is, the numbers such that
+    \[
+        e_\lambda = \sum_\mu M_{\lambda\mu} m_\mu.
+    \]
+    More generally, for any weak composition $\alpha$, let $M_{\lambda\alpha}$ be the coefficient of $x^\alpha$ in $e_\lambda$.
+\end{definition}
 
 \begin{theorem}
-    The coefficient $M_{\lambda\nu}$ is counted by zero-one matrices whose row-sums are $\lambda$ and whose column sums are $\nu$.
+    The coefficient $M_{\lambda\mu}$ is counted by zero-one matrices whose row-sums are $\lambda$ and whose column sums are $\mu$.
 \end{theorem}
 
-\begin{theorem} \label{e2msymmetric}
-    Let $\lambda,\nu \vdash n$, then
+\begin{proof}
+
+    Consider what is going on when we compute the terms of $e_\lambda$,
     \[
-        M_{\lambda\nu} = M_{\nu\lambda}.
+        e_\lambda = e_{\lambda_1}e_{\lambda_2}\ldots.
+    \]
+    The right hand side is
+    \[
+        \left(\sum_{i_1<\ldots<i_{\lambda_1}} x_{i_1}\cdots x_{\lambda_1}\right)\left(\sum_{i_1<\ldots<i_{\lambda_2}} x_{i_1}\cdots x_{\lambda_2}\right)\cdots
+    \]
+    and naming a term in this product means you pick up monomials which are products of $\lambda_1$ distinct variables from $\lambda_1$, monomials of $\lambda_2$ distinct variables from $\lambda_2$, and so on. 
+    
+    These choices of distinct variables are in fact subsets of $(x_1, x_2, \ldots)$, and encoding these subsets with lists of $1$s and $0$s gives us the rows of our $0-1$ matrix, where the row $i$ corresponds to $e_{\lambda_i}$.     
+    \[
+        \begin{bmatrix}
+            x_1 & x_2 & x_3 & \cdots \\
+            x_1 & x_2 & x_3 & \cdots \\
+            x_1 & x_2 & x_3 & \cdots \\
+            \vdots & \vdots & \vdots & \ddots 
+        \end{bmatrix}
+    \]
+    The fact that we picked up $\lambda_i$ variables in each row manifests as the $i$-th row sum being equal to $\lambda_i$.
+The exponent of a given variable $x_j$ appearing in a monomial only depends on how many times we picked up an $x_j$ from each $e_{\lambda_i}$. 
+This manifests as the $j$-th column sum being equal to $\mu_i$.
+
+
+\end{proof}
+
+\begin{theorem} \label{e2msymmetric}
+    Let $\lambda,\mu \vdash n$, then
+    \[
+        M_{\lambda\mu} = M_{\mu\lambda}.
     \]
 \end{theorem}
 
@@ -223,6 +345,7 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
 
 \begin{proof}
     We demonstrate this algorithmically.
+    \todo{Finish proof of Gale-Ryser}
 \end{proof}
 \begin{theorem}[Fundamental theorem of symmetric functions] The $e$'s form a $\ZZ$-basis for the ring of symmetric functions.
 \end{theorem}
@@ -232,6 +355,8 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
 \end{proof}
 
 \subsection{Complete homogeneous symmetric functions}
+
+The \textit{complete homogeneous symmetric functions}, or the \textit{completes}, or the $h$'s, have a very similar definition as the elementaries, but with distinctness relaxed.
 
 \begin{definition}
     Let $n\in\NN$. The \textit{complete homogeneous symmetric function} $h_n$ is defined to be
@@ -258,7 +383,7 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
 \begin{proof}
     The exact same as with Theorem \ref{e2msymmetric}.
 \end{proof}
-    
+
 \subsection{Power sum symmetric functions}
 
 \begin{definition}
@@ -365,7 +490,28 @@ We will cover bases of the ring of symmetric functions. These are all indexed by
 
 \subsection{Vieta's formulas}
 
-\subsection{Power series identities}
+\subsection{Cauchy identities}
+
+\begin{theorem}\label{CauchyIdentityForME}
+    We have that
+    \[
+        \prod_{i,j \geq 1} (1+x_iy_j) = \sum_{\lambda\in\Par} m_\lambda(X) e_\lambda(Y).
+    \]
+\end{theorem}
+
+\begin{theorem}\label{CauchyIdentityForMH}
+    We have that
+    \[
+        \prod_{i,j \geq 1} (1-x_iy_j)^{-1} = \sum_{\lambda\in\Par} m_\lambda(X) h_\lambda(Y).
+    \]
+\end{theorem}
+
+\begin{theorem}\label{CauchyIdentityForPP}
+    We have that
+    \[
+        \prod_{i,j \geq 1} (1-x_iy_j)^{-1} = \sum_{\lambda\in\Par} z_\lambda^{-1}p_\lambda(X) p_\lambda(Y).
+    \]
+\end{theorem}
 
 \section{\texorpdfstring{$\omega$}{w}-involution}
 
@@ -392,6 +538,63 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
     \]
     This scalar product is called the \textit{Hall inner product}. It is well defined since the $m$'s and $h$'s form a basis for $\Lambda$.
 \end{definition}
+
+\begin{theorem}
+    $\langle\cdot,\cdot\rangle$ is symmetric.
+\end{theorem}
+
+\begin{proof}
+    It suffices to prove that products of basis elements are symmetric for some bases of $\Lambda$. Consider the basis $\{h_\lambda\}$. We have that
+    \[
+        \langle h_\lambda, h\nu \rangle = \left\langle \sum_{\gamma} N_{\lambda\gamma} m_\gamma, h\nu \right\rangle = N_{\lambda\nu}.
+    \]
+    Then $\langle h_\lambda, h_\nu \rangle = N_{\lambda\nu} = N_{\nu\lambda} = \langle h_\lambda, h_\nu \rangle$.
+\end{proof}
+
+\begin{theorem}\label{thm:CauchyIdentityImpliesOrthonormal}
+    Any two bases $\{u_\lambda\}$ and $\{v_\lambda\}$ of $\Lambda$ that have a Cauchy identity
+    \begin{equation}\label{eq:CauchyIdentityArbitrary}
+        \prod_{i,j \geq 1}(1 - x_iy_j)^{-1} = \sum_{\lambda\in\Par} u_\lambda(X) y_\lambda(Y)
+    \end{equation}
+    are orthonormal with respect to the Hall inner product.
+\end{theorem}
+
+\begin{proof}
+    Let
+    \[
+        m_\lambda = \sum_\rho \zeta_{\lambda\rho} u_\rho, \qquad h_\mu = \sum_\nu \eta_{\mu\nu} v_\nu.
+    \]
+    Then
+    \[
+        \delta_{\lambda\mu} = \langle m_\lambda, h_\mu \rangle = \sum_{\rho,\nu}\zeta_{\lambda\rho} \eta_{\mu\nu} \langle u_\rho, u_\nu \rangle
+    \]
+    If $\langle u_\lambda, v_\mu \rangle = \delta_{\lambda\mu}$, the above becomes
+    \[
+        \delta_{\lambda\mu} =  \sum_{\rho,\nu}\zeta_{\lambda\rho} \eta_{\mu\nu} \delta_{\rho\nu}.
+    \]
+    Since $\sum_\nu \eta_{\mu\nu}\delta_{\rho\nu} = \eta_{\mu\rho}$, we find that
+    \begin{equation}\label{CauchyIdentityImpliesDualBasis:1}
+        \delta_{\lambda\mu} =  \sum_\rho\zeta_{\lambda\rho} \eta_{\mu\rho}.
+    \end{equation}
+    The sequence of equalities given can be run backwards, so we have to just show (\ref{CauchyIdentityImpliesDualBasis:1}) and the theorem is proven.
+    By Theorem \ref{CauchyIdentityForMH}, we have that
+    \[
+        \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda m_\lambda(X) h_\lambda(Y).
+    \]
+    So 
+    \[
+        \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda \left(\sum_\rho \zeta_{\lambda\rho} u_\rho(X)\right)\left(\sum_\nu \eta_{\lambda\nu}v_\nu(Y)\right).
+    \]
+    Interchanging sums,
+    \[
+        \sum_\lambda \left(\sum_\rho \zeta_{\lambda\rho} u_\rho(X)\right)\left(\sum_\nu \eta_{\lambda\nu}v_\nu(Y)\right) = \sum_{\rho,\nu} \left(\sum_\lambda \zeta_{\lambda\rho} \eta_{\lambda\nu}\right) u_\rho(X) v_\nu(Y).
+    \]
+    By (\ref{eq:CauchyIdentityArbitrary})
+    \[
+        \sum_{\rho,\nu} \left(\sum_\lambda \zeta_{\lambda\rho} \eta_{\lambda\nu}\right) u_\rho(X) v_\nu(Y) = \sum_\mu u_\mu(X) v_\mu(Y).
+    \]
+    Since the $u_\lambda(X)v_\lambda(Y)$ are linearly independent as power series, we can compare coefficients, which gives us the desired equality.
+\end{proof}
 
 \section{Schur functions}
 \subsection{Combinatorial definitions}
@@ -494,28 +697,52 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
 
 \begin{example}
     Let $\lambda = \ydiagram{4,4,3,2}$ and $\nu = \ydiagram{3,2,2}$. Then $\lambda \setminus \nu$ is
+
     \ytableausetup{boxsize=normal}
     \[\ydiagram{3+1,2+2,2+1,2}.\]
 \end{example}
+
+\subsubsection{Kostka numbers}
+
+\begin{definition}
+    Let $\lambda \vdash n$ and let $\alpha$ be a weak composition of $n$. The \textit{Kostka number } $K_{\lambda\alpha}$ counts the number of SSYT with shape $\lambda$ and type $\alpha$.
+
+    Let $\nu \subseteq \lambda$. We define the skew Kostka number $K_{\lambda\setminus\nu,\alpha}$ similarly.
+\end{definition}
+
+\begin{remark}
+    We have that
+    \[
+        s_\lambda = \sum_\alpha K_{\lambda\alpha}x^\alpha.
+    \]
+\end{remark}
 
 \begin{theorem} The skew Schurs, and therefore also the Schurs, are symmetric functions.
 \end{theorem}
 
 \begin{proof}
-    We will prove that $s_{\lambda\setminus\nu}$ is invariant under the action of simple transpositions. Consider the simple transposition which swaps $i$ and $i+1$. 
+    We will prove that $s_{\lambda\setminus\nu}$ is invariant under the action of simple transpositions. 
+    Consider the simple transposition $s_i$ which swaps $i$ and $i+1$. 
+    Let $\alpha$ be some weak composition of $n$, and define
+    \[
+        \tilde{\alpha} = s_i\alpha = (\alpha_1, \ldots, \alpha_{i+1}, \alpha_i, \ldots).
+    \]
+    We wish to now show that 
+    \[
+        K_{\lambda\setminus\nu,\alpha} = K_{\lambda\setminus\nu,\tilde{\alpha}}.
+    \]
+    We will prove this by bijection.
 
-    The key fact is that \textit{if $i$ and $i+1$ appear in the same column, they must be vertically adjacent}.
+    The key fact here is that \textit{if $i$ and $i+1$ appear in the same column, they must be vertically adjacent}. 
+    This is due to the column-strictness of semistandard Young tableau.
 
     Let $T\in\SSYT(\lambda \setminus \nu)$. 
-
     Take all the columns of $T$ which contain $i$ or $i+1$ but not both. 
     These will form rows consisting of consecutive $i$'s followed by consecutive $i+1$'s. 
     In these rows, swap the number of consecutive $i$'s with the number of consecutive $i+1$'s. 
     This swap works because the $i$'s that become $i+1$'s will not break column strictness since there is no $i+1$ in the same column, similarly $i+1$'s that become $i$'s will not break column strictness since there is no $i$ in the same column.
 
-    This correspondence is involutive and therefore bijective. 
-    We've bijected SSYT of a given type to another whose type is a permutation of the original type.
-    This tells us that $s$ is symmetric.
+    This correspondence is involutive and therefore bijective. This completes the proof.
 
     For example, if $T$ looked like
 
@@ -565,7 +792,58 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
     \]
 \end{proof}
 
-\subsection{Jacobi-Trudi identities}
+As a consequence,
+\begin{corollary}
+    Let $\lambda\setminus\nu$ be a skew shape. Then
+    \[
+        s_{\lambda\setminus\nu} = \sum_{\gamma}K_{\lambda\setminus\nu,\gamma}m_\gamma.
+    \]
+\end{corollary}
+
+Next, we will prove that the Schurs $s_\lambda$ form a $\ZZ$-basis for $\Lambda$.
+
+\begin{theorem}
+    Let $\lambda, \nu \vdash n$. Then $K_{\lambda\nu} \neq 0$ implies $\lambda \geq \nu$. Also, $K_{\lambda\lambda} = 1$.
+\end{theorem}
+
+\begin{proof}
+    Let $K_{\lambda\nu} \neq 0 $. Then we have the existence of a SSYT $T$ of shape $\lambda$ and type $\nu$. 
+
+    We will show that the entries $1,\ldots,k$ can only appear in the first $k$ rows of $T$.
+    Since there can only be $\lambda_1 + \cdots + \lambda_k$ entries in the first $k$ rows of $T$, this automatically tells us that
+    \[
+        \nu_1 + \cdots + \nu_k \leq \lambda_1 + \cdots + \lambda_k.
+    \]
+
+    Suppose that $k$ appeared in the row $i > k$, and let $T_{ij} = k$. 
+    Then 
+    \[
+        1 \leq T_{1j} < T_{2j} < \cdots < T_{kj} < \cdots < T_{ij} = k.
+    \]
+    But that implies
+    \[
+        k \leq T_{kj} < \cdots < T_{ij} = k.
+    \]
+    which gives us $k < k$, a contradiction.
+
+    If $\nu = \lambda$, the only possible SSYT has the $i$th row filled with $i$.
+\end{proof}
+
+\begin{corollary}
+    $\{ s_\lambda : \lambda \in \Par(n) \}$ forms a basis for $\Lambda^n$, and therefore $\{ s_\lambda : \lambda \in \Par \}$ form a basis for $\Lambda$, as the transition matrix $(K_{\lambda\nu})_{n \prec \lambda, \nu \prec 1^n}$ is lower triangular.
+\end{corollary}
+
+
+\subsection{The Jacobi-Trudi identity}
+
+\subsubsection{Statement}
+
+\begin{theorem} Let $\lambda$ be a partition. Then
+    \[
+        s_\lambda = \det(h_{\lambda_i+j-i})_{i,j=1}^{\len(\lambda)}.
+    \]
+\end{theorem}
+
 
 \subsubsection{The Lindstr\"om-Gessel-Viennot lemma}
 
@@ -603,6 +881,7 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
     where $p: u \rightarrow v$ means that $p$ is a path from $u$ to $v$.
 
     Consider now the determinant 
+
     \[
         \det \begin{bmatrix}
             \phi(u_1, v_1) & \cdots & \phi(u_n, v_1) \\
@@ -610,23 +889,81 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
             \phi(u_1, v_n) & \cdots & \phi(u_n, v_n)
         \end{bmatrix}
     \]
-    \textcolor{red}{Finish this later.}
+
+    \todo{Finish proof of LGV}
 \end{theorem}
 
-\subsubsection{Jacobi-Trudi statement and proof}
+\subsubsection{Proof}
 
-\begin{theorem} Let $\lambda$ be a partition. Then
-    \[
-        s_\lambda = \det(h_{\lambda_i+j-i})_{i,j=1}^{|\lambda|}.
-    \]
-\end{theorem}
+\begin{proof}[Proof of the Jacobi-Trudi identity]
+    Fix $N \in \NN$. Consider the digraph $D$ whose vertex set is $\NN \times \{1,\ldots,N\}$. 
 
-\begin{proof}
-    Consider the lattice, $\ZZ^2$. We assign weights to the edges so that going vertically, you pick up a $1$, and going horizontally at the height $i$, you pick up a $x_i$.
+    We assign weights to the edges so that all vertical arcs are weighted $1$, and all horizontal arcs $(i, j) \to (i+1, j)$ are weighted $x_{j+1}$.
+
+    For example, consider the following path
+    \begin{center}
+        \begin{tikzpicture}[
+            scale=2,
+            font=\Large
+            ]
+            \draw[
+                step=1cm,
+                line width = 0.05cm,
+                ] (0,0) grid (3,3);
+            \draw[
+                blue, 
+                line width = 0.2cm,
+                ->
+                ] (0,0) -- node[above] {$x_1$} ++(1,0);
+            \draw[
+                red, 
+                line width = 0.2cm,
+                ->
+                ] (1,0) -- ++(0,1);
+            \draw[
+                red, 
+                line width = 0.2cm,
+                ->
+                ] (1,1) -- ++(0,1);
+            \draw[
+                blue, 
+                line width = 0.2cm,
+                ->
+                ] (1,2) -- node[above] {$x_3$} ++(1,0);
+            \draw[
+                blue, 
+                line width = 0.2cm,
+                ->
+                ] (2,2) -- node[above] {$x_3$} ++(1,0);
+            \draw[
+                red, 
+                line width = 0.2cm,
+                ->
+                ] (3,2) --++ (0,0.75);
+            \filldraw[
+                fill=white,
+                draw=black,
+                line width=0.05cm,
+                radius=0.25cm,
+                ] (0,0) circle node {$u$};
+            \filldraw[
+                fill=white,
+                draw=black,
+                line width=0.05cm,
+                radius=0.25cm
+                ] (3,3) circle node {$v$};
+        \end{tikzpicture}
+    \end{center}
+
+    This path's weight is $x_1x_3^2$.
+
+    Paths $p: (i,1) \to (i+n, N)$ are in bijection with monomials in $\KK[X_N]$ of degree $n$.
+
+
 
     We lay out the parts of $\lambda$ in ascending order at $x=1$.
 
-    \textcolor{red}{Finish this later.}
+    \todo{Finish proof of Jacobi-Trudi}
 \end{proof}
 
 \section{The Robinson-Schensted-Knuth correspondence}
@@ -637,14 +974,16 @@ I'm going to define RSK functionally instead of imperatively.
 
 \subsection{Row insertion}
 
+The basic operation will be that of \textit{row insertion}.
+
 \begin{definition}[Row insertion]
     Let $P = (P_{ij})$ be a SSYT of shape $\lambda$. And let $t \in \NN$. We will define the \textit{insertion path} $I(P\leftarrow t)$ now.
     We write that $t \geq P_m$ whenever $t \geq \max P_m$ or $P_m$ is empty and $t < P_m$ otherwise. 
     If $t < P_m$, define
     \begin{align*}
         (P_m \leftarrow t) := \begin{cases}
-            \lambda_m + 1 & t \geq P_m \\
-            \min\{n:P_{mn} > t\} & t < P_m 
+            \lambda_m + 1 & \text{if $t \geq \max P_m$ or $P_m$ is empty} \\
+            \min\{n:P_{mn} > t\} & \text{otherwise}.
         \end{cases}.
     \end{align*}
     We note that $(P_m \leftarrow t) \leq \lambda_m + 1$ always.
@@ -693,7 +1032,7 @@ We state a property of insertion paths that will allow us to prove that row inse
     Either way $j_{m+1} \leq j_m$.
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}\label{InsertionPreservesSSYT}
     If $P$ is a SSYT and $t \in \PP$, then $(P \leftarrow t)$ is a SSYT.
 \end{corollary}
 
@@ -712,12 +1051,14 @@ We state a property of insertion paths that will allow us to prove that row inse
     \[
         \binom{i}{j} + \binom{k}{l} := \binom{i\:k}{j\:l}.
     \]
-    Now consider the following two-line array:
-    \[
-        w_A = \sum_{i=1}^\infty \sum_{j=1}^\infty \binom{i}{j}^{a_{ij}}.
-    \]
+    Now consider the following formal sum:
+    \begin{align*}
+        w_A &= \sum_{i=1}^\infty \sum_{j=1}^\infty a_{ij}\binom{i}{j} \\
+            &= \sum_{i=1}^\infty \left(a_{i1}\binom{i}{1} + a_{i2}\binom{i}{2} + \cdots\right) \\
+            &= \left(a_{11}\binom{1}{1} + a_{12}\binom{1}{2} + \cdots\right) + \left(a_{21}\binom{2}{1} + a_{22}\binom{2}{2} + \cdots\right) + \cdots.
+    \end{align*}
     If $A$ has finite support, $w_A$ is well-defined. 
-    $w_A$ is the \textit{two-line array} or \textit{generalized permutation} corresponding to the matrix $A$.
+    $w_A$ is the \textit{two-line array} or \textit{generalized permutation} corresponding to the matrix $A$. We note that in $w_A$ the individual two-line entries are sorted in lexicographic order.
 \end{definition}
 
 \begin{example}
@@ -773,6 +1114,8 @@ We state a property of insertion paths that will allow us to prove that row inse
     $P$ is referred to as the \textit{insertion tableau} and $Q$ is referred to as the \textit{recording tableau}.
 \end{definition}
 
+
+
 \begin{example}
     Let 
     \[
@@ -781,6 +1124,100 @@ We state a property of insertion paths that will allow us to prove that row inse
             0 & 2 & 0 \\
             1 & 1 & 0
         \end{bmatrix}.
+    \]
+    We have that
+    \[
+        w_A = \begin{pmatrix}
+            1 & 1 & 1 \
+              & 2 & 2 \
+              & 3 & 3 \\
+            1 \
+              & 3 & 3 \
+              & 2 & 2 \
+              & 1 & 2
+        \end{pmatrix}.
+    \]
+    So, going through the insertion process,
+
+    \ytableausetup{boxsize=10pt}
+    \begin{center}
+        \begin{tabular}{r | l | l}
+            $t$ &  $P_t$ & $Q_t$ \\
+            \hline 
+            $1$ \
+              & \begin{ytableau} 
+                  \none
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  \none
+              \end{ytableau} \\
+            $2$ \
+              & \begin{ytableau} 
+                    *(green) 1
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  *(green) 1
+              \end{ytableau} \\
+            $3$ \
+              & \begin{ytableau} 
+                  1 & *(green) 3
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  1 & *(green) 1
+              \end{ytableau} \\
+            $4$ \
+              & \begin{ytableau} 
+                  1 & 3 & *(green) 3
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  1 & 1 & *(green) 1
+              \end{ytableau} \\
+            $5$ \
+              & \begin{ytableau} 
+                  1 & *(yellow) 2 & 3 \\
+                  *(green) 3
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  1 & 1 & 1 \\
+                  *(green) 2
+              \end{ytableau} \\
+            $6$ \
+              & \begin{ytableau} 
+                  1 & 2 & *(yellow) 2 \\
+                  3 & *(green) 3
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  1 & 1 & 1  \\
+                  2 & *(green) 2
+              \end{ytableau} \\
+            $7$ \
+              & \begin{ytableau} 
+                  1 & *(yellow) 1 & 2 \\
+                  *(yellow) 2 & 3 \\
+                  *(green) 3
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  1 & 1 & 1  \\
+                  2 & 2 \\
+                  *(green) 3
+              \end{ytableau} \\
+            $8$ \
+              & \begin{ytableau} 
+                  1 & 1 & 2 & *(green) 2 \\
+                  2 & 3 \\
+                  3
+                \end{ytableau} \
+              & \begin{ytableau} 
+                  1 & 1 & 1 & *(green) 3 \\
+                  2 & 2 \\
+                  3
+              \end{ytableau} \\
+        \end{tabular} 
+    \end{center}  
+
+    We find that
+    \[
+        P = \ytableaushort{1122,23,3} \qquad Q = \ytableaushort{1113,22,3}.
     \]
 \end{example}
 
@@ -791,5 +1228,89 @@ We state a property of insertion paths that will allow us to prove that row inse
         \type(Q) &= \row(A).
     \end{align*}
 \end{theorem}
+
+\begin{proof}
+    That the types of $P$ and $Q$ correspond to row and column sums of $A$ is obvious-- $j$ coordinates with multiplicities get inserted into $P$, while $i$ coordinates with multiplicities get inserted into $Q$.
+    That $P$ is a SSYT follows from (\ref{InsertionPreservesSSYT}).
+    That $Q$ is a SSYT follows from properties of the insertion path.
+
+    Now, it remains to prove that the RSK correspondence is a bijection. 
+    RSK can actually be run backwards. 
+    First, we use this to prove injectivity, by showing that running RSK backwards is actually the inverse of RSK. 
+    Second, we use this to prove surjectivity, by showing that backwards RSK works for arbitrary pairs of SSYT.
+
+\end{proof}
+
+
+\begin{theorem}[Cauchy identity]    We have
+    \begin{equation}\label{eq:CauchyIdentityForSchurs}
+        \prod_{i,j \geq 1}(1-x_iy_j)^{-1} = \sum_{\lambda \in \Par}s_\lambda(X) s_\lambda(Y).     
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We have that
+    \begin{align*}
+        [x^\alpha y^\beta]\left(\prod_{i,j\geq1}(1-x_iy_j)^{-1}\right) &= \left(\substack{\#\text{ of $\NN$-matrices $(a_ij)$ such that}\\\row(a) = \alpha\text{, and }\col(a) = \beta}\right) \\
+        [x^\alpha y^\beta]\left(\sum_{\lambda\in\Par} s_\lambda(X) s_\lambda(Y) \right) &= \left(\substack{\#\text{ of pairs $(P,Q)$ of SSYT of the same shape such that}\\\type(P) = \alpha\text{, and }\type(Q) = \beta}\right).
+    \end{align*}
+    RSK tells us that both counts are the same, hence both sides of the identity are equal as power series.
+\end{proof}
+
+\begin{corollary}
+    The Schurs are an orthonormal basis of $\Lambda$ with respect to the Hall inner product.
+\end{corollary}
+\begin{proof}
+    This follows from Theorem \ref{thm:CauchyIdentityImpliesOrthonormal}.
+\end{proof}
+
+\begin{corollary}
+    Let $\mu,\nu \vdash n$. Then
+    \[
+        \sum_{\lambda \vdash n} K_{\lambda\mu}K_{\lambda\nu} = \langle h_\mu, h_\nu \rangle.
+    \]
+\end{corollary}
+
+\begin{proof}
+    Take the coefficient of $x^\mu y^\nu$ in (\ref{eq:CauchyIdentityForSchurs}).
+\end{proof}
+
+\begin{corollary}
+    We have that
+    \[
+        h_\mu = \sum_\lambda K_{\lambda\mu}s_\lambda.
+    \]
+\end{corollary}
+
+\begin{corollary}
+    We have that
+    \[
+        h_1^n \sum_{\lambda \vdash n} f^\lambda s_\lambda.
+    \]
+\end{corollary}
+
+\section{Appendix}
+
+\begin{theorem}
+    Googoo gaga
+\end{theorem}
+
+\section{Solutions to Exercises}
+
+\begin{exercise}
+\end{exercise}
+
+\begin{thebibliography}{999999}
+    \raggedright\footnotesize
+
+    \bibitem[StanleyEC2]{StanleyEC2}
+    Richard P. Stanley, \textit{Enumerative Combinatorics. Volume 2}, Cambridge University Press 2023.
+
+    \bibitem[GrinbergAC]{DarijAC}
+    Darij Grinberg, \textit{An Introduction to Algebraic Combinatorics}, \href{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
+
+    \bibitem[WildonSymFuncs]{WildonSymFuncs}
+    Mark Wildon, \textit{An Involutive Introduction to Symmetric Functions}, \href{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
+\end{thebibliography}
 
 \end{document}

@@ -1,0 +1,212 @@
+\documentclass{article}
+
+\usepackage[garamond, tableau]{jaspercommon}
+
+\newcommand{\frkS}{\ensuremath\mathfrak{S}}
+
+\title{Schubert polynomials}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+These are notes based on my study of Schubert polynomials. My main references are \cite{KnutsonSchubertPolynomials} and \cite{MacdonaldSchubertPolynomials}.
+
+\tableofcontents
+
+\section{Notation and conventions}
+
+\subsection{Sets}
+
+We take $\NN$ to be the set of natural numbers \textit{including} zero,
+\[
+    \NN := \{0,1,2,\ldots\}.
+\]
+We take $\PP$ to be the set of \textit{positive integers},
+\[
+    \PP := \{1,2,\ldots\}.
+\]
+$\ZZ,\QQ,\RR,\CC$ are defined as usual.
+
+\subsection{Partitions and compositions}
+
+A \textit{weak composition} $\alpha$ of $n \in \NN$ is an infinite tuple of nonnegative integers 
+\[
+    (\alpha_1, \alpha_2, \ldots)
+\]
+such that $\sum_i \alpha_i = n$. 
+We define $|\alpha| = \sum_i \alpha_i$ to have notation for recovering $n$ given $\alpha$.
+
+A \textit{partition} $\lambda$ of $n$ is a weak composition whose entries are \textit{weakly decreasing}. 
+That a particular partition $\lambda$ is a partition of a particular $n$ is denoted $\lambda \vdash n$. 
+We define $|\lambda|$ the exact same way.
+
+I use English notation when drawing diagrams and tableaux, meaning, rows are drawn further downward as the index increases.
+
+\subsection{Rings, polynomials, and formal power series}
+
+The following notation is (mostly) in accordance with the notation in \cite{DarijAC}, with a few additions. 
+
+All rings considered are commutative and unital. An arbitrary ring will be denoted $\KK$. 
+
+$\KK[[t]]$ will denote the formal power series ring over $\KK$ in the indeterminate $t$.
+
+We will fix notation for the following sets of indeterminates, which we will use when convenient:
+\begin{enumerate}[label=(\alph*)]
+    \item $X_N := (x_1, x_2, \ldots x_N)$ for a set of $N$ indeterminates.
+    \item $X := (x_1, x_2, \ldots)$ for a set of countably many indeterminates.
+    \item $Y$, $Y_N$, $Z$, $Z_N$, $Q$, $Q_N$ and so on are defined similarly.
+\end{enumerate}
+
+Let $\KK[[X]]$ be a formal power series ring. With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} for compactly writing down monomials in $\KK[[X]]$.
+\[
+    x^\alpha := x_1^{\alpha_1}x_2^{\alpha_2}x_3^{\alpha_3}\cdots.
+\]
+We will let $[x^\alpha]f$ denote the coefficient of $[x^\alpha]$ in the formal power series $f$.
+
+\subsection{Permutations and the symmetric group}
+
+$S_n$ will denote the symmetric group on $n$ letters.
+
+I use cycle notation, so e.g the cycle that sends $1$ to $7$, $7$ to $4$, and $4$ to $1$ will be written as $(174)$.
+
+The simple transpositions $(i\:i+1)$ will be denoted $s_i$.
+
+The length of a permutation $w$ will be denoted $\ell(w)$.
+
+Permutations will act on polynomials or power series by permuting \textit{places}, meaning that if $\sigma \in S_n$ and $f(x_1, \ldots, x_n) \in \KK[X_n]$, we define
+\[
+    \sigma f(x_1, \ldots, x_n) := f(x_{\sigma(1)}, \ldots x_{\sigma(n)}).
+\]
+
+\section{Schubert Polynomials}
+
+Apparently these are ``Schubert cycles in flag varieties''.
+
+\subsection{Divided difference operators}
+
+These strike me as a tool to measure how ``unsymmetric'' a polynomial is in a local sense, in two variables at a time. 
+
+\subsubsection{Definition}
+
+\begin{definition}
+    Let $f$ be a polynomial in $N$ indeterminates. 
+    We define the \textit{divided difference operators} $\partial_i$ by 
+    \begin{equation}
+        \partial_i f := \frac{f-s_if}{x_i-x_{i+1}}
+    \end{equation}
+\end{definition}
+
+\begin{example}
+    If $f(x_1, x_2, x_3) = x_1x_2$, then
+    \begin{align*}
+        \partial_2 f(x_1,x_2,x_3) &= \frac{x_1x_2 - x_1x_3}{x_2 - x_3} \\
+                                  &= x_1\left(\frac{x_2-x_3}{x_2-x_3}\right) \\
+                                  &= x_1.
+    \end{align*}
+\end{example}
+
+\subsubsection{Basic facts}
+
+\begin{theorem} 
+    Let $f$ be a polynomial.
+    \begin{enumerate}[label=(\alph*)]
+        \item $\partial_if$ is a polynomial.
+        \item If $f$ is homogeneous of degree $d$, then $\partial_if$ is homogeneous of degree $d-1$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The proof is not hard but it's a slog. We'll take some liberty with notation so it's a little less of a slog. 
+    Consider some monomial $\cdots x_i^a x_{i+1}^b \cdots$. We compute
+
+    \begin{align*}
+        \partial_i(\cdots x_i^a x_{i+1}^b \cdots) &= \frac{(\cdots x_i^a x_{i+1}^b \cdots) - (\cdots x_i^b x_{i+1}^a \cdots)}{x_i-x_{i+1}} \\
+                                                                          &= (\cdots) \frac{x_i^ax_{i+1}^b - x_i^bx_{i+1}^a}{x_i-x_{i+1}}.
+    \end{align*}
+    Let $k = |a-b|$, and let $[]_\pm$ denote the sign of a number. Then
+    \[
+        (\cdots) \frac{x_i^ax_{i+1}^b - x_i^bx_{i+1}^a}{x_i-x_{i+1}} = (\cdots x_i^ax_{i+1}^a \cdots)[k]_\pm\frac{x_{i+1}^k - x_i^k}{x_i-x_{i+1}}.
+    \]
+    We recall a favorite high-school algebra identity
+    \[
+        \frac{a^n-b^n}{a-b} = a^{n-1}b^0 + a^{n-2}b^1 + \cdots + a^1b^{n-2}a^0b^{n-1},
+    \]
+    and continue computing to finally get
+    \[
+        (\cdots x_i^ax_{i+1}^a \cdots)[k]_\pm\frac{x_i^k - x_{i+1}^k}{x_i-x_{i+1}} = [k]_\pm(\cdots x_i^ax_{i+1}^a \cdots)(x_i^{k-1}x_{i+1}^0 + \cdots + x_i^0 x_{i+1}^{k-1}),
+    \]
+    which is evidently a polynomial. 
+    We also note that in the above computation we had a monomial of, say, degree $\_ + a + b$, and $\partial_i$ gave us a monomial with degree $\_ + a + a$ multiplied by a homogeneous polynomial of degree $b - a - 1$, hence the resulting polynomial is homogeneous of degree $(\_ + a + a) + (b - a - 1) = \_ + a + b - 1$.
+
+    Since $\partial_i$ is linear, the proof is complete, as we've proven it for an arbitrary monomial.
+\end{proof}
+
+\begin{theorem}
+    The divided difference operators satsify the following relations
+    \begin{enumerate}[label=(\alph*)]
+        \item The braid relation
+            \begin{equation}
+                \partial_i\partial_{i+1}\partial_i = \partial_{i+1}\partial_i\partial_{i+1}
+            \end{equation}
+        \item Far commutativity
+            \[
+                \partial_i\partial_j = \partial_j\partial_i\qquad \text{whenever}\qquad|i-j| > 1
+            \]
+        \item Reflection by a simple
+            \[
+                \partial_is_i = -\partial_i
+            \]
+        \item Chain condition
+            \[
+                \partial_i^2 = 0
+            \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\end{proof}
+
+I wonder if $\partial_i^2 = 0$ has to do with the Schuberts arising from a cohomology theory.
+
+\subsection{The definition of a Schubert polynomial}
+
+\begin{definition}
+    The \textit{Schubert polynomials} $\frkS_w$ are defined by the rules
+    \[
+        \begin{cases}
+        \frkS_{w_0} := x_1^{n-1}x_2^{n-2}\cdots x_{n-1}^1, \\
+        \partial_i\frkS_w := \frkS_{ws_i}
+        \end{cases}
+    \]
+\end{definition}
+
+\section{The ring of coinvariants of}
+
+\begin{theorem}
+    The Schuberts form a basis for the coinvariant ring 
+\end{theorem}
+\subsection{Definition}
+
+
+
+\begin{thebibliography}{999999999}
+    \footnotesize \raggedright
+    \bibitem[StanleyEC2]{StanleyEC2}
+    Richard P. Stanley, \textit{Enumerative Combinatorics. Volume 2}, Cambridge University Press 2023.
+
+    \bibitem[GrinbergAC]{DarijAC}
+    Darij Grinberg, \textit{An Introduction to Algebraic Combinatorics}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
+
+    \bibitem[KnutsonSP]{KnutsonSchubertPolynomials}
+    Allen Knutson, \textit{Schubert Polynomials and Symmetric Functions}, \url{https://pi.math.cornell.edu/~allenk/schubnotes.pdf}
+
+    \bibitem[MacdonaldSP]{MacdonaldSchubertPolynomials}
+    Ian Macdonald, \textit{Notes on Schubert Polynomials}
+\end{thebibliography}
+
+\end{document}
