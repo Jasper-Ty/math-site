@@ -45,7 +45,7 @@ A \textit{partition} $\lambda$ of $n$ is a weak composition whose entries are \t
 That a particular partition $\lambda$ is a partition of a particular $n$ is denoted $\lambda \vdash n$. 
 We define $|\lambda|$ the exact same way.
 
-I use English notation when drawing diagrams and tableaux, meaning, rows are drawn further downward as the index increases.
+I use English notation when drawing diagrams and tableaux, meaning, row index increases \textit{north to south}, and column index increases \textit{west to east}.
 
 \subsection{Rings, polynomials, and formal power series}
 
@@ -62,11 +62,11 @@ We will fix notation for the following sets of indeterminates, which we will use
     \item $Y$, $Y_N$, $Z$, $Z_N$, $Q$, $Q_N$ and so on are defined similarly.
 \end{enumerate}
 
-Let $\KK[[X]]$ be a formal power series ring. With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} for compactly writing down monomials in $\KK[[X]]$.
+With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} for compactly writing down monomials.
 \[
     x^\alpha := x_1^{\alpha_1}x_2^{\alpha_2}x_3^{\alpha_3}\cdots.
 \]
-We will let $[x^\alpha]f$ denote the coefficient of $[x^\alpha]$ in the formal power series $f$.
+We will let $[x^\alpha]f$ denote the coefficient of $[x^\alpha]$ in the polynomial or formal power series $f$.
 
 \subsection{Permutations and the symmetric group}
 
@@ -112,39 +112,61 @@ These strike me as a tool to measure how ``unsymmetric'' a polynomial is in a lo
 
 \subsubsection{Basic facts}
 
-\begin{theorem} 
+We have the following characterization of $\partial_i$ that does not invoke division.
+
+\begin{lemma}
+    Fix $i$. Consider some monomial $f = \cdots x_i^ax_{i+1}^b \cdots$. Then
+    \[
+        \partial_i(\cdots x_i^a x_{i+1}^b \cdots) = 
+        \varepsilon_{ba}
+        \sum_{\substack{u,v \geq \min\{a,b\} \\ u+v = a+b-1}} \cdots x_i^u x_{i+1}^v \cdots,
+    \]
+    where $\varepsilon$ is defined to be
+    \[
+        \varepsilon_{rs} := \begin{cases}
+            0 & \text{if } r = s \\
+            1 & \text{if } r < s \\
+            -1 & \text{if }r > s 
+        \end{cases}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    The proof is not hard but it's a slog. We compute
+    \begin{align*}
+        \partial_i(\cdots x_i^a x_{i+1}^b \cdots) &= \frac{(\cdots x_i^a x_{i+1}^b \cdots) - (\cdots x_i^b x_{i+1}^a \cdots)}{x_i-x_{i+1}} \\
+                                                                          &= (\cdots) \frac{x_i^ax_{i+1}^b - x_i^bx_{i+1}^a}{x_i-x_{i+1}}.
+    \end{align*}
+    We recall our (well, mine) favorite high-school algebra identity
+    \[
+        \frac{x^n-y^n}{x-y} = x^{n-1}y^0 + x^{n-2}y^1 + \cdots + x^1y^{n-2} + x^0y^{n-1},
+    \]
+    which we will modify a little
+    \[
+        \frac{x^{n+m}y^m-x^my^{n+m}}{x-y} = x^{m+n-1}y^m + x^{m+n-2}y^{m+1} + \cdots + x^{m+1}y^{m+n-2}x^my^{m+n-1},
+    \]
+    and we note that the pairs $(u,v) \in \{(m+n-1,m),\ldots,(m,m+n-1)\}$ are precisely those such that $u,v \geq \min\{a,b\}$ and $u+v = 2m+n-1$. We then put $a=m+n$ and $b=m$, to get that
+    \[
+        \frac{x^ay^b-x^ay^b}{x-y} = \sum_{\substack{u,v \geq \min\{a,b\}\\u+v=a+b-1}} x^uy^v, \qquad \text{given }a \geq b.
+    \]
+    Then, to forget $a \geq b$, we pick up a $\varepsilon_{ba}$ term to keep track of sign. 
+    Applying this identity now to our computation, we finish the lemma.
+\end{proof}
+
+Then the following properties of the operator $\partial_i$ can be read off
+
+\begin{corollary} 
     Let $f$ be a polynomial.
     \begin{enumerate}[label=(\alph*)]
         \item $\partial_if$ is a polynomial.
         \item If $f$ is homogeneous of degree $d$, then $\partial_if$ is homogeneous of degree $d-1$.
     \end{enumerate}
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
-    The proof is not hard but it's a slog. We'll take some liberty with notation so it's a little less of a slog. 
-    Consider some monomial $\cdots x_i^a x_{i+1}^b \cdots$. We compute
-
-    \begin{align*}
-        \partial_i(\cdots x_i^a x_{i+1}^b \cdots) &= \frac{(\cdots x_i^a x_{i+1}^b \cdots) - (\cdots x_i^b x_{i+1}^a \cdots)}{x_i-x_{i+1}} \\
-                                                                          &= (\cdots) \frac{x_i^ax_{i+1}^b - x_i^bx_{i+1}^a}{x_i-x_{i+1}}.
-    \end{align*}
-    Let $k = |a-b|$, and let $[]_\pm$ denote the sign of a number. Then
-    \[
-        (\cdots) \frac{x_i^ax_{i+1}^b - x_i^bx_{i+1}^a}{x_i-x_{i+1}} = (\cdots x_i^ax_{i+1}^a \cdots)[k]_\pm\frac{x_{i+1}^k - x_i^k}{x_i-x_{i+1}}.
-    \]
-    We recall a favorite high-school algebra identity
-    \[
-        \frac{a^n-b^n}{a-b} = a^{n-1}b^0 + a^{n-2}b^1 + \cdots + a^1b^{n-2}a^0b^{n-1},
-    \]
-    and continue computing to finally get
-    \[
-        (\cdots x_i^ax_{i+1}^a \cdots)[k]_\pm\frac{x_i^k - x_{i+1}^k}{x_i-x_{i+1}} = [k]_\pm(\cdots x_i^ax_{i+1}^a \cdots)(x_i^{k-1}x_{i+1}^0 + \cdots + x_i^0 x_{i+1}^{k-1}),
-    \]
-    which is evidently a polynomial. 
-    We also note that in the above computation we had a monomial of, say, degree $\_ + a + b$, and $\partial_i$ gave us a monomial with degree $\_ + a + a$ multiplied by a homogeneous polynomial of degree $b - a - 1$, hence the resulting polynomial is homogeneous of degree $(\_ + a + a) + (b - a - 1) = \_ + a + b - 1$.
-
-    Since $\partial_i$ is linear, the proof is complete, as we've proven it for an arbitrary monomial.
+    Left to reader.
 \end{proof}
+
 
 \begin{theorem}
     The divided difference operators satsify the following relations
@@ -169,6 +191,11 @@ These strike me as a tool to measure how ``unsymmetric'' a polynomial is in a lo
 \end{theorem}
 
 \begin{proof}
+    We have that
+    \[
+        \partial_i = (x_i-x_{i+1})^{-1}(1 - s_i).
+    \]
+    Then
 \end{proof}
 
 I wonder if $\partial_i^2 = 0$ has to do with the Schuberts arising from a cohomology theory.
@@ -184,6 +211,8 @@ I wonder if $\partial_i^2 = 0$ has to do with the Schuberts arising from a cohom
         \end{cases}
     \]
 \end{definition}
+
+Actually, this definition is a theorem if we start with the ``Representatives of cohomology classes of Schubert cycles in flag varieties'' definition, but I don't understand that unfortunately.
 
 \section{The ring of coinvariants of}
 
