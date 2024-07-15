@@ -163,11 +163,10 @@ And in fact, we will find many such symmetric functions, usually in the form of 
 
 \subsection{As a limit of graded rings}
 
-The \textit{definition} of a symmetric function arises from the study of \textit{symmetric polynomials}. Specifically, it is a limit of
+The \textit{definition} of a symmetric function arises from the study of \textit{symmetric polynomials}. Specifically, it is a limit in the category of graded rings.
 
-Consider the polynomial ring $\KK[x_1,\ldots,x_n]$.
-
-We denote this subring by $\KK[x_1,\ldots,x_n]^{\frkS_n}$.
+Consider the polynomial ring $K = \KK[x_1,\ldots,x_N]$. We denote the subring of $K$ which consists of all polynomials $f(x_1,\ldots,x_N)$ such that $wf = f$ for all $w \in \frkS_N$ to be the \textit{ring of symmetric polynomials in $N$ variables}.
+We denote this subring by $\KK[x_1,\ldots,x_N]^{\frkS_N}$.
 
 
 \section{Partitions}
@@ -573,10 +572,10 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
         \delta_{\lambda\mu} =  \sum_{\rho,\nu}\zeta_{\lambda\rho} \eta_{\mu\nu} \delta_{\rho\nu}.
     \]
     Since $\sum_\nu \eta_{\mu\nu}\delta_{\rho\nu} = \eta_{\mu\rho}$, we find that
-    \begin{equation}\label{CauchyIdentityImpliesDualBasis:1}
+    \begin{equation}\label{eq:CauchyIdentityImpliesDualBasis:1}
         \delta_{\lambda\mu} =  \sum_\rho\zeta_{\lambda\rho} \eta_{\mu\rho}.
     \end{equation}
-    The sequence of equalities given can be run backwards, so we have to just show (\ref{CauchyIdentityImpliesDualBasis:1}) and the theorem is proven.
+    The sequence of equalities given can be run backwards, so we have to just show (\ref{eq:CauchyIdentityImpliesDualBasis:1}) and the theorem is proven.
     By Theorem \ref{CauchyIdentityForMH}, we have that
     \[
         \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda m_\lambda(X) h_\lambda(Y).
@@ -1241,6 +1240,8 @@ We state a property of insertion paths that will allow us to prove that row inse
 
 \end{proof}
 
+\subsection{Implications}
+
 
 \begin{theorem}[Cauchy identity]    We have
     \begin{equation}\label{eq:CauchyIdentityForSchurs}
@@ -1275,19 +1276,83 @@ We state a property of insertion paths that will allow us to prove that row inse
     Take the coefficient of $x^\mu y^\nu$ in (\ref{eq:CauchyIdentityForSchurs}).
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}\label{thm:HToSIsKostka}
     We have that
     \[
         h_\mu = \sum_\lambda K_{\lambda\mu}s_\lambda.
     \]
+    Equivalently,
+    \[
+        \langle h_\mu, s_\lambda \rangle = K_{\lambda\mu}.
+    \]
 \end{corollary}
+
+The book gives three proofs of this corollary. The first one is ``the fastest''.
+
+\begin{proof}[Proof via the Hall inner product]
+    We know that
+    \[
+        s_\lambda = \sum_\nu K_{\lambda\nu} m_\nu,
+    \]
+    so 
+    \begin{align*}
+        \langle h_\mu, s_\lambda \rangle &= \left\langle h_\mu, \sum_\nu K_{\lambda\nu} m_\nu \right\rangle \\
+                                         &=\sum_{\nu} K_{\lambda\nu} \langle h_\mu, m_\nu \rangle \\
+                                         &=\sum_{\nu} K_{\lambda\nu} \delta_{\mu\nu} \\
+                                         &= K_{\lambda\mu}.
+    \end{align*}
+\end{proof}
+
+This next one is really the same thing, but packaged differently.
+
+\begin{proof}[Proof via Cauchy Identities]
+    We have that
+    \[
+        \sum_\lambda m_\lambda(X)h_\lambda(Y) = \sum_\lambda s_\lambda(X) s_\lambda(Y),
+    \]
+    since both equal $\prod_{i,j}(1-x_iy_j)^{-1}$.
+    So we have that
+    \begin{align*}
+        \sum_\mu m_\mu(X)h_\mu(Y) &= \sum_\lambda \left( \sum_\mu K_{\lambda\mu} m_\mu(X) \right) s_\lambda(Y) \\
+                                  &= \sum_\lambda \sum_\mu m_\mu(X) K_{\lambda\mu} s_\lambda(Y) \\
+                                  &= \sum_\mu \sum_\lambda m_\mu(X) K_{\lambda\mu} s_\lambda(Y) \\
+                                  &= \sum_\mu m_\mu(X) \left(\sum_\lambda K_{\lambda\mu} s_\lambda(Y)\right)
+    \end{align*}
+    We already know that the $m_\mu(X)$'s are linearly independent; we finish the proof by equating their coefficients.
+\end{proof}
+
+This last proof is purely combinatorial. 
+
+\begin{proof}[Proof via RSK]
+    \[
+        h_\mu = \sum_A x^{\col A}
+    \]
+\end{proof}
 
 \begin{corollary}
     We have that
     \[
-        h_1^n \sum_{\lambda \vdash n} f^\lambda s_\lambda.
+        h_{1^n} = \sum_{\lambda \vdash n} f^\lambda s_\lambda.
     \]
 \end{corollary}
+
+\begin{proof}
+    Combine Corollary \ref{thm:HToSIsKostka} and the fact that $f^\lambda = K_{\lambda,1^n}$.
+\end{proof}
+
+\subsection{Standardization}
+
+\subsection{Symmetry}
+\begin{theorem}
+    If
+    \[
+        A \rskarrow (P,Q),
+    \]
+    then
+    \[
+        A^T \rskarrow (Q,P).
+    \]
+\end{theorem}
 
 \section{Appendix}
 
