@@ -1,0 +1,370 @@
+\documentclass{article}
+
+\usepackage[garamond]{jaspercommon}
+
+\title{The Fundamental Theorem of Calculus}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+\maketitle 
+
+The \emph{fundamental theorem of calculus} has several statements, and, depending on who you ask, can even be considered to be more than just \emph{one} theorem. In one perspective, that of differential forms, \emph{Stokes' Theorem} is the true fundamental theorem of calculus. In another, in that of measure theory, maybe the \emph{Radon-Nikodym} theorem is in some sense the fundamental theorem of calculus. 
+
+Probably, there are way more perspectives, advanced and elementary, on the ``fundamental theorem of calculus''. Here I cover the fundamental theorem of calculus that appears in... calculus classes. However, this is a rigorous exposition, and requires some understanding of real analysis. I cover their relationships via continuity and differentiability.
+
+I was asked by a university I applied to for a math Ph.D to prepare an explanation of the fundamental theorem of calculus for an interview. This gave birth to these notes, which I typed up as I was re-studying this topic. I expected to give a super technical explanation, but it turns out I only had to give a very elementary, introductory one, as if I was explaining in a Calculus I class. Oh well.
+
+\section*{Preliminaries}
+Let $f$ be a Riemann-integrable function on the interval $[a, b]$. Note that this means $f$ is bounded, as Riemann sums are not well-defined for an unbounded function on a closed interval.
+
+Consider the function $F$ defined to be
+\[
+    F(x) := \int_a^x f(t)dt
+\]
+We claim that $F$ is continuous. 
+\begin{proof}
+    For all points $x, y$ such that $a<x<y<b$
+    \[
+        \int_a^x f(t)dt + \int_x^y f(t)dt = \int_a^y f(t)dt
+    \]
+    So
+    \[
+        F(x) + \int_x^y f(t)dt = F(y)
+    \]
+    and so $F(y)-F(x) = \displaystyle\int_x^y f(t)dt$ for all $a < x < y < b$.
+
+    Use $f$'s boundedness now, and let $|f(t)|<M$ for all $t \in [a,b]$. We can now directly show that $F$ is continuous.
+
+    Let $\varepsilon > 0$. Put $\delta = \varepsilon/M$, so if 
+    \[
+        |y - x| < \delta = \frac{\varepsilon}{M}
+    \]
+     we have that
+     \begin{align*}
+         |F(y)-F(x)| &= \left|\int_x^yf(t)dt\right| \\
+                     &\leq \int_x^y |f(t)|dt \\
+                     &< \int_x^y M dt \\
+                     &= M|y-x| \\
+                     &< M\frac{\varepsilon}{M} \\
+                     &= \varepsilon \\
+     \end{align*}
+     Thus showing that $F$ is continuous. (And more, this proves that $F$ is \emph{uniformly continuous})
+
+\end{proof}
+
+\section{The first fundamental theorem of calculus}
+
+What if $f$ is already continuous? In that case, we have the following result
+\begin{theorem}{(The first fundamental theorem of calculus)}
+
+    Let $f$ be Riemann-integrable on $[a, b]$, and let $f$ be continuous at a point $x_0$ of $[a, b]$. Then if we define the function $F$ to be
+    \[
+        F(x) := \int_a^x f(t)dt
+    \]
+    we have that $F$ is differentiable at $x_0$, and moreover
+    \[
+        F'(x_0) = f(x_0)
+    \]
+\end{theorem}
+
+\begin{proof}
+    Pick two distinct points $x^- < x^+$ inside $[a, b]$. 
+    Note that the difference quotient for the function $F$
+    \[
+        \frac{F(x^+) - F(x^-)}{x^+-x^-}
+    \]
+    has a particular meaning:
+    \[
+        \frac{F(x^+) - F(x^-)}{x^+-x^-} = \frac{\displaystyle \int_a^{x^+} f(t)dt - \int_a^{x^-}f(t)dt}{x^+-x^-} = \frac{\displaystyle\int_{x^-}^{x^+} f(t)dt}{x^+-x^-}
+    \]
+    It is the \emph{average value} of $f$ on the interval $[x^+, x^-]$. The idea here is that $f$'s continuity at $x_0$ in fact \emph{forces the average value of $f$ to be close to $f(x_0)$ in a small enough neighborhood of $x_0$}. 
+
+    Use $f$'s continuity: let $\varepsilon > 0$, and choose $\delta$ such that
+    \[|f(t)-f(x_0)| < \varepsilon \qquad \text{for all }t\text{ such that} \qquad |t-x_0| < \delta\]
+
+    Now, choose the two numbers $x^- < x^+$ so that 
+    \[
+        x_0 - \delta < x^- \leq x_0 \leq x^+ < x_0 + \delta
+    \]
+    This just means that $[x^+, x^-]$ is a \emph{smaller} neighborhood of $x_0$ than the closed ball of radius $\delta$ centered at $x_0$; $[x_0 - \delta, x_0 + \delta]$. Now we write down the distance between our difference quotient and $f(x_0)$
+    \[
+        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right|
+    \]
+    and make the following calculation 
+    \begin{align*}
+        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right| &= \left|\frac{1}{x^+-x^-}\int_{x^-}^{x^+} f(t)dt - f(x_0)\right| \\
+                                                            &= \left|\frac{1}{x^+-x^-}\int_{x^-}^{x^+} f(t)dt - \frac{x^+-x^-}{x^+-x^-}f(x_0)\right| \\
+                                                            &= \left|\frac{1}{x^+-x^-}\left(\int_{x^-}^{x^+} f(t)dt - (x^+-x^-)f(x_0)\right)\right| \\
+                                                            &= \left|\frac{1}{x^+-x^-}\left(\int_{x^-}^{x^+} f(t)dt - \int_{x^-}^{x^+}f(x_0)dx\right)\right| \\
+                                                            &= \left|\frac{1}{x^+-x^-}\int_{x^-}^{x^+} \Big(f(t) - f(x_0)\Big)dt\right| \\
+                                                            &\leq \frac{1}{x^+-x^-}\int_{x^-}^{x^+} \bigg|f(t) - f(x_0)\bigg|dt \\
+                                                            &< \frac{1}{x^+-x^-}\int_{x^-}^{x^+} \varepsilon dt \\
+                                                            &= \frac{1}{x^+-x^-}\varepsilon(x^+-x^-) \\
+                                                            &= \frac{1}{x^+-x^-}\varepsilon(x^+-x^-) \\
+                                                            &= \varepsilon
+    \end{align*}
+    If we compress that all down, we have
+    \[
+        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right| < \varepsilon
+    \]
+    And we are almost done. If we fix $x^- = x_0$ and let $x^+\downarrow x_0$,\footnote{This notation means that $x^+$ approaches $x_0$ from above} the above allows us to prove the right hand limit
+    \[
+        \lim_{x^+\downarrow x_0}\frac{F(x^+)-F(x_0)}{x^+-x_0} = f(x_0)
+    \]
+    Then, fixing $x^+ = x_0$ and letting $x^- \uparrow x_0$,\footnote{Similarly} this gives us the left hand limit
+    \[
+        \lim_{x^-\uparrow x_0}\frac{F(x_0)-F(x^-)}{x_0-x^-} = f(x_0)
+    \]
+    Then we have the two-sided limit, and we finally conclude
+    \[
+        F'(x_0) = \lim_{x \to x_0}\frac{F(x)-F(x_0)}{x-x_0} = f(x_0)
+    \]
+\end{proof}
+
+We note some consequences of this theorem. The theorem statement, in the interest of generality, was concerned only with \emph{continuity at a point}. This can easily be extended to the less general but more immediate case of \emph{continuity for the whole function}
+
+\begin{corollary}
+    If $f$ is a continuous function on $[a, b]$, then the function
+    \[
+        F(x) = \int_a^x f(t)dt
+    \]
+    is differentiable on $[a, b]$. Moreover, $F' = f$. This is commonly stated in more slick but less precise notation
+    \[
+        f(x) = \frac{d}{dx}\int_a^x f(t)dt
+    \]
+\end{corollary}
+
+But note that $F$ is not just \emph{differentiable}, but also \emph{continuously differentiable}, meaning its derivative is itself continuous.
+
+This motivates the following statements. Let $C^0[a,b]$ denote the set of all continuous functions on $[a, b]$. Let $C^1[a,b]$ denote the set of all \emph{continuously differentiable} functions on $[a, b]$.
+
+Define the two maps
+\begin{align*}
+    I: C^0[a,b] &\to C^1[a,b] \\
+                f(\bullet) &\mapsto \int_a^\bullet f(t)dt \\
+                \\
+    D: C^1[a,b] &\to C^0[a,b] \\
+                f &\mapsto f'
+\end{align*}
+Care must be taken to verify that these maps are in fact defined correctly. For example, why is $C^1[a,b]$ the codomain of $I$? This is a consequence of the fundamental theorem of calculus itself. Why is $C^0[a,b]$ the codomain of $D$? This follows from the definition of $C^1[a,b]$ as the space of continuously differentiable functions.
+
+Once those are resolved, we obtain the following, simple corollary of the first fundamental theorem of calculus
+
+\begin{corollary}
+    $D$ is a left inverse of $I$, i.e $D \circ I = \text{id}$, the identity map $f \mapsto f$
+\end{corollary}
+
+This is really a restatement of the first fundamental theorem of calculus when we restrict ourselves to $C^0[a,b]$ and $C^1[a,b]$. This has a further generalization if we define $C^k[a,b]$, $D^k$, $I^k$ in the natural way.
+
+\begin{corollary}
+    For all $n > 0$, $I^k$ sends functions in $C^n[a,b]$ to $C^{n+k}[a,b]$, and $D^k$ is a left inverse of $I^k$
+\end{corollary}
+
+Can $D$ be a \emph{right-inverse} of $I$? No--- there is a simple argument: the image of $I$ consists of functions that have the value $0$ at $a$, since
+\[
+    \int_a^a f(t)dt = 0
+\]
+trivially for any function $f$. But there are continuously differentiable functions $f$ such that $f(a) \neq 0$. Then $(I \circ D)f(a) = 0 \neq f(a)$. 
+
+The main part of the problem is that $(f+C)' = f'$ for all constants $C$. The following will show that fixing this situation is all about just putting the $C$ ``back in the picture''.
+
+\begin{lemma}
+    Let $f$ be a function on $[a, b]$. We call differentiable functions $F$ such that $F' = f$ \emph{antiderivatives} of $f$.
+
+    Suppose $f$ has antiderivatives. Then we have the following
+    \begin{itemize}
+        \item[(a)] There exists a unique antiderivative $F_0$ of $f$ such that $F_0(a) = 0$
+        \item[(b)] Every antiderivative of $f$ is $F_0 + C$ for some constant $C$.
+        \item[(c)] If $f$ is continuous, then $F_0 = If = \displaystyle \int_a^\bullet f(t)dt$
+    \end{itemize}
+\end{lemma}
+
+\begin{proof}
+    Note that for any antiderivative $F$ of $f$ and any constant $C$, $(F+C)' = F' = f$, so $F+C$ is also an antiderivative of $f$.
+
+    \begin{itemize}
+        \item[(a)] Suppose $f$ has an antiderivative $F_\ast$. Then we can define the function
+        \[
+            F_0 := F_\ast - F_\ast(0)
+        \]
+        which, by the note, is an antiderivative of $F$. And, $F_0(a) = F_\ast(a) - F_\ast(a) = 0$.
+        \item[(b)] Recall a consequence of the mean value theorem: a function that has zero derivative everywhere is constant.
+
+        Let $F$ be an antiderivative of $f$. Then
+        \[
+            (F_0 - F)' = f - f \equiv 0
+        \]
+        so $F_0 - F$ is constant and $F_0-F \equiv C$ for some constant $C$, hence $F = F_0 + C$. This gives us our uniqueness proof for $F_0$, since this forces two antiderivatives that agree at any point to agree at all points.
+    \item[(c)] This just follows now from the first fundamental theorem of calculus and the uniqueness of $F_0$.
+    \end{itemize}
+\end{proof}
+
+With this lemma we have one final corollary of the first fundamental theorem of calculus--- something that looks \emph{almost} like the \textit{second fundamental theorem of calculus}
+
+\begin{corollary}
+    If $f$ is continuous and $F$ is an antiderivative of $f$,
+    \[
+        \int_a^b f(t)dt = F(b) - F(a)
+    \]
+\end{corollary}
+\begin{proof}
+    \begin{align*}
+        F(b) - F(a) &= (F_0(b) + C) - (F_0(a) + C) \\
+                    &= F_0(b) - F_0(a) \\
+                    &= \int_a^b f(t)dt - \int_a^a f(t)dt \\
+                    &= \int_a^bf(t)dt
+    \end{align*}
+\end{proof}
+
+
+But we have a somewhat stringent requirement on $f$ here, namely that it should be \emph{continuous}. This forces our antiderivative $F$ to be \emph{continuously differentiable} rather than just \emph{differentiable}. The next result loosens this requirement 
+
+\section{The second fundamental theorem of calculus}
+
+It turns out, what was not important for the above identity was not the continuity of $f$, but the \emph{existence of an antiderivative $F$ of $f$}. It just so happens that $f$'s continuity did in fact imply it had an antiderivative-- this was what the first fundamental theorem said! We just had to stir in the crucial fact that antiderivatives are more or less ``the same'' up to adding a constant.
+
+Now, more generally, we state the following theorem
+
+\begin{theorem} (The second fundamental theorem of calculus)
+
+    If $f$ is Riemann-integrable on $[a, b]$, and $F$ is an antiderivative of $f$
+    \[
+        \int_a^b f(x)dx = F(b)-F(a)
+    \]
+\end{theorem}
+\begin{proof}
+    Let $P = {a=x_0 < x_1 < \cdots < x_{n-1} < x_n = b}$ be a partition of $[a,b]$.
+
+    We do something very common when working with partitions: write a quantity involving the first and last points as a telescoping sum
+    \begin{align*}
+        F(b)-F(a) &= F(x_n) - F(x_0) \\
+                  &= F(x_n)-F(x_{n-1})+F(x_{n-1}) - \cdots - F(x_1) + F(x_1) - F(x_0) \\
+                  &= \sum_{i=1}^n F(x_i) - F(x_{i-1})
+    \end{align*}
+
+    Since $F$ is differentiable, the mean value theorem gives us points $t_i \in [x_{i-1},x_i]$ such that 
+    \[
+        \frac{F(x_i)-F(x_{i-1})}{x_i-x_{i-1}} = F'(t_i)
+    \]
+    for all $i$. Since $F'(t_i) = f(t_i)$, we have that $F(x_i) - F(x_{i-1}) = f(t_i)(x_i-x_{i-1}) = f(t_i)\Delta x_i$, where $\Delta x_i := x_i - x_{i-1}$.
+
+    Plugging this in to the sum, we've shown that
+    \[
+        F(b)-F(a) = \sum_{i=1}^n f(t_i) \Delta x_i
+    \]
+    Recall the definition of the lower and upper Riemann sums $L(P, f)$ and $U(P, f)$
+    \[
+        L(P, f) := \sum_{i=1}^n m_i\Delta x_i \qquad U(P, f) := \sum_{i=1}^n M_i\Delta x_i 
+    \]
+    where 
+    \[
+        m_i := \inf_{x_{i-1} \leq x \leq x_i} f(x) \qquad M_i := \sup_{x_{i-1} \leq x \leq x_i} f(x) 
+    \]
+    This gives us right away that $m_i \leq f(t_i) \leq M_i$, as $t_i \in [x_{i-1}, x_i]$. Then 
+    \[
+        m_i\Delta x_i \leq f(t_i)\Delta x_i \leq M_i \Delta x_i
+    \]
+    So
+    \[
+        \sum_{i=0}^n m_i\Delta x_i \leq \sum_{i=0}^n f(t_i)\Delta x_i \leq \sum_{i=0}^n M_i \Delta x_i
+    \]
+    Which we may read off as
+    \[
+        L(P, f) \leq \sum_{i=1}^n f(t_i) \Delta x_i \leq U(P, f) 
+    \]
+    We also already know that
+    \[
+        L(P, f) \leq \int_a^b f(x)dx \leq U(P, f) 
+    \]
+    Hence, as an exercise in inequality trickery, we may deduce
+    \[
+    \left|\int_a^b f(x)dx - \underbrace{\big(F(b)-F(a)\big)}_{=\sum_{i=1}^n f(t_i)\Delta x_i}\right| \leq U(P,f) - L(P, f)
+    \]
+    Note that we have proved this for an \emph{arbitrary} partition $P$. I appeal now to the theorem\footnote{For a reference, see Theorem 7.2.8 in Abbott's \textit{Understanding Analysis} or Theorem 6.6 in Rudin's \textit{Principles of Mathematical Analysis}} that says if $f$ is Riemann-integrable, we may always choose a partition $P$ such that $U(P, f) - L(P, f)$ is arbitrarily small.
+
+    Let $\varepsilon > 0$. Choose a partition $P$ such that $U(P, f) - L(P,f) < \varepsilon$. Then
+    \[
+        \left|\int_a^b f(x)dx - (F(b)-F(a))\right| \leq \varepsilon
+    \]
+    Since $\varepsilon$ was arbitrary, in fact
+    \[
+        \left|\int_a^b f(x)dx - (F(b)-F(a))\right| \leq 0
+    \]
+    And finally!
+    \[
+        \int_a^b f(x)dx = F(b) - F(a)
+    \]
+\end{proof}
+
+Say we're interested in seeing where the second fundamental theorem of calculus holds but not the first. In general, it's actually not so easy to come up with functions that are discontinuous but have antiderivatives. Consider the reverse problem: can we find differentiable functions whose derivative is discontinuous? The following theorem gives us a big problem here. 
+
+\begin{theorem} (Darboux's theorem)
+
+    If $f$ is differentiable on $[a, b]$, then $f'$ has the \textit{intermediate value property}--- for all $f'(a) < T < f'(b)$, there exists a point $a < t < b$ such that $f(t) = T$.
+\end{theorem}
+
+This tells us that $f'$ cannot have \textit{simple discontinuities}, as those break the intermediate value property.
+
+However, that doesn't stop us, since simple discontinuities are not the only kinds of discontiniuties.
+
+An example of a function with a discontinuous derivative is the function, defined on $[-1, 1]$
+\[
+    f(x) = \begin{cases}
+        x^2\sin\left(\frac{1}{x}\right) & x \neq 0 \\
+        0 & x = 0
+    \end{cases}
+\]
+This has the derivative
+\[
+    f'(x) = \begin{cases}
+    2x\sin\left(\frac{1}{x}\right) - \cos\left(\frac{1}{x}\right) & x \neq 0 \\
+    0 & x = 0
+    \end{cases}
+\]
+which has discontinuity of the second kind at $0$.
+
+So for any $a < 0 < b$, the second fundamental theorem of calculus tells us that
+\[
+    \int_a^b \left[2x\sin\left(\frac{1}{x}\right) - \cos\left(\frac{1}{x}\right)\right]dx = b^2\sin\left(\frac{1}{b}\right) - a^2\sin\left(\frac{1}{a}\right)
+\]
+Neat.
+
+\section{Counterexamples}
+
+The following demonstrates how \emph{jump} discontinuities give a partial converse to the first fundamental theorem of calculus--- if $f$ has a jump discontinuity at $x_0$, $F$ is not differentiable at $x_0$.
+\begin{example} 
+    The following function is not continuous at $0$.
+    \[
+        f(t) := \begin{cases}
+            0 & t < 0 \\
+            1 & t \geq 0 
+        \end{cases}
+    \]
+    $F(t)$ ends up being a \emph{ramp} function, which is not differentiable at $0$.
+\end{example}
+
+The next example shows that \emph{removable} discontinuities are more or less harmless
+\begin{example} 
+    The following function is not continuous at $0$.
+    \[
+        f(t) := \begin{cases}
+            1 & t \neq 0 \\
+            10000 & t = 0 
+        \end{cases}
+    \]
+    but $F(t) = t$, which is differentiable at $0$.
+\end{example}
+
+The following, most epic function yet, is \emph{Volterra's function}, which I do not want to type up. 
+It's a function that is differentiable everywhere, but whose derivative is \emph{not even Riemann integrable at all}, which seems like a counterexample to the second fundamental theorem of calculus, but this boils down to the considerations mentioned: this function's derivative is \emph{super} discontinuous. 
+In fact, it is discontinuous \emph{on a Cantor set}.
+\begin{example} (Volterra's function)
+
+    Follow this \href{https://en.wikipedia.org/wiki/Volterra\%27s_function}{Wikipedia link!}
+\end{example}
+
+
+\end{document}
