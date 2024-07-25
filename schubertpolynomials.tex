@@ -3,6 +3,7 @@
 \usepackage[garamond, tableau]{jaspercommon}
 
 \newcommand{\frkS}{\ensuremath\mathfrak{S}}
+\DeclareMathOperator{\sgn}{sgn}
 
 \title{Schubert polynomials}
 \author{Jasper Ty}
@@ -14,7 +15,7 @@
 
 \maketitle
 
-These are notes based on my study of Schubert polynomials. My main references are \cite{KnutsonSchubertPolynomials} and \cite{MacdonaldSchubertPolynomials}.
+These are notes based on my study of Schubert polynomials. My main references are \cite{MacdonaldSchubertPolynomials} and \cite{KnutsonSchubertPolynomials}.
 
 \tableofcontents
 
@@ -31,6 +32,8 @@ We take $\PP$ to be the set of \textit{positive integers},
     \PP := \{1,2,\ldots\}.
 \]
 $\ZZ,\QQ,\RR,\CC$ are defined as usual.
+
+We denote the set $\{1,\ldots,n\}$ by $[n]$.
 
 \subsection{Partitions and compositions}
 
@@ -76,12 +79,118 @@ I use cycle notation, so e.g the cycle that sends $1$ to $7$, $7$ to $4$, and $4
 
 The simple transpositions $(i\:i+1)$ will be denoted $s_i$.
 
+The identity permutation will be denoted $1$.
+
 The length of a permutation $w$ will be denoted $\ell(w)$.
 
 Permutations will act on polynomials or power series by permuting \textit{places}, meaning that if $\sigma \in S_n$ and $f(x_1, \ldots, x_n) \in \KK[X_n]$, we define
 \[
     \sigma f(x_1, \ldots, x_n) := f(x_{\sigma(1)}, \ldots x_{\sigma(n)}).
 \]
+
+\section{Permutations}
+
+We recall here relevant tidbits about permutations. 
+
+\begin{definition}
+    Let $w \in S_n$. 
+    An \textit{inversion} of $w$ is a pair $i < j$ such that $w(i) > w(j)$.
+    The \textit{inversion number} of $w$ is the number of inversions of $w$, and we denote this with $\ell(w)$.
+\end{definition}
+
+We note that it's particularly easy to see that $\ell(w)$ is well-defined (as the size of a well-defined subset of $[n]\times[n]$). 
+
+It gives us, then, an easy way to define the simplest, most famous permutation statistic:
+
+\begin{definition}
+    We define the \textit{sign} of a permutation $w$ to be
+    \[
+        (-1)^w := (-1)^{\ell(w)}.
+    \]
+\end{definition}
+
+This coincides with more typical definitions.
+
+\begin{remark}
+    Let $w \in S_n$.
+    The quantity $(-1)^{\ell(w)}$ agrees with the following
+    \begin{enumerate}[label=(\alph*)]
+        \item $\sgn(w)$, where $\sgn$ is the usual \textit{sign homomorphism} $\sgn: S_n \to \{-1, 1\}$. 
+        \item $(-1)^k$, where $k$ is the length of \textit{any} decomposition of $w$ into a product of transpositions.
+    \end{enumerate}
+\end{remark}
+
+\begin{proof}
+    See section 5.4 in \cite{DarijAC}.
+\end{proof}
+
+We happen to be interested in a particular kind of decomposition of a permutation $w$ as a product of transpositions:
+
+\begin{definition}
+    Let $w \in S_n$. 
+    A \textit{Coxeter word} for $w$ is a sequence of simple transpositions $s_{i_1}, \ldots, s_{i_k}$ such that
+    \[
+        w = s_{i_1}\cdots s_{i_k}.
+    \]
+    We call a Coxeter word a \textit{reduced word} if it's of minimal length, that is, there is no shorter Coxeter word for $w$.
+\end{definition}
+
+The following theorem is important, and has a detailed proof, as Theorem 5.3.17, in \cite{DarijAC}.
+
+\begin{theorem}
+    Let $w \in S_n$.
+    Then there exist Coxeter words for $w$, and their minimal length is $\ell(w)$, i.e reduced words for $w$ have length $\ell(w)$.
+\end{theorem}
+
+\begin{proof}[Proof (sketch)]
+    We kill one and a half birds with one stone by first showing existence of Coxeter words for $w$ with length $\ell(w)$. 
+    The remaining half a bird is showing that it is a reduced word.
+
+    The key fact is that simples $s_i$, when multiplied on the right, either increment or decrement the inversion number--- if $(i, i+1)$ is an inversion, then $s_i$ \textit{deletes} it, otherwise, $s_i$ \textit{creates} an inversion $(i, i+1)$.
+
+    This makes existence amenable to proof by induction on $\ell(w)$. 
+
+    For the base case, the only permutation $w$ with $\ell(w) = 0$ is the identity permutation, a product of zero simples.
+
+    For the induction step, let $w$ be a permutation and suppose $\ell(w) = h > 0$ and assume (induction hypothesis) existence of Coxeter words for all permutations $w'$ where $\ell(w') = h-1$.
+    Then we hit $w$ with a simple $s_k$ that cancels out one of its inversions.
+    
+    Then $\ell(ws_k) = \ell(w)-1 = h-1$, so there exists a Coxeter word $s_{i_1}\cdots s_{i_{h-1}}$ for $ws_k$.
+    Then $s_{i_1}\cdots s_{i_{h-1}}s_k$ is a Coxeter word of length $h = \ell(w)$ for $w$.
+
+    The fact that we have a reduced word follows from $s_i$'s at most only incrementing inversion number--- you can't get $\ell(w) = h$ with fewer than $h$ simples!
+\end{proof}
+
+Then, what do we know about $\ell(w)$?
+
+\begin{definition}
+    Let
+    \[
+        w_0 := n,n-1,\ldots,1.
+    \]
+    Equivalently, it's the permutation that maximizes the number of inversions, which happens to be 
+    \[
+        \ell(w_0) = \frac{n(n-1)}{2}.
+    \]
+\end{definition}
+
+\begin{theorem}\label{thm:simplerelations}
+    The simple transpositions satisfy the relations
+    \begin{enumerate}[label=(\alph*)]
+        \item Braid relation 
+            \begin{equation}\label{eq:simplebraid}
+                s_is_{i+1}s_i = s_{i+1}s_is_{i+1}
+            \end{equation}
+        \item Far commutativity
+            \begin{equation}\label{eq:simplecommute}
+                s_is_j = s_js_i\qquad \text{whenever}\qquad|i-j| > 1
+            \end{equation}
+        \item Contraction
+            \begin{equation}\label{eq:simplecontract}
+                s_i^2 = 1
+            \end{equation}
+    \end{enumerate}
+\end{theorem}
 
 \section{Schubert Polynomials}
 
@@ -94,8 +203,8 @@ These strike me as a tool to measure how ``unsymmetric'' a polynomial is in a lo
 \subsubsection{Definition}
 
 \begin{definition}
-    Let $f$ be a polynomial in $N$ indeterminates. 
-    We define the \textit{divided difference operators} $\partial_i$ by 
+    Let $f$ be a polynomial. 
+    We define the \textit{divided difference operator} $\partial_i$ by 
     \begin{equation}
         \partial_i f := \frac{f-s_if}{x_i-x_{i+1}}
     \end{equation}
@@ -137,7 +246,7 @@ We have the following characterization of $\partial_i$ that does not invoke divi
         \partial_i(\cdots x_i^a x_{i+1}^b \cdots) &= \frac{(\cdots x_i^a x_{i+1}^b \cdots) - (\cdots x_i^b x_{i+1}^a \cdots)}{x_i-x_{i+1}} \\
                                                                           &= (\cdots) \frac{x_i^ax_{i+1}^b - x_i^bx_{i+1}^a}{x_i-x_{i+1}}.
     \end{align*}
-    We recall our (well, mine) favorite high-school algebra identity
+    Recall that in any commutative ring we have that
     \[
         \frac{x^n-y^n}{x-y} = x^{n-1}y^0 + x^{n-2}y^1 + \cdots + x^1y^{n-2} + x^0y^{n-1},
     \]
@@ -167,38 +276,90 @@ Then the following properties of the operator $\partial_i$ can be read off
     Left to reader.
 \end{proof}
 
+The following theorem gives us an analogy between the divided difference operators and the simple transpositions.
+In particular, it tells us that sequences of $\partial_i$'s structurally behave like reduced words when the corresponding sequence of $s_i$'s are reduced words (see Definition \ref{def:ddword} and Theorem \ref{thm:ddreducedwordequiv}), but that the $\partial_i$'s degenerate and collapse to nothing in the case for non-reduced words (see Theorem \ref{thm:ddnonreducedzero}).
 
-\begin{theorem}
-    The divided difference operators satsify the following relations
+\begin{theorem}\label{thm:ddrelations}
+    The divided difference operators satsify, in analogy to Theorem \ref{thm:simplerelations},
     \begin{enumerate}[label=(\alph*)]
         \item The braid relation
-            \begin{equation}
+            \begin{equation}\label{eq:ddbraid}
                 \partial_i\partial_{i+1}\partial_i = \partial_{i+1}\partial_i\partial_{i+1}
             \end{equation}
         \item Far commutativity
-            \[
+            \begin{equation}\label{eq:ddcommute}
                 \partial_i\partial_j = \partial_j\partial_i\qquad \text{whenever}\qquad|i-j| > 1
-            \]
-        \item Reflection by a simple
-            \[
-                \partial_is_i = -\partial_i
-            \]
-        \item Chain condition
-            \[
+            \end{equation}
+        \item Annihilation (not contraction!)
+            \begin{equation}\label{eq:ddcontract}
                 \partial_i^2 = 0
-            \]
+            \end{equation}
     \end{enumerate}
 \end{theorem}
 
-\begin{proof}
-    We have that
+\begin{proof}[Proof (sketch)]
+    For (a), without loss of generality we prove the case
     \[
-        \partial_i = (x_i-x_{i+1})^{-1}(1 - s_i).
+        \partial_1\partial_2\partial_1 = \partial_2\partial_1\partial_2.
     \]
-    Then
+    Which we just have to grind out (see Appendix).
+
+    It turns out that both sides equal
+    \[
+        \frac{1 - s_1 - s_2 + s_1s_2 + s_2s_1 - s_1s_2s_1}{(x_1-x_2)(x_1-x_3)(x_2-x_3)}.
+    \]
+    The proofs of (b), (c) are straightforward.
 \end{proof}
 
-I wonder if $\partial_i^2 = 0$ has to do with the Schuberts arising from a cohomology theory.
+    Note that the numerator appearing in the proof happens to be
+    \[
+        \nabla^{-} := \sum_{w\in S_3}(-1)^w w,
+    \]
+    the antisymmetrizer of $\ZZ[S_3]$.
+
+Given that the definition of $\partial_i$ takes in some $s_i$ as an input, we can naturally come up with a broader definition of $\partial$ that takes in Coxeter words.
+
+\begin{definition}\label{def:ddword}
+    Let $w \in S_n$, and let $a = (a_1, \ldots a_k)$ be a Coxeter word for $w$, i.e $k = \ell(w)$ and $s_{a_1}\ldots s_{a_k} = w$. Then define
+    \[
+        \partial_a := \partial_{a_1}\ldots\partial_{a_k}.
+    \]
+\end{definition}
+
+We'll actually use this to bootstrap another definition-- divided difference operators parametrized by permutations. That doesn't quite come for free, so we need to first prove the following fact:
+
+\begin{theorem}\label{thm:ddreducedwordequiv}
+    Let $w \in S_n$.
+    If $a=(a_1,\ldots,a_k)$ and $b=(b_1,\ldots,b_k)$ are reduced words for $w$, then $\partial_a = \partial_b$.
+\end{theorem}
+
+\begin{proof}
+    This follows from the fact any two reduced words for a permutation $w$ are equivalent modulo far commutativity and the braid relation. 
+    Then recall Theorem \ref{thm:ddrelations}--- Equations \ref{eq:ddbraid} and \ref{eq:ddcommute} tell us exactly that the divided difference operators also satisfy those relations.
+\end{proof}
+
+So we can now properly define the following:
+
+\begin{theorem}
+    Let $w \in S_n$, and let $a=(a_1,\ldots,a_k)$ be some reduced word for $w$.
+    Then define
+    \[
+        \partial_w := \partial_a = \partial_{a_1}\ldots\partial_{a_k}.
+    \]
+\end{theorem}
+
+In the case for sequences that \textit{do not} correspond to reduced words, we have the following reason to not really care about them:
+\begin{theorem}\label{thm:ddnonreducedzero}
+    Let $a=(a_1,\ldots,a_k)$ be a sequence that is not a reduced word for any $w \in S_n$. Then
+    \[
+        \partial_a = 0.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Because $a$ is not a reduced word, it is possible to do a sequence of moves on the Coxeter word which contains a contraction.
+    Mapping these moves over to the divided difference word results in an application of Equation \ref{eq:ddcontract}, killing the whole term.
+\end{proof}
 
 \subsection{The definition of a Schubert polynomial}
 
@@ -220,6 +381,51 @@ Actually, this definition is a theorem if we start with the ``Representatives of
     The Schuberts form a basis for the coinvariant ring 
 \end{theorem}
 \subsection{Definition}
+
+
+\section{Appendix}
+
+\begin{proof}[Detailed proof of Theorem \ref{thm:ddrelations}] 
+    Define $[ij] := x_i - x_j$.
+    We have the following relations:
+    \begin{align*}
+        s_1[12] &= -[12] & s_2[12] &= [13] \\
+        s_1[13] &= [23] & s_2[13] &= [12] \\
+        s_1[23] &= [13] & s_2[23] &= -[23]
+    \end{align*}
+    First, we expand the left hand side, which is
+    \[
+        \partial_1\partial_2\partial_1 = \left(\frac{1 - s_1}{[12]}\right)\left(\frac{1 - s_2}{[23]}\right)\left(\frac{1 - s_1}{[12]}\right).
+    \]
+    We do the first application, which is the $\partial_2$ hitting the $\partial_1$,
+    \begin{align*}
+        &\partial_2\partial_1 = \left(\frac{1 - s_2}{[23]}\right) {\color{red} \left(\frac{1 - s_1}{[12]}\right)} \\
+        &= \left(\frac{{\color{red}\left(\frac{1 - s_1}{[12]}\right)} - s_2{\color{red}\left(\frac{1 - s_1}{[12]}\right)}}{[23]}\right),
+    \end{align*}
+    then we apply the $s_2$,
+    \begin{align*}
+        &= \left(\frac{\left(\frac{1 - s_1}{[12]}\right) - {\color{blue}s_2}\left(\frac{1 - s_1}{[12]}\right)}{[23]}\right) \\
+        &= \left(\frac{\frac{1 - s_1}{[12]} - \frac{{\color{blue}s_2} - {\color{blue}s_2}s_1}{{\color{blue} s_2}[12]}}{[23]}\right) \\
+        &= \left(\frac{\frac{1 - s_1}{[12]} - \frac{{\color{blue}s_2} - {\color{blue}s_2}s_1}{\color{blue}[13]}}{[23]}\right) \\
+        &= \left(\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]}\right).
+    \end{align*}
+    Now we apply $\partial_1$ to our just computed $\partial_2\partial_1$,
+    \begin{align*}
+        \partial_1(\partial_2\partial_1)
+        &= \left(\frac{1 - s_1}{[12]}\right){\color{red}\left(\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]}\right)} \\
+        &= \left(\frac{\left(\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]}\right) - s_1\left(\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]}\right)}{[12]}\right) \\
+        &= \left(\frac{\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]} - \frac{s_1 - s_1s_1}{s_1[12]s_1[23]} + \frac{s_1s_2 - s_1s_2s_1}{s_1[13]s_1[23]}}{[12]}\right) \\
+        &= \left(\frac{\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]} - \frac{s_1 - 1}{(-[12])[13]} + \frac{s_1s_2 - s_1s_2s_1}{[23][13]}}{[12]}\right) \\
+        &= \left(\frac{\frac{1 - s_1}{[12][23]} - \frac{s_2 - s_2s_1}{[13][23]} - \frac{1 - s_1}{[12][13]} + \frac{s_1s_2 - s_1s_2s_1}{[23][13]}}{[12]}\right) \\
+        &= \left(\frac{\frac{1-s_1}{[12][23]} - \frac{1-s_1}{[12][13]}}{[12]}\right) +\left(\frac{-\frac{s_2 - s_2s_1}{[13][23]} + \frac{s_1s_2 - s_1s_2s_1}{[23][13]}}{[12]}\right) \\
+        &= \left(\frac{1-s_1}{[12]^2[23]} - \frac{1-s_1}{[12]^2[13]}\right) + \left(\frac{-(s_2 - s_2s_1) + s_1s_2 - s_1s_2s_1}{[12][13][23]}\right)\\
+        &= \left(\frac{1-s_1}{[12]^2}\left(\frac{1}{[23]}-\frac{1}{[13]}\right)\right) + \left(\frac{-s_2 + s_2s_1 + s_1s_2 - s_1s_2s_1}{[12][13][23]}\right)\\
+        &= \left(\frac{1-s_1}{[12]^2}\left(\frac{[13]-[23]}{[23][13]}\right)\right) + \left(\frac{-s_2 + s_2s_1 + s_1s_2 - s_1s_2s_1}{[12][13][23]}\right)\\
+        &= \left(\frac{1-s_1}{[12]^2}\left(\frac{[12]}{[23][13]}\right)\right) + \left(\frac{-s_2 + s_2s_1 + s_1s_2 - s_1s_2s_1}{[12][13][23]}\right)\\
+        &= \left(\frac{1-s_1}{[12][13][23]}\right) + \left(\frac{-s_2 + s_2s_1 + s_1s_2 - s_1s_2s_1}{[12][13][23]}\right)\\
+        &= \frac{1-s_1-s_2+s_2s_1-s_1s_2s_1}{[12][13][23]}    
+    \end{align*}
+\end{proof}
 
 
 
