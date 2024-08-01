@@ -1,18 +1,25 @@
 \documentclass{article}
 
+% See https://github.com/Jasper-Ty/dotfiles
 \usepackage[garamond, tableau]{jaspercommon}
+\usetikzlibrary{arrows.meta}
 
 \DeclareMathOperator{\RSK}{RSK}
 \DeclareMathOperator{\RowInsert}{RowInsert}
 \DeclareMathOperator{\row}{row}
 \DeclareMathOperator{\col}{col}
 \DeclareMathOperator{\shape}{shape}
+\DeclareMathOperator{\sh}{sh}
 \DeclareMathOperator{\len}{len}
 \DeclareMathOperator{\type}{type}
 \DeclareMathOperator{\Par}{Par}
+\DeclareMathOperator{\SYT}{SYT}
 \DeclareMathOperator{\SSYT}{SSYT}
 \DeclareMathOperator{\Dom}{Dom}
 \DeclareMathOperator{\Lex}{Lex}
+\DeclareMathOperator{\cyc}{cyc}
+\DeclareMathOperator{\tr}{t}
+\DeclareMathOperator{\s}{s}
 
 \newcommand{\frkS}{\ensuremath\mathfrak{S}}
 \newcommand{\rskarrow}{\ensuremath\xrightarrow{\RSK}}
@@ -29,13 +36,23 @@
 
 \maketitle
 
+\section*{What is this?}
 These are notes based on my self-study of Chapter 7 in R.P Stanley's ``Enumerative Combinatorics'', mixed in with readings of various other expositions. 
 
-\hide{I currently have a weak foundation in algebra, but am very comfortable with combinatorial arguments, so you might find that the algebraic aspects are over-explained while the combinatorial aspects are under-explained.}
+I've learned to \textit{love} this subject! At first, I thought ``Functions that remain the same change under interchange of variables? What's so interesting about that?'', but at some point between now and the end of my undergraduate life, I took it on myself to \textit{compute} with these things, to hold them with my bare hands, and lo--- I suddenly found myself baptized in the waters of symmetric polynomials.
+
+I'm not entirely sure how to write for an audience yet, so certain things might be over or under explained, and this might happen all over the place!
+I guess, one has to have had some combinatorics, knowing about posets, partitions, coming up with bijections, and so on. 
+Also experience with working with formal power series probably helps.
+
+I'll be honest and say algebra is not my strong suit, so I apologize in advance if that manifests particularly clearly in some sections.
 
 \tableofcontents
 
 \section*{Notation and conventions}
+
+(Yadda yadda.)
+
 \addcontentsline{toc}{section}{Notation and conventions}
 
 \subsection*{Sets}
@@ -64,7 +81,7 @@ When more convenient (most of the time), we will omit brackets and commas, and w
 A \textit{partition} $\lambda$ of $n$ is a weak composition whose entries are \textit{weakly decreasing}. 
 That a particular partition $\lambda$ is a partition of a particular $n$ is denoted $\lambda \vdash n$. 
 
-I use English notation when drawing diagrams and tableaux, meaning, rows are drawn further downward as the index increases.
+I use English notation when drawing diagrams and tableaux, meaning, increasing row index means going north to south, and increasing column index means going east to west.
 
 \subsection*{Rings, polynomials, and formal power series}
 
@@ -88,11 +105,13 @@ We will let $[x^\alpha]f$ denote the coefficient of $[x^\alpha]$ in the formal p
 
 \subsection*{Permutations and the symmetric group}
 
-$\frkS_n$ will denote the symmetric group on $n$ letters. I chose this symbol mostly because I think it looks insanely cool.
+$\frkS_n$ will denote the symmetric group on $n$ letters. I chose this symbol mostly because I think it looks \textit{\color{red} unbelievably} cool.
+
+I will use one-line notation, generally, for permutations.
 
 I use cycle notation, so e.g the cycle that sends $1$ to $7$, $7$ to $4$, and $4$ to $1$ will be written as $(174)$.
 
-The simple transpositions $(i\:i+1)$ will be denoted $s_i$.
+The simple transpositions $(i\:i+1)$ will be denoted $\s_i$.
 
 Permutations will act on functions by permuting places, so if $w \in \frkS_n$ and $f$ is a function, then
 
@@ -102,25 +121,82 @@ Permutations will act on functions by permuting places, so if $w \in \frkS_n$ an
 
 \section{Symmetric Functions}
 
-The first definition is exactly how the ring of symmetric functions is defined in \\
-\cite{StanleyEC2}, which is was my primary reference on this topic.
+And so it begins! We start with the now \textit{canonized} definition for ``the ring of symmetric functions''.
 
-\subsection{As a certain subring of FPS in countably many indeterminates}
+\subsection{As a certain subring}
 
-\subsubsection{Definition}
+More precisely, we construct the ring of symmetric functions as a certain subring of formal power series in infinitely many variables.
+The reason for this mouthful is that we want a space into which all the facts we care about in the theory of symmetric \textit{polynomials} lift up.
+
+Unfortunately, this means we \textit{have} to do some paperwork with regards to constructing this mythical ring.
+\begin{definition}
+    Fix a ground ring $\KK$.
+    The ring $\KK[[X]]$ of \textit{formal power series in countably many variables} $X = (x_1, x_2, \ldots)$ is defined to be the set of all formal sums
+    \[
+        \sum_\alpha c_\alpha x^\alpha,
+    \]
+    where $c_a \in \KK$, and $\alpha$ ranges over all weak compositions, or equivalently over all finitely supported $\NN-$sequences.
+
+    The ring operations are defined in the morally correct way;
+    if $f = \sum_\alpha a_\alpha x^\alpha$ and $g = \sum_\alpha b_\alpha x^\alpha$, then $f + g$ and $fg$ are defined to be
+    \[
+        f+g := \sum_\alpha (a_\alpha+b_\alpha)x^\alpha
+    \]
+    and
+    \[
+        fg := \sum_\gamma \prod_{\alpha+\beta=\gamma} (a_\alpha b_\beta) x^\gamma.
+    \]
+\end{definition}
+
+Indexing over all \textit{weak compositions} $\alpha$ means that all the monomials that appear are more or less ``honest'', and this makes the definition work nicely with our existing intuition for working with formal power series.
+
+\begin{example}
+    The formal power series
+    \[
+        f(X) = x_1 + x_2 + x_3 + \cdots
+    \]
+    is an element of $\KK[[X]]$.
+\end{example}
+
+$\KK[[X]]$ contains as subrings, in an extremely direct way, every power series ring in \textit{finitely many variables} $\KK[[x_{i_1}, \ldots, x_{i_n}]]$.
+
+On this level, it is already some kind of generalization of working with finitely many variables.
+Next, we add another ingredient which generalizes, in a similar way, what we mean when we say ``symmetric''.
 
 \begin{definition}
-    A \textit{A homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
+    Let $\frkS_\infty$ denote the subgroup of $\frkS_\NN$ consisting of permutations of $\NN$ with ``finite support''.
+    That is,
+    \[
+        \frkS_\infty := \{w \in \frkS_\NN: w(t) = t\text{ for all but finitely many }t\}.
+    \]
+\end{definition}
+
+Again, this contains as subgroups every $\frkS_n$ for all $n \in \NN$.
+Moreover, it's not hard to see that every permutation in $\frkS_\infty$ is an extension of a permutation that lives in some finite symmetric group.
+
+\subsubsection{Homogeneous symmetric functions}
+
+We're ready to start defining the ring of symmetric functions!
+
+\begin{definition}
+    A \textit{homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
     \[
         \sum_\alpha c_\alpha x^\alpha \in \KK[[X]],
     \]
-    where we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar.
+    where we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar such that $c_\alpha = c_\beta$ whenever $\beta$ can be obtained by permuting the parts of $\alpha$.
     
     We denote the set of all such formal power series by $\Lambda_\KK^n$.
 \end{definition}
 
-These form a $\KK$-module, as a submodule of $\KK[[X]]$. 
-The following is a simple example:
+These form a $\KK$-module, as a submodule of $\KK[[X]]$.
+Moreover, these are in fact defined correctly, meaning that these are symmetric ``functions''.
+
+\begin{remark}
+    Let $w \in \frkS_\infty$ and let $\phi_w: K[[X]] \to K[[X]]$ be the $\KK$-algebra isomorphism given by sending each indeterminate $x_i$ to $x_{w(i)}$.
+    Then if $f(X) \in \Lambda_\KK^n$, $f(X)$ is a fixed point of $\phi$.
+\end{remark}
+
+The following is a simple example of an element of $\Lambda_\KK^n$:
 
 \begin{example}
     The formal power series 
@@ -132,9 +208,9 @@ The following is a simple example:
 
 
 We note that multiplying any two homogeneous symmetric functions $f$, $g$ of degree $m$ and $n$ respectively give us a homogeneous symmetric function of degree $m+n$.
-The following definition gives us the space in which this multiplication makes sense.
+The following definition gives us the right subalgebra this remark hints at.
 
-\subsubsection{The ring of symmetric functions}
+\subsubsection{Symmetric functions}
 
 \begin{definition}
     The \textit{ring of symmetric functions} $\Lambda_\KK$ is the infinite direct sum
@@ -145,7 +221,6 @@ The following definition gives us the space in which this multiplication makes s
 \end{definition}
 
 This direct sum is \textit{internal}, happening within $\KK[[X]]$. 
-This is a $\KK$-algebra, being a subalgebra of $\KK[[X]]$.
 
 This greatly broadens the possible definitions for symmetric functions. 
 For example, the following demonstrates a symmetric function that arises from an infinite product, which evidently contains many monomials of different degrees and is not at all homogeneous.
@@ -153,24 +228,40 @@ For example, the following demonstrates a symmetric function that arises from an
 \begin{example}
     The formal power series 
     \[
-        f = \prod_i (1 + 5x_i^2 + 7x_i^5)
+        f = \prod_i (1 + 3x_i^2 + 7x_i^5)
     \]
     is a symmetric function.
 \end{example}
 
-And in fact, we will find many such symmetric functions, usually in the form of \textit{Cauchy identities}.
+And in fact, we will find many such symmetric functions.
 
-
-\subsection{As a limit of graded rings}
+\subsection{As an inverse limit of graded rings}
 
 The \textit{definition} of a symmetric function arises from the study of \textit{symmetric polynomials}. Specifically, it is a limit in the category of graded rings.
 
 Consider the polynomial ring $K = \KK[x_1,\ldots,x_N]$. We denote the subring of $K$ which consists of all polynomials $f(x_1,\ldots,x_N)$ such that $wf = f$ for all $w \in \frkS_N$ to be the \textit{ring of symmetric polynomials in $N$ variables}.
 We denote this subring by $\KK[x_1,\ldots,x_N]^{\frkS_N}$.
 
+\begin{example}
+    The polynomial
+    \[
+        f(x) = x_1^2x_2 + x_1x_2^2
+    \]
+    lies inside $\KK[x_1,x_2]^{\frkS_2}$.
+\end{example}
+
+Define $\Lambda_n = \QQ[x_1,\ldots,x_n]^{\frkS_n}$.
+
+Clearly, 
 
 \section{Partitions}
+
+Partitions are evidently extremely important in the theory of symmetric functions for reasons that are, honestly, still quite mysterious to me.
+
 \subsection{Definition}
+
+A partition is just a way of writing down $n$ as a sum of positive integers.
+
 \begin{definition}
     A partition $\lambda$ of $n \in \NN$, which we denote $\lambda \vdash n$, is a sequence of numbers 
     \[
@@ -187,23 +278,141 @@ We denote this subring by $\KK[x_1,\ldots,x_N]^{\frkS_N}$.
     for all $j\geq k$.
 \end{definition}
 
-In other words, $\lambda_k$ is weakly decreasing and has only finitely many nonzero entries. 
+In other words, $\lambda_k$ is weakly decreasing and has only finitely many nonzero entries.
+
+\begin{example}
+    The sequence
+    \[
+        (\lambda_i) = (5,4,4,3,2,1,1,1,0,\ldots)
+    \]
+    is a partition of $21$.
+\end{example}
+
+We will truncate the trailing zeros and elide tuple notation when convenient (most of the time), so the above partition is also written $54432111$.
 
 The set of all partitions $\lambda$ such that $\lambda \vdash n$ is denoted $\Par(n)$. We define the set of \textit{all} partitions to be just $\Par$.
 
-\subsection{Young diagrams}
+\subsection{Diagrams}
 Partitions can be drawn as \textit{Ferrers diagrams} and \textit{Young diagrams}. 
 
-Both have the same underlying data structure: they encode the partition $\lambda$ as a subset of $\NN^2$.
+Both have the same underlying data structure: they encode the partition $\lambda$ as a subset of $\NN^2$, with a particularly simple definition:
 
-\subsection{Orders}
+\begin{definition}
+    Let $\lambda \vdash n$. The \textit{diagram} of $\lambda$ is the set 
+    \[
+        \{(i,j) \in \NN^2 : 1 \leq j \leq \lambda_i\}.
+    \]
+\end{definition}
+
+Then, we can define Young and Ferrers diagrams.
+
+\begin{definition}
+    Let $\lambda \vdash n$.
+    The \textit{Young diagram} of $\lambda$ is obtained by drawing a box at location $(i,j)$ for each $(i,j)$ in $\lambda$'s diagram.
+    Similarly, its \textit{Ferrers diagram} is obtained by plotting dots rather than boxes.
+\end{definition}
+\begin{example}
+    The Young diagram of the partition $\lambda = 54432111$ is
+    \[
+        \ydiagram{5,4,4,3,2,1,1,1}.
+    \]
+\end{example}
+\begin{example}
+    The Ferrers diagram of the partition $\lambda = 54432111$ is
+    \[
+        \begin{matrix}
+            . & . & . & . & . \\
+            . & . & . & . &  \\
+            . & . & . &   &  \\
+            . & . &   &   &  \\
+            . &   &   &   &  \\
+            . &   &   &   &  \\
+            . &   &   &   & 
+        \end{matrix}
+    \]
+\end{example}
+
+\subsection{Tableaux}
+
+The fact that Young diagrams are made up of boxes is nice--- because we can put things in the boxes! 
+
+\begin{definition}
+    Let $\lambda \vdash n$. A Young diagram of $\lambda$ whose boxes are filled in with elements from a set is called a \textit{Young tableau}, which will often be denoted with a capital letter, say $T$. 
+
+    $\lambda$ is referred to as the \textit{shape} of the tableau, denoted $\shape T$ or $\sh T$.
+
+    The elements filled in are called the \textit{entries} of the tableau, and the entry at box $(i,j)$ is indexed as $T_{ij}$.
+\end{definition}
+
+\begin{example}
+    The following is a Young tableau, filled in with positive integers:
+    \[
+        \ytableaushort{123,45}
+    \]
+\end{example}
+
+More formally, Young tableau are functions whose domain is a partition's diagram.
+A partition's diagram has an order induced on it by being a subset of $\NN^2$--- consider the product order on $\NN^2$. 
+\textit{Magic starts to happen} when you consider a function on $\NN^2$ whose codomain is also a poset, say $\NN$.
+
+Well, really, this just means a Young diagram with numbers filled in the boxes, but this is a fertile ground for having $\NN^2$'s order interact with $\NN$'s order!
+
+\begin{definition}
+    We define a few important constraints on a Young tableau $T$.
+    \begin{enumerate}[label=(\alph*)]
+        \item That the \textit{rows} of $T$ are \textit{weakly increasing} means that
+            \[
+                T_{n,i} \leq T_{n,j} \textit{ for all } i < j.
+            \]
+        \item That the \textit{columns} of $T$ are \textit{weakly increasing} means that
+            \[
+                T_{i,m} \leq T_{j,m} \textit{ for all } i < j.
+            \]
+        \item That the \textit{rows} of $T$ are \textit{strongly increasing} means that
+            \[
+                T_{n,i} < T_{n,j} \textit{ for all } i < j.
+            \]
+        \item That the \textit{columns} of $T$ are \textit{strongly increasing} means that
+            \[
+                T_{i,m} < T_{j,m} \textit{ for all } i < j.
+            \]
+    \end{enumerate}
+\end{definition} 
+
+These have really obvious meanings on the level of ``filling numbers in boxes'' (try it!).
+
+With this, we can define two important classes of Young tableau.
+
+\begin{definition}
+    A Young tableau $T$ is called \textit{standard} if both its rows and columns are strongly increasing. $T$ is called \textit{semistandard} if its rows are weakly increasing and its columns are strongly increasing.
+
+    Let $\lambda \vdash n$. We denote the set of all standard Young tableau of shape $\lambda$ by $\SYT(\lambda)$, and the set of all semistandard Young tableau by $\SSYT(\lambda)$.
+\end{definition}
+
+Semistandard Young tableau are explored in more detail in Section \ref{ch:schurs}.
+
+\subsection{Orders on partitions}
+
+We have several orders on \textit{partitions themselves}.
+The first one, \textit{containment}, is defined on all partitions.
 
 \begin{definition}[Containment order]
     Young diagrams, as subsets of $\NN^2$, have a partial order induced by containment. 
-    \textit{Containment order} for partitions is precisely this order when you pull back Young diagrams to partitions.
+    \textit{Containment order} for partitions is precisely this order that diagrams induce on partitions.
 
     We will use $\subseteq$ to denote this order.
 \end{definition}
+
+Containment order in fact induces a lattice, a sublattice of $\NN^2$'s powerset, once it's checked that $\Par$ is closed under union and intersection. 
+
+\begin{definition}
+    The lattice structure on $\Par$ given by containment is called \textit{Young's lattice}.
+\end{definition}
+
+Containment is somewhat sensitive to partition size--- for $\lambda \subseteq \mu$ it's necessary that $|\lambda| \leq |\mu|$.
+Even more sharply, all partitions of a fixed size are incomparable in Young's lattice!
+
+The next two orders are not so sensitive to a partition's size, and they arise not from viewing partitions as diagrams, but viewing them as sequences.
 
 \begin{definition}[Dominance order]
     Let $\lambda$ and $\nu$ be two partitions. We say that $\lambda$ \textit{dominates} or \textit{majorizes} $\nu$ if
@@ -213,7 +422,7 @@ Both have the same underlying data structure: they encode the partition $\lambda
     We denote this relation $\lambda \leq \nu$.
 \end{definition}
 
-\begin{theorem}[The covering relation for dominance order]
+\begin{theorem}
     $\lambda$ covers $\nu$ if
 \end{theorem}
 
@@ -247,20 +456,34 @@ This is in total analogy to taking the \textit{monomial basis of a polynomial ri
     where $\alpha \sim \lambda$ means that $\alpha$ may be obtained by permuting the parts of $\lambda$.
 \end{definition}
 
-The above definition involves permuting around the exponent vector $\alpha$. I think it's actually much easier to think of the monomial symmetric functions as \textit{permuting the subscripts}. 
+The above definition involves permuting around the exponent vector $\alpha$. I personally find it actually much easier to think of the monomial symmetric functions as \textit{permuting the subscripts}. 
 
 \begin{example}
     Let $\lambda = 5322$. Then
     \begin{align*}
-        m_\lambda = \sum_{i_1<i_2<i_3<i_4} \Big(&x_{i_1}^5x_{i_2}^3x_{i_3}^2x_{i_4}^2 + x_{i_1}^5x_{i_2}^2x_{i_3}^3x_{i_4}^2 + x_{i_1}^5x_{i_2}^2x_{i_3}^2x_{i_4}^3 \\ 
-                                           &+ x_{i_1}^2x_{i_2}^5x_{i_3}^3x_{i_4}^2 + x_{i_1}^2x_{i_2}^5x_{i_3}^2x_{i_4}^3 + x_{i_1}^2x_{i_2}^2x_{i_3}^5x_{i_4}^3  \\
-                                           &+ x_{i_1}^3x_{i_2}^5x_{i_3}^2x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^5x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^2x_{i_4}^5  \\
-                                           &+ x_{i_1}^2x_{i_2}^3x_{i_3}^5x_{i_4}^2 + x_{i_1}^2x_{i_2}^3x_{i_3}^2x_{i_4}^5 + x_{i_1}^2x_{i_2}^2x_{i_3}^3x_{i_4}^5 \Big).
+        m_\lambda = m_{5322} = \sum_{i_1<i_2<i_3<i_4} \Big(&x_{i_1}^5x_{i_2}^3x_{i_3}^2x_{i_4}^2 + x_{i_1}^5x_{i_2}^2x_{i_3}^3x_{i_4}^2 + x_{i_1}^5x_{i_2}^2x_{i_3}^2x_{i_4}^3 \\ 
+            + &x_{i_1}^2x_{i_2}^5x_{i_3}^3x_{i_4}^2 + x_{i_1}^2x_{i_2}^5x_{i_3}^2x_{i_4}^3 + x_{i_1}^2x_{i_2}^2x_{i_3}^5x_{i_4}^3  \\
+            + &x_{i_1}^3x_{i_2}^5x_{i_3}^2x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^5x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^2x_{i_4}^5  \\
+        + &x_{i_1}^2x_{i_2}^3x_{i_3}^5x_{i_4}^2 + x_{i_1}^2x_{i_2}^3x_{i_3}^2x_{i_4}^5 + x_{i_1}^2x_{i_2}^2x_{i_3}^3x_{i_4}^5 \Big).
     \end{align*}
-    \todo{Add extra expression for monomial example}
+    when you view the action of $\frkS_n$ as permuting the exponents. When viewed as permuting the subscripts, we have that
+    \begin{align*}
+        m_\lambda = m_{5322} = \sum_{i_1<i_2<i_3<i_4} \Big(
+        &x_{i_1}^5x_{i_2}^3x_{i_3}^2x_{i_4}^2
+        + x_{i_1}^5x_{i_3}^3x_{i_2}^2x_{i_4}^2
+        + x_{i_1}^5x_{i_4}^3x_{i_2}^2x_{i_3}^2 \\
+        + &x_{i_2}^5x_{i_1}^3x_{i_3}^2x_{i_4}^2
+        + x_{i_2}^5x_{i_3}^3x_{i_1}^2x_{i_4}^2
+        + x_{i_2}^5x_{i_4}^3x_{i_1}^2x_{i_3}^2 \\
+        + &x_{i_3}^5x_{i_1}^3x_{i_2}^2x_{i_4}^2
+        + x_{i_3}^5x_{i_2}^3x_{i_1}^2x_{i_4}^2
+        + x_{i_3}^5x_{i_4}^3x_{i_2}^2x_{i_4}^2 \\
+        + &x_{i_4}^5x_{i_1}^3x_{i_2}^2x_{i_3}^2
+        + x_{i_4}^5x_{i_2}^3x_{i_1}^2x_{i_3}^2
+        + x_{i_4}^5x_{i_3}^3x_{i_1}^2x_{i_2}^2
+    \Big).
+    \end{align*}
 \end{example}
-
-Now we prove the main result. 
 
 \begin{theorem}
     The monomial symmetric funtions form a basis for $\Lambda$.
@@ -295,7 +518,7 @@ Now we examine the relationship between the elementaries and the monomials.
     More generally, for any weak composition $\alpha$, let $M_{\lambda\alpha}$ be the coefficient of $x^\alpha$ in $e_\lambda$.
 \end{definition}
 
-\begin{theorem}
+\begin{theorem} \label{thm:e2mCombInterpretation}
     The coefficient $M_{\lambda\mu}$ is counted by zero-one matrices whose row-sums are $\lambda$ and whose column sums are $\mu$.
 \end{theorem}
 
@@ -307,11 +530,11 @@ Now we examine the relationship between the elementaries and the monomials.
     \]
     The right hand side is
     \[
-        \left(\sum_{i_1<\ldots<i_{\lambda_1}} x_{i_1}\cdots x_{\lambda_1}\right)\left(\sum_{i_1<\ldots<i_{\lambda_2}} x_{i_1}\cdots x_{\lambda_2}\right)\cdots
+        \left(\sum_{i_1<\ldots<i_{\lambda_1}} x_{i_1}\cdots x_{i_{\lambda_1}}\right)\left(\sum_{i_1<\ldots<i_{\lambda_2}} x_{i_1}\cdots x_{i_{\lambda_2}}\right)\cdots
     \]
-    and naming a term in this product means you pick up monomials which are products of $\lambda_1$ distinct variables from $\lambda_1$, monomials of $\lambda_2$ distinct variables from $\lambda_2$, and so on. 
+    and naming a term in this product means you pick up $\lambda_1$ distinct variables from $e_{\lambda_1}$, $\lambda_2$ distinct variables from $e_{\lambda_2}$, and so on. 
     
-    These choices of distinct variables are in fact subsets of $(x_1, x_2, \ldots)$, and encoding these subsets with lists of $1$s and $0$s gives us the rows of our $0-1$ matrix, where the row $i$ corresponds to $e_{\lambda_i}$.     
+    These choices of distinct variables are $\lambda_i$-sized subsets of $(x_1, x_2, \ldots)$, and encoding these subsets with lists of $1$s and $0$s gives us the rows of our $0-1$ matrix, where the row $i$ corresponds to $e_{\lambda_i}$.     
     \[
         \begin{bmatrix}
             x_1 & x_2 & x_3 & \cdots \\
@@ -327,7 +550,7 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
 
 \end{proof}
 
-\begin{theorem} \label{e2msymmetric}
+\begin{theorem} \label{thm:e2msymmetric}
     Let $\lambda,\mu \vdash n$, then
     \[
         M_{\lambda\mu} = M_{\mu\lambda}.
@@ -339,18 +562,19 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
 \end{proof}
 
 \subsubsection{The fundamental theorem of symmetric functions}
-\begin{theorem}[Gale-Ryser] \label{galeryser} Let $M = [a_{ij}]$ be a zero-one matrix, whose row sums are given by the composition $\alpha$ and whose column sums are given by composition $\beta$. Then it must be that $\alpha \leq \beta^T$. Moreover, there is only \textit{one} zero-one matrix such that $\alpha = \beta^T$.
+\begin{theorem}[Gale-Ryser] \label{thm:galeryser} Let $M = [a_{ij}]$ be a zero-one matrix, whose row sums are given by the composition $\alpha$ and whose column sums are given by composition $\beta$. Then it must be that $\alpha \leq \beta^T$. Moreover, there is only \textit{one} zero-one matrix such that $\alpha = \beta^T$.
 \end{theorem}
 
 \begin{proof}
-    We demonstrate this algorithmically.
-    \todo{Finish proof of Gale-Ryser}
+    We demonstrate this algorithmically. 
+    Let
 \end{proof}
+
 \begin{theorem}[Fundamental theorem of symmetric functions] The $e$'s form a $\ZZ$-basis for the ring of symmetric functions.
 \end{theorem}
 
 \begin{proof}
-    By Theorem \ref{galeryser}, the transition matrix is upper-triangular and has $1$'s on the diagonal, hence it is invertible. 
+    By Theorem \ref{thm:galeryser}, the transition matrix is upper-triangular and has $1$'s on the diagonal, hence it is invertible. 
 \end{proof}
 
 \subsection{Complete homogeneous symmetric functions}
@@ -368,22 +592,33 @@ The \textit{complete homogeneous symmetric functions}, or the \textit{completes}
     \]
 \end{definition}
 
-\begin{theorem}
-    $N_{\lambda\nu}$ is counted by $\NN$-matrices with row sums $\lambda$ and column sums $\nu$.
+As with the elementaries and $M_{\lambda\mu}$, we define a set of monomial coefficients for the completes.
+
+\begin{definition}
+    Let $\lambda \vdash n$. Define $N_{\lambda\alpha}$ be the coefficient of $x^\alpha$ in $h_\lambda$.
+\end{definition}
+
+These numbers satisfy analogous theorems.
+
+\begin{theorem} \label{thm:h2mCombInterpretation}
+    Let $\lambda, \mu$ be partitions. Then $N_{\lambda\mu}$ is counted by $\NN$-matrices with row sums $\lambda$ and column sums $\mu$.
 \end{theorem}
 
-\begin{theorem}
-    Let $\lambda, \nu \vdash n$, then
+\begin{theorem} \label{thm:h2mSymmetric}
+    Let $\lambda, \mu \vdash n$, then
     \[
-        N_{\lambda\nu} = N_{\nu\lambda}.
+        N_{\lambda\mu} = N_{\mu\lambda}.
     \]
 \end{theorem}
 
-\begin{proof}
-    The exact same as with Theorem \ref{e2msymmetric}.
+\begin{proof}[Proof of Theorems \ref{thm:h2mSymmetric} and \ref{thm:h2mCombInterpretation}]
+    These are proved almost exactly the same way as Theorems \ref{thm:e2mCombInterpretation} and \ref{thm:e2msymmetric}.
 \end{proof}
 
+However, we do not have an analogue of Theorem \ref{thm:galeryser} for $N_{\lambda\mu}$.
 \subsection{Power sum symmetric functions}
+
+We have one more simple basis for $\Lambda$, which has many not-so-simple theorems!
 
 \begin{definition}
     Let $n\in\NN$. The \textit{power sum symmetric function} $p_n$ is defined to be
@@ -396,7 +631,103 @@ The \textit{complete homogeneous symmetric functions}, or the \textit{completes}
     \]
 \end{definition}
 
-\section{Some theorems}
+\begin{definition}
+    Let $\lambda \vdash n$. Let $R_{\lambda\alpha}$ be the coefficient of $x^\alpha$ in $p_\lambda$.
+\end{definition}
+
+\begin{theorem}
+    The coefficient $R_{\lambda\mu}$ occurring in the monomial expansion of $p_\lambda$,
+    \[
+        p_\lambda = \sum_\mu K_{\lambda\mu} m_\mu
+    \]
+    is counted by the number of ordered partitions $\pi = (B_1, \ldots, B_k)$, where $k = \ell(\mu)$, such that
+    \[
+        \mu_i = \sum_{j\in B_i} \lambda_j.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Choosing a term in $p_\lambda$ means picking up an $x_{i_j}^{\lambda_j}$ term from each
+    \[
+        p_{\lambda_j} = (\cdots + x_{i_j}^{\lambda_j} + \cdots).
+    \]
+    Evidently, given such a choice, we can partition the $\lambda_j$'s into subsets which pick out the same indeterminate $x_{i_j}$, and this subset determines the degree of $x_{i_j}$ in our monomial.
+\end{proof}
+
+\subsubsection{Cycle type}
+
+\begin{definition}
+    Let $w \in \frkS_n$. The \textit{cycle type} $\rho(w)$ of $w$ is the partition of $n$ whose parts are the cycle lengths of $w$'disjoint cycle decomposition.
+\end{definition}
+
+\begin{example}
+    The cycle type of $w = 1657234$ is $\rho(w) = 421$, since $w$ factorizes as
+    \[
+        w = (2635)(47)(1).
+    \]
+\end{example}
+
+\begin{definition}
+    Define the number $z_\lambda$ to be
+    \[
+        z_\lambda := 1^{m_1}m_1!2^{m_2}m_2!\cdots.
+    \]
+\end{definition}
+
+This is important when it comes to enumeration with regards to cycle type.
+
+\begin{theorem}
+    The number of permutations $w \in \frkS_n$ of cycle type $\rho = \langle 1^{m_1}2^{m_2}\cdots\rangle$ is
+    \[
+        \frac{n!}{1^{m_1}m_1!2^{m_2}m_2!\cdots} = n!z_\rho^{-1}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Split off the denominator into two, so that we have
+    \[
+        \frac{n!}{(1^{m_1}2^{m_2}\cdots)(m_1!m_2!\cdots)}.
+    \]
+    The left accounts for an ``internal'' symmetry, that of \textit{permuting the insides of each cycle}. 
+    The right accounts for an ``external'' symmetry, that of \textit{permuting the cycles themselves}.
+    Specifically, take a permutation $w = w_1w_2\cdots w_n$, viewing it only as a tuple of numbers, i.e a word.
+    There are $n!$ many such $w$.
+    We may construct a permutation $[w]$ out of $w$ with cycle type $\rho$ by considering the permutation
+    \[
+        (w_1\cdots w_{\rho_1})
+        (w_{\rho_1+1}\cdots w_{\rho_1+\rho_2})\cdots(w_{\rho_1+\cdots+\rho_{k-1}+1}\cdots w_{\rho_1+\cdots+\rho_{k-1}+\rho_k}).
+    \]
+    The group action 
+\end{proof}
+
+\section{Power series identities}
+
+We define the following generating functions in $\Lambda[[t]]$.
+\begin{definition}
+    \begin{align*}
+        H(t) &:= \sum_{n\in\NN}h_n t^n \\
+        E(t) &:= \sum_{n\in\NN}e_n t^n \\
+        P(t) &:= \sum_{n\geq1}p_n t^n
+    \end{align*}
+\end{definition}
+
+Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant term one!
+
+\begin{theorem}\label{thm:HEPPowerSeries}
+    We have that
+    \begin{align*}
+        H(t) &= \prod_{n\in\NN}\frac{1}{1-x_nt}, \\
+        E(t) &= \prod_{n\in\NN}(1+x_nt), \\
+        P(t) &= \sum_{n\in\NN}\frac{x_nt}{1-x_nt}.
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        \prod_{n\in\NN}\frac{1}{1-x_nt} &= \prod_{n\in\NN}\Big(1 + x_nt + x_n^2t^2 + \cdots\Big) \\
+                                        &= \sum
+    \end{align*}
+\end{proof}
 
 \subsection{The Newton-Girard formulas}
 
@@ -410,25 +741,11 @@ The \textit{complete homogeneous symmetric functions}, or the \textit{completes}
 \end{theorem}
 
 \begin{proof}
-    First, we ``upgrade'' to proving certain power series identities, from which the Newton-Girard formulas can be read off. Consider the power series
+    These all follow from Theorem \ref{thm:HEPPowerSeries}. We have that
     \[
-        H(t) := \sum_{n\in\NN}h_n t^n \in \Lambda[[t]]
-    \]
-    and 
-    \[
-        E(t) := \sum_{n\in\NN}e_n t^n \in \Lambda[[t]].
-    \]
-    Combintorially, we can see that 
-    \[
-        H(t) = \prod_{n\in\NN}\frac{1}{1-x_nt}
-    \]
-    and
-    \[
-        E(t) = \prod_{n\in\NN}(1+x_nt).
-    \]
-    So we have that
-    \[
-        H(t)E(-t) = \prod_{n\in\NN}\frac{1-x_nt}{1-x_nt} = 1.
+        H(t)E(-t) 
+        = \left(\prod_{n\in\NN}\frac{1}{1-x_nt}\right)\left(\prod_{n\in\NN}1-x_nt\right) 
+        = \prod_{n\in\NN}\frac{1-x_nt}{1-x_nt} = 1.
     \]
     Then $[t^n] H(t)E(-t) = 0$ for all $n \geq 1$, giving us
     \[
@@ -436,15 +753,7 @@ The \textit{complete homogeneous symmetric functions}, or the \textit{completes}
     \]
     This proves the first Newton-Girard formula \eqref{ng1}.
 
-    For the next, we define a new power series
-    \[
-        P(t) := \sum_{n\geq1}p_nt^n \in \Lambda[[t]].
-    \]
-    Which has the following formula
-    \[
-        P(t) = t\sum_{n\in\NN}\frac{x_n}{1-x_nt}
-    \]
-    Doing the same thing,
+    Then, we have that
     \begin{align*}
         E(-t)P(t) &= \left[\prod_{n\in\NN}(1-x_nt)\right]\left[t\sum_{m\in\NN}\frac{x_m}{1-x_mt}\right] \\
                   &= t\sum_{m\in\NN}\left[\frac{x_m}{1-x_mt}\prod_{n\in\NN}(1-x_nt)\right] \\
@@ -498,12 +807,32 @@ The \textit{complete homogeneous symmetric functions}, or the \textit{completes}
     \]
 \end{theorem}
 
+\begin{proof}
+    The coefficient of $x^\alpha y^\beta$ is obtained by taking a $1,0-$matrix $A = (a_{ij})$ whose row sum is $\alpha$ and whose column sum is $\beta$. Then
+    \begin{align*}
+        \prod_{i,j\geq1}(1+x_iy_j) &= \sum_{A:1,0-\text{matrix}}x^{\row A}y^{\col A} \\
+                                   &= \sum_{\lambda,\mu} M_{\lambda\mu} (m_\lambda(X) m_\mu(Y)) \\
+                                   &= \sum_{\lambda} m_\lambda(X) \left[\sum_\mu M_{\lambda\mu} m_\mu(Y)\right]\\
+                                   &= \sum_\lambda m_\lambda(X) e_\lambda(Y).
+    \end{align*}
+\end{proof}
+
 \begin{theorem}\label{CauchyIdentityForMH}
     We have that
     \[
         \prod_{i,j \geq 1} (1-x_iy_j)^{-1} = \sum_{\lambda\in\Par} m_\lambda(X) h_\lambda(Y).
     \]
 \end{theorem}
+
+\begin{proof}
+    Exactly the same as with Theorem \ref{CauchyIdentityForME}.
+    \begin{align*}
+        \prod_{i,j\geq1}(1+x_iy_j) &= \sum_{A:\NN-\text{matrix}}x^{\row A}y^{\col A} \\
+                                   &= \sum_{\lambda,\mu} N_{\lambda\mu} (m_\lambda(X) m_\mu(Y)) \\
+                                   &= \sum_{\lambda} m_\lambda(X) \left[\sum_\mu N_{\lambda\mu} m_\mu(Y)\right]\\
+                                   &= \sum_\lambda m_\lambda(X) h_\lambda(Y).
+    \end{align*}
+\end{proof}
 
 \begin{theorem}\label{CauchyIdentityForPP}
     We have that
@@ -595,9 +924,11 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
     Since the $u_\lambda(X)v_\lambda(Y)$ are linearly independent as power series, we can compare coefficients, which gives us the desired equality.
 \end{proof}
 
-\section{Schur functions}
+\section{Schur functions}\label{ch:schurs}
 \subsection{Combinatorial definitions}
 \subsubsection{Schur functions via semistandard Young tableaux}
+
+We recall the definition of a semistandard Young tableau.
 
 \begin{definition}
     A semistandard Young tableau is a Young diagram filled in with entries which increase \textit{weakly} along rows but \textit{strongly} along columns. 
@@ -695,9 +1026,10 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
 \end{definition}
 
 \begin{example}
+    \ytabsmallbox
     Let $\lambda = \ydiagram{4,4,3,2}$ and $\nu = \ydiagram{3,2,2}$. Then $\lambda \setminus \nu$ is
 
-    \ytableausetup{boxsize=normal}
+    \ytabnormalbox
     \[\ydiagram{3+1,2+2,2+1,2}.\]
 \end{example}
 
@@ -742,11 +1074,12 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
     This swap works because the $i$'s that become $i+1$'s will not break column strictness since there is no $i+1$ in the same column, similarly $i+1$'s that become $i$'s will not break column strictness since there is no $i$ in the same column.
 
     This correspondence is involutive and therefore bijective. This completes the proof.
+\end{proof}
 
     For example, if $T$ looked like
-
-    \ytableausetup{boxsize=20pt}
+    % I desperately need to refactor this
     \[
+        \ytabbigbox
         \begin{ytableau}
             \none & \none & \none & \none & \none & \none & \none & \none & & & i & i+1 & i+1 \\
             \none & \none & \none & \none & \none & \none & \none &  & i & i &  \\
@@ -789,7 +1122,6 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
             *(green) i & *(yellow) i+1 & *(yellow) i+1
         \end{ytableau}
     \]
-\end{proof}
 
 As a consequence,
 \begin{corollary}
@@ -973,6 +1305,8 @@ I'm going to define RSK functionally instead of imperatively.
 
 \subsection{Row insertion}
 
+\todo{Rewrite row insertion}
+
 The basic operation will be that of \textit{row insertion}.
 
 \begin{definition}[Row insertion]
@@ -1140,6 +1474,7 @@ We state a property of insertion paths that will allow us to prove that row inse
 
     \ytableausetup{boxsize=10pt}
     \begin{center}
+        \ytabmathmode
         \begin{tabular}{r | l | l}
             $t$ &  $P_t$ & $Q_t$ \\
             \hline 
@@ -1214,6 +1549,7 @@ We state a property of insertion paths that will allow us to prove that row inse
         \end{tabular} 
     \end{center}  
 
+    In the above table, green squares are inserted, whereas yellow squares are bumped.
     We find that
     \[
         P = \ytableaushort{1122,23,3} \qquad Q = \ytableaushort{1113,22,3}.
@@ -1287,7 +1623,7 @@ We state a property of insertion paths that will allow us to prove that row inse
     \]
 \end{corollary}
 
-The book gives three proofs of this corollary. The first one is ``the fastest''.
+\cite{StanleyEC2} gives three proofs of this corollary. The first one is ``the fastest''.
 
 \begin{proof}[Proof via the Hall inner product]
     We know that
@@ -1321,12 +1657,16 @@ This next one is really the same thing, but packaged differently.
     We already know that the $m_\mu(X)$'s are linearly independent; we finish the proof by equating their coefficients.
 \end{proof}
 
-This last proof is purely combinatorial. 
+This last proof is purely combinatorial, but is also again really the same thing. 
 
 \begin{proof}[Proof via RSK]
-    \[
-        h_\mu = \sum_A x^{\col A}
-    \]
+    \begin{align*}
+        h_\mu = \sum_{\substack{A:\NN-\text{matrix}\\\row A=\mu}} x^{\col A}
+              \qquad\rskarrow\qquad
+              &=\sum_{\substack{P,Q:\SSYT^2\\\type P=\mu}} x^Q  \\
+              &= \sum_\lambda K_{\lambda\mu} \left(\sum_{\substack{Q:\SSYT\\\shape Q=\lambda}} x^Q\right) \\
+              &= \sum_\lambda K_{\lambda\mu} s_\lambda
+    \end{align*}
 \end{proof}
 
 \begin{corollary}
@@ -1341,29 +1681,418 @@ This last proof is purely combinatorial.
 \end{proof}
 
 \subsection{Standardization}
+We can \textit{standardize} two-line arrays, which gives us another two-line array with no repeated entries.
 
-\subsection{Symmetry}
-\begin{theorem}
-    If
+Consider a row of numbers $(i_1\: \ldots\: i_n)$. 
+We create a tableau that fills each position in the row in a corresponding box, where a box $(s,t)$ corresponds to the $t$-th appearance of $s$ from the left.
+For example, the array
+\[
+    \begin{pmatrix}
+        1 & 1 & 1 & 2 & 2 & 3 & 3 & 3 & 3
+    \end{pmatrix}
+\]
+becomes
+\[
+    \ytabnormalbox
+    \ytableaushort{123,45,6789}*{3,2,4}
+\]
+Then, we fill in all the squares with $1,\ldots,n$ going in rows.
+In our example, this is already how the rows are filled!
+To get our standardized row, $\tilde{i}_n$ will be the entry of the second tableau in the box where $n$ appears in the first tableau.
+So the standardized row from our example is actually
+\[
+    \begin{pmatrix}
+        1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9
+    \end{pmatrix}.
+\]
+It's not hard to see that this \textit{always} happens if our row is weakly increasing.
+
+Consider the row
+\[
+    \begin{pmatrix}
+        1 & 1 & 3 & 2 & 3 & 1 & 2 & 2 & 2
+    \end{pmatrix}.
+\]
+Our first tableau is now
+\[
+    \ytabnormalbox
+    \ytableaushort{126,4789,35}*{3,4,2},
+\]
+and so our second tableau is
+\[
+    \ytabnormalbox
+    \ytableaushort{123,4567,89}*{3,4,2}
+\]
+Applying standardization, we get
+\[
+    \begin{pmatrix}
+        1 & 2 & 8 & 4 & 9 & 3 & 5 & 6 & 7
+    \end{pmatrix}
+\]
+We can now define the following:
+
+\begin{definition}
+    Let $w_A = \binom{i_1\cdots i_n}{j_1\cdots j_n}$ be a two-line array arising from the $\NN$-matrix $A$.
+
+    We define the \textit{standardized two-line array} $\widetilde{w}_A$ to be $w_A$ with both of its rows standardized. 
+\end{definition}
+
+In effect, we will always get 
+\[
+    \begin{pmatrix}
+        1 & \cdots & n \\
+        \widetilde{j_1} & \cdots & \widetilde{j_n}
+    \end{pmatrix}.
+\]
+where $\widetilde{j_i}$ is $j_i$ standardized.
+
+\begin{example}
+    Combining the first two examples of standardized rows, if
     \[
-        A \rskarrow (P,Q),
+        w_A = \begin{pmatrix}
+            1 & 1 & 1 & 2 & 2 & 3 & 3 & 3 & 3 \\
+            1 & 1 & 3 & 2 & 3 & 1 & 2 & 2 & 2
+        \end{pmatrix},
     \]
     then
     \[
-        A^T \rskarrow (Q,P).
+        \widetilde{w}_A = \begin{pmatrix}
+            1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+1 & 2 & 8 & 4 & 9 & 3 & 5 & 6 & 7
+        \end{pmatrix}.
     \]
+\end{example}
+
+\begin{lemma}
+    Standardization commutes with RSK.
+    Meaning, if you keep track of the map of entries going from $w_A$ to $\widetilde{w}_A$, then reversing this map on $\widetilde{P},\widetilde{Q}$ gives you $P,Q$ respectively.
+\end{lemma}
+
+\subsection{Symmetry}
+
+\begin{theorem}\label{thm:rsksymmetry}
+    If $A \rskarrow (P,Q),$ then $A^T \rskarrow (Q,P).$
 \end{theorem}
 
-\section{Appendix}
+The first proof given in \cite{StanleyEC2} makes use of the \textit{inversion poset} of a permutation.
 
-\begin{theorem}
-    Googoo gaga
-\end{theorem}
+\begin{definition}
+    Consider the two-line array
+    \[
+        w = \begin{pmatrix}
+            i_1 & \cdots & i_k \\
+            j_1 & \cdots & j_k
+        \end{pmatrix}
+    \]
+    and define the \textit{inversion poset} $I$ to be the poset whose elements are the pairs $(i_t, j_t)$ for $1 \leq t \leq k$, and whose partial order is given by putting $(a,b) \leq (c,d)$ whenever $a \leq b$ and $c \leq d$.
+\end{definition}
+
+For convience, we will use the compact notation $i_tj_t$.
+For example, the pair $(3,5)$ will just be written $35$.
+
+\begin{example}\label{ex:invposet}
+    Let
+    \[
+        w = \begin{pmatrix}
+            1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+            5 & 1 & 6 & 7 & 4 & 3 & 2
+        \end{pmatrix}.
+    \]
+    Then the inversion poset of $w$ is 
+    \begin{center}
+        \begin{tikzpicture}[scale=1.3]
+            \node (15) at (0,0) {$15$};
+            \node (21) at (1,0) {$21$};
+            \node (36) at (0,1) {$36$};
+            \node (47) at (0,2) {$47$};
+            \node (54) at (1,1) {$54$};
+            \node (63) at (2,1) {$63$};
+            \node (72) at (3,1) {$72$};
+            \draw (15) -- (36);
+            \draw (21) -- (36);
+            \draw (36) -- (47);
+            \draw (21) -- (54);
+            \draw (21) -- (63);
+            \draw (21) -- (72);
+        \end{tikzpicture}.
+    \end{center}
+\end{example}
+
+Given an inversion poset $I$, we may partition it into antichains $I_1, \ldots, I_k$ as follows:
+\begin{enumerate}
+    \item Let $I_1$ be the set of minimal elements of $I$.
+    \item Suppose that $I_1, \ldots, I_j$ are defined. 
+        Then define $I_{j+1}$ to be the minimal elements of $I \setminus (I_1 \cup \cdots \cup I_j)$.
+\end{enumerate}
+
+\begin{example}\label{ex:invposetantichains}
+    For the same $w$ defined in Example \ref{ex:invposet}, the antichains are
+    \begin{center}
+        \begin{tikzpicture}[scale=1.3]
+            \node (15) at (0,0) {$15$};
+            \node (21) at (1,0) {$21$};
+            \node (36) at (0,1) {$36$};
+            \node (47) at (0,2) {$47$};
+            \node (54) at (1,1) {$54$};
+            \node (63) at (2,1) {$63$};
+            \node (72) at (3,1) {$72$};
+            \draw (15) -- (36);
+            \draw (21) -- (36);
+            \draw (36) -- (47);
+            \draw (21) -- (54);
+            \draw (21) -- (63);
+            \draw (21) -- (72);
+            \node[red] (i1) at (-0.5,0) {$I_1$};
+            \node[red] (i2) at (-0.5,1) {$I_2$};
+            \node[red] (i3) at (-0.5,2) {$I_3$};
+            \draw[thick,red,rounded corners] (-0.3, -0.3) rectangle (1.3, 0.3) {};
+            \draw[thick,red,rounded corners] (-0.3, 0.7) rectangle (3.3, 1.3) {};
+            \draw[thick,red,rounded corners] (-0.3, 2.3) rectangle (0.3, 1.7) {};
+        \end{tikzpicture}.
+    \end{center}
+\end{example}
+
+Moreover, considering the definition of the inversion poset's order, we may define an order on its antichains, given by $(a,b) < (c,d)$ whenever $a < c$ and $b > d$.
+
+This defines a total order on any antichain of $I$ (check it!).
+
+\begin{example}
+    Continuing Example \ref{ex:invposetantichains}, the order internal to each antichain (going east to west from least to greatest) is
+    \begin{center}
+        \begin{tikzpicture}[scale=1.3]
+            \node (15) at (0,0) {$15$};
+            \node (21) at (1,0) {$21$};
+            \node (36) at (0,1) {$36$};
+            \node (47) at (0,2) {$47$};
+            \node (54) at (1,1) {$54$};
+            \node (63) at (2,1) {$63$};
+            \node (72) at (3,1) {$72$};
+            \draw (15) -- (36);
+            \draw (21) -- (36);
+            \draw (36) -- (47);
+            \draw (21) -- (54);
+            \draw (21) -- (63);
+            \draw (21) -- (72);
+            \node[red] (i1) at (-0.5,0) {$I_1$};
+            \node[red] (i2) at (-0.5,1) {$I_2$};
+            \node[red] (i3) at (-0.5,2) {$I_3$};
+            \draw[thick,red,rounded corners] (-0.3, -0.3) rectangle (1.3, 0.3) {};
+            \draw[thick,red,rounded corners] (-0.3, 0.7) rectangle (3.3, 1.3) {};
+            \draw[thick,red,rounded corners] (-0.3, 2.3) rectangle (0.3, 1.7) {};
+            \draw[red] (15) -- (21);
+            \draw[red] (36) -- (54) -- (63) -- (72);
+        \end{tikzpicture},
+    \end{center}
+    where the covering relation is notated with red edges.
+\end{example}
+
+We can now state an important lemma that makes use of all the machinery we've just built up.
+
+\begin{lemma}
+    Consider a two-line word $w$, and let $w \rskarrow (P, Q)$.
+    Suppose we've constructed $I$ and $I_1, \ldots I_k$ given $w$.
+    Then, the first row of $P$ has $k$ entries, and is given by
+    \[
+        P_{1,r} = \text{the top number of }\min I_r,
+    \]
+    and the first row of $Q$ also has $k$ entries and is given by
+    \[
+        Q_{1,r} = \text{the bottom number of }\max I_r.
+    \]
+\end{lemma}
+
+\begin{example}
+    Completing the example, we compute the top and bottom numbers of the least and greatest elements of each antichain.
+    \begin{center}
+        \begin{tikzpicture}[scale=1.3]
+            \node (15) at (0,0) {$15$};
+            \node (21) at (1,0) {$21$};
+            \node (36) at (0,1) {$36$};
+            \node (47) at (0,2) {$47$};
+            \node (54) at (1,1) {$54$};
+            \node (63) at (2,1) {$63$};
+            \node (72) at (3,1) {$72$};
+            \draw (15) -- (36);
+            \draw (21) -- (36);
+            \draw (36) -- (47);
+            \draw (21) -- (54);
+            \draw (21) -- (63);
+            \draw (21) -- (72);
+            \begin{scope}[thick,red,rounded corners]
+                \draw (-0.3, -0.3) rectangle (1.3, 0.3) {};
+                \draw (-0.3, 0.7) rectangle (3.3, 1.3) {};
+                \draw (-0.3, 2.3) rectangle (0.3, 1.7) {};
+            \end{scope}
+            \begin{scope}[color=red]
+                \draw (15) -- (21);
+                \draw (36) -- (54) -- (63) -- (72);
+            \end{scope}
+            \begin{scope}[color=blue,-{Latex[length=3mm]}]
+                \draw (-0.5,2) -- (-1.5,2);
+                \draw (-0.5,1) -- (-1.5,1);
+                \draw (-0.5,0) -- (-1.5,0);
+            \end{scope}
+            \begin{scope}[color=green,-{Latex[length=3mm]}]
+                \draw (0.5,2) -- (4.5,2);
+                \draw (3.5,1) -- (4.5,1);
+                \draw (1.5,0) -- (4.5,0);
+            \end{scope}
+            \begin{scope}
+                \node at (-2, 2) {$4$};
+                \node at (-2, 1) {$3$};
+                \node at (-2, 0) {$1$};
+            \end{scope}
+            \begin{scope}
+                \node at (5, 2) {$7$};
+                \node at (5, 1) {$2$};
+                \node at (5, 0) {$1$};
+            \end{scope}
+        \end{tikzpicture}
+    \end{center}
+    So the first row of $P$ is $\ytableaushort{134}$ and the first row of $Q$ is $\ytableaushort{127}$.
+\end{example}
+
+\todo{Finish proofs of RSK symmetry}
+\begin{proof}[Proof of Theorem \ref{thm:rsksymmetry} using the inversion poset]
+
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{thm:rsksymmetry} using Fomin growth diagrams]
+\end{proof}
 
 \section{Solutions to Exercises}
 
 \begin{exercise}
+    $[1]$
+    True or false: The Ferrers diagram of the partition $(4,4,3)$ is given by
+    \[
+        \begin{matrix}
+            . & . & . & . \\
+            . & . & . & . \\
+            . & . & . & .
+        \end{matrix}
+    \]
 \end{exercise}
+
+True! The bottom-right-most dot is in fact the sentence's period. (I hate this book!)
+
+\begin{exercise}
+    Let $\Par(n)$ denote the set of all partitions of $n$ with the dominance ordering.
+    \begin{enumerate}[label=(\alph*)]
+        \item $[2]$ Show that $\Par(n)$ is a lattice.
+        \item $[2+]$ Show that $\Par(n)$ is self-dual.
+        \item $[2+]$ Find the smallest value of $n$ for which $\Par(n)$ is not graded.
+        \item $[2+]$ Show that the maximum number of elements covered by an element of $\Par(n)$ is $\lfloor \frac{1}{2}(\sqrt{1+8n}-3)\rfloor$.
+        \item $[2+]$ Show that the shortest maximal chain in $\Par(n)$ has length $2n-4$ for $n \geq 3$.
+        \item $[3-]$ Show that the longest maximal chain in $\Par(n)$ has length
+            \[
+                \frac{1}{3}m(m^2+3r-1) \sim \frac{1}{3}(2n)^{3/2},
+            \]
+            where $n = \binom{m+1}{2} + 2,\:0 \leq r \leq m$.
+    \end{enumerate}
+\end{exercise}
+
+Consider dividing a partition's diagram into rectangles of parts of the same size. For example, if $\lambda = \ydiagram{4,3,3,1}$, we divide it into the three rectangles $r_1 = 4^1, r_2 = 3^2, r_3 = 1^1$.
+\[
+    \ytabnormalbox
+    \ytableaushort[r_]{1111,222,222,3}
+\]
+Given a partition $\lambda$ with rectangles $(r_1, \ldots)$, we define a a new partition from a \textit{tap} of rectangle $r_i$, where $i > 1$, to be taking the bottom-right-most box of $r_i$ and adding it to the first row of $r_{i-1}$.
+
+For example, if we tapped $r_2$ in the above diagram, we get
+\[
+    \ytableaushort{}*{4,3,3,1}*[*(green)]{4}*[*(yellow)]{0,3,3}
+    \xrightarrow{\text{tap second rectangle}} 
+    \ytableaushort{}*{0,0,0,1}*[*(green)]{4}*[*(yellow)]{4+1,3,2}
+\]
+Evidently, this breaks the rectangular division of $\lambda$, so we obtain new rectangles.
+
+\begin{lemma}
+    Suppose $\lambda$ and $\mu$ agree on the first $t$ rows. Then they both agree with $\lambda \wedge \mu$ on the first $t$ rows. Moreover, let $\lambda'$ and $\mu'$ be the respective partitions with the first $t$ rows removed. Then $\lambda \wedge \mu$ is $\lambda' \wedge \mu'$ prepended with the $t$ removed rows.
+\end{lemma}
+\begin{proof}
+    Suppose $\lambda_1 = \mu_1, \ldots, \lambda_t = \mu_t$.
+    Let $\nu \geq \lambda$ and $\nu \geq \mu$.
+    Suppose $\nu$ disagrees with $\mu$ and $\lambda$ at $s$-th row, where $s < t$.
+    It must be that $\nu_s > \lambda_s$, since $\nu \geq \lambda$. 
+\end{proof}
+
+Now let $\lambda, \mu$ be two partitions of $n$. 
+We give an explicit construction for $\nu := \lambda \wedge \mu$, which we construct by stabilizing one row at a time.
+
+Put $\lambda^{(0)} := \lambda$ and $\mu^{(0)} := \mu$. We will construct two sequences of partitions $(\lambda^{(j)})$ and $(\mu^{(j)})$ such that $\nu_i = \lambda^{(i)}_i = \mu^{(i)}_i$.
+
+
+Suppose $\lambda^{(0)}, \ldots, \lambda^{(j-1)}$, $\mu^{(0)}$, \ldots, $\mu^{(j-1)}$ have been constructed. 
+To construct $\lambda^{(j)}, \mu^{(j)}$, we consider three cases
+\begin{itemize}
+    \item Case $1$: $\lambda_j = \mu_j$. We put 
+        \begin{align*}
+            \nu_j &= \nu_{j-1}, \\
+            \lambda^{(j)} &= \lambda^{(j-1)}, \\
+            \mu^{(j)} &= \mu^{(j-1)}.
+        \end{align*}
+    \item Case $2$: $\lambda_j > \mu_j$. We put 
+        \begin{align*}
+            \nu_j &= \lambda_j, \\
+            \lambda^{(j)} &= \lambda^{(j-1)}, \\
+            \mu^{(j)} &= \overline{\mu^{(j-1)}},
+        \end{align*}
+        where $\overline{\mu^{(j-1)}}$ is the tableau obtained by tapping the the nearest rectangle to the $j$-th row of $\mu$ until the $j$-th row has $\lambda_j$ squares.
+    \item Case $3$: $\lambda_j < \mu_j$. We put 
+        \begin{align*}
+            \nu_j &= \mu_j, \\
+            \lambda^{(j)} &= \overline{\lambda^{(j-1)}}, \\
+            \mu^{(j)} &= \mu^{(j-1)},
+        \end{align*}
+        where $\overline{\lambda^{(j-1)}}$ is defined similarly as above.
+\end{itemize}
+
+We claim that, not only are the above sequences, and therefore $\nu$, are well defined, we also have that $\nu = \lambda \wedge \mu$ as desired.
+
+We now have a smaller tableau of size $n - |\mu_1 - \lambda_1|$.
+
+
+\begin{exercise}
+    $[2+]$
+    Expand the power series $\prod_{i\geq1}(1+x_i+x_i^2)$ in terms of the elementary symmetric functions.
+\end{exercise}
+
+Let $f$ be the above power series. 
+Picking a term of $f$ amounts to choosing some composition $\alpha$ with parts $0,1,2$. Hence
+\[
+    f = \sum_{p,q \geq 0} m_{1^p,2^q}
+\]
+We 
+
+\begin{exercise}
+    $[2+]$
+    Show that
+    \[
+        h_r(x_1,\ldots,x_n) = \sum_{k=1}^n x_k^{n-1+r}\prod_{i\neq k}(x_k-x_i)^{-1}.
+    \]
+\end{exercise}
+
+\begin{exercise}
+    $[2+]$
+    \begin{enumerate}[label=(\alph*)]
+        \item $[2+]$ Prove the identity
+            \begin{equation}\label{eq:124}
+                \left(1-\sum_{n\geq1}p_nt^n\right)^{-1} = \frac{\sum_{n\geq0}h_nt^n}{1-\sum_{n\geq1}(n-1)h_nt^n}
+            \end{equation}
+        \item $[2+]$ Let $Y_n$ denote the coefficient of $t^n$ in the expansion of either side of equation (\ref{eq:124}), so $Y_n \in \Lambda^n$. Show that
+            \[
+                Y_n = \sum_w p_{\rho(w)},
+            \]
+            where $w$ ranges over all permutations in $\frkS_n$ satisfying $w(i) \geq i-1$ for all $i$.
+    \end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+    $[2+]$
+    Let $w \in \frkS_n$ have cycle type $\lambda$. Give a direct bijective proof of 
+\end{exercise}
+
 
 \begin{thebibliography}{999999}
     \raggedright\footnotesize
@@ -1372,10 +2101,13 @@ This last proof is purely combinatorial.
     Richard P. Stanley, \textit{Enumerative Combinatorics. Volume 2}, Cambridge University Press 2023.
 
     \bibitem[GrinbergAC]{DarijAC}
-    Darij Grinberg, \textit{An Introduction to Algebraic Combinatorics}, \href{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
+    Darij Grinberg, \textit{An Introduction to Algebraic Combinatorics}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
+
+    \bibitem[GrinbergSGA]{DarijSGA}
+    Darij Grinberg, \textit{An introduction to the symmetric group algebra}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/24s/sga.pdf}
 
     \bibitem[WildonSymFuncs]{WildonSymFuncs}
-    Mark Wildon, \textit{An Involutive Introduction to Symmetric Functions}, \href{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
+    Mark Wildon, \textit{An Involutive Introduction to Symmetric Functions}, \url{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
 \end{thebibliography}
 
 \end{document}
