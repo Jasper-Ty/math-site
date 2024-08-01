@@ -174,8 +174,8 @@ Then, what do we know about $\ell(w)$?
     \]
 \end{definition}
 
-\begin{theorem}\label{thm:simplerelations}
-    The simple transpositions satisfy the relations
+\begin{theorem}\label{thm:simplecoxeterrelations}
+    The simple transpositions satisfy the \textit{Coxeter-Moore relations}
     \begin{enumerate}[label=(\alph*)]
         \item Braid relation 
             \begin{equation}\label{eq:simplebraid}
@@ -279,8 +279,8 @@ Then the following properties of the operator $\partial_i$ can be read off
 The following theorem gives us an analogy between the divided difference operators and the simple transpositions.
 In particular, it tells us that sequences of $\partial_i$'s structurally behave like reduced words when the corresponding sequence of $s_i$'s are reduced words (see Definition \ref{def:ddword} and Theorem \ref{thm:ddreducedwordequiv}), but that the $\partial_i$'s degenerate and collapse to nothing in the case for non-reduced words (see Theorem \ref{thm:ddnonreducedzero}).
 
-\begin{theorem}\label{thm:ddrelations}
-    The divided difference operators satsify, in analogy to Theorem \ref{thm:simplerelations},
+\begin{theorem}\label{thm:ddnilcoxeterrelations}
+    The divided difference operators satsify the \textit{nil-Coxeter relations}:
     \begin{enumerate}[label=(\alph*)]
         \item The braid relation
             \begin{equation}\label{eq:ddbraid}
@@ -290,7 +290,7 @@ In particular, it tells us that sequences of $\partial_i$'s structurally behave 
             \begin{equation}\label{eq:ddcommute}
                 \partial_i\partial_j = \partial_j\partial_i\qquad \text{whenever}\qquad|i-j| > 1
             \end{equation}
-        \item Annihilation (not contraction!)
+        \item Nilpotence
             \begin{equation}\label{eq:ddcontract}
                 \partial_i^2 = 0
             \end{equation}
@@ -335,7 +335,7 @@ We'll actually use this to bootstrap another definition-- divided difference ope
 
 \begin{proof}
     This follows from the fact any two reduced words for a permutation $w$ are equivalent modulo far commutativity and the braid relation. 
-    Then recall Theorem \ref{thm:ddrelations}--- Equations \ref{eq:ddbraid} and \ref{eq:ddcommute} tell us exactly that the divided difference operators also satisfy those relations.
+    Then recall Theorem \ref{thm:ddnilcoxeterrelations}--- Equations \ref{eq:ddbraid} and \ref{eq:ddcommute} tell us exactly that the divided difference operators also satisfy those relations.
 \end{proof}
 
 So we can now properly define the following:
@@ -385,7 +385,7 @@ Actually, this definition is a theorem if we start with the ``Representatives of
 
 \section{Appendix}
 
-\begin{proof}[Detailed proof of Theorem \ref{thm:ddrelations}] 
+\begin{proof}[Detailed proof of Theorem \ref{thm:ddnilcoxeterrelations}] 
     Define $[ij] := x_i - x_j$.
     We have the following relations:
     \begin{align*}
