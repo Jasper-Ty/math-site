@@ -1,0 +1,380 @@
+\documentclass{article}
+
+\usepackage[garamond,nosubsections]{jaspercommon}
+\newcommand{\ff}[2]{\ensuremath{#1^{\underline{#2}}}}
+\DeclareMathOperator{\degree}{deg}
+
+\title{A neat infinite sum identity}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+\setcounter{MaxMatrixCols}{20}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+This identity I'm writing about is entirely routine. But, I do think it's a cute starting point for the combinatorial topics it touches on.
+
+We wish to compute, say, the infinite series
+\[
+    \sum_{n=0}^\infty \frac{4n^3 + 2n^2 - 8n - 23}{2^n}.
+\]
+Alright, whatever, seems a bit tricky.
+
+Consider the numerator, a polynomial in $n$, and write down its values for $n=1,2,3,\ldots$ in a row.
+\[
+    \begin{matrix}
+        -23 & -25 & 1 & 79 & 233 & 487 & 865 & \ldots
+    \end{matrix}
+\]
+Still doesn't look so nice.
+But now, write a row below it, whose numbers are the difference of the number on its top right and its top left.
+\[
+    \begin{matrix}
+        -23 & & -25 & & 1 & & 79 & & 233 & & \ldots \\
+        & -2 & & 26 & & 78 & & 154 & & \ldots \\
+        & & 28 & & 52 & & 76 & & \ldots \\
+        & & & 24 & & 24 & & \ldots \\
+        & & & & 0 & & \ldots \\
+        & & & & & \ddots 
+    \end{matrix}
+\]
+If you take the first column of numbers, add them up, and multiply them by two, this turns out to be the answer:
+it happens to be that
+\[
+    \sum_{n=0}^\infty \frac{4n^3 + 2n^2 - 8n - 23}{2^n} = 2(-23-2+28+24) = 54.
+\]
+Moreover, this ``always happens'' to be, which we will now show.
+
+\section{Finite differences and computing polynomials}
+
+But first, we define a discrete analogue of the derivative, the \textit{difference operator}, or the \textit{first difference operator}.
+
+\begin{definition}\label{def:differenceoperator}
+    The \textit{difference operator} $\Delta$ is defined by the equation
+    \[
+        (\Delta f)(x) \coloneq f(x+1) - f(x).
+    \]
+\end{definition}
+
+We define a related operator which is interesting in its own right, but whose purpose right now is to one specific calculation easier.
+
+\begin{definition}
+    The \textit{shift operator} $T$ is defined by
+    \[
+        (Tf)(x) \coloneq f(x+1).
+    \]
+\end{definition}
+
+Then, we can write $T = \Delta + \mathbf{1}$, where $\mathbf{1}$ is the identity operator.
+This \textit{immediately} gives us the following result.
+
+\begin{theorem}\label{thm:discretetaylor}
+    Let $f$ be some function.
+    We have that
+    \[
+        f(n) = \sum_{k=0}^n \binom{n}{k} \Delta^k f(0).
+    \]
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        f(n) &= f(0+n) \\
+             &= T^nf(0) \\
+             &= (\Delta + \mathbf{1})^n f(0) \\
+             &= \left[\sum_{k=0}^n \binom{n}{k} \Delta^k\mathbf{1}^{n-k}\right] f(0) \\
+             &= \sum_{k=0}^n \binom{n}{k} \Delta^k f(0).
+    \end{align*}
+\end{proof}
+
+One remark is in order: just as differentiating enough times kills off polynomials, taking enough finite differences does the same thing as well.
+
+\begin{remark}
+    If $p(x)$ is a polynomial, then for all $m > \degree p$,
+    \[
+        (\Delta^m p) \equiv 0.
+    \]
+\end{remark}
+
+\begin{proof}
+    Left to the reader.
+\end{proof}
+
+This gives us an easy corollary to Theorem \ref{thm:discretetaylor}.
+
+\begin{corollary}\label{cor:polysumfinitediffs}
+    If $p(x)$ is a polynomial in $x$, we have that
+    \[
+        p(n) = \sum_{k=0}^{\degree p}\binom{n}{k}(\Delta^kp)(0).
+    \]
+\end{corollary}
+
+\begin{proof}
+    Left to the reader.
+\end{proof}
+
+This result is one of the easier pieces of proving the identity, which we can now finally precisely state using the difference operator.
+
+\section{The identity}
+
+Constructing the triangular array we constructed earlier.
+
+Now instead of numbers, we can write it with notation.
+
+\[
+    \begin{matrix}
+        f(0) && f(1) && f(2) && f(3) && \cdots \\
+             &  \Delta f(0) && \Delta f(1) && \Delta f(2) && \cdots \\
+             && \Delta^2 f(0) && \Delta^2 f(1) && \cdots \\
+             && & \Delta^3 f(0) && \cdots \\
+             &&&& \ddots
+    \end{matrix}
+\]
+Now, we can see that ``taking the first column'' accounts to looking at $(\Delta^k f)(0)$ for all $k$. 
+
+We've looked at $(\Delta^k f)(0)$ for a bit now--- in Theorem \ref{thm:discretetaylor}, in Corollary \ref{cor:polysumfinitediffs}, and now in the identity we want to prove. This is another ``finite calculus'' analogy--- Theorem \ref{thm:discretetaylor} is an analogue of \textit{Taylor series expansion}.
+Instead of expanding $f$ as a sum of \textit{derivatives} $f^{(k)}(0)$, we expand $f$ as a sum of \textit{differences} $(\Delta^k f)(0)$.
+
+In its more general form, the identity looks very similar to Corollary \ref{cor:polysumfinitediffs}.
+Without further ado, here it is.
+
+\begin{theorem}[The theorem, more generally]\label{thm:thethm}
+    Let $p$ be some polynomial.
+    Fix a number $a > 1$.
+    Then,
+    \[
+        \sum_{n=0}^\infty \frac{p(n)}{a^n} = \sum_{k=0}^{\degree p} \frac{a}{(a-1)^{k+1}} (\Delta^k p)(0).
+    \]
+\end{theorem}
+
+We can't quite prove this yet, though.
+
+For the meantime, we note that something \textit{awesome} happens in the $a=2$ case, which was demonstrated in the introduction.
+
+\begin{corollary}[The theorem, less generally]
+    Let $p$ be some polynomial.
+    Then,
+    \[
+        \sum_{n=0}^\infty \frac{p(n)}{2^n} = 2\sum_{k=0}^{\degree p} (\Delta^k p)(0).
+    \]
+\end{corollary}
+
+\begin{proof}
+    Left to the reader.
+\end{proof}
+
+Here's a quick example:
+
+\begin{example}
+    Consider the sum
+    \[
+        \sum_{n=0}^\infty \frac{n}{2^n},
+    \]
+    so now $p(n) = n$, and $a = 2$.
+
+    The finite differences are $(\Delta^0 p)(0) = 0$, $(\Delta^1 p)(0) = 1$, so
+    \[
+        \sum_{n=0}^\infty \frac{n}{2^n} = 2(0 + 1)
+    \]
+\end{example}
+
+
+\iffalse
+This \textit{immediately} gives us the following result:
+
+\begin{computation}
+    We evaluate the \textit{$n$-th difference operator}, $\Delta^n$,
+    \begin{align*}
+        \Delta^n &= \underbrace{(T-\mathbf{1})^n}_{\text{commuting operators--- can use binomial expansion}} \\
+                 &= \sum_{k=0}^n \binom{n}{k} T^k(-\mathbf{1})^{n-k}.
+    \end{align*}
+    Applied to a specific $f$, we have that
+    \begin{align*}
+        \Delta^n f(x) &= \left[\sum_{k=0}^n \binom{n}{k} T^k(-\mathbf{1})^{n-k}\right] \underbrace{f(x)}_\text{can push inside sum} \\
+                      &= \sum_{k=0}^n \binom{n}{k} \underbrace{T^k(-\mathbf{1})^{n-k}}_{\text{commute}}f(x) \\
+                      &= \sum_{k=0}^n \binom{n}{k}(-\mathbf{1})^{n-k}T^kf(x) \\
+                      &= \sum_{k=0}^n \binom{n}{k}(-\mathbf{1})^{n-k}\Big[T^kf(x)\Big] \\
+                      &= \sum_{k=0}^n \binom{n}{k}(-\mathbf{1})^{n-k}f(x+k).
+    \end{align*}
+    As a special case,
+    \[
+        \Delta^n f(0) = \sum_{k=0}^n \binom{n}{k}(-\mathbf{1})^{n-k}f(k).
+    \]
+\end{computation}
+
+\fi
+
+\section{Falling factorials and Newton's binomial formula}
+
+Next, we define an operation that is \textit{like} taking powers, just like how differences are \textit{like} taking derivatives.
+
+\begin{definition}
+    Let $m \geq 0$ be a number.
+    The \textit{falling factorial}, $\ff{x}{m}$, is defined by
+    \[
+        \ff{x}{m} \coloneq \underbrace{x\cdot(x-1)\cdots(x-m+1)}_{m\text{ factors}}.
+    \]
+\end{definition}
+
+Note that the ordinary factorial $n!$ is $\ff{n}{n}$.
+On the flip side, if $m < n$ are two integers, then $\ff{n}{m} = n!/(n-m)!$.
+With that said, we can see then that $\binom{n}{k} = \ff{n}{k}/k!$, when $n$ and $k$ are positive integers.
+
+Even better, falling factorials allow us to give a \textit{more general definition} of the binomial coefficient, in which the upper index is no longer required to be a nonnegative integer.
+
+\begin{definition}
+    Let $k \in \NN$, and let $n$ be \textit{any} number.
+    The \textit{binomial coefficient} $\binom{n}{k}$ is defined by
+    \[
+        \binom{n}{k} \coloneq \frac{\ff{n}{k}}{k!}.
+    \]
+\end{definition}
+
+Now we have identities which we couldn't have \textit{dreamed of} without a more general binomial coefficient, for example:
+
+\begin{lemma}[Upper negation]
+    Let $k \in \NN$ and let $n$ be any number again.
+    Then
+    \[
+        \binom{-n}{k} = (-1)^k\binom{n+k-1}{k}.
+    \]
+\end{lemma}
+\begin{proof}
+    We start by expanding the left hand side, which is
+    \[
+        \binom{-n}{k} = \frac{\ff{(-n)}{k}}{k!}.
+    \]
+    Then, we manipulate the product $\ff{(-n)}{k}$ with our bare hands:
+    \begin{align*}
+        \ff{(-n)}{k} &= \Big((-n)\Big)\Big((-n)-1\Big)\Big((-n)-2\Big)\cdots\Big((-n)-k+1\Big) \\
+                     &= \Big((-1)(n)\Big)\Big((-1)(n+1)\Big)\Big((-1)(n+2)\Big)\cdots\Big((-1)(n+k-1)\Big) \\
+                     &= (-1)^k\Big(n\Big)\Big(n+1\Big)\Big(n+2\Big)\cdots\Big(n+k-1\Big) \\
+                     &= (-1)^k\ff{(n+k-1)}{k}.
+    \end{align*}
+    Then,
+    \[
+    \binom{-n}{k} = \frac{\ff{(-n)}{k}}{k!} = \frac{(-1)^k\ff{(n+k-1)}{k}}{k!} = (-1)^k\binom{n+k-1}{k}.
+    \]
+\end{proof}
+
+What this tells us is that negating the upper index can be ``straightened out'' this way into an expression \textit{without} a negative upper index.
+
+As another application of our new binomial coefficient, we have a powerful and important generalization of the \textit{binomial formula}, which involves a \textit{series} rather than a sum.
+
+\begin{theorem}[Newton's binomial formula]
+    For any $a \in \RR$,
+    \[
+        (1+x)^a = \sum_{k=0}^\infty \binom{a}{k} x^k.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Doing this rigorously takes \textit{forever}, so I refer to \cite{GrinbergAC}, Theorem 3.8.3.
+\end{proof}
+
+However, in proving our identity, we'll want the above sum to run over the \textit{upper index} of the binomial coefficient.
+Luckily, we \textit{do} have a version that runs over the upper index.
+
+\begin{theorem}
+    Fix $k \in \NN$.
+    Then
+    \[
+        \sum_{n=0}^\infty \binom{n}{k} x^n = \frac{x^k}{(1-x)^{k+1}}.
+    \]
+\end{theorem}
+\begin{proof}
+    We begin with Newton's binomial formula
+    \[
+        (1+x)^a = \sum_{k=0}^\infty \binom{a}{k} x^k,
+    \]
+    And we, superficially for now, replace $k$ with $n$, so we have
+    \[
+        (1+x)^a = \sum_{n=0}^\infty \binom{a}{n} x^n.
+    \]
+    Now $k$ is back in our pool of free variables, so put $a = -k-1$.
+    Then,
+    \[
+        \frac{1}{(1+x)^{k+1}} = \sum_{n=0}^\infty \binom{-(k+1)}{n} x^n.
+    \]
+    Now we hit it with upper negation,
+    \[
+        \binom{-(k+1)}{n} = (-1)^n\binom{(k+1)+n-1}{n} = (-1)^n \binom{n+k}{n},
+    \]
+    so now we finally have a $n$ in the top index,
+    \[
+        \frac{1}{(1+x)^{k+1}} = \sum_{n=0}^\infty \binom{n+k}{n}(-1)^n x^n.
+    \]
+    To get rid of the $n$ in the bottom index, we use binomial coefficient symmetry,
+    \[
+        \binom{n+k}{n} = \binom{n+k}{(n+k)-n}= \binom{n+k}{k},
+    \]
+    and now we're almost done, since we have
+    \[
+        \frac{1}{(1+x)^{k+1}} = \sum_{n=0}^\infty \binom{n+k}{k}(-1)^n x^n.
+    \]
+    To cancel out the $(-1)^n$, we introduce another $(-1)^n$ by substituting $-x$ for $x$, so 
+    \begin{align*}
+        \frac{1}{(1-x)^{k+1}} &= \sum_{n=0}^\infty \binom{n+k}{k}(-1)^n (-x)^n \\
+                              &= \sum_{n=0}^\infty \binom{n+k}{k}(-1)^n(-1)^n x^n \\
+                              &= \sum_{n=0}^\infty \binom{n+k}{k}(-1)^{2n} x^n \\
+                              &= \sum_{n=0}^\infty \binom{n+k}{k}x^n.
+    \end{align*}
+    And finally, we shift by a $x^k$ term, so that we can do a re-indexing of the sum,
+    \begin{align*}
+        \frac{x^k}{(1+x)^{k+1}} &= x^k\sum_{n=0}^\infty \binom{n+k}{k} x^n \\
+                                &= \sum_{n=0}^\infty \binom{n+k}{k} x^{n+k} \\
+                                &= \sum_{n=k}^\infty \binom{n}{k} x^{n}.
+    \end{align*}
+\end{proof}
+
+Now we basically have the \textit{other} piece we need to prove our identity.
+
+\begin{corollary}\label{cor:binomseries}
+    Fix $k$.
+    We have that
+    \[
+        \sum_{n=0}^\infty \binom{n}{k} \frac{1}{a^n} = \frac{a}{(a-1)^{k+1}}.
+    \]
+\end{corollary}
+
+\begin{proof}
+    Left to the reader.
+\end{proof}
+
+\section{Proof of the identity}
+
+Now we have all the tools to prove this!
+
+\begin{proof}[Proof of Theorem \ref{thm:thethm}]
+    By Theorem \ref{thm:discretetaylor}, we have that
+    \[
+        p(n) = \sum_{k=0}^{\degree p}\binom{n}{k}(\Delta^k p)(0)
+    \]
+    Next, we grind it out a little.
+
+    \begin{align*}
+        \sum_{n=0}^\infty \frac{p(n)}{a^n} &= \sum_{n=0}^\infty \frac{\sum_{k=0}^{\degree p}\binom{n}{k}(\Delta^k p)(0)}{a^n}  & \text{By Corollary \ref{cor:polysumfinitediffs}} \\
+                                           &= \sum_{n=0}^\infty \sum_{k=0}^{\degree p} \frac{\binom{n}{k}(\Delta^k p)(0)}{a^n} & \text{Push the }a^{-n}\text{ inside the sum} \\
+                                           &= \sum_{k=0}^{\degree p} \sum_{n=0}^\infty \frac{\binom{n}{k}(\Delta^k p)(0)}{a^n} & \text{Interchange sums} \\
+                                           &= \sum_{k=0}^{\degree p} (\Delta^k p)(0) \sum_{n=0}^\infty \frac{\binom{n}{k}}{a^n} & \substack{\text{Pull out }(\Delta^k)p(0)\text{ from}\\ \text{sum running over }n}\\
+                                           &= \sum_{k=0}^{\degree p} (\Delta^k p)(0) \frac{a}{(a-1)^{k+1}} & \text{By Corollary \ref{cor:binomseries}} \\
+                                           &= \sum_{k=0}^{\degree p} \frac{a}{(a-1)^{k+1}} (\Delta^k p)(0).
+    \end{align*}
+\end{proof}
+
+
+
+\begin{thebibliography}{999999}
+    \footnotesize\raggedright
+
+    \bibitem[GrinbergAC]{GrinbergAC}
+    Darij Grinberg, \textit{An Introduction to Algebraic Combinatorics}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
+
+\end{thebibliography}
+\end{document}
