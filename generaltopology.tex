@@ -1,0 +1,1536 @@
+\documentclass{article}
+
+\usepackage[garamond,nosubsections]{jaspercommon}
+\usepackage{centernot}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\closure}{cl}
+
+\title{Topology}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+
+Here lies an attempt to learn topology from Munkres.
+I'm trying to do all exercises and prove all the theorems myself.
+I'm also changing notations / conventions to what I like.
+
+\tableofcontents
+
+\setcounter{section}{11}
+\section{Topological spaces}
+
+\begin{definition}[Topological spaces]
+    A \textit{topology} on a set $X$ is a collection $\scrT$ of subsets of $X$ such that
+    \begin{enumerate}[label=(T\arabic*)]
+        \item $\varnothing, X \in \scrT$. 
+            \label{item:topbtmelems}
+        \item $\scrT$ is closed under taking arbitrary unions.
+            \label{item:arbunion}
+        \item $\scrT$ is closed under taking \textit{finite} intersections.
+            \label{item:finintersect}
+    \end{enumerate}
+    The elements of $\scrT$ are called the \textit{open sets of $X$}.
+\end{definition}
+
+\begin{example}[Some finite topologies]
+    Consider the three-element set $X=\{a,b,c\}$.
+    We will write a subset compactly with a string, so we write $ab$ for $\{a,b\}$.
+    The following collections are topologies on $X$:
+    \begin{enumerate}[label=(\alph*)]
+        \item $\{\varnothing,abc\}$
+        \item $\{\varnothing,a,ab,abc\}$
+        \item $\{\varnothing,b,ab,bc,abc\}$
+        \item $\{\varnothing,b,abc\}$
+        \item $\{\varnothing,a,bc,abc\}$
+        \item $\{\varnothing,b,c,ab,bc,abc\}$
+        \item $\{\varnothing,ab,abc\}$
+        \item $\{\varnothing,a,b,ab,abc\}$
+        \item $\{\varnothing,a,b,c,ab,bc,ac,abc\}$
+    \end{enumerate}
+\end{example}
+
+\begin{example}[Discrete and indiscrete topology]
+    Let $X$ be a set.
+    Then $\mathscr{P}(X)$ is a topology on $X$, called the \textit{discrete topology}.
+
+    The set $\{X, \varnothing\}$ is also a topology on $X$, called the \textit{indiscrete topology}.
+\end{example}
+
+\begin{example}[Cofinite topology]
+    Let $X$ be a set.
+    Let $\scrT_f$ be the collection of all subsets $U$ of $X$ such that $X \setminus U$ is either finite or $X$ itself.
+    Then $\scrT_f$ is called the \textit{cofinite topology} on $X$.
+\end{example}
+
+\begin{proof}[Proof (the cofinite topology is a topology)]
+    $X \setminus X$ is finite, namely $\varnothing$, and $X \setminus \varnothing$ is $X$, so we have that $X, \varnothing \in \scrT_f$.
+    Then $\scrT_f$ satisfies condition \ref{item:topbtmelems}.
+
+    Let $\{U_\alpha\}$ be a subcollection of $\scrT_f$.
+    It's a set theoretic identity that
+    \[
+        X \setminus \bigcup_\alpha U_\alpha = \bigcap_\alpha (X \setminus U_\alpha).
+    \]
+    Then it's clear that the complement of $\bigcup_\alpha U_\alpha$ is either finite (some $X \setminus U_\alpha$ is finite) or equal to $X$ (none of the $X \setminus U_\alpha$ are finite--- they all equal $X$).
+    So, $\scrT_f$ satisfies condition \ref{item:arbunion}.
+
+
+    Let $U_\alpha$ and $U_\beta$ be two arbitrary elements of $\scrT_f$.
+    The relevant computation here is 
+    \[
+        X \setminus (U_\alpha \cap U_\beta) =  (X \setminus U_\alpha) \cap (X \setminus U_\beta).
+    \]
+    And the same casework applies: if both $X \setminus U_\alpha$ and $X \setminus U_\beta$ are $X$, then the left hand side is $X$. 
+    If either of them are finite, then the left hand side is finite.
+    Then, $\scrT_f$ satisfies condition \ref{item:finintersect}.
+\end{proof}
+
+\begin{convention}
+    That a set is \textit{countable} means that it's either finite or countably infinite.
+\end{convention}
+
+\begin{example}[Cocountable topology]\label{ex:cocountabletop}
+    Let $X$ be a set.
+    Let $\scrT_c$ be the collection of all subsets $U$ of $X$ such that $X \setminus U$ is either \textit{countable} or $X$ itself.
+    Then $\scrT_c$ is called the \textit{cocountable topology} on $X$.
+\end{example}
+
+\begin{proof}[Proof (the cocountable topology is a topology)] \
+    This is proven the same way, using the same computations.
+
+    The ``juice'' for both proofs is that the subset relationship respects the total order defined by cardinality, so a subset of a countable (resp. finite) set can never be more than countable (resp. finite).
+    Combine this with the fact that the intersection of a collection of sets is always a subset of any of the individual sets in the collection.
+\end{proof}
+
+\begin{definition}[Finer and coarser topologies]
+    Let $\scrT$ and $\scrT'$ be two topologies on a set $X$.
+    We say that $\scrT$ is \textit{coarser} then $\scrT'$ when $\scrT \subset \scrT'$.
+    $\scrT$ is \textit{finer} than $\scrT'$ when $\scrT \supset \scrT'$.
+    We say that two topologies $\scrT$ and $\scrT'$ are \textit{comparable} whenever one is finer or coarser than the other.
+\end{definition}
+
+\begin{example}
+    For all sets $X$, the discrete topology on $X$ is finer than the indiscrete topology on $X$.
+    Conversely, the indiscrete topology is always coarser than the discrete topology.
+
+    In fact, the discrete topology on $X$ is finer than \textit{any} other topology on $X$, and the indiscrete topology is coarser than \textit{any other} topology on $X$.
+    In this sense, the former is also defined as the \textit{finest} topology on $X$, and the latter the coarsest.
+\end{example}
+
+\begin{example}
+    The cocountable topology is finer than the cofinite topology.
+\end{example}
+
+\section{Basis for a topology}
+
+\begin{definition}[Basis for a topology]
+    Let $X$ be a set.
+A \textit{basis for a topology} on $X$ is a collection $\scrB$ such that
+    \begin{enumerate}[label=(B\arabic*)]
+        \item For all $x \in X$, there exists $B \in \scrB$ such that $x \in B$. 
+            \label{basis:cover}
+        \item If $x \in B_1 \cap B_2$ for some $B_1, B_2 \in \scrB$, then there exists $B_3 \in \scrB$ such that $x \in B_3$ and $B_3 \subset B_1 \cap B_2$. 
+            \label{basis:intersect}
+    \end{enumerate}
+    We refer to the sets $B \in \scrB$ as \textit{basis elements}.
+
+    The \textit{topology $\scrT$ generated by $\scrB$} is defined by letting the open sets $U$ be the sets such that, for all $x \in U$, there exists a basis element $B \in \scrB$ such that $x \in B$ and $B \subset U$.
+\end{definition}
+
+\begin{proof}[Proof (the topology generated by a basis is a topology)]
+    Let $\scrT$ be the topology generated by $\scrB$, as in the above definition.
+
+    $X \in \scrT$, almost directly from \ref{basis:cover}, since we note that $B \subseteq X$ for all $B \in \scrB$.
+    Vacuously, $\varnothing \in \scrT$.
+    Then we've shown that $\scrT$ satisfies \ref{item:topbtmelems}.
+
+    Let $\{U_\alpha\}$ be some subcollection of $\scrT$.
+    If $x \in \bigcup_\alpha U_\alpha$, then it is in $U_\alpha$ for some $\alpha$.
+    Then there exists some $B \in \scrB$ such that $x \in B$ and $B \subseteq U_\alpha$.
+    Noting that $U_\alpha \subseteq \bigcup_\alpha U_\alpha$ tells us that $B \subseteq \bigcup_\alpha U_\alpha$.
+    Since we picked an arbitrary $x$ from $\bigcup_\alpha U_\alpha$, we've shown that $\bigcup_\alpha U_\alpha \in \scrT$.
+    Then $\scrT$ satisfies \ref{item:arbunion}.
+
+    Finally, let $U_1, U_2 \in \scrT$.
+    Pick some $x \in U_1 \cap U_2$.
+    Then we can take basis elements $B_1$ and $B_2$ such that $x \in B_1$, $x \in B_2$, $B_1 \subseteq U_1$, $B_2 \subseteq B_2$.
+    Use \ref{basis:intersect} now to produce a $B_3$.
+    We will have that $x \in B_3$, and that $B_3 \subseteq B_1 \cap B_2$.
+    Since $B_1 \cap B_2 \subseteq U_1 \cap U_2$, we have that $B_3 \subseteq U_1 \cap U_2$.
+    This shows \ref{item:finintersect}.
+\end{proof}
+
+\begin{example}\label{ex:openballsopenrectsbasis}
+    Consider the plane, $\RR^2$.
+    The set of all open balls 
+    \[
+        \{(x,y): (x-c)^2 + (y-c)^2 < r^2\}
+    \]
+    form a basis.
+
+    Similarly, the set of all open rectangles
+    \[
+        \{(x,y): x_0 < x < x_1, y_0 < y < y_1\}
+    \]
+    form a basis.
+\end{example}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \fill (-0.2,0.2) circle (1pt) node[right] {$x$};
+        \draw[dashed] (0,0) circle (0.5cm) node[below] {$B_3$};
+        \draw[dashed] (-0.5,-1) circle (1.7cm) node[below left] {$B_1$};
+        \draw[dashed] (1,0) circle (1.6cm) node[above right] {$B_2$};
+    \end{tikzpicture}
+    \caption{Pictorial explanation of why open balls satisfy \ref{basis:intersect}.}
+    \label{fig:openballb2}
+\end{figure}
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \fill (0,0) circle (1pt) node[right] {$x$};
+        \draw[dashed] (-0.5,-0.5) rectangle ++(1,1)
+            node[right] {$B_3$};
+        \draw[dashed] (-1,-1) rectangle ++(4,3.5)
+            node[right] {$B_1$};
+        \draw[dashed] (-3,-1.5) rectangle ++(5,3)
+            node[right] {$B_2$};
+    \end{tikzpicture}
+    \caption{Pictorial explanation of why open rectangles satisfy \ref{basis:intersect}.}
+\end{figure}
+
+\begin{proof}
+    Fix some $\varepsilon > 0$.
+    Every point $x$ on the plane belongs to some open ball of radius $\varepsilon$ centered at $x$.
+    Hence open balls satisfy \ref{basis:cover}.
+    For \ref{basis:intersect}, consider Figure \ref{fig:openballb2}.
+
+\end{proof}
+
+\begin{example}
+    The set of all one-element subsets of a set $X$ is a basis for the discrete topology on $X$.
+\end{example}
+
+
+\begin{lemma}
+    The topology generated by a basis is the same as the collection of all possible unions of basis elements.
+\end{lemma}
+
+\begin{proof}
+    Fix $\scrB$ to be a basis for a topology $\scrT$.
+
+    If $U \in \scrT$, we can assign to each $x \in U$ a basis element $B_x \in \scrB$. Evidently,
+    \[
+        \bigcup_{x \in U} B_x = U.
+    \]
+    So every open set in $\scrT$ is some union of basis elements.
+
+    Conversely, let $U$ be some union of basis elements $U_\alpha B_\alpha$.
+    This is obviously an open set, since $x \in U$ if and only if $x$ came from some $B_\alpha$, and every such $B_\alpha$ will be a subset of $U$.
+\end{proof}
+
+\begin{lemma}\label{lem:basisfromsubcollection}
+    Let $X$ be a topological space.
+    Suppose $\scrC$ is a collection of open sets in $X$ such that for all open sets $U$, there exists a $C \in \scrC$ for each $x \in U$ such that $x \in C$ and $C \subseteq U$.
+    Then $\scrC$ is a basis for the topology on $X$.
+\end{lemma}
+
+\begin{proof}
+    $\scrC$ automatically satisfies \ref{basis:cover} when we take $U$ in the definition above to be $X$ (recall \ref{item:topbtmelems}).
+
+    For \ref{basis:intersect}, we use the fact that $\scrC$ is already made up of open sets.
+    Let $C_1, C_2 \in \scrC$, and let $x \in C_1 \cap C_2$.
+    We have that $C_1 \cap C_2$ is an open set (recall \ref{item:finintersect}), hence we can reuse the above definition to produce $C_3 \in \scrC$, which will satisfy \ref{basis:intersect}.
+\end{proof}
+
+\begin{lemma}\label{lem:finerbasis}
+    Let $\scrT$ and $\scrT'$ be topologies on $X$, generated respectively by $\scrB$ and $\scrB'$.
+    Then the following are equivalent:
+    \begin{enumerate}[label=(\arabic*)]
+        \item $\scrT'$ is finer than $\scrT$. \label{basisfiner1}
+        \item For each $x \in X$ and each basis element $B \in \scrB$, there exists $B' \in \scrB'$ such that $x \in B'$ and $B' \subseteq B$. \label{basisfiner2}
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    Suppose \ref{basisfiner2}.
+    It suffices to prove that every open set of $\scrT$ is also an open set of $\scrT'$.
+    This much is clear, because if $U = \bigcup_\alpha B_\alpha$, where all $B_\alpha \in \scrB$, then every $x \in U$ belongs to some $B_\alpha$, and therefore to some $B'_x \in \scrB'$ as well, where $B'_x \subset B_\alpha$.
+    Then
+    \[
+        U = \bigcup_{x \in U} B'_x.
+    \]
+    This proves that \ref{basisfiner2} implies \ref{basisfiner1}.
+
+    For the other direction, choose some pair $x$ and $B \in \scrB$ such that $x \in \scrB$.
+    $B$ is already open in $\scrT$, and therefore it's also open in $\scrT'$, since $\scrT'$ is finer than $\scrT$.
+    Then, there must exist some $B' \in \scrB$ such that $x \in B'$ and $B' \subseteq B$.
+    This proves that \ref{basisfiner1} implies \ref{basisfiner2}.
+\end{proof}
+
+\begin{example}
+    The bases in Example \ref{ex:openballsopenrectsbasis}, that of open balls and open rectangles in the plane, generate the same topology.
+\end{example}
+
+\begin{proof}
+    For any open ball and a point inside it, we can fit an open rectangle containing the point.
+
+    Likewise, for any open rectangle and a point inside it, we can fit an open ball containing the point.
+
+    Then the topologies generated by both are finer than each other.
+    By antisymmetry, they must be the same topology.
+\end{proof}
+
+\begin{definition}
+    Consider the real line $\RR$.
+    The \textit{standard topology} on the real line is the topology generated by the basis of open intervals; sets of the form
+    \[
+        (a,b) \coloneq \{x: a < x < b\}.
+    \]
+    The \textit{lower limit topology} on the real line is the topology generated by the basis of sets of the form
+    \[
+        [a,b) \coloneq \{x: a \leq x < b\}.
+    \]
+    Let \textit{$K$-topology} on the real line is the topology generated by the basis of open intervals, along with the sets 
+    \[
+        (a,b) \setminus \left\{1, \frac{1}{2}, \frac{1}{3}, \ldots\right\}
+    \]
+    for all open intervals $(a,b)$.
+
+    We will refer to $\RR$ equipped with the standard, lower limit, and the $K$ topologies by $\RR$, $\RR_\ell$, and $\RR_K$ respectively.
+\end{definition}
+
+\begin{lemma}
+    $\RR_\ell$ and $\RR_K$ are strictly finer than the standard topology, but are incomparable.
+\end{lemma}
+
+\begin{proof}
+    That $\RR_K$ is finer than the standard topology is obvious.
+    That it is strictly finer follows from the fact that we cannot produce the set $E = (-1,1) \setminus \{1, 1/2, 1/3, \ldots\}$ with a union of open intervals.
+
+    We would have an open interval $(a,b) \subseteq E$ containing $0$, but that's impossible, since we would be able to produce $n$ such that $0 < 1/n < b$,\footnote{this follows from the archimedean property of the reals} so that $1/n \in (a,b)$, hence $1/n \in E$.
+
+    But $1/n \in K$, which is a contradiction to the fact that $E$ contains no points of $K$.
+
+    $\RR_\ell$ is finer than the standard topology, since
+\end{proof}
+
+\begin{definition}[Subbasis for a topology]
+    A \textit{subbasis} for a topology on $X$ is a collection $\scrS$ of subsets of $X$ whose only constraint is that they must cover $X$.
+
+    The \textit{topology generated by the subbasis} $\scrS$ is defined to be the collection of all possible unions of all possible finite intersections of elements of $\scrS$.
+\end{definition}
+
+\begin{proof}[Proof (the topology generated by a subbasis is a topology)]
+    Let $\widetilde{\scrS}$ be the collection of all possible finite intersections of elements of $S$.
+    We will show that $\widetilde{\scrS}$ is a basis, which will prove that the topology generated by $\scrS$ is a topology.
+
+    \ref{basis:cover} is automatically satisfied, since $\scrS$ covers $X$, and the individual elements of $\scrS$ are in $\widetilde{\scrS}$.
+
+    \ref{basis:intersect} is also easily satisfied, since for any two $S_1, S_2 \in \widetilde{\scrS}$, $S_1 \cap S_2 \in \widetilde{\scrS}$ as well, since a finite intersection of finite intersections remains finite.
+\end{proof}
+
+\section*{Exercises}
+
+\begin{exercise}
+    Let $X$ be a topological space; let $A$ be a subset of $X$.
+    Suppose that for each $x \in A$ there is an open set $U$ containing $x$ such that $U \subset A$.
+    Show that $A$ is open in $X$.
+\end{exercise}
+
+Assign each $x \in A$ an open set $U_x$ such that $U_x \subset A$.
+Then 
+\[
+    \bigcup_{t\in A} U_t \subset A.
+\]
+Since $x \in U_x \subset \bigcup_{t \in A} U_t \subset A$ for \textit{all} $x \in A$, we also have that
+\[
+    A \subset \bigcup_{t \in A} U_t.
+\]
+Then $A$ is a union of open sets in $X$, namely all the $U_x$.
+
+\begin{exercise}
+    Consider the nine topologies on the set $X = \{a,b,c\}$ indicated in Example 1 of §12.
+    Compare them; that is, for each pair of topologies, determine whether they are comparable, and if so, which is the finer.
+\end{exercise}
+
+The Hasse diagram of the nine topologies, ordered by containment.
+
+\begin{center}
+    \begin{tikzpicture}[scale=1.3]
+    \node (abcabbcacabc) at (-1,4) {$\{abc,ab,bc,ac,a,b,c,\varnothing\}$};
+    \node (abcabab) at (1,3) {$\{abc, ab, a,b,\varnothing\}$};
+    \node (abcabbcb) at (-3,2) {$\{abc, ab, bc, b,\varnothing\}$};
+    \node (abcabbcbc) at (-3,3) {$\{abc, ab, bc, b,c,\varnothing\}$};
+    \node (abcabc) at (-1,2) {$\{abc, ab, c,\varnothing\}$};
+    \node (abcaba) at (1,2) {$\{abc, ab, a,\varnothing\}$};
+    \node (abcab) at (-1,1) {$\{abc, ab,\varnothing\}$};
+    \node (abcb) at (-3,1) {$\{abc, b,\varnothing\}$};
+    \node (abc) at (-1,0) {$\{abc,\varnothing\}$};
+    \draw (abc) -- (abcab);
+    \draw (abc) -- (abcb);
+    \draw (abcab) -- (abcaba);
+    \draw (abcab) -- (abcabbcb);
+    \draw (abcb) -- (abcabbcb);
+    \draw (abcab) -- (abcabc);
+    \draw (abcaba) -- (abcabab);
+    \draw (abcabbcb) -- (abcabbcbc);
+    \draw (abcabbcbc) -- (abcabbcacabc);
+    \draw (abcabab) -- (abcabbcacabc);
+    \draw (abcabc) -- (abcabbcbc);
+    \end{tikzpicture}.
+\end{center}
+
+\begin{exercise}
+    Show that the collection $\scrT_c$ given in Example \ref{ex:cocountabletop} is a topology on the set $X$.
+    Is the collection
+    \[
+        \scrT_\infty = \{U : X \setminus U \text{ is infinite or empty or all of } X\}
+    \]
+    a topology on $X$?
+\end{exercise}
+
+I already proved $\scrT_c$ is a topology, and for reasons outlined the collection above is \textit{not} a topology.
+
+This is because the union and intersection of two infinite sets may be finite--- having the condition cover all smaller cardinalities is crucial.
+
+Consider $\scrT_\infty$ on $\NN = \{1,2,3,\ldots\}$.
+We have that $\{n\} \in \scrT_\infty$ for all $n$.
+However, the set $\{2,3,4,\ldots\}$, despite being the union $\bigcup_{n>1}\{n\}$, is evidently not in $\scrT_\infty$, since its complement in $\NN$ is $\{1\}$, a set that is neither infinite, empty, nor all of $\NN$.
+Similarly, $\{2,3,4,\ldots\}$ can be written as the intersection of the two sets $\{2,4,6,\ldots\}$ and $\{3,5,7,\ldots\}$, which are both in $\scrT_\infty$.
+
+\begin{exercise}\
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            If $\{\scrT_\alpha\}$ is a family of topologies on $X$, show that $\bigcap_\alpha \scrT_\alpha$ is a topology on $X$.
+            Is $\bigcup_\alpha \scrT_\alpha$ a topology on $X$?
+        \item
+            Let $\{\scrT_\alpha\}$ be a family of topologies on $X$.
+            Show that there is a unique smallest topology on $X$ containing all the collections $\scrT_\alpha$, and a unique largest topology contained in all $\scrT_\alpha$.
+        \item 
+            If $X = \{a,b,c\}$, let
+            \[
+                \scrT_1 = \{\varnothing, X, \{a\},\{a,b\}\} \qquad \text{and} \qquad \scrT_2 = \{\varnothing, X, \{a\}, \{b, c\}\}.
+            \]
+            Find the smallest topology containing $\scrT_1$ and $\scrT_2$, and the largest topology contained in $\scrT_1$ and $\scrT_2$.
+    \end{enumerate}
+\end{exercise}
+
+\begin{enumerate}[label=(\alph*)]
+    \item
+        Put $\scrT := \bigcap_\alpha \scrT_\alpha$.
+        $X, \varnothing \in \scrT_\alpha$ for all $\alpha$, hence they are in $\scrT$.
+
+        Similarly, for an arbitrary union of open sets $U_\mu$ in $\scrT$, we have that each $U_\mu$ is in each $\scrT_\alpha$, hence the union $\bigcup_\mu U_\mu$ is in $\scrT_\alpha$ for all $\alpha$.
+        Then $\bigcup_\mu U_\mu \in \scrT$.
+
+        Similar reasoning goes for finite intersections.
+
+        $\bigcup_\alpha \scrT_\alpha$ is \textit{not necessarily} a topology on $X$.
+
+        Consider $X = \{a,b,c\}$.
+        The collections $\scrT_1 = \{\varnothing,a,abc\}$ and $\scrT_2 = \{\varnothing,b,abc\}$ are topologies on $X$, however their union is not a topology, since it does not contain $a \cup b = ab$.
+
+        \item
+            The unique largest topology contained in all $T_\alpha$ is $\bigcap_\alpha \scrT_\alpha$.
+            It is evidently contained in all $\scrT_\alpha$, and we just proved that it's a topology.
+            Suppose we had another topology contained in all $T_\alpha$, then its open sets must be contained in all $\scrT_\alpha$, and so are also open sets of $\bigcap_\alpha \scrT_\alpha$, hence it is coarser than $\scrT_\alpha$.
+            This shows that $\bigcap_\alpha \scrT_\alpha$ is the largest such topology.
+
+            The unique smallest topology on $X$ containing all the $\scrT_\alpha$ is the topology generated by $\bigcup_\alpha \scrT_\alpha$ viewed as a subbasis.
+            Suppose another topology contains all the $\scrT_\alpha$, then it certainly contains all possible unions of finite intersections of elements of $\bigcup_\alpha \scrT_\alpha$, meaning that it is finer than our unique smallest topology.
+            This shows that it is in fact the smallest.
+        \item
+            In light of the answer above, we have that the smallest topology containing both $\scrT_1$ and $\scrT_2$ is
+            \[
+                \{\varnothing, a, b, ab, bc, abc\},
+            \]
+            and the unique largest topology contained in both $\scrT$ and $\scrT_2$ is
+            \[
+                \{\varnothing,a,abc\}.
+            \]
+\end{enumerate}
+
+\begin{exercise}
+    Show that if $\scrA$ is a basis for a topology on $X$, then the topology generated by $\scrA$ equals the intersection of all topologies on $X$ that contain $\scrA$.
+    Prove the same if $\scrA$ is a subbasis.
+\end{exercise}
+
+\begin{proof}
+    Let $\scrA$ be a basis for a topology on $X$.
+    Let $\scrT$ be the topology generated by $\scrA$.
+    Let $\{\scrT_\alpha\}$ be the collection of all topologies that contain $\scrA$.
+    The claim is that
+    \[
+        \scrT = \bigcap_\alpha \scrT_\alpha.
+    \]
+    Let $U \in \scrT$.
+    Then $U = \bigcup_\mu U_\mu$ where $U_\mu \in \scrA$ for all $\mu$.
+    But we have $U_\mu \in \scrT_\alpha$ for all $\alpha$ also, since all the $\scrT_\alpha$ contain $\scrA$.
+    Then $\bigcup_\mu U_\mu \in \scrT_\alpha$, and hence $U \in \scrT_\alpha$, for all $\scrT_\alpha$.
+    This shows that
+    \[
+        \scrT \subseteq \bigcap_\alpha \scrT_\alpha.
+    \]
+    Since $\scrT$ is a topology containing $\scrA$, $\scrT \in \{\scrT_\alpha\}$.
+    Then
+    \[
+        \bigcap_\alpha \scrT_\alpha \subseteq \scrT,
+    \]
+    which proves equality.
+
+    Now let $\scrS$ be a subbasis for a topology on $X$.
+    Let $\scrT$ be the topology generated by $\scrS$.
+    Let $\{\scrT_\alpha\}$ be the collection of all topologies that contain $\scrS$.
+    Let $U \in \scrT$.
+    Then $U$ is a union of finite intersections of sets in $\scrS$.
+    But since $\scrS \subset \scrT_\alpha$ for any $\alpha$, it must be that $U \in \scrT_\alpha$ for any $\alpha$ as well, since topologies are closed under unions of finite intersections.
+    Then
+    \[
+        \scrT \subseteq \bigcap_\alpha \scrT_\alpha
+    \]
+    again, which proves the statement.
+\end{proof}
+
+\begin{exercise}
+    Show that the topologies of $\RR_\ell$ and $\RR_K$ are not comparable.
+\end{exercise}
+
+You cannot produce the set $(-1, 1) \setminus K$ by unions of $[a,b)$, hence $\RR_K$ contains an open set not in $\RR_\ell$.
+
+Similarly, you cannot produce the set 
+\[
+    \left(-1, -\frac{1}{2}\right) 
+    \cup \left(-\frac{1}{2}, -\frac{1}{3}\right) 
+    \cup \left(-1, -\frac{1}{4}\right) 
+    \cup \cdots
+    \cup [0, 1)
+\]
+by unions of $(a,b) - K$, for the same reason that the standard topology doesn't contain the set $(-1,1) \setminus K$. Then, $\RR_\ell$ contains an open set not in $\RR_K$.
+
+\begin{exercise}
+    Consider the following topologies on $\RR$:
+    \begin{align*}
+        \scrT_1 &= \text{the standard topology}, \\
+        \scrT_2 &= \text{the topology of }\RR_K, \\
+        \scrT_3 &= \text{the finite complement topology}, \\
+        \scrT_4 &= \text{the upper limit topology, having all sets }(a,b]\text{ as basis}, \\
+        \scrT_5 &= \text{the topology having all sets }(-\infty,a)=\{x:x<a\}\text{ as basis}.
+    \end{align*}
+    Determine, for each of these topologies, which of the others it contains.
+\end{exercise}
+
+We have that $\scrT_5 \subset \scrT_1 = \scrT_3 \subset \scrT_2 \subset \scrT_4$, and  $\scrT_3 \subset \scrT_1$.
+
+\begin{itemize}
+    \item[$\scrT_5 \subset \scrT_1$]
+        Use Lemma \ref{lem:finerbasis}: for any $x \in (-\infty, a)$, we can find an open interval containing $x$ contained in $(-\infty, a)$, namely $(x-\delta, a)$ for some $\delta > 0$.
+
+        The converse relation does not hold, since you cannot produce the set $(0,1)$ by \textit{any} union of rays $(-\infty, a)$--- any such union is either yet another ray or the entirety of $\RR$.
+        This follows from the least upper bound property, since if the set of right endpoints have an upper bound $M$, then the union is $(-\infty, M)$, and if not, the union is $\RR$.
+    \item[$\scrT_1 \subset \scrT_2$] This was already proven.
+    \item[$\scrT_2 \subset \scrT_4$]
+        We know that we can write any open interval $(a,b)$ as a union of half-open intervals: 
+        \[
+            (a,b) = \bigcup_{k=0}\left(a,b-\frac{1}{k}\right].
+        \]
+        So, we can conservatively add all the open intervals to our basis without changing the generated topology.
+        Then, using Lemma \ref{lem:finerbasis} again, we show that we can write the set $(a,b) \setminus K$ as follows:
+        \[
+            (a,b) \setminus K = (a, 0] \cup \left(\bigcup_{n=1}^\infty \left(\frac{1}{n+1},\frac{1}{n}\right)\right) \cup \left(\frac{1}{n}, b\right).
+        \]
+        The converse relation does not hold, since you cannot express the set $(0,1]$ as a union of $(a,b) \setminus K$.
+    \item[$\scrT_3 \subset \scrT_1$]
+        Take some open set of $\scrT_3$, namely, $\RR \setminus E$ where $E$ is some finite subset of $\RR$.
+        If $E$ is empty, then $\RR \setminus K = \RR$ is already always open.
+        Suppose $E$ is nonempty, and put $E = \{x_0, x_1, \ldots, x_n\}$.
+        Then
+        \[
+            \RR \setminus E = (-\infty, x_0) \cup \bigcup_{k=0}^{n-1}(x_k, x_{k+1}) \cup (x_n, \infty).
+        \]
+        Then $\scrT_3 \subseteq \scrT_1$.
+        The converse does not hold, since you cannot write $(0, 1)$ as a union of cofinite subsets of the real line--- such a union will also again be cofinite, but $(0,1)$ is not.
+\end{itemize}
+
+\begin{exercise}\
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            Apply Lemma \ref{lem:basisfromsubcollection} to show that the countable collection
+            \[
+                \scrB = \{(a,b): a<b,a\text{ and }b\text{ rational}\}
+            \]
+            is a basis that generates the standard topology on $\RR$.
+        \item 
+            Show that the collection
+            \[
+                \scrC = \{[a,b): a<b,a\text{ and }b\text{ rational}\}
+            \]
+            is a basis that generates a topology different from the lower limit topology on $\RR$.
+    \end{enumerate}
+\end{exercise}
+
+Let $U$ be an open set in $\RR$.
+Let $x \in U$.
+Then $x$ is contained in some open interval $(a,b) \subseteq U$.
+
+Between every two real numbers there exists a rational number.
+Then, we may produce rational points $p,q$ such that $a<p<x<q<b$.
+Then $x \in (p,q) \subset (a,b) \subseteq U$.
+
+By Lemma \ref{lem:basisfromsubcollection}, this means that the set of all open intervals with rational endpoints forms a basis for the standard topology on $\RR$.
+
+For (b), consider the interval $[\sqrt{2}, 2)$.
+$\sqrt{2} \in [\sqrt{2},2)$, but we cannot produce $[a,b) \subseteq [\sqrt{2},2)$ with rational endpoints such that $\sqrt{2} \in [a,b)$, since necessarily $a > \sqrt{2}$ by $a$ being rational.
+
+Then the lower limit topology contains an set \textit{not} in the topology generated by the basis in the question.
+
+\section{The order topology}
+
+\begin{definition}
+    Let $X$ be a totally ordered set.
+    Suppose that $X$ has more than one element.
+    Let $\scrB$ be the collection of all sets of the following types
+    \begin{enumerate}[label=(\arabic*)]
+        \item All open intervals $(a,b)$ in $X$.
+        \item All intervals of the form $[a_0, b)$, where $a_0$ is the least element (if any) of $X$.
+        \item All intervals of the form $(a, b_0]$, where $b_0$ is the greatest element (if any) of $X$.
+    \end{enumerate}
+
+    Then $\scrB$ is a basis for what is called the \textit{order topology} on $x$.
+\end{definition}
+
+\begin{proof}[Proof (order topology is topology)]
+    Let $X$ be a totally ordered set with more than one element, and define $\scrB$ as above.
+
+    Let $x \in X$.
+    Suppose $x$ is a least element of $X$, then $x \in [x,b)$ for some $b \in X$, where $b \neq x$.
+    Similarly, if $x$ is a greatest element of $X$, then $x \in (a, x]$ for some $a \in X$, where $a \neq x$.
+    Now suppose $x$ is not a least or greatest element of $X$.
+    This implies that there are elements $u,v$ such that $u < x < v$, in which case $x \in (u,v)$.
+
+    This shows that $\scrB$ as defined satisfies \ref{basis:cover}.
+
+    Now let $B_1$ and $B_2$ be two basis elements.
+    Let $x \in B_1 \cap B_2$.
+
+    If $B_1 = (a,b)$ and $B_2 = (c,d)$, then it must be that $a<x<b$ and $c<x<d$.
+    Put $u = \max(a,c)$ and $v = \min(b,d)$.
+    Then $a,c \leq u < x < v \leq b,d$. 
+    From that we can read off that $x \in (u,v)$, $(u,v) \subseteq (a,c)$, and $(u,v) \subseteq (b,d)$.
+    So put $B_3 = (u,v)$.
+
+    There is extra casework in the case that $B_1$ or $B_2$ are of the form $[a, b)$ or $(a, b]$.
+
+\end{proof}
+
+\begin{example}
+    The standard topology on $\RR$ is the order topology on $(\RR, \geq)$.
+\end{example}
+
+\begin{example}
+    Take $\RR \times \RR$ with dictionary order.
+    The order topology on $\RR \times \RR$ is the topology generated by the basis sets of the form 
+    \[
+        \Big((a,b), (c,d)\Big)
+    \]
+    where $(a,b) < (c,d)$ in dictionary order, which means that either $a<c$, or $a=c$ and $b<d$.
+
+    The type of basis set which contain greatest and least elements are not a consideration here, since $\RR \times \RR$ with dictionary order has no greatest nor least element.
+\end{example}
+
+\begin{example}
+    The order topology on the positive integers $\ZZ_+$ is the discrete topology, since we have as basis sets all singletons $\{n\}$---
+    for $n > 1$, we take $(n-1,n+1)$, and for $n=1$, we take $[1,2)$.
+\end{example}
+
+\begin{example}
+    The set $\{1,2\} \times \ZZ$ with the dictionary order has a least element--- $\{1,1\}$.
+    Denote the elements of the form $\{1, a\}$ simply by $a$, and elements of the form $\{2, a\}$ by $a^\ast$.
+
+    Then $1 < 2 < 3 < \cdots < 1^\ast < 2^\ast < 3^\ast < \cdots$.
+
+    The order topology on this set is \textit{not} the discrete topology, since it does not contain the singleton $\{1^\ast\}$--- for all $x < 1^\ast$, there always exists $y$ such that $x < y < 1^\ast$ (consider $x+1$).
+
+    Hence, any open interval $(a, b^\ast)$ that contains $1^\ast$ must necessarily contain an element $x$ such that $a < x < 1^\ast$.
+\end{example}
+
+\begin{definition}
+    Let $X$ be a totally ordered set.
+    The \textit{open rays} are all sets of the form
+    \begin{align*}
+        (a, +\infty) &\coloneq \{x: x > a\}, \\
+        (-\infty, a) &\coloneq \{x: x < a\}.
+    \end{align*}
+
+    These sets form a \textit{subbasis} for the order topology on $X$.
+\end{definition}
+
+\begin{proof}
+    \begin{enumerate}[label=(\arabic*)]
+        \item $(a,b) = (a, +\infty) \cap (-\infty, b)$
+        \item $[a_0, b) = (-\infty, b)$
+        \item $(a, b_0] = (a, +\infty)$
+    \end{enumerate}
+\end{proof}
+
+\section{The ``product'' topology}
+
+\begin{convention}
+    For two collections $\scrA$ and $\scrB$, we define
+    \[
+        \scrA \otimes \scrB \coloneq \{A \times B: A \in \scrA, B \in \scrB\}.
+    \]
+\end{convention}
+
+\begin{definition}\label{def:producttopology}
+    Let $(X, \scrT_X)$ and $(Y, \scrT_Y)$ be topological spaces.
+    The \textit{product topology} is defined to be topology generated by the basis $\scrT_X \otimes \scrT_Y$, that is, all sets $U \times V$, where $U \in \scrT_X$ and $V \in \scrT_Y$.
+\end{definition}
+
+\begin{proof}[Proof (box topology is topology)]
+    Take some point $(x,y) \in X \times Y$, then \ref{basis:cover} is automatically satisfied, since $X \times Y \in \scrT_X \otimes \scrT_Y$.
+    
+    For \ref{basis:intersect}, take $U_1 \times V_1 \in \scrT_X \otimes \scrT_Y$ and $U_2 \times V_2 \in \scrT_X \otimes \scrT_Y$, and let $x \in (U_1 \times V_1) \cap (U_2 \times V_2)$.
+    Since $U_1, U_2 \in \scrT_X$, $U_1 \cap U_2 \in \scrT_X$, and similarly $V_1 \cap V_2 \in \scrT_Y$.
+    Then $(U_1 \cap U_2) \times (V_1 \cap V_2) \in \scrT_X \otimes \scrT_Y$.
+    It's an easy set-theoretic fact that
+    \[
+        (U_1 \times V_1) \cap (U_2 \times V_2) = (U_1 \cap U_2) \times (V_1 \cap V_2).
+    \]
+    From which \ref{basis:intersect} easily follows--- $x$ is a member of the LHS, so it is therefore a member of the RHS.
+    Moreover, the RHS is a subset of the LHS.
+
+    To prove the identity, the LHS consists of all elements of the form $(u,v)$ where $(u \in U_1 \wedge v \in V_1) \wedge (u \in U_2 \wedge v \in V_2)$, and the RHS consists of all elements of the form $(u,v)$ where $(u \in U_1 \wedge u \in U_2) \wedge (v \in V_1 \wedge v \in V_2)$.
+    Then the identity follows from properties of $\wedge$.
+\end{proof}
+
+\begin{theorem}\label{thm:basisforproduct}
+    Let $(X, \scrT_X)$ and $(Y, \scrT_Y)$ be topological spaces, and let $(X \times Y, \scrT_{X \times Y})$ be their topological product.
+    Let $\scrB_X$ and $\scrB_Y$ be bases for $\scrT_X$ and $\scrT_Y$ respectively.
+    Then, $\scrB_X \otimes \scrB_Y$ is a basis for $(X \times Y, \scrT_{X \times Y})$.
+\end{theorem}
+
+\begin{proof}
+    Each member of $\scrB_X \times \scrB_Y$ is open, since if $B_X \in \scrB_X$ and $B_Y \in \scrB_Y$, we have that $B_X \in \scrT_X$ and $B_Y \in \scrT_Y$, and so $B_X \times B_Y \in \scrT_X \otimes \scrT_Y$, which is by definition the basis for $\scrT_{X \times Y}$. 
+    Then we can use Lemma \ref{lem:basisfromsubcollection}.
+
+    Let $U \in \scrT_{X \times Y}$.
+    Let $(x,y) \in U$.
+    Then $(x,y) \in U_X \times U_Y$ for some $U_X \times U_Y \in \scrT_X \otimes \scrT_Y$. Since $\scrB_X$ and $\scrB_Y$ are bases for $\scrT_X$ and $\scrT_Y$, we now produce sets $B_X$ and $B_Y$ such that $x \in B_X$, $y \in B_Y$, and $B_X \subseteq U_X$, $B_Y \subseteq U_Y$.
+
+    Then
+    \[
+        (x,y) \in B_X \times B_Y \subseteq U_X \times U_Y \subseteq U.
+    \]
+    Since the conditions of Lemma \ref{lem:basisfromsubcollection} hold, we have shown that $\scrB_X \otimes \scrB_Y$ is a basis for $\scrT_{X \times Y}$.
+\end{proof}
+
+\begin{example}
+    The standard topology on $\RR^2 \coloneq \RR \times \RR$ is the product of the standard topologies.
+
+    By the previous theorem, this means that we have as a basis for this topology all sets of the form $(a,b) \times (c,d)$.
+
+    Namely, this topology is the topology generated by all open rectangles in the plane, which was considered earlier in Example \ref{ex:openballsopenrectsbasis}.
+\end{example}
+
+The product topology can also be defined in terms of a particular subbasis.
+
+\begin{definition}
+    Let $(X, \scrT_X)$, $(Y, \scrT_Y)$ be topological spaces.
+    We define the \textit{projections} $\pi_1$ and $\pi_2$ to be the functions
+    \begin{align*}
+        \pi_1: X \times Y &\to X \\
+        (x,y) &\mapsto x
+    \end{align*}
+and
+    \begin{align*}
+        \pi_2: X \times Y &\to Y \\
+        (x,y) &\mapsto y
+    \end{align*}
+respectively.
+\end{definition}
+
+\begin{remark}
+    For any set $U_X \in X$,
+    \[
+        \pi_1^{-1}(U_X) = U_X \times Y.
+    \]
+    Similarly, for any set $U_Y \in Y$,
+    \[
+        \pi_2^{-1}(U_Y) = X \times U_Y.
+    \]
+\end{remark}
+
+\begin{convention}
+    Given a function $f: X \to Y$, and a collection $\scrA$ of subsets of $Y$, we define $f^{-1}(\scrA)$ to be
+    \[
+        f^{-1}(\scrA) \coloneq \{f^{-1}(A): A \in \scrA\}.
+    \]
+\end{convention}
+
+\begin{theorem}
+    Let $(X, \scrT_X)$, $(Y, \scrT_Y)$ be two topological spaces, and let $(X \times Y, \scrT_{X \times Y})$ be their topological product.
+    The collection
+    \[
+        \pi_1^{-1}(\scrT_X)
+        \cup
+        \pi_2^{-1}(\scrT_Y)
+    \]
+    is a subbasis for $\scrT_{X \times Y}$.
+\end{theorem}
+
+\begin{proof}
+    Take two sets in $\pi_1^{-1}(\scrT_X) \cup \pi_2^{-1}(\scrT_Y)$, one from $\pi_1^{-1}(\scrT_X)$, and the other from $\pi_2^{-1}(\scrT_X)$.
+    Then we may write the former set as $U_X \times Y$ and the latter as $X \times U_Y$.
+    Their intersection yields
+    \[
+        (U_X \times Y) \cap (X \times U_Y) = (U_X \cap X) \times (U_Y \cap Y) = U_X \times U_Y.
+    \]
+    hence, the topology generated by the subbasis $\pi_1^{-1}(\scrT_X) \cup \pi_1^{-1}(\scrT_Y)$ contains the topology generated by the basis $\scrT_X \otimes \scrT_Y$.
+
+    Now take some set in $\scrT_X \otimes \scrT_Y$.
+    This set can be written as $U_X \times U_Y$.
+    Running the same equality backwards shows that it is obtained by intersecting two sets in $\pi_1^{-1}(\scrT_X) \cup \pi_2^{-1}(\scrT_Y)$, hence we've obtained the opposite inclusion.
+\end{proof}
+
+\section{The subspace topology}
+
+\begin{definition}
+    Let $(X, \scrT)$ be a topological space.
+    Let $Y \subseteq X$.
+    The collection
+    \[
+        \scrT_Y = \{Y \cap U : U \in \scrT\}
+    \]
+    is called the \textit{subspace topology}, and $Y$ equipped with $\scrT_Y$ is called a \textit{subspace} of $X$.
+\end{definition}
+
+\begin{proof}[Proof (subspace topology is topology)]
+    Let $(X, \scrT)$ and $\scrT_Y$ be defined as above.
+    We note that $X, \varnothing \in \scrT$ by definition, so
+    $Y \cap X \in \scrT_Y$, and $Y \cap \varnothing \in \scrT_Y$.
+    The former is $Y$ and the latter is $\varnothing$, so this shows \ref{item:topbtmelems}.
+    Intersections distribute over unions \textit{in full generality}, so we have that
+    \[
+        \bigcup_\alpha Y \cap U_\alpha = Y \cap \left(\bigcup_\alpha U_\alpha\right),
+    \]
+    which shows \ref{item:arbunion}.
+    Similarly, intersections distribute over intersections, so
+    \[
+        \bigcap_{k=1}^n Y \cap U_k = Y \cap \left(\bigcap_{k=1}^n \cap U_k \right),
+    \]
+    which shows \ref{item:finintersect}.
+\end{proof}
+
+\begin{lemma}
+    Let $\scrB$ be a basis for a topological space $(X, \scrT)$.
+    Then
+    \[
+        \scrB_Y \coloneq \{B \cap Y : B \in \scrB\}
+    \]
+    is a basis for the subspace topology on $X$.
+\end{lemma}
+
+\begin{proof}
+    Take an open set in the subspace $Y$--- this is $Y \cap U$ for some $U \in \scrT$.
+    Then if we pick $y \in Y \cap U$, we know that $y \in U$, and so there must exist $B \in \scrB$ such that $y \in B \subseteq U$.
+    Then $y \in Y \cap B \subseteq Y \cap U$.
+    By \ref{lem:basisfromsubcollection}, $\scrB_Y$ is a basis for the subspace topology on $Y$.
+\end{proof}
+
+\begin{convention}
+    If $(X, \scrT_X)$ is a topological space, we denote the subspace topology on a subset $Y \subseteq X$ by $\scrT_{Y \subseteq X}$.
+\end{convention}
+
+\begin{lemma}
+    Let $(Y, \scrT_{Y \subseteq X})$ be a subspace of $(X, \scrT_X)$.
+    Then if $U$ is open in $\scrT_{Y \subseteq X}$, and $Y$ itself is open in $X$, then $U$ is open in $X$.
+\end{lemma}
+
+\begin{proof}
+    $U = Y \cap U_X$ for some open set $U_X \in \scrT_X$.
+    Since $Y$ is open, we may use \ref{item:finintersect} to know that $Y \cap U_X \in \scrT_X$.
+\end{proof}
+
+\begin{theorem}[Products of subspaces are subspaces of products]
+    Take the product $X \times Y$ of two topological spaces $X$, $Y$.
+    Let $A \subseteq X$ and $B \subseteq Y$, and induce the subspace topologies on them.
+    Then we have that the topological product of $A$ and $B$ is the same as the subspace $A \times B$ of $X \times Y$.
+\end{theorem}
+
+\begin{proof}
+    Name the subspace topologies on $A$ and $B$ $\scrT_{A \subseteq X}$ and $\scrT_{B \subseteq Y}$ respectively.
+    Name the subspace topology on $A \times B$ as a subset of $X \times Y$ $\scrT_{A \times B \subseteq X \times Y}$.
+
+    We abuse the poor little identity about intersections and products once more, namely that
+    \[
+        (U \cap A) \times (V \cap B) = (U \times V) \cap (A \times B).
+    \]
+    The left hand side belongs to $\scrT_{A \subseteq X} \otimes \scrT_{B \subseteq Y}$--- the basis for $A \times B$ as a product of subspaces.
+    The right hand side belongs to $\{U \cap E: U \in X \times Y, E \in A \times B\}$--- the basis for $A \times B$ as a subspace of a product. 
+\end{proof}
+
+\begin{example}[Subspace of order topology is order topology of suborder]
+    Consider the subset $[0,1]$ of $\RR$ in the \textit{subspace topology}.
+    This topology is generated by sets of the form $(a,b) \cap [0,1]$.
+    We compute the possible forms this set can take.
+    \begin{center}
+        \begin{tabular}{ c | c c }
+            & $a < 0$ & $0 \leq a$ \\ 
+            \hline
+            $1 < b$ & $[0,1]$ & $(a,1]$ \\
+            $0 \leq b$ & $[0,b)$ & $(a,b)$
+        \end{tabular}
+    \end{center}
+    These sets are also a basis for the \textit{order topology} on $[0,1]$.
+\end{example}
+
+\begin{example}[Subspace of order topology is not order topology of suborder] 
+    Consider the subspace $[0,1) \cup \{2\}$ of $\RR$.
+    The set $\{2\}$ is open in this subspace, but it is not open when you consider $[0,1) \cup \{2\}$ with the order topology, since it is smaller than any basis set that can contain it.
+\end{example}
+
+\begin{theorem}
+    Let $(X, <)$ be a totally ordered set, and induce the order topology on it.
+    Let $Y$ be a convex subset of $X$, meaning that it contains the interval $(a,b)$ for any pair of points $a<b$ in $Y$.
+    Then the order topology on the suborder $(Y, <)$ is the same as the subspace topology on $Y$, as a subspace of the order topology on $X$.
+\end{theorem}
+
+\section*{Exercises}
+
+\begin{exercise}
+    Show that if $Y$ is a subspace of $X$, and $A$ is a subspace of $Y$, then the topology $A$ inherits as a subspace of $Y$ is the same as the topology it inherits as a subspace of $X$.
+\end{exercise}
+
+Let $\scrT_{A\subseteq Y}$ and $\scrT_{A \subseteq X}$ denote the two topologies we wish to prove are the same.
+
+We recall the fact that for any sets $A, B, C$.
+\[
+    A \cap (B \cap C) = (A \cap B) \cap C.
+\]
+
+Now, let $U_A \in \scrT_{A \subseteq Y}$.
+Then $U_A = A \cap U_Y$ for some $U_Y \in \scrT_{Y \subseteq X}$.
+But that also means $U_Y = Y \cap U_X$ for some $U_X \in \scrT_X$, so
+\[
+    U_A = A \cap U_Y = A \cap (Y \cap U_X) = \underbrace{(A \cap Y)}_{=A} \cap U_X = A \cap U_X,
+\]
+hence $U_A \in \scrT_{A \subseteq X}$.
+Then $\scrT_{A \subseteq Y} \subseteq \scrT_{A \subseteq X}$.
+
+Conversely, if $U_A \in \scrT_{A \subseteq X}$, we can run the logic backwards
+\[
+    U_A = A \cap U_X = (A \cap Y) \cap U_X = A \cap \underbrace{(Y \cap U_X)}_{\coloneq U_Y} = A \cap U_Y,
+\]
+so that hence $U_A \in \scrT_{A \subseteq Y}$.
+This proves the opposite inclusion, so both topologies are the same.
+
+\begin{exercise}
+    If $\scrT$ and $\scrT'$ are topologies on $X$ and $\scrT'$ is strictly finer than $\scrT$, what can you say about the corresponding subspace topologies on the subspace $Y$ of $X$?
+\end{exercise}
+
+The subspace of the finer topology is finer, but not neccessarily strictly, than the subspace of the coarser topology.
+
+Let $Y \cap U$ be open in $Y$ as a subspace of $\scrT$.
+Then $Y \cap U$ is open in $Y$ as a subspace of $\scrT'$ as well since $U \in \scrT'$.
+
+There might not exist an open set $\scrT_Y \cap U'$ that is an open set in $Y$ as a subspace of $\scrT'$ but not as a subspace of $\scrT$, since even if $U' \notin \scrT$, it may be the case that $Y \cap U' = Y \cap U$ for some $U \in \scrT$.
+
+As a silly example, the case $Y = \varnothing$ always results in the same subspace topology same no matter what the bigger topology is.
+
+\begin{exercise}
+    Consider the set $Y = [-1,1]$ as a subspace of $\RR$.
+    Which of the following sets are open in $Y$?
+    Which are open in $\RR$?
+    \begin{align*} 
+        A &= \left\{x : \frac{1}{2} < |x| < 1 \right\}, \\
+        B &= \left\{x : \frac{1}{2} < |x| \leq 1 \right\}, \\
+        C &= \left\{x : \frac{1}{2} \leq |x| < 1 \right\}, \\
+        D &= \left\{x : \frac{1}{2} \leq |x| \leq 1 \right\}, \\
+        E &= \left\{x : 0 < |x| < 1 \text{ and } 1/x \notin \ZZ_+ \right\}.
+    \end{align*}
+\end{exercise}
+
+The sets $A$ through $D$ can be rewritten
+\begin{align*}
+    A &= \left(-1, -\frac{1}{2}\right) \cap \left(\frac{1}{2}, 1\right), \\
+    B &= \left[-1, -\frac{1}{2}\right) \cap \left(\frac{1}{2}, 1\right], \\
+    C &= \left(-1, -\frac{1}{2}\right] \cap \left[\frac{1}{2}, 1\right), \\
+    D &= \left[-1, -\frac{1}{2}\right] \cap \left[\frac{1}{2}, 1\right]. \\
+\end{align*}
+
+Then, we can see that $A$ is open in both $\RR$ and $Y$.
+$B$ is open in $Y$ but not in $\RR$.
+$C$ and $D$ are neither open in $Y$ nor open in $\RR$.
+
+$E$ is open in both $Y$ and $\RR$, since it decomposes as 
+\[
+    (-1,1) \cup \bigcup_{n=1}^\infty \left(\frac{1}{n+1},\frac{1}{n}\right).
+\]
+
+\begin{exercise}
+    A map $f: X \to Y$ is said to be an \textit{open map} if for every open set $U$ of $X$, the set $f(U)$ is open in $Y$.
+    Show that $\pi_1: X \times Y \to X$ and $\pi_2: X \times Y \to Y$ are open maps.
+\end{exercise}
+
+Let $A$ be an open set of $X \times Y$.
+
+Let $(x,y) \in A$.
+Then $(x,y) \in U \times V \subseteq A$, where $U$ is open in $X$ and $V$ is open in $Y$.
+
+We have that $U = \pi_1(U \times V) \subseteq \pi_1(A)$.
+
+Then $\pi_1(A)$ is open, since for all $x \in \pi_1(A)$ we can find an open set $U$ of $X$ such that $x \in U \subseteq \pi_1(A)$.
+
+Similarly, $\pi_2(A)$ is open.
+
+\begin{exercise}
+    Let $X$ and $X'$ denote a single set in the topologies $\scrT$ and $\scrT'$, respectively; let $Y$ and $Y'$ denote a single set in the topologies $\scrU$ and $\scrU'$, respectively.
+    Assume these sets are nonempty.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            Show that if $\scrT' \supset \scrT$ and $\scrU' \supset \scrU$, then the product topology on $X' \times Y'$ is finer than the product topology on $X \times Y$.
+        \item 
+            Does the converse of (a) hold?
+            Justify your answer.
+    \end{enumerate}
+\end{exercise}
+
+I don't get it honestly.
+
+\begin{exercise}
+    Show that the countable collection
+    \[
+        \{(a,b)\times(c,d) : a<b \text{ and } c<d \text{ and } a,b,c,d \text{ are rational.}\}
+    \]
+    is a basis for $\RR^2$.
+\end{exercise}
+
+By a previous exercise, the set
+\[
+    \{(a,b): a<b \text{ and }a,b \text{ are rational.}\}
+\]
+is a basis for $\mathbb{R}$.
+Then, by Theorem \ref{thm:basisforproduct}, the set in question is a basis for $\RR^2$.
+
+\begin{exercise}
+    Let $X$ be an ordered set.
+    If $Y$ is a proper subset of $X$ that is convex in $X$, does it follow that $Y$ is an interval or a ray in $X$?
+\end{exercise}
+
+The set
+\[
+    E = \{p : p^2 < 2\}
+\]
+is convex in $\QQ$, but is not an interval or ray in $\QQ$.
+
+\begin{exercise}
+    If $L$ is a straight line in the plane, describe the topology $L$ inherits as a subspace of $\RR_\ell \times \RR$ and as a subspace of $\RR_\ell \times \RR_\ell$.
+    In each case it is a familiar topology.
+\end{exercise}
+
+For $\RR_\ell \times \RR$, if $L$ is \textit{not} a vertical line, it has the lower limit topology, and if $L$ is a vertical line, it has the standard topology.
+
+
+
+If $L$ is a straight line, it can be described as either the sets
+\[
+    \{ (x, ax+b) : x \in \RR \}
+\]
+or
+\[
+    \{(x_0, y) : y \in \RR \}.
+\]
+
+In the first case, the basis elements of $\RR_\ell \times \RR$ are of the form
+
+\[
+    (x, ax+b) \cap \Big([p,q) \times (r,s)\Big)
+\]
+which is equal to the conditions that $p \leq x < q$ and $r < ax+b < s$.
+
+\[
+    p \leq x < q
+\]
+\[
+    \frac{r}{a} - b < x < \frac{s}{a} - b
+\]
+
+Which is
+
+In the latter case, 
+
+\todo{Exercise 16.8}
+
+For $\RR_\ell \times \RR_\ell$, the topology is the lower limit topology for \textit{all} lines $L$.
+
+\begin{exercise}
+    Show that the dictionary order topology on the set $\RR \times \RR$ is the same as the product topology $\RR_d \times \RR$, where $\RR_d$ denotes $\RR$ in the discrete topology.
+    Compare this topology with the standard topology on $\RR^2$.
+\end{exercise}
+
+To avoid nesting too many brackets, denoted a \textit{pair} of real numbers $(a,b)$ by $ab$.
+
+The basis sets of $\RR \times \RR$ in the dictionary order are intervals of the form
+\[
+    (ab, cd)
+\]
+where either $a<c$ or $a=c$ and $b<d$.
+
+If $a < c$, this basis element can be broken down into the union of three pieces:
+\begin{align*}
+    \{a\} &\times (b, \infty) \\
+    (a,c) &\times \RR \\
+    \{c\} &\times (-\infty, d),
+\end{align*}
+each corresponding to the case that the first coordinate equals $a$, is between $a$ and $c$, and equals $c$ respectively.
+
+Each piece is open in $\RR_d \times \RR$ respectively.
+
+If $a=c$ and $b<d$, then our basis set is
+\[
+    \{a\} \times (b,d).
+\]
+Which is again open in $\RR_d \times \RR$.
+We have now shown one inclusion of topologies.
+
+Take some basis element of $\RR_d \times \RR$.
+This is a set of the form 
+\[
+    \{a\} \times (b,c)
+\]
+which is evidently the interval $(ab, ac)$ in the dictionary order.
+This shows the reverse inclusion.
+
+\begin{exercise}
+    Let $I = [0,1]$.
+    Compare the product topology on $I \times I$, the dictionary order topology on $I \times I$, and the topology $I \times I$ inherits as a subspace of $\RR \times \RR$ in the dictionary order topology.
+\end{exercise}
+
+\todo{Exercise 16.9}
+
+\section{Closed sets and limit points}
+
+\begin{convention}
+    Let $X$ be a set, and let $A \subseteq X$.
+    We denote the complement $X \setminus A$ to be $A^c$.
+\end{convention}
+
+\begin{definition}
+    Let $X$ be a topological space.
+    We say that a subset $A$ of $X$ is closed whenever $A^c$ is open.
+\end{definition}
+
+\begin{example}
+    The subset $[a,b] \in \RR$ is closed, since it is the complement of the open set 
+    \[
+        (-\infty, a) \cap (b, \infty).
+    \]
+\end{example}
+
+\begin{example}
+    The subset
+    \[
+        \{(x,y): x \geq 0, y \geq 0\}
+    \]
+    of $\RR^2$ is closed, since it is the complement of the union of the two open sets
+    \[
+        \pi_1^{-1}\Big((-\infty, 0)\Big) \qquad \text{and} \qquad \pi_2^{-1}\Big((-\infty, 0)\Big).
+    \]
+    Namely, these are open half-spaces--- the former is the left hand plane, and the latter is the bottom half plane.
+\end{example}
+
+\begin{example}
+    The closed sets in the cofinite topology on $X$ are the finite subsets of $X$ and $X$ itself.
+\end{example}
+
+\begin{example}
+    In every discrete topology, all subsets are closed since all subsets are open.
+\end{example}
+
+\begin{example}
+    Consider the subset 
+    \[
+        Y = [0,1] \cup (2,3)
+    \]
+    of the real line.
+    It has $[0,1]$ as an open set, and also as a closed set.
+    Similarly, it has $(2,3)$ as a closed set, and also as a nopen set.
+\end{example}
+
+\begin{definition}
+    A subset of a topological space that is both closed an open is called \textit{clopen}.
+\end{definition}
+
+\begin{theorem}[Closed set axioms]
+    Let $X$ be a topological space.
+    Let $\scrC$ denote the collection of all closed sets of $X$.
+    Then
+    \begin{enumerate}[label=(C\arabic*)]
+        \item $\varnothing, X \in \scrC$. \label{ax:closure:topbtmelems}
+        \item $\scrC$ is closed under arbitrary intersection. \label{ax:closure:arbintersect}
+        \item $\scrC$ is closed under finite unions. \label{ax:closure:finunion}
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    For \ref{ax:closure:topbtmelems}, $X = \varnothing^c$, and $\varnothing = X^c$.
+
+    \ref{ax:closure:arbintersect} can be read off the equation
+    \[
+        \left(\bigcup_\alpha U_\alpha\right)^c = \bigcap_\alpha U_\alpha^c,
+    \]
+    an application of DeMorgan's laws.
+
+    Similarly, we can read off \ref{ax:closure:finunion} from the equation
+    \[
+        \left(\bigcap_{k=1}^n U_k\right)^c = \bigcup_{k=1}^n U_k^c.
+    \]
+\end{proof}
+
+\begin{theorem}
+    Let $Y$ be a subspace of $X$.
+    Then $A \subseteq Y$ is closed in $Y$ if and only if it is $Y \cap C$ for some closed set $C$ of $X$.
+\end{theorem}
+
+\begin{proof}
+    Let $A$ be closed in $Y$.
+    Then $A$ is the complement (in $Y$) of some open set in $Y$.
+    Then $A = Y \setminus (Y \cap U)$, where $U$ is an open set of $X$.
+    So
+    \[
+        A = Y \setminus U = Y \cap (X \setminus U) = Y \cap U^c.
+    \]
+    Then $A$ is $Y \cap C$ for a closed set $C$ of $X$, namely $U^c$.
+
+    Conversely, if $A = Y \cap C$, then we run the equations backwards.
+\end{proof}
+
+\begin{theorem}
+    Let $Y$ be a subspace of $X$. If $A$ is closed in $Y$ and $Y$ is closed in $X$, then $A$ is closed in $X$.
+\end{theorem}
+
+\begin{proof}
+    If $A$ is closed in $Y$, then $A = Y \setminus V$, where $V$ is open in $Y$.
+    Then $A = Y \setminus (Y \cap U)$, where $U$ is open in $X$.
+    So,
+    \[
+        A = Y \cap (Y \cap U)^c = Y \cap (Y^c \cup U^c) = (Y \cap Y^c) \cup (Y \cap U) = Y \cap U^c.
+    \]
+    Since $U^c$ is closed and $Y$ is closed, $Y \cap U^c$ is closed.
+\end{proof}
+
+\subsection{Closure and interior of a set}
+\begin{definition}
+    Let $X$ be a topological space, and let $A$ be a subset of $X$.
+    The \textit{interior} of $A$ is the largest open set contained in $A$, and the \textit{closure} of $A$ is the smallest closed set containing $A$.
+
+    Specifically, the interior of $A$, $\interior A$, is defined to be
+    \[
+        \interior A \coloneq \bigcup_{\substack{U\text{ is open} \\U \subseteq A}}U,
+    \]
+    and the closure of $A$, $\closure A$, is defined to be
+    \[
+        \closure A \coloneq \bigcap_{\substack{U\text{ is closed} \\U \supseteq A}}U.
+    \]
+\end{definition}
+
+\begin{theorem}
+    Let $Y$ be a subspace of $X$, and let $A$ be a subset of $Y$.
+    Define $\closure_Y A$ and $\closure_X A$ to be the closure of $A$ with respect to $X$ and $Y$ respectively.
+    Then
+    \[
+    \closure_Y A = \closure_X A \cap Y.
+    \]
+\end{theorem}
+
+\begin{proof}
+    The left hand side is
+    \[
+        \bigcap_{\substack{V \text{ is closed in } Y \\ V \supseteq A}} V 
+    \]
+    Since $V$ is closed in $Y$, we may write it as $Y \cap C$, where $C$ is closed in $X$.
+    So we can rewrite the above to be
+    \[
+        \bigcap_{\substack{C \text{ is closed in } X \\ Y \cap C \supseteq A}} Y \cap C.
+    \]
+    Now, since $A \subseteq Y$, the condition $Y \cap C \supseteq A$ is equivalent to $C \supseteq A$.
+    Moreover, we can use distributivity of intersection with itself to pull out the $Y$.
+    Now, our expression is
+    \[
+        Y \cap \bigcap_{\substack{C \text{ is closed in } X \\ C \supseteq A}} C.
+    \]
+    which is evidently the right hand side of the equation we want to prove.
+\end{proof}
+
+\begin{definition}
+    Fix some background topological space.
+    An open set containing a point $x$ is called a \textit{neighborhood of $x$}.
+    If the intersection of two sets $A$ and $B$ is nonempty, we say that \textit{$A$ intersects $B$} and vice versa.
+\end{definition}
+
+\begin{theorem}
+    Let $X$ be a topological space, and let $A$ be a subset of $X$.
+    \begin{enumerate}[label=(\alph*)]
+        \item $x \in \closure A$ if and only if every neighborhood of $x$ intersects $A$.
+        \item If $\scrB$ is a basis for the topology on $X$, then $x \in \closure A$ if and only if $A$ intersects every basis element containing $x$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Take a point $x$.
+    Suppose $x$ has a neighborhood $N$ does not intersect $A$.
+    Then there exists a closed set $C$ containing $A$ that does not intersect $N$ (namely, $N^c$).
+    So $x$ \textit{cannot} be in the intersection of all closed sets containing $A$, since it doesn't belong in at least one of them.
+
+    Hence, if $x$ has a neighborhood $N$ that does not intersect $A$, it cannot be in the closure of $A$.
+    By contraposition, if $x \in \closure A$, it must be that every neighborhood of $x$ intersects $A$.
+
+    Now suppose that $x$ is not in the closure of $A$.
+    We can then produce a closed set $C$ that does not contain $x$.
+    Then, $C^c$ is a neighborhood of $x$ not intersecting $A$.
+    This proves the opposite direction, and we use contraposition again--- if every neighborhood of $x$ intersects $A$, then $x \in \closure A$.
+
+    For (b), we note that every basis set is open, and that every open set containing $x$ contains a basis set containing $x$.
+\end{proof}
+
+\begin{example}
+    In $\RR$, $\closure (0,1] = [0,1]$.
+
+\end{example}
+\todo{Closure examples}
+
+
+\subsection{Limit Points}
+
+\begin{definition}
+    A \textit{limit point} $x$ of a subset $A$ of a topological space $X$ is a point in which every neighborhood of $x$ contains a point of $A$ \textit{distinct from $x$ itself}.
+\end{definition}
+
+\begin{theorem}
+    Let $X$ be a topological space.
+    Let $A$ be any subset of $X$.
+    Let $A'$ be the set of all limit points of $A$.
+    Then
+    \[
+        \closure A = A \cup A'.
+    \]
+\end{theorem}
+
+Let $x$ be in the closure of $A$.
+Then it is contained in every closed set containing $A$.
+Suppose that
+
+\subsection{Hausdorff spaces}
+
+\begin{definition}
+    A topological space $X$ is \textit{Hausdorff} whenever points can be separated with open sets, meaning that for two distinct points $x_1, x_2 \in X$, there exist \textit{disjoint} neighborhoods $U_1$ and $U_2$ of $x_1$ and $x_2$ respectively.
+\end{definition}
+
+\begin{definition}
+    Let $X$ be a topological space.
+    We say that a sequence $x_1, x_2, \ldots$ of points in $X$ \textit{converges to the point $x$} if, for every neighborhood $U$ of $x$, there exists a positive integer $N$ such that $x_n \in U$ for all $n \geq N$.
+\end{definition}
+
+\begin{theorem}
+    In a Hausdorff space, all finite sets are closed.
+\end{theorem}
+
+\begin{proof}
+    Let $x$ be any point at all in a Hausdorff space.
+
+    The closure of $\{x\}$ is $\{x\}$, since for any other point $x'$, we may produce a neighborhood $U$ of $x'$ that does not intersect $\{x\}$--- choose a neighborhood $V$ of $x$ that is disjoint from $U$.
+    A fortiori, the fact that $U$ and $V$ are disjoint means that $U$ and $\{x\}$ are disjoint, so $x'$ is not in the closure of $\{x\}$.
+    Since $\{x\}$ equals its own closure, it must be closed.
+
+    Since finite unions of closed sets are closed, it follows that all finite sets in a Hausdorff space are closed.
+\end{proof}
+
+The condition that we can separate \textit{one point from another with a neighborhood} is weaker than being Hausdorff.
+
+\begin{definition}
+    A topological space $X$ is $T_1$ if any two distinct points have neighborhoods which do not contain the other.
+\end{definition}
+
+\begin{remark}
+    A topological space is $T_1$ if and only if every singleton is closed.
+\end{remark}
+
+\begin{theorem}
+    Let $X$ be a $T_1$ space.
+    Let $A \subseteq X$.
+    Then $x$ is a limit point of $A$ if and only if every neighborhood of $x$ contains infinitely many points of $A$.
+\end{theorem}
+
+\begin{proof}
+    Suppose there exists a neighborhood $U$ of $x$ which contains only finitely many points of $A$.
+    Then, if we label these points $a_1, a_2, \ldots, a_n$, the set $\{a_1, a_2, \ldots, a_n\}$ is closed. Then
+    \[
+        A \setminus \{a_1, a_2, \ldots, a_n\}
+    \]
+    is an open set containing $x$ --- a neighborhood of $x$ --- containing no points of $A$.
+    Then $x$ cannot be a limit point of $A$.
+    By contraposition, if $x$ is a limit point of $A$ then every neighborhood of $x$ contains infinitely many points of $A$.
+
+    For the other direction, if every neighborhood of $x$ contains infinitely many points of $A$, it definitely has to contain \textit{some} point of $A$, so it is a limit point of $A$.
+\end{proof}
+
+\begin{theorem}
+    In Hausdorff spaces, sequences converge to at most one point.
+\end{theorem}
+
+\begin{proof}
+    Let
+    \[
+        x_n \xrightarrow{n\to\infty} x.
+    \]
+    Take a point $x' \neq x$.
+    Then we can separate $x$ and $x'$ with disjoint neighborhoods $U$ and $U'$ respectively.
+    Now, since $x_n \xrightarrow{n\to\infty} x$, there exists $N$ such that $x_n \in U$ for all $n \geq N$.
+    However, this means $x_n \neq U'$ for all $n \geq N$.
+    Hence it's impossible to find a positive integer $M$ such that $m \geq M$ implies $x_m \in U'$ (for any $M$, pick the first $n$ greater than both $M$ and $N$).
+    So it must be that $x_n \centernot{\xrightarrow{n\to\infty}}x$.
+\end{proof}
+
+\begin{theorem}[Some facts about Hausdorff spaces]\
+    \begin{enumerate}[label=(\alph*)]
+        \item Every totally ordered set is Hausdorff in the order topology.
+        \item The product of two Hausdorff spaces is again Hausdorff.
+        \item Subspaces of Hausdorff spaces are Hausdorff.
+    \end{enumerate}
+\end{theorem}
+
+\section*{Exercises}
+
+\todo{Section 17 exercises}
+
+\section{Continuous functions}
+
+\subsection{Continuity of a function}
+
+\begin{definition}
+    Let $X$ and $Y$ be topological spaces.
+    A function $f: X \to Y$ is said to be \textit{continuous} if for all open sets $V$ of $Y$, the set $f^{-1}(V)$ is an open subset of $X$.
+\end{definition}
+
+\begin{proposition}
+    Let $f: X \to Y$ be a map between topological spaces, and suppose we have a basis for $Y$.
+    Then, to prove that $f$ is continuous, it suffices to check that the preimage of every basis element is open.
+
+    Similarly, if we have a subbasis for $Y$, $f$'s continuity can be checked by checking that the preimages of subbasis elements are open.
+\end{proposition}
+
+\begin{theorem}
+    Let $X$ and $Y$ be topological spaces, and let $f:X \to Y$.
+    Then the following are equivalent:
+    \begin{enumerate}[label=(\alph*)]
+        \item $f$ is continuous.
+        \item $f(\overline{A}) \subseteq \overline{f(A)}$ for all $A \subseteq X$.
+        \item For every closed subset $B$ of $Y$, $f^{-1}(B)$ is closed in $X$.
+        \item For each $x \in X$ and each neighborhood $V$ of $f(x)$, there is a neighborhood of $x$ such that $f(U) \subseteq V$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{example}[Continuity of real-valued functions]
+    In analysis, we have the \textit{epsilon-delta} definition of continuity, which states that, for functions $f: \RR \to \RR$,
+    \begin{align*}
+        &f\text{ is continuous at }x_0 \\
+        &\iff \\
+        &\forall \varepsilon > 0, \exists \delta > 0, \forall x \Big(|x - x_0| < \delta \implies |f(x) - f(x_0)| < \varepsilon\Big).
+    \end{align*}
+    This definition is equivalent to continuity of real-valued functions with our previous definition, taking the standard topology on $\RR$.
+\end{example}
+
+\begin{proof}
+    Fix $f: \RR \to \RR$.
+    Suppose that $f$ is continuous as per the open set definition.
+    Then $f^{-1}\big((a,b)\big)$ is open in $\RR$ for all open intervals $(a,b)$.
+    Let $\varepsilon > 0$.
+    Consider the interval
+    \[
+        V = \left(f(x_0) - \frac{\varepsilon}{2}, f(x_0) + \frac{\varepsilon}{2}\right).
+    \]
+    $V$ contains $f(x_0)$, hence $f^{-1}(V)$ must contain $x_0$.
+    $V$ is also open, hence $f^{-1}(V)$ is open.
+    There must be then some basis element $(a,b)$ such that $x_0\in (a,b) \subseteq f^{-1}(V)$.
+    Put $\delta = \min\{|a-f(x_0)|, |b-f(x_0)|\}$.
+    Then, if $|x - x_0| < \delta$, we have that $x \in (x_0-\delta, x_0+\delta) \subseteq (a,b)$, so $f(x) \in f((a,b)) \subseteq f(V)$.
+    By how we defined $V$, it must be that $|f(x) - f(x_0)| < \varepsilon$, which shows that $f$ is continuous at $x_0$.
+    Since $x_0$ was arbitrary, $f$ is continuous per the epsilon-delta definition.
+\end{proof}
+
+\subsection{Homeomorphisms}
+
+\begin{definition}
+    Let $X$ and $Y$ be topological spaces, and let $f : X \to Y$ be a bijection.
+    If $f$ and $f^{-1}$ are both continuous, then $f$ is called a \textit{homeomorphism}.
+\end{definition}
+
+\begin{remark}
+    Equivalently, $f$ is a homeomorphism if it is bijective, continuous, and an \textit{open map}, i.e $f(U)$ is open in $Y$ if $U$ is open in $X$.
+\end{remark}
+
+\begin{definition}
+    If $f$ is a continuous injective map from $X$ into $Y$, then it is called a \textit{topological imbedding} or simply an \textit{imbedding} of $X$ in $Y$.
+
+    If we endow $f(X)$ with the subspace topology, then $f$ is a homeomorphism of $X$ and $f(X)$.
+\end{definition}
+
+\begin{example}
+    $x \mapsto 3x+1$ is a homeomorphism.
+\end{example}
+
+\begin{example}
+    $x \mapsto x/(1-x^2)$ is a homeomorphism.
+\end{example}
+
+\begin{example}
+    Let $S^1$ denote \textit{the unit circle},
+    \[
+        S^1 \coloneq \{(x,y), x^2 + y^2 = 1\}.
+    \]
+    The map $t \mapsto (\cos 2\pi t, \sin 2 \pi t)$ is a continuous bijective map between $[0,1)$ and $S^1$ that is \textit{not} a homeomorphism.
+\end{example}
+
+\begin{theorem}
+    Let $X,Y,Z$ be topological spaces.
+    \begin{enumerate}[label=(\alph*)]
+        \item The constant map $X \to Y$ given by $x \mapsto y_0$ is continuous.
+        \item For any subspace $A$ of $x$, the \textit{inclusion map} $\iota_A: A \to X$ is continuous.
+        \item If $f: X \to Y$ and $g: Y \to Z$ are continuous, then the map $g \circ f$ is continuous.
+        \item If $f: X \to Y$ is continuous and $A$ is a subspace of $X$, then $f|_A: A \to Y$ is continuous.
+        \item a
+        \item ooga
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Pasting lemma]
+    Let $X, Y$ be topological spaces.
+    Suppose $X$ is the union of two closed sets $A$ and $B$, and suppose that we have two continuous functions $f: A \to Y$ and $g: B \to Y$, then if $f(x) = g(x)$ for all $x \in A \cap B$, the function 
+    \[
+        x \mapsto \begin{cases}
+            f(x) & x \in A \\
+            g(x) & x \in B \setminus A
+        \end{cases}
+    \]
+    is continuous.
+\end{theorem}
+
+\begin{theorem}
+    Let $f: A \to X \times Y$.
+\end{theorem}
+
+
+
+
+
+
+\end{document}

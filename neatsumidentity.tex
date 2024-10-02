@@ -4,7 +4,7 @@
 \newcommand{\ff}[2]{\ensuremath{#1^{\underline{#2}}}}
 \DeclareMathOperator{\degree}{deg}
 
-\title{A neat infinite sum identity}
+\title{An infinite sum identity}
 \author{Jasper Ty}
 \date{}
 
@@ -18,8 +18,6 @@
 \tableofcontents
 
 \section{Introduction}
-
-This identity I'm writing about is entirely routine. But, I do think it's a cute starting point for the combinatorial topics it touches on.
 
 We wish to compute, say, the infinite series
 \[
@@ -330,6 +328,11 @@ Luckily, we \textit{do} have a version that runs over the upper index.
         \frac{x^k}{(1+x)^{k+1}} &= x^k\sum_{n=0}^\infty \binom{n+k}{k} x^n \\
                                 &= \sum_{n=0}^\infty \binom{n+k}{k} x^{n+k} \\
                                 &= \sum_{n=k}^\infty \binom{n}{k} x^{n}.
+    \end{align*}
+    Since, for integers, $\binom{n}{k} = 0$ if $n < k$, we can rewrite the sum to start from $n=0$, since this amounts to padding leading zeros.
+    \begin{align*}
+    \sum_{n=k}^\infty \binom{n}{k} x^{n} &= \sum_{n=k}^\infty \binom{n}{k} x^{n} + \sum_{n=0}^{k-1}\binom{n}{k}x^n \\
+                                &= \sum_{n=0}^\infty \binom{n}{k} x^{n}.
     \end{align*}
 \end{proof}
 

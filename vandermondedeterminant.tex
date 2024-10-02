@@ -1,0 +1,84 @@
+\documentclass{article}
+
+\usepackage[garamond, tableau]{jaspercommon}
+
+\DeclareMathOperator{\scb}{scb}
+
+\setcounter{MaxMatrixCols}{20}
+
+\title{The Vandermonde Determinant}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\begin{theorem}[Vandermonde determinant]\label{thm:vandermonde}
+    Let $n \in \NN$. Then,
+    \[
+        \det\begin{bmatrix}
+            a_1^0 & a_1^1 & \cdots & a_1^{n-1} & a_1^n \\
+            a_2^0 & a_2^1 & \cdots & a_2^{n-1} & a_2^n \\
+            \vdots & \vdots &  & \vdots & \vdots \\
+            a_{n-1}^0 & a_{n-1}^{n-1} & \cdots & a_{n-1}^{n-1} & a_{n-1}^n \\
+            a_n^0 & a_n^1 & \cdots & a_n^{n-1} & a_n^n
+        \end{bmatrix} = \prod_{1\leq i < j \leq n}(a_i-a_j).
+    \]
+    where $a_1, \ldots, a_n$ are elements of some commutative ring.
+\end{theorem}
+
+\begin{definition}
+    A \textit{tournament} $D$ is a subset of $[n]\times[n]$ such that for all $i < j$, exactly one of $(i,j)$ or $(j,i)$ is in $D$.
+
+    We define the \textit{scoreboard} $\scb D$ of a tournament $D$ to be the $n$-tuple $(s_1,\ldots,s_n)$ defined by
+    \[
+        s_j := (\# i \text{ such that } (i,j) \in D).
+    \]
+
+    We say that a tournament is \textit{injective} if all of the entries of its scoreboard are distinct.
+
+    We denote the set of all tournaments $T$.
+\end{definition}
+
+\begin{definition}
+    Let $\sigma \in S_n$.
+    Define $P_\sigma \in T$ to be
+    \[
+        P_\sigma := \{(\sigma(i), \sigma(j)): 1 \leq i < j \leq n\}.
+    \]
+\end{definition}
+
+\begin{lemma}
+    A tournament $D \in T$ is injective if and only if it is equal to $P_\sigma$ for some $\sigma \in S_n$.
+\end{lemma}
+
+\begin{proof}
+    Let $\sigma \in S_n$.
+    Then consider $\scb P_\sigma$. We have that
+    \begin{align*}
+        s_{\sigma(1)} &= 0 \\
+        s_{\sigma(2)} &= 1 \\
+                      &\vdots \\
+        s_{\sigma(n)} &= n-1.
+    \end{align*}
+    Then $P_\sigma$ is injective.
+
+    Suppose $D$ is injective. Then
+    \begin{align*}
+        s_{1} &= a_1 \\
+        s_{2} &= a_2 \\
+                      &\vdots \\
+        s_{n} &= a_n,
+    \end{align*}
+    where $a_1,\ldots,a_n$ is some labeling of $\{0,\ldots,n-1\}$
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{thm:vandermonde}]
+
+
+\end{proof}
+
+\end{document}

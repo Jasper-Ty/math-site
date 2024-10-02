@@ -1,0 +1,61 @@
+\documentclass{article}
+
+\usepackage[a5paper, margin=0.7in]{geometry}
+\usepackage[garamond]{jaspercommon}
+
+\DeclareMathOperator{\sign}{sign}
+
+\makeatletter
+\fancyhead[L]{\@title}
+\fancyhead[R]{\@author}
+\makeatother
+
+\title{MATH-531 Homework Solutions}
+
+\newcommand{\pts}[1]{\fbox{#1}}
+
+\author{Jasper Ty}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Before we start...}
+
+\subsection{Binomial coefficients and elementary counting}
+
+\begin{exercise}\pts{3} Let $n \in \NN$. Prove that 
+    \[
+        \sum_{k=0}^n \binom{-2}{k} = (-1)^n \left\lfloor\frac{n+2}{2}\right\rfloor
+    \]
+\end{exercise}
+
+\section{Generating functions}
+\section{Integer partitions and \texorpdfstring{$q$}{q}-binomial coefficients}
+\section{Permutations}
+\section{Alternating sums, signed counting and determinants}
+
+\begin{exercise} ($3$ points) \\
+    Prove a generalization of Lemma $6.1.4$ in which $f$ is only required to be a bijection, not an involution, but the assumption ``$\sign I = 0$ for all $I \in \mathcal{X}$ satisfying $f(I) = I$'' is replaced by the stronger assumption  ``$\sign I = 0$ for all $I \in \mathcal{X}$ and all \textbf{odd} $k \in \NN$ satisfying $f^k(I) = I$''
+\end{exercise}
+
+Since $\mathcal{X}$ is finite, there exists a smallest $k$.
+
+\begin{exercise}
+    Recall the concepts of Dyck words and Dyck paths defined in Example 2 in Section 3.1.
+    Let $n \in \N$.
+    If $w \in {0,1}^{2n}$ is a $2n$-tuple, and if $k \in \{0,1,\ldots,2n\}$, then we define \textit{$k$-height} $h_k(w)$ of $w$ to be the number 
+    \begin{align*}
+        (\text{\# of $1$'s }&\text{among the first $k$ entries of $w$}) \\
+        &- (\text{\# of $0$'s among the first $k$ entries of $w$}) 
+    \end{align*}
+    If $w$ is a Dyck word, then this $k$-height $h_k(w)$ is a nonnegative integer.
+    [For example, if $n=4$ and $w=(1,0,0,1)$ then $h_3(w)$ is a nonnegative integer.
+\end{exercise}
+
+\section{Symmetric functions}
+
+
+
+\end{document}

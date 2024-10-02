@@ -1,0 +1,154 @@
+\documentclass{article}
+
+% See https://github.com/Jasper-Ty/dotfiles
+\usepackage[garamond]{jaspercommon}
+
+\newcommand*\wc{{\mkern 3mu\_\mkern 3mu}}
+\newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
+
+\DeclareMathOperator{\s}{s}
+\DeclareMathOperator{\ogroup}{O}
+\DeclareMathOperator{\Dih}{Dih}
+\DeclareMathOperator{\Sym}{Sym}
+
+\title{Reflection groups and Coxeter groups}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+
+These are notes based on my reading of Humphreys's ``Reflection groups and Coxeter groups''.
+
+\tableofcontents
+
+\section{Finite reflection groups}
+
+We define \textit{reflections}.
+
+\begin{definition}
+    Let $V$ be a real Euclidean space, equipped with an inner product $\innerproduct{\wc}{\wc}$.
+    Let $\alpha \in V$ be some nonzero vector.
+    The \textit{reflection $\s_\alpha$} is defined to be.
+    \[
+        \s_\alpha \lambda \coloneq \lambda - \frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha.
+    \]
+\end{definition}
+
+This has the effect of sending $\alpha$ to $-\alpha$, and fixing the hyperplane orthogonal to $\alpha$.
+
+We do some paperwork to show that this is all defined correctly.
+
+\begin{proposition}
+    Let $V$ be a real vector space, and let $\alpha \in V$.
+    The reflection $\s_\alpha$ is an orthogonal linear operator, which sends $\alpha$ to $-\alpha$, and fixes the hyperplane
+    \[
+        H_\alpha \coloneq \{w \in V: \innerproduct{w}{\alpha} = 0\}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    Linearity follows from the bilinearity of the inner product.
+    Let $a,b \in \RR$.
+    Then
+    \begin{align*}
+        \s_\alpha (a\lambda+b\beta)
+        &=
+        (a\lambda+b\beta) - \frac{2\innerproduct{a\lambda+b\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha \\
+        &=
+        (a\lambda+b\beta) - \frac{2\Big(a\innerproduct{\lambda}{\alpha}+b\innerproduct{\beta}{\alpha}\Big)}{\innerproduct{\alpha}{\alpha}}\alpha \\
+        &=
+        (a\lambda+b\beta) - \left(\frac{2a\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha + \frac{2b\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha\right) \\
+        &=
+        \left(a\lambda - \frac{2a\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha\right) +
+        \left(b\beta - \frac{2b\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha\right) \\
+        &=
+        a\left(\lambda - \frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha\right) +
+        b\left(\beta - \frac{2\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha\right) \\
+        &=
+        a\s_\alpha\lambda + b \s_\alpha\beta.
+    \end{align*}
+    
+    Next, we compute that it is orthogonal.
+    \begin{align*}
+        &\innerproduct{\s_\alpha\lambda}{\s_\alpha\beta} \\
+        &=
+        \innerproduct{\lambda - \frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha}{\beta- \frac{2\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha} \\
+        &= 
+        \innerproduct{\lambda}{\beta}
+        +
+        \innerproduct{\lambda}{-\frac{2\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha}
+        +
+        \innerproduct{-\frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha}{\beta}
+        +
+        \innerproduct{-\frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha}{-\frac{2\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha} \\
+        &= 
+        \innerproduct{\lambda}{\beta}
+        -
+        \frac{2\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}
+        \innerproduct{\lambda}{\alpha}
+        -
+        \frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}
+        \innerproduct{\alpha}{\beta}
+        +
+        \frac{4\innerproduct{\lambda}{\alpha}\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}^2}
+        \innerproduct{\alpha}{\alpha} \\
+        &=
+        \innerproduct{\lambda}{\beta}
+        -
+        \frac{4\innerproduct{\lambda}{\alpha}\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}}
+        +
+        \frac{4\innerproduct{\lambda}{\alpha}\innerproduct{\beta}{\alpha}}{\innerproduct{\alpha}{\alpha}} \\
+        &= 
+        \innerproduct{\lambda}{\beta}.
+    \end{align*}
+    Finally, we verify its ``reflection'' properties.
+    First,
+    \[
+        \s_\alpha \alpha = \alpha - \frac{2\innerproduct{\alpha}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha = \alpha - 2\alpha = -\alpha.
+    \]
+    And, if $\innerproduct{\lambda}{\alpha} = 0$
+    \[
+        \s_\alpha \lambda = \lambda - \frac{2\innerproduct{\lambda}{\alpha}}{\innerproduct{\alpha}{\alpha}}\alpha = \lambda - \frac{2 \cdot 0}{\innerproduct{\alpha}{\alpha}} = \lambda.
+    \]
+\end{proof}
+
+And finally, 
+
+\begin{remark}
+    Let $\s_\alpha$ be a reflection in $V$.
+    Then it is involutory, i.e $\s_\alpha^2$ is the identity operator on $V$.
+\end{remark}
+
+\begin{proof}
+    We know that $V = \RR\alpha \oplus H_\alpha$.
+    Then if we write down a vector $w \in V$ as $p\alpha + q\lambda$, where $p,q \in \RR$ and $\lambda \in H_\alpha$,
+    \[
+        \s_\alpha \s_\alpha w = \s_\alpha \s_\alpha (p\alpha) + \s_\alpha \s_\alpha (q\lambda) = \s_\alpha(-p\alpha) + \s_\alpha(q\lambda) = p\alpha + q\beta = w.
+    \]
+\end{proof}
+
+\begin{definition}
+    A \textit{finite reflection group} is a finite subgroup of $\ogroup(V)$ generated by reflections.
+\end{definition}
+
+\subsection{Some examples}
+
+\begin{definition}
+    Let $V = \RR^2$, and fix some integer $m \geq 3$.
+    The \textit{dihedral group $\Dih_{m}$} is the finite reflection group consisting of all orthogonal transformations which fix a regular $m$-sided polygon centered at the origin.
+\end{definition}
+
+\begin{definition}
+    The \textit{symmetric group} $\Sym_n$ is the finite reflection group consisting of all orthogonal transformations which swap two basis vectors.
+\end{definition}
+
+
+
+
+\end{document}

@@ -1,0 +1,395 @@
+\documentclass{article}
+
+\usepackage[garamond]{jaspercommon}
+
+\newcommand\toea{\mathrel{\ooalign{$\nearrow$\cr$\searrow$\cr}}}
+\newcommand\astart{\mathrel{~_\bullet^\uparrow}}
+\newcommand\aend{\mathrel{~_\uparrow^\bullet}}
+\newcommand\toto{\rightrightarrows}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\head}{head}
+\DeclareMathOperator{\tail}{tail}
+\DeclareMathOperator{\sgn}{sgn}
+
+\title{The Lindstr\"om-Gessel-Viennot Lemma}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+I needed to re-understand this lemma to understand the proof of equivalence of the two definitions of Schur polynomials, one as a quotient of determinants and the other as a certain weight generating function.
+
+\section{Preliminaries}
+
+Let's get the graph theory out of the way.
+
+\begin{definition}[Digraphs]
+    A \textit{directed graph} $D$ is a pair $(V, A)$ consisting of a set $V$ of vertices and a set $A$ of arcs (normally called \textit{edges} for undirected graphs) consisting of pairs of the form $(v_1, v_2)$ where $v_1, v_2 \in V$. 
+\end{definition}
+
+\begin{example}
+    The following is a digraph
+
+    \begin{tikzpicture}
+        \filldraw[
+            radius=0.5cm
+            ] (-1,-1) circle;
+        \filldraw[
+            radius=0.5cm
+            ] (-1,1) circle;
+        \filldraw[
+            radius=0.5cm
+            ] (1,-1) circle;
+        \filldraw[
+            radius=0.5cm
+            ] (1,1) circle;
+    \end{tikzpicture}
+\end{example}
+
+\begin{definition}[Arcs]
+    Let $a = (v_1, v_2)$ be an arc of a digraph.
+    $v_1$ will be called the \textit{source} of the arc and $v_2$ will be called the \textit{destination} of the arc. For any such arc $a$, define $\astart a = v_1$ and $\aend a = v_2$.
+\end{definition}
+
+\begin{definition}[Paths]
+    A \textit{path} $p$ in a digraph $D$ is a finite sequence of arcs $(a_1,\ldots,a_n)$ connected end-to-end, i.e 
+    \[
+        \aend a_i = \astart a_{i+1}
+    \]
+    for all $i < n$.
+
+    We define the \textit{source} of a $p$ and $\textit{destination}$ of $p$ to be
+    \[
+        \astart p := \astart a_1
+    \]
+    \[
+        \aend p := \aend a_n
+    \]
+\end{definition}
+
+We say that a digraph $D$ is \textit{path-finite} whenever there are only finitely many paths between any two vertices $u, v$ in $V$. We say $D$ is \textit{acyclic} when it does not contain any cycles. A digraph $D$ is \textit{simple} whenever there are no self-arcs.
+
+\begin{definition}[Lattice Paths]
+    Consider the digraph whose vertex set is $\ZZ^2$, and whose edge set consists of the arcs
+    \[
+        (i,j) \rightarrow (i+1, j) \qquad \text{for all } (i,j) \in \ZZ^2,
+    \]
+    which will be called \textit{right-steps}, and
+    \[
+        (i,j) \rightarrow (i, j+1) \qquad \text{for all } (i,j) \in \ZZ^2,
+    \]
+    which will be called \textit{up-steps}.
+
+    This digraph will be called the \textit{lattice} and paths in the lattice will be called \textit{lattice paths}.
+\end{definition}
+
+The lattice is acyclic, simple, and path-finite.
+
+\begin{remark}
+    Lattice paths may be identified with a starting point $A$ and a \textit{step sequence} consisting of up-steps and right-steps. The step sequence can be identified further with strings consisting of the letters $U$ and $R$.
+\end{remark}
+
+
+\section{Counting lattice paths}
+
+Apply the previous remark to counting lattice paths. If we knew ahead of time how many up-steps (say $\#U$) and right-steps (say $\#R$) we needed to get from a point on the lattice to the other, we can biject all paths between two points with strings consisting of $\#U$ up-steps and $\#R$ right-steps.
+This string has length $\#U + \#R$. With some quick reasoning we get the formula
+\[
+    (\text{\# of paths}) = \binom{\#U + \#R}{\#U} = \binom{\#U + \#R}{\#R}.
+\]
+Fortunately, we do know ahead of time how many up-steps and right-steps we need to get from one point to another on the lattice. 
+Let $(a,b), (c,d) \in \ZZ^2$ and consider counting paths $(a,b) \rightarrow (c,d)$. Then $\#R = c-a$ and $\#U = d-b$.
+
+But, $\#U$ and $\#R$ are apparently meaningless if it's impossible to get from one point to the other on the lattice (i.e no path exists). 
+Intuitively, this happens if and only if the destination further left than the source ($c<a$) or further down than the source ($d<b$) or both. 
+
+Put another way, a path exists if and only if $c \geq a$ and $d \geq b$. 
+A necessary \textit{but not sufficient} condition of this is that $(c, d)$ lies within the half-space in $\RR^2$ defined by $x + y \geq a + b$. 
+This is not sufficient because the cone defined by the intersections of $\{(x, y): x \geq a\}$ and $\{(x,y): y \geq b\}$ is strictly smaller than the aforementioned half-space.
+
+But that's not a problem! Because the trick here is that we use a fairly clever definition of the binomial coefficient which makes a whole slew of identities much easier to write:
+
+% Have to put reference here
+
+\begin{definition}[Binomial coefficients]
+    \[
+        \binom{n}{k} := \begin{cases}
+            \displaystyle\frac{n(n-1)(n-2)\cdots(n-k+1)}{k!}, & \text{if }k\in\NN\\
+            0, & \text{otherwise.}
+        \end{cases}
+    \]
+\end{definition}
+
+This totally solves our problem, since negative $k$ automatically zero the binomial coefficient. The requirement that the destination live in a certain half-space will guarantee that the top entry of our binomial coefficient is ultimately positive (and we don't have to deal with any upper negation business). These two facts lend us the following conclusion: 
+
+\begin{proposition}
+    Let $(a,b), (c,d) \in \ZZ^2$. Then
+    \[
+        (\text{\# of paths from }(a,b)\text{ to }(c,d)) = 
+        \begin{cases}
+            \binom{c+d-a-b}{c-a}, & \text{if }c+d \geq a+b \\
+            0, & \text{otherwise.}
+        \end{cases}
+    \]
+\end{proposition}
+\begin{proof}
+    Put $\#R=c-a$ and $\#U=d-b$. 
+\end{proof}
+
+\section{Tuples of lattice paths}
+
+Now that we have a foothold in lattice path counting, let's consider the problem of counting \textit{tuples} of them.
+
+\begin{definition} Let $k \in \NN$
+    \begin{enumerate}
+        \item A \textit{$k$-vertex} is a $k$-tuple of lattice points $(A_1, A_2, \ldots, A_k) \in (\ZZ^2)^k$. 
+        \item Permutations will act on $k$-vertices by permuting indices, i.e if
+            \[
+                \mathbf{A} = (A_1, A_2, \ldots A_k)
+            \]
+            then
+            $\sigma(\mathbf{A}) = (A_{\sigma(1)}, A_{\sigma(2)}, \ldots, A_{\sigma(k)})$.
+        \item If $\mathbf{A} = (A_1, A_2, \ldots A_k)$ and $\mathbf{B} = (B_1, B_2, \ldots B_k)$, then a \textit{path tuple} from $\mathbf{A}$ to $\mathbf{B}$ is a $k$-tuple $(p_1, p_2, \ldots, p_k)$, where each $p_i$ is a lattice path from $A_i$ to $B_i$.
+        \item A path tuple is \textit{non-intersecting} if $p_i$ and $p_j$ share no vertex in common for all $1 \leq i < j \leq k$.
+        \item A path tuple is \textit{intersecting} if... it is not non-intersecting.
+    \end{enumerate}
+\end{definition}
+
+We will call intersecting path tuples \textit{ipats} and non-intersecting path tuples \textit{nipats}.
+
+Now to get some notation in:
+
+\begin{definition}
+    Let $A$, $B$ be lattice points. The number of paths from $A$ to $B$ will be denoted $\#(A{\to}B)$.
+\end{definition}
+
+Simple enough, let's upgrade to $k$-vertices.
+
+\begin{definition} Let $\mathbf{A}$ and $\mathbf{B}$ be $k$-vertices.
+    \begin{itemize}
+        \item The number of path tuples from $\mathbf{A}$ to $\mathbf{B}$ will be denoted $\#(\mathbf{A}{\to}\mathbf{B})$.
+        \item The number of nipats from $\mathbf{A}$ to $\mathbf{B}$ will be denoted $\#(\mathbf{A}{\toto}\mathbf{B})$.
+        \item The number of ipats from $\mathbf{A}$ to $\mathbf{B}$ will be denoted $\#(\mathbf{A}{\toea}\mathbf{B})$.
+    \end{itemize}
+\end{definition}
+
+Hopefully it's clear why this notation in particular. We have a particularly simple result about counting path tuples:
+
+\begin{remark}
+    Let $\mathbf{A} = (A_1, A_2, \ldots, A_k)$ and $\mathbf{B} = (B_1, B_2, \ldots B_k)$. Then we have that.
+    \[
+        \#(\mathbf{A}{\rightarrow}\mathbf{B}) = \prod_{i=1}^k \#(A_i{\to}B_i).
+    \]
+\end{remark}
+
+What about counting nipats?
+
+\section{The LGV lemma for two paths}
+
+Consider the following operation on two intersecting paths.
+
+\begin{definition}
+    Let $A_1, A_2, B_1, B_2$ be lattice points and let $p$ and $q$ be intersecting paths from $A_1$ to $B_1$ and $A_2$ to $B_2$ respectively. The path $p\looparrowright q$ will be a path from $A_1$ to $B_2$ defined as follows:
+
+    Let $v$ be the first point of intersection of $p$ and $q$.
+
+    Let $\head_v p$ be all arcs in $p$ between $A$ and $v$, and $\tail_v p$ be all arcs in $p$ between $v$ and $B$. Define them similarly for $q$.
+
+    Then let $p\looparrowright q := \head_v p \cup \tail_v q$. 
+\end{definition}
+
+Then we have the following consequence:
+
+\begin{remark}
+    For any two intersecting paths $p, q$, 
+    \[
+        (p\looparrowright q)\looparrowright(q\looparrowright p) = p 
+    \]
+\end{remark}
+\begin{proof}
+    \begin{align*}
+        (p\looparrowright q)\looparrowright(q\looparrowright p) &= (\head_v p \cup \tail_v q) \looparrowright (\head_v p \cup \tail_v q) \\
+                                                                &= \head_v (\head_v p \cup \tail_v q) \cup \tail_v (\head_v q \cup \tail_v p) \\
+                                                                &= \head_v p \cup \tail_v p \\
+                                                                &= p
+    \end{align*}
+\end{proof}
+
+And this is the key to proving our first theorem about counting nipats.
+
+\begin{theorem}[Lindstr\"om-Gessel-Viennot for lattice paths, $k=2$] 
+    Let $\mathbf{A} = (A_1,A_2)$ and $\mathbf{B}=(B_1,B_2)$. Let $\mathbf{B}' = (B_2, B_1)$. Then
+    \[
+        \det \begin{pmatrix}
+            \#(A_1{\to}B_1) & \#(A_1{\to}B_2) \\
+            \#(A_2{\to}B_1) & \#(A_2{\to}B_2)
+        \end{pmatrix} = \#(\mathbf{A}{\toto}\mathbf{B}) - \#(\mathbf{A}{\toto}\mathbf{B}')
+    \]
+\end{theorem}
+
+\begin{proof}
+    First, we evaluate the determinant
+    \begin{align*}
+        &\det \begin{pmatrix}
+            \#(A_1{\to}B_1) & \#(A_1{\to}B_2) \\
+            \#(A_2{\to}B_1) & \#(A_2{\to}B_2)
+        \end{pmatrix} \\
+        &= \Big[\#(A_1{\to}B_1) \cdot \#(A_2{\to}B_2)\Big] - \Big[\#(A_1{\to}B_2)\cdot\#(A_2{\to}B_1)\Big] \\
+        &= \#(\mathbf{A}{\to}\mathbf{B}) - \#(\mathbf{A}{\to}\mathbf{B}').
+    \end{align*}
+    and so we have to show that
+    \[
+        \#(\mathbf{A}{\to}\mathbf{B}) - \#(\mathbf{A}{\to}\mathbf{B}') = \#(\mathbf{A}{\toto}\mathbf{B}) - \#(\mathbf{A}{\toto}\mathbf{B}').
+    \]
+    Since a path tuple is either an ipat or a nipat, we have that
+    \[
+        \#(\mathbf{A}{\to}\mathbf{B}) = \#(\mathbf{A}{\toto}\mathbf{B}) + \#(\mathbf{A}{\toea}\mathbf{B}).
+    \]
+    Then
+    \begin{align*}
+        \#(\mathbf{A}{\to}\mathbf{B}) - \#(\mathbf{A}{\to}\mathbf{B}') &= \Big[\#(\mathbf{A}{\toto}\mathbf{B}) + \#(\mathbf{A}{\toea}\mathbf{B})\Big] - \Big[\#(\mathbf{A}{\toto}\mathbf{B'}) + \#(\mathbf{A}{\toea}\mathbf{B'})\Big] \\
+                                                                       &= \Big[\#(\mathbf{A}{\toto}\mathbf{B}) - \#(\mathbf{A}{\toto}\mathbf{B'})\Big] + \Big[\#(\mathbf{A}{\toea}\mathbf{B}) - \#(\mathbf{A}{\toea}\mathbf{B'})\Big].
+    \end{align*}
+    Now our goal is further modified to showing that
+    \[
+        \Big[\#(\mathbf{A}{\toto}\mathbf{B}) - \#(\mathbf{A}{\toto}\mathbf{B'})\Big] + \Big[\#(\mathbf{A}{\toea}\mathbf{B}) - \#(\mathbf{A}{\toea}\mathbf{B'})\Big] = \#(\mathbf{A}{\toto}\mathbf{B}) - \#(\mathbf{A}{\toto}\mathbf{B}').
+    \]
+    Which simplifies to
+    \[
+        \#(\mathbf{A}{\toea}\mathbf{B}) = \#(\mathbf{A}{\toea}\mathbf{B}').
+    \]
+    Nice! If this is true, then the proof follows. It is in fact true, and we can construct an explicit bijection using $\looparrowright$.
+    Define $f$ as a function on pairs of intersecting paths that returns another pair of intersecting paths to be
+    \[
+        f(p, q) := (p \looparrowright q, q \looparrowright p).
+    \]
+    we have that
+    \begin{align*}
+        f(f(p,q)) &= f(p\looparrowright q,q\looparrowright p) \\
+                  &= \Big((p\looparrowright q)\looparrowright(q\looparrowright q),(q\looparrowright p)\looparrowright(p\looparrowright q)\Big) \\
+                  &= (p, q).
+    \end{align*}
+    Hence $f$ is an involution. 
+\end{proof}
+
+That wasn't too bad, since it's quite literally the smallest nontrivial case of the theorem. To do better, we will need a more general tool, \textit{sign-reversing involutions}.
+
+\section{Sign-reversing involutions}
+
+I think \textit{sign-reversing involution} is a good name. Hopefully after seeing the definitions you might agree.
+
+\begin{definition}
+    Let $\mathcal{A}$ be a finite set, and consider a \textit{sign} function
+    \[
+        \sign: \mathcal{A} \to \mathbb{Z}.
+    \]
+    A \textit{sign-reversing involution} is an involution $f$ defined on a subset $\mathcal{X}$ of $\mathcal{A}$ such that 
+    \[
+        \sign f(a) = -\sign a
+    \]
+    for all $a \in \mathcal{A}$. That $f$ is an involution means that 
+    \[
+        f(f(x)) = x
+    \]
+    for all $x \in \mathcal{X}$.
+\end{definition}
+
+Then we have a principle that is entirely obvious to me but I never tried proving and have no idea if it is difficult or not to prove:
+
+\begin{theorem}[Cancellation principle]
+    Again, let $\mathcal{A}$ be a finite set with a sign function $\sign$.
+
+    Let a sign-reversing involution $f$ be defined for a subset $\mathcal{X}$ of $\mathcal{A}$. Then 
+    \[
+        \sum_{a\in\mathcal{A}} \sign a = \sum_{a\in\mathcal{A}\setminus\mathcal{X}} \sign a,
+    \]
+\end{theorem}
+
+The idea behind the cancellation principle is that, well, the signs of the elements of $\mathcal{X}$ cancel each other out, and $f$ records exactly how they cancel out. 
+
+\section{Weighted digraphs}
+
+\begin{definition}
+    Let $D$ be a digraph.
+\end{definition}
+
+\section{Statement and proof of the LGV lemma}
+
+
+\begin{theorem*}[Lindstr\"om-Gessel-Viennot] 
+    Let $k \in \NN$. 
+
+    Let $\mathbf{A} = (A_1, A_2, \ldots, A_k)$ and let $\mathbf{B} = (B_1, B_2, \ldots, B_k)$. Then
+    \[
+        \det \left[W(A_i{\to}B_j)\right]_{1\leq i \leq k,\: 1\leq j \leq k} = \sum_{\sigma\in \mathfrak{S}_k} \sgn \sigma \cdot W\big(\mathbf{A}{\toto}\sigma(\mathbf{B})\big),
+    \]
+    where $\mathfrak{S}_k$ is the symmetric group on $k$ letters, and $\sgn$ denotes the sign of a permutation.
+\end{theorem*}
+
+\begin{proof}
+    We're going to set up a sign-reversing involution and use the previous remark.
+
+    Let our background set $\mathcal{A}$ be
+    \[
+        \mathcal{A} := \{ (\sigma, \mathbf{p}) : \sigma \in \mathfrak{S}_k \text{ and } \mathbf{p} \in \mathbf{A}{\to}\sigma(\mathbf{B})\}.
+    \]
+    And let our subset $\mathcal{X}$ be the set of all ipats in $\mathcal{A}$, i.e
+    \[
+        \mathcal{X} := \{(\sigma, \mathbf{p}) \in \mathcal{A} : \mathbf{p} \in \mathbf{A}{\toea}{\mathbf{B}}\}.
+    \]
+    Define our sign function on $\mathcal{A}$ to be
+    \[
+        \sign (\sigma, \mathbf{p}) := \sgn (\sigma).
+    \]
+    Now let's do the same thing we did before-- expand the determinant. We have
+    \begin{align*}
+        \det \Big[W(A_i{\to}B_j)\Big] &= \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot \prod_{1 \leq i \leq k} W\big(A_i{\to}B_{\sigma(i)}\big) \\
+                                       &= \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\to}\sigma(\mathbf{B})\big).
+    \end{align*}
+    It turns out by grouping together $\mathbf{p}$'s we have that
+    \[
+        \sum_{(\sigma,\mathbf{p})\in\mathcal{A}} \sign (\sigma,\mathbf{p}) = \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\to}\sigma(\mathbf{B})\big). 
+    \]
+    And, by considering that $\mathcal{X}$ consists of \textit{precisely all} the ipats, we have
+    \[
+        \sum_{(\sigma,\mathbf{p})\in\mathcal{X}} \sign (\sigma,\mathbf{p}) = \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\toea}\sigma(\mathbf{B})\big)
+    \]
+    and
+    \[
+        \sum_{(\sigma,\mathbf{p})\in\mathcal{A}\setminus\mathcal{X}} \sign (\sigma,\mathbf{p}) = \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\toto}\sigma(\mathbf{B})\big). 
+    \]
+    Then, since $W(\mathbf{A}{\to}\mathbf{B}) = W(\mathbf{A}{\toto}\mathbf{B}) + W(\mathbf{A}{\toea}\mathbf{B})$,
+    \begin{align*}
+        &\sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\to}\sigma(\mathbf{B})\big) \\
+        &= \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\toto}\sigma(\mathbf{B})\big) + \sum_{\sigma \in \mathfrak{S}_k}\sgn(\sigma) \cdot W\big(\mathbf{A}{\toea}\sigma(\mathbf{B})\big) \\
+        &= \sum_{(\sigma,\mathbf{p})\in\mathcal{A}\setminus\mathcal{X}} \sign (\sigma,\mathbf{p}) + \sum_{(\sigma,\mathbf{p})\in\mathcal{X}} \sign (\sigma,\mathbf{p}) \\
+        &= \sum_{(\sigma,\mathbf{p})\in\mathcal{A}} \sign (\sigma,\mathbf{p}).
+    \end{align*}
+    If we find a sign-reversing involution on $\mathcal{X}$, this will prove the desired statement.
+
+    ``Swapping paths'' will suffice again, but we have to take care about our \textit{specific choices} now. 
+    Here, the superhero of choosing-from-sets appears to save the day once again: \textit{we fixed an order on our vertices}!
+
+    So, given a path tuple $\mathbf{p} = (p_1,\ldots,p_k)$, we may have multiple paths that intersect, i.e we have multiple choices of $i<j$ such that $p_i$ and $p_j$ share a vertex in common. 
+    We know how to swap two paths already-- meaning, if we had $i<j$ already such that $p_i$ intersects with $p_j$, we could construct a path tuple
+    \[
+        \mathbf{p'} = (p_1,\ldots,p_i \looparrowright p_j,\ldots,p_j \looparrowright p_i, \ldots, p_k)
+    \]
+    from $\mathbf{A}$ to $(ij)(\mathbf{B})$
+    \footnote{where $(ij)$ refers to the transposition that swaps $i$ and $j$}.
+
+    Now we just need to make sure we have a well defined procedure that \textit{reliably} picks out two paths from our path tuple. Here's how I would do it:
+
+    Assign a total order (say, lexicographic) on all vertices in $\ZZ^2$.
+
+    For any ipat, pick the smallest such vertex that is an intersection of any two paths in the ipat. 
+    Then, from the set of paths that contain that vertex, pick the ones with the smallest two indices. 
+    This suffices as our pairing rule.
+
+\end{proof}
+
+\end{document}

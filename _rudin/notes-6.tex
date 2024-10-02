@@ -1,0 +1,79 @@
+\documentclass{article}
+
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[margin=0.5in]{geometry}
+
+\newenvironment{myboxed}{\bigskip\noindent\begin{tabular}{|p{.975\textwidth}|}\hline \\}{\\\\\hline\end{tabular}\bigskip}
+\newenvironment{mytitle}{\noindent\large\begin{flushright}}{\end{flushright}\normalsize}
+
+\begin{document}
+
+\begin{mytitle}
+    Principles of Mathematical Analysis \\
+    Chapter 6 \\
+    \normalsize Jasper Ty
+\end{mytitle}
+
+\begin{myboxed}
+
+\end{myboxed}
+
+\begin{myboxed}
+    \textsc{Riemann integral of $f \alpha'$ is equal to Riemann-Stieltjes integral of $f$ with integrator $\alpha$}
+ 
+    \textbf{Theorem}
+
+    Let $\alpha: [a,b] \rightarrow \mathbb{R}$ be a differentiable monotonic function such that $\alpha' \in \mathscr{R}$. Let $f: [a, b] \rightarrow \mathbb{R}$ be a bounded function. 
+
+    Then $f \in \mathscr{R}(\alpha)$ if and only if $f\alpha' \in \mathscr{R}$. And
+    \[\int_a^b fd\alpha = \int_a^b f(x) \alpha'(x) dx\]
+
+    \textbf{Proof}
+
+    Let $\varepsilon > 0$ and choose a partition $P$ such that
+    \[U(P, \alpha') - L(P, \alpha') < \varepsilon\]
+    If we pick any points $s_i, t_i \in [x_{i-1}, x_i]$, we have that
+    \[\sum_{i=1}^n |\alpha'(s_i) - \alpha'(t_i)|\Delta x_i \leq \varepsilon \]
+    Let $|f(x)| \leq M$, then
+    \[\sum_{i=1}^n |\alpha'(s_i) \Delta x_i - \alpha'(t_i) \Delta x_i||f(s_i)| \leq  M\varepsilon \]
+    Pushing the $f(s_i)$ in,
+    \[\sum_{i=1}^n |f(s_i)\alpha'(s_i) \Delta x_i - f(s_i)\alpha'(t_i) \Delta x_i| \leq  M\varepsilon \]
+    By the mean value theorem, we can choose $t_i$ such that
+    \[\Delta\alpha_i = \alpha'(t_i)\Delta x_i\]
+    Then
+    \[\sum_{i=1}^n |f(s_i)\alpha'(s_i) \Delta x_i - f(s_i)\Delta\alpha_i| \leq  M\varepsilon \]
+    By the triangle inequality,
+    \[\left| \sum_{i=1}^n [f(s_i)\alpha'(s_i) \Delta x_i - f(s_i)\Delta\alpha_i] \right| \leq \sum_{i=1}^n |f(s_i)\alpha'(s_i) \Delta x_i - f(s_i)\Delta\alpha_i| \leq  M\varepsilon \]
+    So 
+    \[\left| \sum_{i=1}^n f(s_i)\alpha'(s_i) \Delta x_i - \sum_{i=1}^n f(s_i)\Delta\alpha_i \right| \leq \sum_{i=1}^n |f(s_i)\alpha'(s_i) \Delta x_i - f(s_i)\Delta\alpha_i| \leq  M\varepsilon \]
+    In particular, letting $f(s_i)$ be $M_i$ and $m_i$ respectively,
+    \[|U(P, f\alpha') - U(P, f, \alpha)| \leq M\varepsilon\]
+    \[|L(P, f\alpha') - L(P, f, \alpha)| \leq M\varepsilon\]
+
+\end{myboxed}
+
+\begin{myboxed}
+    Since the triangle inequality holds for $\sup$, consider the reverse triangle inequality (for $\sup$)
+    \[\Bigg|\sup_P|U(P, f\alpha')| - \sup_P|U(P, f\alpha')|\Bigg|\leq \sup_P|U(P, f\alpha') - U(P, f, \alpha)| \leq M\varepsilon\]
+    Then
+    \[\left|\overline{\int_a^b}f\alpha'dx - \overline{\int_a^b}fd\alpha \right|\leq M\varepsilon\]
+    Similarly,
+    \[\left|\underline{\int_a^b}f\alpha'dx - \underline{\int_a^b}fd\alpha \right|\leq M\varepsilon\]
+    Hence, if one integral exists, the other does. Moreover, their integrals are equal.
+\end{myboxed}
+
+\begin{myboxed}
+    \textsc{Change of variable}
+
+    \textbf{Theorem}
+\end{myboxed}
+
+\begin{myboxed}
+    \textsc{Integration by parts}
+
+    \textbf{Theorem}
+\end{myboxed}
+
+\end{document}

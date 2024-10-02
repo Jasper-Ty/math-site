@@ -1,0 +1,296 @@
+\documentclass{article}
+
+% See https://github.com/Jasper-Ty/dotfiles
+\usepackage[garamond]{jaspercommon}
+
+\DeclareMathOperator{\id}{id}
+
+\title{Group actions and representations}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+This are notes I took while going through Chapter 4 of Darij Grinberg's ``Introduction to the symmetric group algebra'' \cite{DarijSGA}.
+
+\tableofcontents
+
+\section{Group actions and \texorpdfstring{$G$}{G}-sets}
+
+\subsection{Introduction}
+
+We start with one of the most famous applications of group actions.
+
+\begin{theorem}[Cayley's theorem]\label{thm:cayley}
+    Every group is isomorphic to a subgroup of some symmetric group.
+\end{theorem}
+\begin{proof}[Proof (sketch)]
+    Fix a group $G$. For all group elements $g \in G$, define the map
+    \begin{align*}
+        L_g: G &\to G \\
+        k &\mapsto gk,
+    \end{align*}
+    which is easily verified to be an element of $S_G$.
+    It is also easily shown that $L_{gh} = L_g \circ L_h$, implying that the map $g \mapsto L_g$ is homomorphic. 
+    Then $G$ is isomorphic to the image of the aforementioned map, a subgroup of $S_G$.
+\end{proof}
+
+This is, at least, the standard proof.
+If you're cheating and already more or less know the idea of the proof ahead of time, an even terser proof sketch would go:
+
+\begin{proof}[Proof (sketchier)]
+    \textit{$G$ acts on itself via left multiplication}.
+\end{proof}
+
+In fact, $G$ can act on \textit{far, far more} than just itself.
+
+\begin{definition}[Left group actions]
+    Let $G$ be a group, and let $X$ be a set.
+    We call a binary operation
+    \[
+        \ast : G \times X \to X
+    \]
+    a \textit{left action of $G$ on $X$}, or a \textit{left $G$-action of $X$} whenever it satisfies
+    \begin{align*}
+        g \ast (h \ast x) &= (gh) \ast x \\
+        1_G \ast x &= x
+    \end{align*}
+for any $g,h \in G$, $x \in X$.
+\end{definition}
+
+\begin{definition}[$G$-sets]
+    A \textit{left $G$-set} is a set $X$ equipped with a left $G$-action of it.
+\end{definition}
+
+We can define right actions and right $G$-sets analogously.
+But we won't.
+
+\begin{convention}
+    All actions are left actions unless explicitly noted otherwise.
+\end{convention}
+
+Now, we note that in Cayley's theorem, we expressed our group action as a map into $S_G$.
+This gives us an equivalent formulation of $G$-actions and $G$-sets.
+
+\begin{definition}[$G$-actions, curried form]
+    A left $G$-action on $X$ is a homomorphism
+    \begin{align*}
+        \tau: G &\to S_X \\
+        g &\mapsto \tau_g.
+    \end{align*}
+\end{definition}
+
+We may go between the two different definitions by the relationships
+\[
+    g \ast x \coloneq \tau_g(x) \qquad \tau_g \coloneq (x \mapsto g \ast x)
+\]
+going between both curried and uncurried forms.
+
+
+\subsection{Examples}
+
+For brevity, I omit quantifiers--- any formula written here is implicitly meant to be quantified \textit{universally} over its free variables.
+
+\begin{example}
+    Let $G$ be a group. 
+    Then we have the following $G$-actions on $G$
+    \begin{enumerate}[label=(\alph*)]
+        \item The \textit{left regular $G$-action};
+            \[
+                g \ast h := gh.
+            \]
+        \item The \textit{inverse right regular $G$-action};
+            \[
+                g \ast h := hg^{-1}.
+            \]
+        \item The \textit{conjugation $G$-action};
+            \[
+                g \ast h := ghg^{-1}.
+            \]
+    \end{enumerate}
+\end{example}
+
+\begin{example}
+    Let $G$ be a group and let $X$ be any set.
+    The \textit{trivial $G$-action on $X$} is defined by
+    \[
+        g \ast x = x.
+    \]
+\end{example}
+
+\begin{example}
+    Let $X$ be any set.
+    The \textit{natural} action of $S_X$ on $X$ is defined by
+    \[
+        g \ast x = g(x).
+    \]
+\end{example}
+
+\begin{example}\label{ex:cosetgset}
+    Let $G$ be a group and let $H \leq G$.
+    Define
+    \[
+        G / H := \{\text{left cosets of }H\text{ in }G\} = \{gH : g \in G\}.
+    \]
+    This set, as we know, is a group (with the Minkowski product) if and only if $H$ is normal.
+    Nevertheless, it can always be given the structure of a $G$-set, by defining
+    \[
+        g \ast (uH) := (gu)H.
+    \]
+\end{example}
+
+\subsection{Symmetric group actions}
+
+The following two definitions have a particularly annoying mess of clashing conventions built on top of them, one which my advisor regularly asks me to be careful about.
+
+\begin{definition}[A Tale of Two Actions]
+    Let $n \in \NN$.
+    Let $X$ be a set.
+    Consider the following actions on $X^n$.
+    \begin{enumerate}[label=(\alph*)]
+        \item We have a $S_X$ action given by
+            \[
+                g \ast (x_1,\ldots,x_n) := (g(x_1),\ldots,g(x_n)).
+            \]
+        \item We have a $S_n$ action given by
+            \[
+                g \ast (x_1,\ldots,x_n) := (x_{g(1)},\ldots,x_{g(n)}).
+            \]
+    \end{enumerate}
+    The former sends \textit{values to values}, and is called the \textit{entrywise action}, or the \textit{action on entries}.
+    The latter sends \textit{positions to positions}, and is called the \textit{place permutation action}, or the \textit{action on places}.
+\end{definition}
+
+It gets particularly confusing (to me!) when $X$ itself is the set $\{1, \ldots, n\}$, then both the action on entries and places are $S_n$-actions!
+
+\subsection{\texorpdfstring{$G$}{G}-set morphisms}
+
+$G$ sets form a category (a \href{https://en.wikipedia.org/wiki/Groupoid}{groupoid}, in particular), whose morphisms respect $G$-actions in the following way:
+
+\begin{definition}
+    Let $X$ and $Y$ be two $G$-sets.
+    Then a \textit{$G$-set morphism} or a \textit{$G$-equivariant} map is a function $f: X \to Y$ such that
+    \[
+        f(g \ast x) = g \ast f(x)
+    \]
+    for any $g \in G$, $x \in X$.
+\end{definition}
+
+\begin{example}
+    Let $A$ be any set.
+    Equip $A$ with the trivial $S_n$-action, and $A^n$ with the place-permuting $S_n$-action.
+    The map 
+    \begin{align*}
+        f: A &\to A^n \\
+        a &\mapsto \left(\underbrace{a,a,...,a}_{n\text{ times}}\right)
+    \end{align*}
+    is then a $S_n$-set morphism, since if $g \in S_n$,
+    \[
+        f(g \ast a) = f(a) = \left(\underbrace{a,a,...,a}_{n\text{ times}}\right)
+    \]
+    and
+    \[
+        g \ast f(a) = g \ast \left(\underbrace{a,a,...,a}_{n\text{ times}}\right) = \left(\underbrace{a,a,...,a}_{n\text{ times}}\right).
+    \]
+\end{example}
+
+More generally,
+
+\begin{example}
+    Let $X$ and $Y$ be two $G$-sets, equipped with the trivial $G$-actions.
+    Then \textit{any} map $f: X \to Y$ is $G$-equivariant.
+\end{example}
+
+\begin{proposition}
+    If $f$ is a $G$-set morphism and its inverse $f^{-1}$ exists, then $f^{-1}$ is a $G$-set morphism.
+\end{proposition}
+
+\begin{proof}
+    Let $f: X \to Y$.
+    That $f^{-1}$ is an inverse of $f$ means that
+    \[
+        f^{-1} \circ f = f \circ f^{-1} = \id.
+    \]
+    That $f$ is a $G$-set morphism means that, given the curried forms $\tau: X \to S_X$ and $\phi: Y \to S_Y$ of $X$ and $Y$'s $G$-actions, for all elements $g \in G$
+    \[
+        \phi_g \circ f = f \circ \tau_g.
+    \]
+    Then
+    \[
+        f^{-1} \circ (\phi_g \circ f) \circ f^{-1} = f^{-1} \circ (f \circ \tau_g) \circ f^{-1}
+    \]
+    so
+    \[
+        f^{-1} \circ \phi_g = \tau_g \circ f^{-1}.
+    \]
+    which shows that $f^{-1}$ is a $G$-set morphism.
+\end{proof}
+
+\begin{definition}
+    A \textit{$G$-set isomorphism} is a $G$-set morphism that is invertible, i.e, it is a $G$-set morphism $f$ for which there exists another $G$-set morphism $f^{-1}$ such that
+    \[
+        f \circ f^{-1} = f^{-1} \circ f = \id.
+    \]
+    If $X$ and $Y$ are two $G$-sets that have a $G$-set isomorphism between them, we say that $X$ and $Y$ are \textit{isomorphic as $G$-sets}, and write $X \simeq Y$.
+\end{definition}
+
+\begin{example}
+    $G/G$, as defined in \ref{ex:cosetgset} is isomorphic to $\{1\}$.
+\end{example}
+
+\begin{example}
+    $G/\{1_G\} \sim G$.
+\end{example}
+
+\begin{example}
+    Consider the $S_n$-action on $\scrP([n])$, and consider the place-permutation action of $S_n$ on $\mathbf{2}^n$.
+    Then $\scrP([n]) \simeq \mathbf{2}^n$.
+\end{example}
+\begin{proof}
+    Consider the bijection given by sending each element of $\scrP([n])$ to its corresponding indicator function in $\mathbf{2}^n$.
+\end{proof}
+
+\subsection{Combining \texorpdfstring{$G$}{G}-sets}
+
+\begin{definition}
+    The \textit{Cartesian product of $G$-sets}
+\end{definition}
+
+
+\section{Linear group actions and representations of \texorpdfstring{$G$}{G}}
+
+\subsection{Linear actions, aka representations}
+
+\begin{definition}
+    Let $V$ be a $\mathbf{k}$-module, and let $G$ be a group.
+    \begin{enumerate}[label=(\alph*)]
+        \item A $G$-action on $V$ is \textit{$\mathbf{k}$-linear} if the map $\tau_g$ is $\mathbf{k}$-linear for all $g \in G$.
+    \end{enumerate}
+\end{definition}
+
+\section{Modules over rings}
+\subsection{Definitions}
+\begin{definition}
+
+\end{definition}
+
+\begin{theorem}
+    A left $\mathbf{k}[G]$-module $V$
+\end{theorem}
+
+
+
+
+\begin{thebibliography}{999999}
+    \raggedright\footnotesize
+
+    \bibitem[GrinbergSGA]{DarijSGA}
+    Darij Grinberg, \textit{An introduction to the symmetric group algebra}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/24s/sga.pdf}
+
+\end{thebibliography}
+
+\end{document}

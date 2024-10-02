@@ -1,0 +1,242 @@
+\documentclass{article}
+
+\usepackage[garamond]{jaspercommon}
+
+\newcommand{\inbasis}[2]{\ensuremath{\left[#1\right]_{#2}}}
+\newcommand{\grad}{\ensuremath{\nabla}}
+\newcommand{\norm}[1]{\ensuremath{\left\lVert{#1}\right\rVert}}
+
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\U}{U}
+
+\title{Matrix Analysis Notes}
+\author{Jasper Ty}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+These are typed up notes for my Matrix Analysis class (MATH-504 at Drexel University).
+The class is based on the textbook ``Matrix Analysis'' by Horn and Johnson.
+I am using the second edition of the book \cite{HoJo}
+
+The sections match up with the book, but theorem and definition numbers do not.
+
+\tableofcontents
+
+\setcounter{section}{-1}
+\section{Review}
+
+Omitted.
+
+\section{Eigenvectors, eigenvectors, and similarity}
+
+\setcounter{subsection}{-1}
+\subsection{Introduction}
+
+\begin{proposition}
+    If $T$ is a linear transformation on a vector space $V$, then if we fix a particular basis $\scrB$ of $V$ and put $A = \inbasis{T}{\scrB}$, then the set of \textit{all possible basis representations of $T$} is the set of all \textit{matrices similar to $A$}.
+\end{proposition}
+
+\begin{definition}
+    Let $T$ be a linear transformation on a vector space $V$ over $\FF$.
+    An \textit{eigenvector} of $T$ is a vector $\bfv \in V$ such that
+    \[
+        T\bfv = \lambda\bfv
+    \]
+    for some $\lambda \in \FF$.
+
+    An \textit{eigenvalue} of $T$ is a scalar $\lambda \in \FF$ such that \textit{there exists} an eigenvector for which the above equation holds.
+\end{definition}
+
+Eigenvectors arise, for example, from the problem of \textit{maximizing a real symmetric quadratic form on the boundary of the unit disk}, namely the task of finding
+\[
+    \max\{\bfx^\top A \bfx: \bfx \in \RR^n \text{ and } \bfx^\top \bfx = 1\}.
+\]
+where $A \in M_n(\RR)$ is a real symmetric matrix.
+
+This can be solved with Lagrange multipliers, and the appropriate Lagrangian function is 
+\[
+    \calL(\bfx, \lambda) = \bfx^\top A \bfx - \lambda \bfx^\top \bfx.
+\]
+To compute its stationary points: we have the following fact: $\grad(\bfx^\top A \bfx) = 2A\bfx$, which tells us that
+\[
+    \grad \calL = 2(A\bfx - \lambda\bfx).
+\]
+Hence it must be that $A\bfx = \lambda \bfx$ is a necessary condition to find a maximizing or minimizing vector for our problem.
+
+By Weierstrass's theorem, which is an avatar of the general topological theorem that \textit{continuous images of compact spaces are compact}, we \textit{know} that $\bfx^\top A \bfx$ attains its minimum and minimum for some $\bfx_{\min}$, $\bfx_{\max}$.
+
+\begin{theorem}[Weierstrass]
+    Continuous images of compact
+    Fix a vector space $V$ with a norm $\lVert\cdot\rVert$.
+    If $S \subseteq V$ is compact, and $f: S \to \RR$ is continuous, then $\sup f(S) \in f(S)$ and $\inf f(S) \in f(S)$ respectively.
+\end{theorem}
+
+Then, since $A\bfx = \lambda\bfx$ was a \textit{necessary condition} for such extrema to exist, it must follow that $A\bfx_{\max} = \lambda_1 \bfx_{\max}$ and $A\bfx_{\min} = \lambda_2 \bfx_{\min}$ for some $\lambda_1,\lambda_2 \in \RR$.
+
+What we have just proved is the following:
+
+\begin{theorem}
+    Every real symmetric matrix has at least one real eigenvalue.
+\end{theorem}
+
+\subsection{The eigenvalue-eigenvector equation.}
+
+We review basic terminology about eigenvalues and eigenvectors.
+
+\begin{definition}
+    An \textit{eigenpair} for a matrix $A \in M_n$ is a pair $(\bfx, \lambda)$ where $\bfx \in \CC^n\setminus\{0\}$ and $\lambda \in \CC$ such that
+    \[
+        A\bfx = \lambda\bfx.
+    \]
+    We call $\bfx$ an \textit{eigenvector} of $A$, and we call $\lambda$ an \textit{eigenvalue} of $A$.
+\end{definition}
+
+This definition can readily be manipulated to show the following:
+
+\begin{proposition}
+    Eigenvectors are the nontrivial solutions to the matrix-vector equation
+    \[
+        (\lambda I-A)\bfx = 0.
+    \]
+\end{proposition}
+
+\begin{definition}
+    Let $A \in M_n$.
+    The \textit{spectrum, $\sigma(A)$} of $A$ is the set of all eigenvalues of $A$.
+\end{definition}
+
+We note that \textit{evaluating polynomials at matrices} is entirely well defined, as summing and taking powers of matrices is well defined.
+
+We have the following theorem 
+\begin{theorem}
+    Let $p$ be a polynomial.
+    If $\lambda, x$ is an eigenvalue-eigenvector pair of $A \in M_n$, then $p(\lambda),x$ is an eigenvalue-eigenvector pair of $p(A)$.
+
+    Conversely, if $k \geq 1$ and $\mu$ is an eigenvalue of $p(A)$, then there is some eigenvalue $\lambda$ of $A$ such that $\mu = p(\lambda)$.
+\end{theorem}
+
+\subsection{The characteristic polynomial and algebraic multiplicity}
+
+\begin{definition}
+\end{definition}
+
+\section{Unitary similarity and unitary equivalence}
+
+\subsection{Unitary matrices and the \texorpdfstring{$QR$}{QR} factorization}
+
+\begin{definition}
+    A list of vectors $\bfx_1,\ldots,\bfx_k \in \CC^n$ is said to be \textit{orthogonal} if $\bfx_i^\ast \bfx_j = 0$ for all $1 \leq i < j \leq k$.
+    If, in particular, $\bfx_i^\ast \bfx_i$ for all $1 \leq i \leq k$, then we say that the list is \textit{orthonormal}.
+\end{definition}
+
+
+\begin{theorem}
+    Every orthonormal list of vectors in $\CC^n$ is linearly independent.
+\end{theorem}
+
+\begin{proof}
+    Let $\{\bfx_1,\ldots,\bfx_k\}$ be an orthonormal set, and suppose $\alpha_1\bfx_1 + \cdots + \alpha_k\bfx_k = 0$.
+    Then
+    \begin{align*}
+        0
+        &=
+        0^\ast0
+        \\
+        &=
+        (\alpha_1\bfx_1 + \cdots + \alpha_k\bfx_k)^\ast(\alpha_1\bfx_1 + \cdots + \alpha_k\bfx_k).
+        \\
+        &=
+        \sum_{i,j}
+        \overline{\alpha_i} \alpha_j \bfx_i^\ast \bfx_j
+        \\
+        &=
+        \sum_i
+        |\alpha_i|^2.
+    \end{align*}
+    Hence each $\alpha_i$ must be zero.
+\end{proof}
+
+\begin{definition}
+    A matrix $U \in M_n$ is unitary if $U^\ast U = I$.
+    In particular, a real matrix $U \in M_n(\RR)$ is \textit{orthogonal} if $U^TU = I$.
+\end{definition}
+
+\begin{theorem}
+    Let $U \in M_n$.
+    Then the following are equivalent
+    \begin{enumerate}[label=(\alph*)]
+        \item $U$ is unitary.
+        \item $U$ is nonsingular and $U^\ast = U^{-1}$.
+        \item $UU^\ast = I$.
+        \item $U^\ast$ is unitary.
+        \item The columns of $U$ are orthonormal.
+        \item The rows of $U$ are orthonormal.
+        \item For all $\bfx \in \CC^n$, $\norm{\bfx}_2 = \norm{U\bfx}_2$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    (a) implies (b) follows from the defining equation
+    \[
+        U^\ast U = I.
+    \]
+    (b) implies (c) since matrix inverses are both left and right inverses.
+
+    (d) is verified directly from (c)
+    \[
+        (U^\ast)^\ast (U^\ast) = UU^\ast = I.
+    \]
+    \todo{Finish proof of characterizations of unitarity}
+\end{proof}
+
+\begin{definition}
+    A linear transformation $T: \CC^n \to \CC^n$ is called a \textit{Euclidean isometry} if $\norm{\bfx}_2 = \norm{T\bfx}_2$ for all $x \in \CC^n$.
+\end{definition}
+
+The previous theorem tells us that all such transformations are in fact represented by \textit{square} unitary matricess.
+
+\begin{remark}
+    If $U,V \in M_n$ are unitary, then so is $UV$.
+\end{remark}
+
+\begin{proof}
+    \[
+        (UV)^\ast (UV) = V^\ast U^\ast U V = V^\ast V = I.
+    \]
+\end{proof}
+
+\begin{definition}
+    The subset of $\GL(n, \CC)$ consisting of all $n \times n$ unitary matrices is a subgroup called the unitary group $\U(n)$.
+\end{definition}
+
+\begin{theorem}[QR factorization]
+    Let $A \in M_{n,m}$.
+    If $n \geq m$, then there \textit{always exist} matrices $Q_{n,m}$ and $R \in M_m$ such that
+    \[
+        A = QR.
+    \]
+    where $Q$ is an isometry, and $R$ is diagonal.
+\end{theorem}
+
+\begin{proof}
+    The proof in the book uses the machinery of Householder matrices.
+    The professor gave us a proof via keeping track of intermediate results in applying the Gram-Schmidt algorithm.
+\end{proof}
+
+
+
+
+
+\begin{thebibliography}{999999}
+    \raggedright\footnotesize
+
+    \bibitem[HoJo13]{HoJo}
+    Roger A. Horn and Charles R. Johnson, \textit{Matrix Analysis, Second Edition}, Cambridge University Press 2013.
+
+\end{thebibliography}
+\end{document}

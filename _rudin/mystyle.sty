@@ -1,0 +1,38 @@
+\usepackage{geometry}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+
+\newenvironment{myboxed}{\bigskip\noindent\begin{tabular}{|p{.975\linewidth}|}\hline \\}{\\\\\hline\end{tabular}\bigskip}
+\newenvironment{result}[2]
+{\begin{myboxed}
+    \textsc{\large #1} \\
+    \textbf{#2}}
+{\end{myboxed}}
+
+\newcounter{exercise}[chapter]
+\newcommand{\exercises}{\phantomsection
+\addcontentsline{toc}{section}{Exercises}
+\section*{Exercises}}
+
+\newcommand{\exercise}{\bigskip\noindent\stepcounter{exercise}\textbf{Q\thechapter.\theexercise.} }
+\newcommand{\answer}{\medskip\noindent\textbf{A\thechapter.\theexercise.} }
+
+\newcounter{definition}[chapter]
+\newcommand{\definition}{\bigskip\noindent\stepcounter{definition}\textbf{DEFINITION \thechapter.\thedefinition:} }
+
+\newcounter{example}[chapter]
+\newcommand{\example}{\bigskip\noindent\stepcounter{example}\textbf{EXAMPLE \theexample.} }
+
+\newcounter{theorem}[chapter]
+\newcommand{\theorem}{\bigskip\noindent\stepcounter{theorem}\textbf{THEOREM \Roman{theorem}.} }

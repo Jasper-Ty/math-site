@@ -1,0 +1,527 @@
+\documentclass{article}
+
+\usepackage[garamond,nosubsections]{jaspercommon}
+
+\usepackage{algorithm2e}
+\SetKw{KwAnd}{and}
+
+
+\DeclareMathOperator{\degree}{deg}
+\DeclareMathOperator{\coeff}{coeff}
+\DeclareMathOperator{\eval}{eval}
+\newcommand{\gen}[1]{\ensuremath{\left\langle {#1} \right\rangle}}
+\newcommand{\LT}{\ensuremath{\textsc{LT}}}
+
+\newcounter{Chapcounter}
+\newcommand\showmycounter{\addtocounter{Chapcounter}{1}\themycounter}
+\newcommand{\chapter}[1] 
+{ 
+    \addtocounter{Chapcounter}{1} 
+    \newpage
+    \thispagestyle{empty}
+    \begin{flushright}
+        \huge\textbf{#1}
+    \end{flushright}
+    \vspace{0.3\textheight}
+    \addcontentsline{toc}{section}{\large #1}    
+}
+
+\title{Ideals, Varieties, and Algorithms notes}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Geometry, Algebra, and Algorithms}
+
+\section{Polynomials and Affine Space}
+
+\begin{convention}
+    We let $\mathbf{k}$ denote an arbitrary ground field.
+\end{convention}
+
+\subsection{Monomials, polynomials}
+
+\begin{definition}
+    A monomial in $x_1,\ldots,x_n$ is a formal product
+    \[
+        x_1^{\alpha_1}x_2^{\alpha_2}\cdots x_n^{\alpha_n}.
+    \]
+\end{definition}
+
+The underlying data for a monomial is just a $n$-tuple $\alpha = (\alpha_1,\ldots,\alpha_n)$ of nonnegative integers.
+
+To each monomial we assign a \textit{degree} which is computed in the obvious way.
+
+\begin{definition}
+    The \textit{degree} of a monomial $x_1^{\alpha_1}x_2^{\alpha_2}\cdots x_n^{\alpha_n}$ is a nonnegative integer defined by
+    \[
+        \degree x_1^{\alpha_1}x_2^{\alpha_2}\cdots x_n^{\alpha_n} \coloneq \alpha_1 + \cdots + \alpha_n.
+    \]
+\end{definition}
+
+To make calculations easier, we have a common and convenient notation.
+
+\begin{definition}
+    We define \textit{multi-index notation} for monomials by
+    \[
+        x^\alpha := x_1^{\alpha_1}x_2^{\alpha_2}\cdots x_n^{\alpha_n},
+    \]
+    where $\alpha = (\alpha_1,\ldots,\alpha_n)$ is any $n$-tuple of nonnegative integers.
+\end{definition}
+
+For example, we can compactly define the degree of a monomial by setting $\degree x^\alpha \coloneq |\alpha|$.
+
+\begin{definition}
+    A \textit{polynomial} $f$ in $x_1,\ldots,x_n$ in $\bfk$ is a finite formal linear combination of monomials with coefficients in $\bfk$, which we write
+    \[
+        f = \sum_{\alpha \text{ is a }n\text{-tuple}}c_\alpha x^\alpha, \quad c_\alpha \in \bfk.
+    \]
+    That this is finite means that $c_\alpha$ is zero for all but finitely many $\alpha$--- the sum is interpreted to be exactly over all the $\alpha$ for which $c_\alpha$ is nonzero.
+
+    The number $c_\alpha$ is called the \textit{coefficient} of $x^\alpha$ in $f$.
+    The \textit{terms} of $f$ are the $c_\alpha x^\alpha$ for which $c_\alpha \neq 0$.
+    If $f$ is nonzero, the \textit{total degree of $f$} is defined to be
+    \[
+        \degree f \coloneq \max_{\substack{\alpha \text{is a }n\text{-tuple} \\ c_\alpha \neq 0}} \Big(\deg x^\alpha \Big).
+    \]
+    In other words, the largest degree among all the terms of $f$.
+
+    Finally, the set of all polynomials in $x_1,\ldots,x_n$ in $\bfk$ is denoted $\bfk[x_1,\ldots,x_n]$.
+\end{definition}
+
+The underlying data for a polynomial can be expressed as a function $\coeff_f(\alpha_1, \ldots, \alpha_n)$ giving a coefficient $c_\alpha \in \bfk$ for each monomial $x^\alpha$.
+That the sum is finite can be interpreted as $\coeff_f$ having finite support.
+
+Or, it can also be expressed as a large $n$-dimensional array with entries in $\bfk$, and the tuples $\alpha$ are coordinates into this array for which the coefficients of $x^\alpha$ are given.
+
+This is really also a kind of \href{https://en.wikipedia.org/wiki/Normal_form_(abstract_rewriting)}{\textit{normal form}} for \textit{polynomial expressions}, an expression tree where nodes are the ring operations $(+,\times)$ and whose leaves are terms $c_\alpha x^\alpha$--- we can always associate any such tree with the ``correct'' element of $\bfk[x_1,\ldots,x_n]$.
+
+\subsection{Polynomial rings}
+
+Now, we give polynomials their algebraic structure.
+
+\begin{definition}
+    Let $f = \sum_\alpha a_\alpha x^\alpha$ and $g = \sum_\alpha b_\alpha x^\alpha$ be two polynomials; elements of $\bfk[x_1,\ldots,x_n]$.
+    The \textit{sum} of $f$ and $g$ is defined by
+    \[
+        f + g \coloneq \sum_\alpha (a_\alpha + b_\alpha)x^\alpha.
+    \]
+    The \textit{product} of $f$ and $g$ is defined by
+    \[
+        fg \coloneq \sum_\gamma \sum_{\alpha + \beta = \gamma}(a_\alpha b_\beta)x^\gamma.
+    \]
+    where $\alpha + \beta$ means the coordinate-wise sum of $\alpha$ and $\beta$; $(\alpha + \beta)_i = (\alpha_i + \beta_i)$.
+\end{definition}
+
+This turns $\bfk[x_1,\ldots,x_n]$ into a \textit{ring}, and so we call it a \textit{polynomial ring}.
+
+
+\begin{definition}
+    The \textit{affine space} of dimension $n$ over $\bfk$ is the set $\bfk^n$, i.e all $n$-tuples of elements in $\bfk$.
+\end{definition}
+
+In high school, we study polynomials \textit{as functions}--- we now give the formal presentation of that perspective.
+
+\begin{definition}
+    Any polynomial $f = \sum_\alpha c_\alpha x^\alpha \in \bfk[x_1,\ldots,x_n]$ gives rise to a function $f: \bfk^n \to \bfk$ defined, informally, by replacing all $x_i$'s with $a_i$'s.
+    More precisely,
+    \[
+        f(a_1,\ldots,a_n) \coloneq \sum_\alpha c_\alpha a_1^{\alpha_1} a_2^{\alpha_2} \cdots a_n^{\alpha_n}.
+    \]
+    where now the sum is carried out in $\bfk$--- the terms themselves are products in $\bfk$.
+\end{definition}
+
+Now we ask: what is the difference between ``$f = 0$ as a polynomial'' and ``$f \equiv 0$ as a function''?
+
+\begin{example}
+    Consider the polynomial $f = x^2-x \in \FF_2[x]$. 
+    When we evaluate this in $\FF_2$, we find that
+    \begin{align*}
+        1^2 - 1 &= 0 \\
+        0^2 - 0 &= 0.
+    \end{align*}
+    Hence $f \equiv 0$, as a function $\FF_2^2 \to \FF_2$.
+    However, $f$ is evidently not the zero polynomial.
+\end{example}
+
+\begin{proposition}\label{prop:polyidenttrick}
+    If $\bfk$ is an infinite field, then in $\bfk[x_1,\ldots,x_n]$, $f = 0$ as a polynomial if and only if $f \equiv 0$ as a function.
+\end{proposition}
+
+\begin{proof}
+    $f=0$ as a polynomial obviously gives us the zero function.
+
+    For the other direction, we use induction.
+
+    We start with ``the easy part of the fundamental theorem of algebra''--- that a nonzero univariate polynomial of degree $m$ has at most $m$ roots.
+    This is proven later, using the division algorithm.
+    With it, we have a proof of the statement when $n=1$, the one-variable case!
+
+    Since, if we take a polynomial $f \in \bfk[x]$ and it happens to be zero as a function, it has infinitely many roots.
+    Then we take the contrapositive of the aforementioned fact--- if a polynomial  has infinitely many roots, it cannot be a nonzero polynomial, hence it is the zero polynomial.
+
+    Now, assume the statement holds for $n$, that is, if $g: \bfk^n \to \bfk$ is the zero function, then $g \in \bfk[x_1,\ldots,x_n]$ is the zero polynomial.
+
+    Take some $f \in \bfk[x_1,\ldots,x_{n+1}]$, and assume that $f:\bfk^{n+1} \to \bfk$ is the zero function.
+    We can ``sum by rows'' and group together terms by \textit{their power of $x_{n+1}$}, so we write
+    \[
+        f = \sum_{i=0}^{\degree f} g_i x^i_{n+1},
+    \]
+    where $g_i \in \bfk[x_1,\ldots,x_n]$.
+    Now, we do \textit{partial application} and evaluate $f$ at all coordinates \textit{except} at $x_{n+1}$, which we leave as a variable.
+    \[
+        f(a_1,\ldots,a_n,x_{n+1}) = \sum_{i=0}^{\degree f} g_i(a_1,\ldots,a_n) x^i_{n+1},
+    \]
+    This turns all the $g_i$'s into coefficients in $\bfk$, and so we have a polynomial in $\bfk[x_{n+1}]$.
+    Repeating the same logic, we must have that all the $g_i(a_1,\ldots,a_n)$'s are zero, since $f(a_1,\ldots,a_n,x_{n+1})$ is the zero map.
+
+    Then, since $(a_1,\ldots,a_n)$ was arbitrary, it must be that $g_i$ are zero as functions.
+    But by the induction hypothesis, this means that they are zero as polynomials.
+
+    Hence, $g_i = 0$ for all $i$, and $f = 0$ as a polynomial, proving the case $n+1$.
+
+    By induction, we have proven the theorem.
+\end{proof}
+
+\begin{corollary}
+    If $\bfk$ is an infinite field, then $f=g$ as polynomials if and only if $f=g$ as functions.
+\end{corollary}
+
+\begin{proof}
+    $f=g$ as polynomials implying $f=g$ as functions is trivial.
+
+    If $f=g$ as functions, then $f-g$ is the zero polynomial.
+    Hence, $f-g=0$ in $\bfk[x_1,\ldots,x_n]$, so $f=g$ as polynomials.
+\end{proof}
+
+We have a fairly special result for $\CC$.
+\begin{theorem}[The fundamental theorem of algebra]
+    Every nonconstant polynomial $f \in \CC[x]$ has a root in $\CC$.
+\end{theorem}
+
+\begin{proof}
+    Omitted.
+\end{proof}
+
+A field $\bfk$ which satisfies the above property, which is that every nonconstant polynomial in $\bfk[x]$ has a root in $\bfk$, is called an \textit{algebraically closed field}.
+
+\subsection{Exercises}
+
+\begin{exercise}
+    Prove that $\FF_2$ is a field.
+\end{exercise}
+
+Not doing this one.
+
+\begin{exercise}
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            Consider the polynomial $g(x,y) = x^2y + y^2x \in \FF_2[x,y]$.
+            Show that $g(x,y)=0$ for every $(x,y) \in \FF_2^2$, and explain why this does not contradict Proposition \ref{prop:polyidenttrick}.
+        \item
+            Find a nonzero polynomial in $\FF_2[x,y,z]$ which vanishes at every point of $\FF_2^3$.
+            Try to find one involving all three variables.
+        \item
+            Find a nonzero polynomial in $\FF_2[x_1,\ldots,x_n]$ which vanishes at every point of $\FF_2^n$.
+            Can you find one in which all of $x_1,\ldots,x_n$ appear?
+    \end{enumerate}
+\end{exercise}
+
+$g = (xy)(x+y)$, so it is nonzero if and only if $xy \neq 0$ and $x+y \neq 0$.
+This means that $xy = 1$ and $x+y = 1$.
+The former implies that $x=y=1$, the latter implies that $x\neq y$, a contradiction.
+
+This does not contradict Proposition \ref{prop:polyidenttrick} since it does not satisfy the conditions--- $\FF_2$ is not an infinite field.
+
+$g(x,y,z) = (xyz)(x+y)$ is a nonzero polynomial which vanishes at every point of $\FF_2^3$ for the same reason.
+
+For the general case, $g(x_1,\ldots,x_n) = (x_1\cdots x_n)(x_1 + x_2)$ works.
+
+\section{Affine Varieties}
+
+\subsection{Definition}
+
+\begin{definition}
+    Let $\bfk$ be a field, and let $f_1,\ldots,f_s$ be polynomials in $\bfk[x_1,\ldots,x_n]$.
+    Then the \textit{affine variety} $\bfV(f_1,\ldots,f_s)$ is defined by
+    \[
+        \bfV(f_1,\ldots,f_s) \coloneq \Big\{(a_1,\ldots,a_n) \in \bfk^n: f_i(a_1,\ldots,a_n)=0 \text{ for all } 1 \leq i \leq s\Big\},
+    \]
+    that is, the exact subset of $\bfk^n$ for which all the $f_i$ vanish.
+\end{definition}
+
+Morally, the affine variety is defined by \textit{solutions} of the system of polynomial equations defined by
+\begin{align*}
+    f_1(x_1,\ldots,x_n) &= 0 \\
+    f_2(x_1,\ldots,x_n) &= 0 \\
+                        &\cdots \\
+    f_s(x_1,\ldots,x_n) &= 0
+\end{align*}
+
+\subsection{Examples}
+
+\begin{example}
+    The variety $\bfV(x^2 + y^2 -1)$ cuts out the unit circle in the plane.
+    Moreover, all conic sections are varieties of the form
+    \[
+        \bfV(ax^2 + bxy + cy^2 + dx + ey + f).
+    \]
+\end{example}
+
+\begin{example}
+    The graph of $y = \frac{x^3-1}{x}$ is an affine variety--- it is $\bfV(xy - x^3 + 1)$.
+\end{example}
+
+\todo{3D affine variety examples}
+
+\begin{definition}
+    A \textit{linear variety} is a variety defined by linear equations, i.e polynomials whose total degree is at most 1.
+\end{definition}
+
+\begin{lemma}
+    If $V, W \subseteq \bfk^n$ are affine varieties, then so are $V \cup W$ and $V \cap W$.
+\end{lemma}
+
+\begin{proof}
+    Let $V = \bfV(f_1,\ldots,f_s)$ and $W = \bfV(g_1,\ldots,g_t)$.
+    We can explicitly give $V \cup W$ and $V \cap W$: they are
+    \begin{align*}
+        V \cap W &= \bfV(f_1,\ldots,f_s,g_1,\ldots,g_t) \\
+        V \cup W &= \bfV\Big(f_ig_j: 1\leq i \leq s, 1 \leq j \leq t\Big).
+    \end{align*}
+    The first equality is obvious.
+
+    For the second equality, pick out a point in $V$, then all the $f_i$ vanish at that point, so all the $f_ig_j$ vanish at that point.
+    Similarly if it is in $W$, then all the $g_j$ vanish at that point, and so do the $f_ig_j$.
+    Then, $V \cup W \subseteq \bfV(f_ig_j)$.
+
+    For the reverse inclusion, pick out a point of $\bfV(f_ig_j)$.
+    If all the $f_i$ vanish at that point, it is in $V$ and we are done.
+    If not, then it must be that all the $g_j$ vanish, hence it is in $W$.
+    This completes the proof.
+\end{proof}
+
+\section{Parametrization of affine varieties}
+
+A \textit{parametrization} of a variety is
+
+\begin{definition}
+    Let $\bfk$ be a field.
+    A \textit{rational function} in $t_1,\ldots,t_m$ with coefficients in $\bfk$ is a quotient $f/g$ of two polynomials $f,g \in \bfk[t_1,\ldots,t_m]$, where $g$ is not the zero polynomial.
+
+    Equality of two rational functions $f/g$ and $h/k$ is decided by the equality $kf = hg$ in $\bfk[t_1,\ldots,t_m]$.
+
+    The set of all the aforementioned functions is denoted $\bfk(t_1,\ldots,t_m)$.
+\end{definition}
+
+\begin{definition}
+    Let $V=\bfV(f_1,\ldots,f_s) \subseteq \bfk^n$ be an affine variety.
+    A \textit{rational parametric representation} of $V$ is a set of rational functions $r_1,\ldots,r_n \in \bfk(t_1,\ldots,t_m)$ such that the points
+    \begin{align*}
+        x_1 &= r_1(t_1,\ldots,t_m) \\
+        x_2 &= r_2(t_1,\ldots,t_m) \\
+            &\vdots \\
+        x_n &= r_n(t_1,\ldots,t_m)
+    \end{align*}
+    lie in $V$.
+    Moreover, $V$ must be the \textit{smallest} affine variety containing these points.
+\end{definition}
+
+\section{Ideals}
+
+We have the following idea from abstract algebra, the analogue of a normal subgroup of a group.
+
+\begin{definition}
+    Let $R$ be a commutative ring.
+    A subset $I \subseteq R$ is called an \textit{ideal} if it satisfies:
+    \begin{enumerate}[label=(\roman*)]
+        \item $0 \in I$.
+        \item $x+y \in I$ for all $x,y \in I$.
+        \item $ax \in I$ for all $x \in I$ and $a \in R$.
+    \end{enumerate}
+\end{definition}
+
+Translated for our polynomial rings, an ideal is a subset $I \subseteq \bfk[x_1,\ldots,x_n]$ such that
+\begin{enumerate}[label=(\roman*)]
+    \item $0 \in I$.
+    \item $f+g \in I$ for all $f,g \in I$.
+    \item $hf \in I$ for all $f \in I$ and $h \in \bfk[x_1,\ldots,x_n]$.
+\end{enumerate}
+
+Now, we give a way of \textit{producing} ideals in $\bfk[x_1,\ldots,x_n]$.
+
+\begin{definition}
+    Let $f_1,\ldots,f_s \in \bfk[x_1,\ldots,x_n]$.
+    The \textit{ideal generated by $f_1,\ldots,f_s$}, denoted $\langle f_1,\ldots,f_s \rangle$, is the set
+    \[
+        \langle f_1,\ldots,f_s \rangle \coloneq \left\{\sum_{i=1}^s h_if_i : h_1,\ldots,h_s \in \bfk[x_1,\ldots,x_n]\right\}.
+    \]
+\end{definition}
+
+This can vaguely be imagined as \textit{shrink wrapping} an ideal structure on the set $\{f_1,\ldots,f_s\}$.
+We're adding the extra elements which the properties of ideals allow for, and exactly only those elements.
+
+\begin{lemma}
+    The ideal generated by $f_1,\ldots,f_s$ is in fact an ideal.
+\end{lemma}
+\begin{proof}
+    Set $I = \langle f_1,\ldots,f_s \rangle$.
+    By picking $h_i = 0$ for all $i$, we show that $0 \in I$.
+
+    If $f,g \in I$, then let
+    \begin{align*}
+        f &= \sum_{i=1}^s h_i f_i \\
+        g &= \sum_{i=1}^s h'_i f_i,
+    \end{align*}
+    where $h_i \in \bfk[x_1,\ldots,x_n]$ and $h'_i \in \bfk[x_1,\ldots,x_n]$.
+    Then 
+    \[
+        f+g = \sum_{i=1}^s (h_i+h'_i)f_i,
+    \]
+    which shows that $f+g \in I$.
+    Finally, if we pick $h \in \bfk[x_1,\ldots,x_n]$, we have that
+    \[
+        hf = \sum_{i=1}^s (hh_i)f_i,
+    \]
+    which shows that $hf \in I$.
+\end{proof}
+
+\begin{definition}
+    Let $I$ be an ideal.
+    We say that $I$ is \textit{finitely generated} if it is equal to $\gen{f_1,\ldots,f_s}$ for some $f_1,\ldots,f_s \in \bfk[x_1,\ldots,x_n]$, in which case we say that $f_1,\ldots,f_s$ are a \textit{basis} for $I$.
+\end{definition}
+
+
+\begin{definition}
+    Let $V \subseteq \bfk^n$ be an affine variety.
+    Then the \textit{ideal of $V$}, $\bfI(V)$, is
+    \[
+        \bfI(V) \coloneq \Big\{f \in \bfk[x_1,\ldots,x_n]: f(a_1,\ldots,a_n) = 0 \text{ for all } (a_1,\ldots,a_n) \in V\Big\}.
+    \]
+\end{definition}
+
+\begin{lemma}
+    If $V \subseteq \bfk^n$ is an affine variety, then $\bfI(V)$ is in fact an ideal.
+\end{lemma}
+
+\begin{theorem}
+    \[
+        \bfI(\bfV(y-x^2,z-x^3)) = \gen{y-x^2,z-x^3}.
+    \]
+\end{theorem}
+
+\section{Polynomials of One Variable}
+
+\subsection{Euclidean division}
+
+\begin{definition}
+    Given a nonzero polynomial $f \in \bfk[x]$, let
+    \[
+        f = a_0x^m + a_1x^{m-1} + \cdots + a_m,
+    \]
+    where $a_i \in \bfk$ and $a_i \neq 0$.
+    Then we say that $a_0x^m$ is the \textit{leading term} of $f$, denoted $\LT(f) = a_0x^m$.
+\end{definition}
+
+There is an important fact about leading terms in polynomial rings over a field:
+
+\begin{proposition}\label{prop:ltanddegree}
+    If $\bfk$ is a field, then for all $f,g \in \bfk[x]$,
+    \[
+        \degree f \leq \degree g \iff \LT(f) \text{ divides } \LT(g).
+    \]
+\end{proposition}
+
+This unlocks for us \textit{the division algorithm}.
+
+\begin{proposition}[The division algorithm]
+    Let $\bfk$ be a field and let $g$ be a nonzero polynomial in $\bfk[x]$.
+    Then every $f \in \bfk[x]$ can be written as
+    \[
+        f = qg + r
+    \]
+    where $q,r \in \bfk[x]$ and either $r=0$ or $\degree r < \degree g$.
+    Furthermore, $q,r$ are \textit{unique}, and there is an algorithm for finding $q$ and $r$.
+\end{proposition}
+
+\begin{proof}
+    The algorithm which finds $q$ and $r$ is the following:
+
+    \begin{algorithm}[H]
+        \SetAlgoLined
+        \KwData{$f$,$g$}
+        \KwResult{$q$,$r$}
+        \Begin{
+                $q \gets 0$\;
+                $r \gets f$\;
+            \While{$r \neq 0$ \KwAnd $\LT(g)$ divides $\LT(r)$}{
+                $q \gets q + \LT(r)/\LT(g)$\;
+                $r \gets r - (\LT(r)/\LT(g))g$\;
+            }
+        }
+    \end{algorithm}
+
+    First, we prove that the result has the properties we want: that $f = qg + r$, and either $r=0$ or $\degree r < \degree g$.
+
+    The first property, $f = qg+r$, is actually a \href{https://en.wikipedia.org/wiki/Loop_invariant}{\textit{loop invariant}} of the while block.
+    At the first iteration, where $q=0$ and $r=f$, clearly $f = qg + r$.
+    Now, supposing $f=qg+r$, we have that
+    \begin{align*}
+        f &= qg + r \\
+          &= qg + r + 0\\
+          &= qg + r + \left(\frac{\LT(r)}{\LT(g)}g - \frac{\LT(r)}{\LT(g)}g\right) \\
+          &= \left(qg + \frac{\LT(r)}{\LT(g)}g\right) + \left(r - \frac{\LT(r)}{\LT(g)}g\right) \\
+          &= \left(q+\frac{\LT(r)}{\LT(g)}\right)g + \left(r - \frac{\LT(r)}{\LT(g)}g\right).
+    \end{align*}
+    Hence, if we put $q \gets q+\LT(r)/\LT(g)$ and $r \gets (\LT(r)/\LT(g))g$, we still have $f = qg + r$.
+
+    Next, we show that if the above terminates, it must be that the statement ``$r \neq 0$ and $\LT(g)$ divides $\LT(r)$'' is false, which means that either $r=0$ or $\LT(g)$ does not divide $\LT(r)$.
+
+    For the latter part, we recall the previous proposition, Proposition \ref{prop:ltanddegree}, and perform \textit{biconditional negation}.
+    Namely, we derive from
+    \[
+        \degree f \leq \degree g \iff \LT(f) \text{ divides } \LT(g)
+    \]
+    the statement
+    \[
+        \degree f > \degree g \iff \LT(f) \text{ does not divide } \LT(g),
+    \]
+    by negating both sides of the $\iff$.
+    Now, we can say that ``$\LT(g)$ does not divide $\LT(r)$'' is equivalent to ``$\degree g > \degree r$''.
+    Hence, the algorithm terminates precisely when either $r=0$ or $\degree r < \degree g$.
+
+    Finally, we have to conclude that the algorithm terminates \textit{at all}.
+
+\end{proof}
+
+Now, we can prove the ``easy half of the fundamental theorem of algebra''
+
+\begin{corollary}
+    If $\bfk$ is a field and $f \in \bfk[x]$ is a nonzero polynomial, then $f$ has at most $\degree f$ roots in $\bfk$.
+\end{corollary}
+
+\begin{proof}
+    We prove this by induction on the degree of $f$.
+    If the degree of $f$ is zero,
+\end{proof}
+
+Moreover, the division algorithm has implications for the algebraic structure of $\bfk[x]$.
+
+\begin{definition}
+    Let $R$ be a ring.
+    A ring is said to be a \textit{principal ideal domain}, or a \textit{PID}, if every ideal of $R$ is of the form $\gen{x}$, where $x \in R$.
+\end{definition}
+
+\begin{corollary}
+    If $\bfk$ is a field, then $\bfk[x]$ is a PID.
+\end{corollary}
+
+\chapter{Groebner Bases}
+\end{document}

@@ -11,36 +11,46 @@
 \begin{document}
 \maketitle 
 
-The \emph{fundamental theorem of calculus} has several statements, and, depending on who you ask, can even be considered to be more than just \emph{one} theorem. In one perspective, that of differential forms, \emph{Stokes' Theorem} is the true fundamental theorem of calculus. In another, in that of measure theory, maybe the \emph{Radon-Nikodym} theorem is in some sense the fundamental theorem of calculus. 
+The \emph{fundamental theorem of calculus} has several statements, and, depending on who you ask, can even be considered to be more than just \emph{one} theorem. 
+In one perspective, that of differential forms, \emph{Stokes' Theorem} is the true fundamental theorem of calculus. 
+In another, in that of measure theory, maybe the \emph{Lebesgue differentiation theorem} is in some sense the fundamental theorem of calculus. 
 
-Probably, there are way more perspectives, advanced and elementary, on the ``fundamental theorem of calculus''. Here I cover the fundamental theorem of calculus that appears in... calculus classes. However, this is a rigorous exposition, and requires some understanding of real analysis. I cover their relationships via continuity and differentiability.
+Probably, there are way more perspectives, advanced and elementary, on the ``fundamental theorem of calculus''. 
+Here I cover the fundamental theorem of calculus that appears in... calculus classes. 
+However, this is a rigorous exposition, and requires some understanding of real analysis. 
+I cover their relationships via continuity and differentiability.
 
-I was asked by a university I applied to for a math Ph.D to prepare an explanation of the fundamental theorem of calculus for an interview. This gave birth to these notes, which I typed up as I was re-studying this topic. I expected to give a super technical explanation, but it turns out I only had to give a very elementary, introductory one, as if I was explaining in a Calculus I class. Oh well.
+I was asked by a university I applied to for a math Ph.D to prepare an explanation of the fundamental theorem of calculus for an interview. 
+This gave birth to these notes, which I typed up as I was re-studying this topic. 
+I expected to give a super technical explanation, but it turns out I only had to give a very elementary, introductory one, as if I was explaining in a Calculus I class. 
+Oh well.
 
 \section*{Preliminaries}
-Let $f$ be a Riemann-integrable function on the interval $[a, b]$. Note that this means $f$ is bounded, as Riemann sums are not well-defined for an unbounded function on a closed interval.
+Let $f$ be a Riemann-integrable function on the interval $[a, b]$.
+Note that this means $f$ is bounded, as Riemann sums are not well-defined for an unbounded function on a closed interval.
 
 Consider the function $F$ defined to be
 \[
-    F(x) := \int_a^x f(t)dt
+    F(x) := \int_a^x f(t)dt.
 \]
 We claim that $F$ is continuous. 
 \begin{proof}
-    For all points $x, y$ such that $a<x<y<b$
+    For all points $x, y$ such that $a<x<y<b$, we have that
     \[
-        \int_a^x f(t)dt + \int_x^y f(t)dt = \int_a^y f(t)dt
+        \int_a^x f(t)dt + \int_x^y f(t)dt = \int_a^y f(t)dt.
     \]
-    So
+    So,
     \[
-        F(x) + \int_x^y f(t)dt = F(y)
+        F(x) + \int_x^y f(t)dt = F(y).
     \]
     and so $F(y)-F(x) = \displaystyle\int_x^y f(t)dt$ for all $a < x < y < b$.
 
-    Use $f$'s boundedness now, and let $|f(t)|<M$ for all $t \in [a,b]$. We can now directly show that $F$ is continuous.
+    Use $f$'s boundedness now, and let $|f(t)|<M$ for all $t \in [a,b]$. 
+    We can now directly show that $F$ is continuous.
 
     Let $\varepsilon > 0$. Put $\delta = \varepsilon/M$, so if 
     \[
-        |y - x| < \delta = \frac{\varepsilon}{M}
+        |y - x| < \delta = \frac{\varepsilon}{M},
     \]
      we have that
      \begin{align*}
@@ -49,51 +59,54 @@ We claim that $F$ is continuous.
                      &< \int_x^y M dt \\
                      &= M|y-x| \\
                      &< M\frac{\varepsilon}{M} \\
-                     &= \varepsilon \\
+                     &= \varepsilon,
      \end{align*}
-     Thus showing that $F$ is continuous. (And more, this proves that $F$ is \emph{uniformly continuous})
-
+     thus showing that $F$ is continuous. 
+     (And more, this proves that $F$ is \emph{uniformly continuous})
 \end{proof}
 
 \section{The first fundamental theorem of calculus}
 
-What if $f$ is already continuous? In that case, we have the following result
-\begin{theorem}{(The first fundamental theorem of calculus)}
-
-    Let $f$ be Riemann-integrable on $[a, b]$, and let $f$ be continuous at a point $x_0$ of $[a, b]$. Then if we define the function $F$ to be
+What if $f$ is already continuous? 
+In that case, we have the following result:
+\begin{theorem}[The first fundamental theorem of calculus]
+    Let $f$ be Riemann-integrable on $[a, b]$, and let $f$ be continuous at a point $x_0$ of $[a, b]$. 
+    Then if we define the function $F$ to be
     \[
-        F(x) := \int_a^x f(t)dt
+        F(x) := \int_a^x f(t)dt,
     \]
-    we have that $F$ is differentiable at $x_0$, and moreover
+    we have that $F$ is differentiable at $x_0$, and moreover,
     \[
-        F'(x_0) = f(x_0)
+        F'(x_0) = f(x_0).
     \]
 \end{theorem}
 
 \begin{proof}
     Pick two distinct points $x^- < x^+$ inside $[a, b]$. 
-    Note that the difference quotient for the function $F$
+    Note that the difference quotient for the function $F$,
     \[
-        \frac{F(x^+) - F(x^-)}{x^+-x^-}
+        \frac{F(x^+) - F(x^-)}{x^+-x^-},
     \]
-    has a particular meaning:
+    has a particular meaning, looking at the following computation:
     \[
-        \frac{F(x^+) - F(x^-)}{x^+-x^-} = \frac{\displaystyle \int_a^{x^+} f(t)dt - \int_a^{x^-}f(t)dt}{x^+-x^-} = \frac{\displaystyle\int_{x^-}^{x^+} f(t)dt}{x^+-x^-}
+        \frac{F(x^+) - F(x^-)}{x^+-x^-} = \frac{\displaystyle \int_a^{x^+} f(t)dt - \int_a^{x^-}f(t)dt}{x^+-x^-} = \frac{\displaystyle\int_{x^-}^{x^+} f(t)dt}{x^+-x^-}.
     \]
-    It is the \emph{average value} of $f$ on the interval $[x^+, x^-]$. The idea here is that $f$'s continuity at $x_0$ in fact \emph{forces the average value of $f$ to be close to $f(x_0)$ in a small enough neighborhood of $x_0$}. 
+    It is the \emph{average value} of $f$ on the interval $[x^+, x^-]$. 
+    The idea here is that $f$'s continuity at $x_0$ in fact \emph{forces the average value of $f$ to be close to $f(x_0)$ in a small enough neighborhood of $x_0$}. 
 
     Use $f$'s continuity: let $\varepsilon > 0$, and choose $\delta$ such that
-    \[|f(t)-f(x_0)| < \varepsilon \qquad \text{for all }t\text{ such that} \qquad |t-x_0| < \delta\]
+    \[|f(t)-f(x_0)| < \varepsilon \qquad \text{for all }t\text{ such that} \qquad |t-x_0| < \delta.\]
 
     Now, choose the two numbers $x^- < x^+$ so that 
     \[
-        x_0 - \delta < x^- \leq x_0 \leq x^+ < x_0 + \delta
+        x_0 - \delta < x^- \leq x_0 \leq x^+ < x_0 + \delta.
     \]
-    This just means that $[x^+, x^-]$ is a \emph{smaller} neighborhood of $x_0$ than the closed ball of radius $\delta$ centered at $x_0$; $[x_0 - \delta, x_0 + \delta]$. Now we write down the distance between our difference quotient and $f(x_0)$
+    This just means that $[x^+, x^-]$ is a \emph{smaller} neighborhood of $x_0$ than the closed ball of radius $\delta$ centered at $x_0$; $[x_0 - \delta, x_0 + \delta]$. 
+    Now we write down the distance between our difference quotient and $f(x_0)$, which is
     \[
-        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right|
+        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right|,
     \]
-    and make the following calculation 
+    and make the following calculation:
     \begin{align*}
         \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right| &= \left|\frac{1}{x^+-x^-}\int_{x^-}^{x^+} f(t)dt - f(x_0)\right| \\
                                                             &= \left|\frac{1}{x^+-x^-}\int_{x^-}^{x^+} f(t)dt - \frac{x^+-x^-}{x^+-x^-}f(x_0)\right| \\
@@ -104,23 +117,26 @@ What if $f$ is already continuous? In that case, we have the following result
                                                             &< \frac{1}{x^+-x^-}\int_{x^-}^{x^+} \varepsilon dt \\
                                                             &= \frac{1}{x^+-x^-}\varepsilon(x^+-x^-) \\
                                                             &= \frac{1}{x^+-x^-}\varepsilon(x^+-x^-) \\
-                                                            &= \varepsilon
+                                                            &= \varepsilon.
     \end{align*}
-    If we compress that all down, we have
+    If we compress that all down, we have that
     \[
-        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right| < \varepsilon
+        \left|\frac{F(x^+)-F(x^-)}{x^+-x^-} - f(x_0)\right| < \varepsilon,
     \]
-    And we are almost done. If we fix $x^- = x_0$ and let $x^+\downarrow x_0$,\footnote{This notation means that $x^+$ approaches $x_0$ from above} the above allows us to prove the right hand limit
+    and we are almost done. 
+    If we fix $x^- = x_0$ and let $x^+\downarrow x_0$,
+    \footnote{This notation means that $x^+$ approaches $x_0$ from above} 
+    the above allows us to prove the right hand limit
     \[
-        \lim_{x^+\downarrow x_0}\frac{F(x^+)-F(x_0)}{x^+-x_0} = f(x_0)
+        \lim_{x^+\downarrow x_0}\frac{F(x^+)-F(x_0)}{x^+-x_0} = f(x_0).
     \]
     Then, fixing $x^+ = x_0$ and letting $x^- \uparrow x_0$,\footnote{Similarly} this gives us the left hand limit
     \[
-        \lim_{x^-\uparrow x_0}\frac{F(x_0)-F(x^-)}{x_0-x^-} = f(x_0)
+        \lim_{x^-\uparrow x_0}\frac{F(x_0)-F(x^-)}{x_0-x^-} = f(x_0).
     \]
-    Then we have the two-sided limit, and we finally conclude
+    Then we have the two-sided limit, and we finally conclude that
     \[
-        F'(x_0) = \lim_{x \to x_0}\frac{F(x)-F(x_0)}{x-x_0} = f(x_0)
+        F'(x_0) = \lim_{x \to x_0}\frac{F(x)-F(x_0)}{x-x_0} = f(x_0).
     \]
 \end{proof}
 
