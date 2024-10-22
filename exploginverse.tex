@@ -1,0 +1,505 @@
+\documentclass{article}
+
+\usepackage[garamond,nosubsections]{jaspercommon}
+
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\len}{len}
+
+\title{exp is the inverse of log}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+\begin{definition}
+    The power series $\exp$ and $\log$ are defined by 
+    \begin{align}
+        \exp(x)
+        &\coloneq
+        \sum_{n=0}^\infty
+        \frac{x^n}{n!},
+        \\
+        \log(x)
+        &\coloneq
+        \sum_{n=1}^\infty
+        (-1)^{n+1}
+        \frac{(x-1)^n}{n}.
+    \end{align}
+\end{definition}
+
+We wish to show that $(\log \circ \exp)(x) = x$.
+You can show this using Lagrange inversion or something like that.
+However, we will do this with our bare hands.
+
+Here is a small amount of some ``boilerplate'' we'll need:
+
+\begin{definition}
+    Let $a_1,\ldots,a_k \geq 0$, and let $n = a_1 + \cdots + a_k$.
+    The corresponding \textit{multinomial coefficient} for this tuple is
+    \[
+        \binom{n}{a_1,\ldots,a_k}
+        \coloneq
+        \frac{n!}{a_1! \cdots a_k!}.
+    \]
+\end{definition}
+
+\begin{proposition}
+    The multinomial coefficient 
+    \[
+        \binom{n}{a_1,\ldots,a_k}
+        \coloneq
+        \frac{n!}{a_1! \cdots a_k!}
+    \]
+    counts the number of partitions of the set $\{1, \ldots, k\}$ into parts $A_1, \ldots, A_k$, such that $|A_1| = a_1, \ldots, |A_k| = a_k$.
+\end{proposition}
+
+\begin{proposition}[``Power rule'']
+    \begin{equation}
+        \label{eq:powerrule}
+        \left(
+            \sum_{m=1}^\infty
+            c_mx^m
+        \right)^n
+        =
+        \sum_{m=0}^\infty
+        \left[
+            \sum_{
+                \substack{
+                    a_1,\ldots,a_n \geq 1 \\
+                    a_1 + \cdots + a_n = m
+                }
+            }
+            c_{a_1} \cdots c_{a_n}
+        \right]
+        x^m
+    \end{equation}
+\end{proposition}
+
+\section{Proof}
+
+We first grind it out into a raw expression for the coefficients of $\log \circ \exp$, \textit{as an exponential generating function}, then demonstrate that each coefficient is a signed sum of \textit{cyclically ordered set partitions}.
+
+\begin{align*}
+    &
+    \underbrace{
+        \log
+    }_{\text{expand}}
+    \Big(\exp(x)\Big)
+    \\
+    &=
+    \sum_{n=1}^\infty
+    (-1)^{n+1}
+    \frac{
+        \Big(
+            \overbrace{
+                \exp(x)
+            }^{\text{expand}}
+            -1
+        \Big)^n
+    }{n}
+    \\
+    &=
+    \sum_{n=1}^\infty
+    (-1)^{n+1}
+    \frac{
+        \overbrace{
+            \left(
+                \sum_{m=1}^\infty
+                \frac{x^m}{m!}
+            \right)^n
+        }^{\text{Use ``power rule'' (\ref{eq:powerrule})}}
+    }{n}
+    \\
+    &=
+    \sum_{n=1}^\infty
+    (-1)^{n+1}
+    \frac{
+        \left[
+            \sum_{m=0}^\infty
+            \sum_{
+                \substack{
+                    a_1,\ldots,a_n \geq 1 \\
+                    a_1 + \cdots + a_n = m
+                }
+            }
+            \frac{1}{a_1! \cdots a_n!}
+            x^m
+        \right]
+    }{
+        \underbrace{n}_{\text{break up fraction}}
+    }
+    \\
+    &=
+    \sum_{n=1}^\infty
+    \underbrace{
+        \frac{(-1)^{n+1}}{n}
+    }_{\text{move into innermost sum}}
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            a_1,\ldots,a_n \geq 1 \\
+            a_1 + \cdots + a_n = m
+        }
+    }
+    \frac{1}{a_1! \cdots a_n!}
+    x^m
+    \\
+    &=
+    \underbrace{
+        \sum_{n=1}^\infty
+        \sum_{m=0}^\infty
+    }_{\text{interchange sums}}
+    \sum_{
+        \substack{
+            a_1,\ldots,a_n \geq 1 \\
+            a_1 + \cdots + a_n = m
+        }
+    }
+    \frac{(-1)^{n+1}}{n}
+    \frac{1}{a_1! \cdots a_n!}
+    x^m
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \underbrace{
+        \sum_{n=1}^\infty
+        \sum_{
+            \substack{
+                a_1,\ldots,a_n \geq 1 \\
+                a_1 + \cdots + a_n = m
+            }
+        }
+    }_{\text{this quantifies over all \textit{strong compositions of} $m$}}
+    \frac{(-1)^{n+1}}{n}
+    \frac{1}{a_1! \cdots a_n!}
+    x^m
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            a_1,\ldots,a_n \text{ is a} \\
+            \text{strong composition of } m
+        }
+    }
+    \frac{(-1)^{n+1}}{n}
+    \underbrace{
+        \frac{1}{a_1! \cdots a_n!}
+        x^m
+    }_{\text{multiply by }1 = m!/m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            a_1,\ldots,a_n \text{ is a} \\
+            \text{strong composition of } m
+        }
+    }
+    \frac{(-1)^{n+1}}{n}
+    \underbrace{
+        \frac{m!}{a_1! \cdots a_n!}
+    }_{
+        =\binom{m}{a_1,\ldots,a_n}
+    }
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            a_1,\ldots,a_n \text{ is a} \\
+            \text{strong composition of } m
+        }
+    }
+    \frac{(-1)^{n+1}}{n}
+    \underbrace{
+        \binom{m}{a_1,\ldots,a_n}
+    }_{\text{convert multiplicity into summation}}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \underbrace{
+        \sum_{
+            \substack{
+                a_1,\ldots,a_n \text{ is a} \\
+                \text{strong composition of } m
+            }
+        }
+        \sum_{
+            \substack{
+                A_1,\ldots,A_n \text{ is a partition} \\
+                \text{of }\{1,\ldots,m\} \\
+                |A_1| = a_1, \ldots, |A_n| = a_n
+            }
+        }
+    }_{\text{this quantifies over all \textit{ordered set partitions} of} \{1,\ldots,m\}}
+    \frac{(-1)^{n+1}}{n}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            A_1,\ldots,A_n \text{ is a partition} \\
+            \text{of }\{1,\ldots,m\}
+        }
+    }
+    \underbrace{
+        \frac{(-1)^{n+1}}{n}
+    }_{
+        \substack{
+            \text{this adds a cyclic symmetry,} \\
+            \text{which we will now prove }
+        }
+    }
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \underbrace{
+        \sum_{
+            \substack{
+                A_1,\ldots,A_n \text{ is a partition} \\
+                \text{of }\{1,\ldots,m\}
+            }
+        }
+    }_{\text{break apart parts and order}}
+    \frac{(n-1)!}{n!}
+    (-1)^{n+1}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            \bfA \text{ is an unordered} \\
+            \text{partition of }\{1,\ldots,m\}
+        }
+    }
+    \underbrace{
+        \sum_{
+            \substack{
+                A_1,\ldots,A_n \text{ is an ordering} \\
+                \text{of $\bfA$'s parts}
+            }
+        }
+    }_{\text{there are $n!$ such orders}}
+    \frac{(n-1)!}{n!}
+    (-1)^{n+1}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            \bfA \text{ is an unordered} \\
+            \text{partition of }\{1,\ldots,m\}
+        }
+    }
+    n!
+    \frac{(n-1)!}{n!}
+    (-1)^{n+1}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            \bfA \text{ is an unordered} \\
+            \text{partition of }\{1,\ldots,m\}
+        }
+    }
+    \underbrace{
+        (n-1)!
+    }_{
+        \substack{
+            \text{convert multiplicity into sum.} \\
+            \text{this is the \# of cyclic orders} \\
+            \text{of length $n$ (can you show why?)}
+        }
+    }
+    (-1)^{n+1}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \sum_{
+        \substack{
+            \bfA \text{ is an unordered} \\
+            \text{partition of }\{1,\ldots,m\}
+        }
+    }
+    \sum_{
+        \substack{
+            A_{\underline{1}},\ldots,A_{\underline{n}}\text{ is a cyclic} \\
+            \text{ordering of $\bfA$'s parts}
+        }
+    }
+    (-1)^{n+1}
+    \frac{x^m}{m!}
+    \\
+    &=
+    \sum_{m=0}^\infty
+    \underbrace{
+        \left[
+            \sum_{
+                \substack{
+                    A_{\underline{1}},\ldots,A_{\underline{n}} \text{ is a cyclically ordered} \\
+                    \text{partition of }\{1,\ldots,m\}
+                }
+            }
+            (-1)^{n+1}
+        \right]
+    }_{\text{voil\`a!}}
+    \frac{x^m}{m!}
+\end{align*}
+
+Now for this series to be equal to $x$, it must be that
+
+\[
+    \left[
+        \sum_{
+            \substack{
+                A_{\underline{1}},\ldots,A_{\underline{n}} \text{ is a cyclically ordered} \\
+                \text{partition of }\{1,\ldots,m\}
+            }
+        }
+        (-1)^{n+1}
+    \right]
+    =
+    \begin{cases}
+        1, & \text{if } m=1; \\
+        0, & \text{otherwise}.
+    \end{cases}
+\]
+
+Which we will prove using a \textit{sign-reversing involution}.
+Namely, a function which records exactly how terms cancel out in a sum.
+
+\begin{proposition}
+    Let $X$ be a finite set, and let $\sign: X \to \RR$.
+    If $f: X \to X$ is a bijection such that
+    \[
+        \sign f(x) = -\sign f(x) \qquad \forall x \in X,
+    \]
+    then
+    \[
+        \sum_{x \in X} \sign x = 0.
+    \]
+\end{proposition}
+
+Then, if we define $\sign \bfA = (-1)^{\len \bfA + 1}$, we can prove that
+
+\[
+    \left[
+        \sum_{
+            \substack{
+                \bfA \text{ is a cyclically ordered} \\
+                \text{partition of }\{1,\ldots,m\}
+            }
+        }
+        \sign(\bfA)
+    \right]
+    =
+    0
+\]
+for all $m > 1$ if we can find such a function.
+
+Let $f$ be the function defined by
+\[
+    f(\bfA)
+    =
+    \begin{cases}
+        A_{\underline{k}} \cup A_{\underline{k+1}}, \ldots, A_{\underline{n+k}}
+        & \text{if } A_{\underline{k}} = \{1\} \\
+        \{1\}, A_{\underline{k}} \setminus \{1\}, \ldots, A_{\underline{n+k}}
+        & \text{if } A_{\underline{k}} \neq \{1\} \\
+    \end{cases}
+\]
+where $A_{\underline{k}}$ denotes the unique part of $\bfA$ containing $1$. 
+
+Then, $\sign f(\bfA) = -\sign f(\bfA)$.
+\begin{itemize}
+    \item
+        In the first case, we are merging two parts, $A_{\underline{k}}$ and $A_{\underline{k+1}}$, decreasing the number of parts by one.
+    \item 
+        In the second case, we are splitting apart $A_{\underline{k}}$ into two parts--- one that contains $\{1\}$ and one that doesn't.
+\end{itemize}
+
+Moreover $f$ is an involution, therefore it is a bijection.
+\begin{itemize}
+    \item
+        If $A_{\underline{k}} = \{1\}$, then on applying $f$ it will be merged with the next nonempty part.
+        Upon applying $f$ again, it will be split apart from this part, reversing what happened.
+    \item 
+        If $A_{\underline{k}} \neq \{1\}$, then on applying $f$ we get rid of all elements that aren't $1$ and put them in a new part.
+        Upon applying $f$ again, these elements will be merged into our original part again, reversing what happened.
+\end{itemize}
+
+Moreover, this map is actually only defined whenever $m > 1$, as in the $m = 1$ case, it's impossible to do any splitting or merging of parts.
+
+This proves that
+\[
+    \left[
+        \sum_{
+            \substack{
+                \bfA \text{ is a cyclically ordered} \\
+                \text{partition of }\{1,\ldots,m\}
+            }
+        }
+        \sign(\bfA)
+    \right]
+    =
+    \begin{cases}
+        1, & \text{if } m=1; \\
+        0, & \text{otherwise}.
+    \end{cases}
+\]
+Hence
+\[
+    \left[
+        \sum_{
+            \substack{
+                A_{\underline{1}},\ldots,A_{\underline{n}} \text{ is a cyclically ordered} \\
+                \text{partition of }\{1,\ldots,m\}
+            }
+        }
+        (-1)^{n+1}
+    \right]
+    =
+    \begin{cases}
+        1, & \text{if } m=1; \\
+        0, & \text{otherwise}.
+    \end{cases}
+\]
+Which finally tells us that
+\[
+    (\log \circ \exp)(x)
+    =
+    \sum_{m=0}^\infty
+    \left[
+        \sum_{
+            \substack{
+                A_{\underline{1}},\ldots,A_{\underline{n}} \text{ is a cyclically ordered} \\
+                \text{partition of }\{1,\ldots,m\}
+            }
+        }
+        (-1)^{n+1}
+    \right]
+    \frac{x^m}{m!}
+    =
+    x,
+\]
+which completes the proof!
+
+\end{document}
