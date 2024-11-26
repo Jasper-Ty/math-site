@@ -1,0 +1,803 @@
+\documentclass{article}
+
+% See https://github.com/Jasper-Ty/dotfiles
+\usepackage[garamond]{jaspercommon}
+\usepackage{tikz-cd}
+
+\newcommand*\wc{{\mkern 3mu\_\mkern 3mu}}
+\newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\left\langle{#1}\right\rangle}}
+\newcommand{\lb}[1]{\ensuremath{\left[{#1}\right]}}
+
+\newcommand{\iverson}[1]{\ensuremath{\left[{#1}\right]^?}}
+
+\DeclareMathOperator{\s}{s}
+\DeclareMathOperator{\ogroup}{O}
+\DeclareMathOperator{\Dih}{Dih}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\im}{im}
+
+% The algebra of derivations
+\DeclareMathOperator{\Der}{Der}
+
+% The adjoint representation of a Lie algebra
+\DeclareMathOperator{\ad}{ad}
+
+% An anonymous differential
+\newcommand{\dd}{\ensuremath{\text{d}}}
+
+\newcommand{\frka}{\ensuremath{\mathfrak{a}}}
+\newcommand{\frkg}{\ensuremath{\mathfrak{g}}}
+\newcommand{\frkh}{\ensuremath{\mathfrak{h}}}
+\newcommand{\frku}{\ensuremath{\mathfrak{u}}}
+\newcommand{\frki}{\ensuremath{\mathfrak{i}}}
+\newcommand{\frkj}{\ensuremath{\mathfrak{j}}}
+\newcommand{\frkU}{\ensuremath{\mathfrak{U}}}
+
+\newcommand{\GL}{\ensuremath{\text{GL}}}
+\newcommand{\SL}{\ensuremath{\text{SL}}}
+
+\newcommand{\glalg}{\ensuremath{\mathfrak{gl}}}
+\newcommand{\slalg}{\ensuremath{\mathfrak{sl}}}
+\newcommand{\spalg}{\ensuremath{\mathfrak{sp}}}
+\newcommand{\talg}{\ensuremath{\mathfrak{t}}}
+\newcommand{\oalg}{\ensuremath{\mathfrak{o}}}
+
+\title{Lie algebras}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+
+These are notes based on my reading of Humphreys's ``Introduction to Lie Algebras and Representation Theory''.
+
+\tableofcontents
+
+\newpage
+
+\section{Definitions}
+
+\begin{convention}
+    All vector spaces are finite dimensional and no assumptions are made about the field they are over.
+\end{convention}
+
+\subsection{Lie algebras}
+
+\begin{definition}
+    A \defstyle{Lie algebra} $\frkg$ is a vector space equipped with a product
+    \begin{align*}
+        \lb{\wc,\wc}: \frkg \times \frkg
+        &\to
+        \frkg,
+        \\
+        (x,y)
+        &\mapsto
+        \lb{xy},
+    \end{align*}
+    such that
+    \begin{enumerate}[label=(L\arabic*)]
+        \item 
+            \label{ax:LBIsBilinear}
+            $\lb{\wc,\wc}$ is bilinear,
+        \item 
+            \label{ax:LBNilpotent}
+            $\lb{xx} = 0$ for all $x \in \frkg$, and
+        \item 
+            \label{ax:LBJacobiIdentity}
+            $\lb{x\lb{yz}} + \lb{y\lb{zx}} + \lb{z\lb{xy}} = 0$.
+    \end{enumerate}
+    We refer to $\lb{xy}$ as the \defstyle{bracket} or the \defstyle{commutator} of $x$ and $y$.
+\end{definition}
+
+\ref{ax:LBJacobiIdentity} is referred to as the \textit{Jacobi identity}.
+
+As an exercise in using this definition, we show the following:
+
+\begin{proposition}
+    Brackets are anticommutative, i.e
+    \begin{equation}
+        [xy]
+        =
+        -[yx].
+        \tag{L2'}
+    \end{equation}
+    is a relation in any Lie algebra.
+\end{proposition}
+\begin{proof}
+    By \ref{ax:LBNilpotent}, we have that
+    \[
+        \lb{x+y,x+y}
+        =
+        0,
+    \]
+    and by \ref{ax:LBIsBilinear},
+    \[
+        \lb{xx} + \lb{xy} + \lb{yx} + \lb{yy}
+        =
+        0.
+    \]
+    By \ref{ax:LBNilpotent} again,
+    \[
+        \lb{xy} + \lb{yx}
+        =
+        0,
+    \]
+    which completes the proof.
+\end{proof}
+
+We will look at our first example of a Lie algebra, which is closely related to the $\GL(V)$.
+
+\begin{definition}[$\glalg$, abstractly]
+    Let $V$ be a vector space.
+    The \defstyle{general linear algebra} $\glalg(V)$ is defined to be the Lie algebra with underlying vector space $\End V$ and bracket given by
+    \[
+        \lb{xy}
+        =
+        xy - yx
+    \]
+    defined with $\End V$ natural ring structure.
+\end{definition}
+
+    Put in a more concrete sense, $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
+    Then, the following definition makes sense, and is in a sense ``the only'' finite dimensional general linear algebra.
+
+\begin{definition}[$\glalg$, concretely]
+    Let $\FF$ be some field and let $n$ be a positive integer.
+    The \defstyle{general linear algebra} $\glalg_n(\FF)$ is defined to be the Lie algebra with underlying vector space the set of all $n \times n$ matrices over $\FF$, with bracket given by
+    \[
+        \lb{xy}
+        =
+        xy - yx.
+    \]
+\end{definition}
+
+We can ea
+
+\begin{proposition}
+    Let $\{e_{pq}\}_{p,q = 0}^n$ be the standard basis of $\glalg_n(\FF)$.
+    Then
+    \[
+        \lb{e_{pq}e_{rs}}
+        =
+        \delta_{qr}e_{ps}
+        -
+        \delta_{sp}e_{rq},
+    \]
+    where $\delta$ is the Kronecker delta.
+\end{proposition}
+
+\begin{proof}
+    Using the Iverson bracket,
+    \[
+        (e_{pq})_{ij}
+        =
+        \iverson{p=i \wedge q=j}
+    \]
+    and so
+    \begin{align*}
+        (e_{pq}e_{rs})_{ij}
+        &=
+        \sum_{k=1}^n
+        (e_{pq})_{ik}
+        (e_{rs})_{kj}
+        \\
+        &=
+        \sum_{k=1}^n
+        \iverson{p=i \wedge q=k}
+        \iverson{r=k \wedge s=j}
+        \\
+        &=
+        \left(
+            \sum_{k=1}^n
+            \iverson{q=r=k}
+        \right)
+        \iverson{p=i \wedge s=j}
+        \\
+        &=
+        \delta_{qr}
+        (e_{ps})_{ij}.
+    \end{align*}
+    So $e_{pq}e_{rs} = \delta_{qr}e_{ps}$. 
+    Similarly,
+    $e_{rs}e_{pq} = \delta_{sp}e_{rq}$.
+\end{proof}
+
+Importantly, many Lie algebras, and in fact all the Lie algebras we are concerned with, occur as subalgebras of the general linear algebra--- a \defstyle{subalgebra} of a Lie algebra $\frkg$ is a vector subspace of $\frkg$ that is closed under the bracket.
+
+\begin{definition}
+    A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\FF)$ for some $n$.
+\end{definition}
+
+
+\subsection{Derivations, the adjoint representation}
+
+\begin{definition}
+    Let $\frkU$ be a $\FF$-algebra.
+    A \defstyle{derivation} of $\frkU$ is a linear map $\dd: \frkU \to \frkU$ which satisfies the \textit{Leibniz rule}
+    \[
+        \dd(ab)
+        =
+        a(\dd b) + (\dd a) b.
+    \]
+    The collection of all derivations of $\frkU$ is denoted $\Der \frkU$.
+\end{definition}
+
+\begin{definition}
+    The \defstyle{adjoint representation} of a Lie algebra $\frkg$ is the mapping
+    \[
+        x \mapsto \ad_x
+    \]
+    where $\ad_x \in \Der \frkg$ is defined to be
+    \begin{align*}
+        \ad_x: 
+        \frkg 
+        &\to 
+        \frkg \\
+        y 
+        &\mapsto
+        \lb{x,y}.
+    \end{align*}
+\end{definition}
+
+\begin{proposition}
+    $\ad_x$ is a derivation.
+\end{proposition}
+\begin{proof}
+    We start with the Jacobi identity \ref{ax:LBJacobiIdentity}
+    \[
+        \lb{x\lb{yz}} + \lb{y\lb{zx}} + \lb{z\lb{xy}}
+        =
+        0,
+    \]
+    which, using the anticommutation relations $\lb{y\lb{zx}} = -\lb{y\lb{xz}}$ and $\lb{z\lb{xy}} = -\lb{\lb{xy}z}$, is equivalent to
+    \[
+        \lb{x\lb{yz}}
+        =
+        \lb{y\lb{xz}} + \lb{\lb{xy}{z}}.
+    \]
+    But this is saying that
+    \[
+        \ad_x\lb{yz}
+        =
+        \lb{y, \ad_x z}
+        +
+        \lb{\ad_xy, z}
+    \]
+    which is exactly the defining identity for derivations.
+\end{proof}
+
+
+\subsection{Examples}
+
+We have four distinguished families of Lie algebras:
+\[
+    \sfA_\ell,\qquad
+    \sfB_\ell,\qquad
+    \sfC_\ell,\qquad
+    \sfD_\ell.
+\]
+These classify all but five of the so-called \defstyle{semisimple Lie algebras}.
+
+
+\subsubsection{Type \sfA}
+
+\begin{definition}
+    Let $V$ be a $\FF$-vector space, and fix a basis $\{v_1,\ldots,v_n\}$ of $V$.
+    The \defstyle{trace} of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
+    \[
+        \sum_{i=1}^n\ip{v_i,x(v_i)}
+    \]
+    where $\ip{-,-}$ is the canonical pairing.
+
+    In other words, it is the sum of the diagonal entries of the matrix representation of $x$.
+
+    We say that $x$ is \defstyle{traceless} if $\tr x = 0$.
+\end{definition}
+
+\begin{definition}
+    The \defstyle{special linear algebra} $\slalg(V)$ is defined to be the set of all traceless endomorphisms of $V$.
+\end{definition}
+
+\begin{proposition}
+    $\slalg(V)$ is a subalgebra of $\glalg(V)$.
+\end{proposition}
+\begin{proof}
+    The trace is a linear operator $\tr: \glalg(n, \FF) \to \FF$.
+    Since the kernel of a linear operator is a vector subspace, we conclude that $\slalg(n, \FF)$ is a vector subspace of $\glalg$.
+
+    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg(n,\FF)$ means that $\glalg(n,\FF)$'s Lie bracket is closed in $\slalg(n,\FF)$.
+\end{proof}
+
+\subsubsection{Type \sfB}
+
+\begin{definition}
+    The \defstyle{orthogonal algebra} $\oalg(2n+1,\FF)$ is defined to be
+\end{definition}
+
+\subsubsection{Type \sfC}
+
+\begin{definition}
+    Let $\dim V = 2\ell$.
+    We define a skew-symmetric bilinear form $f$ on $V$ via the matrix
+    \[
+        s
+        \coloneq
+        \begin{pmatrix}
+            0 & I_\ell \\
+            -I_\ell & 0 \\
+        \end{pmatrix}.
+    \]
+    Namely,
+    \[
+        f(u,v)
+        \coloneq
+        u^Tsv.
+    \]
+    The \defstyle{symplectic algebra} $\spalg(V)$ is defined to be the set of all $x \in \End V$ such that
+    \[
+        f\Big(x(u),v\Big)
+        =
+        -f\Big(u,x(v)\Big).
+    \]
+\end{definition}
+
+\subsubsection{Type \sfD}
+
+\begin{definition}
+    The \defstyle{orthogonal algebra} $\oalg(2n,\FF)$ is defined to be
+\end{definition}
+
+\subsection{Abstract Lie algebras}
+
+\section{Ideals and homomorphisms}
+
+\begin{definition}
+    A subspace $I$ of a Lie algebra $L$ is called an \defstyle{ideal} of $L$ if $\lb{xy} \in I$ for all $x \in L$ and $y \in I$.
+\end{definition}
+
+
+\begin{definition}
+    The \defstyle{quotient of a Lie algebra} $L$ by an ideal $I$, denoted $L/I$, is defined to be the quotient of $L$ as a vector space by $I$ as a subspace, equipped with the product
+    \[
+        \lb{x+I,y+I}
+        \coloneq
+        \lb{xy} + I.
+    \]
+\end{definition}
+
+\begin{proposition}
+    $L/I$ is a Lie algebra.
+\end{proposition}
+\begin{proof}
+    These are all easy to check.
+    \begin{align*}
+        \lb{ax+by+I,z+I}
+        &=
+        \\
+        \Big(\lb{ax+by,z}\Big) + I
+        &=
+        \Big(
+            a\lb{x,z}  
+            +
+            b\lb{y,z}  
+        \Big)
+        + I
+        \\
+        &=
+        \Big(
+            a\lb{x,z} + I
+        \Big)
+        +
+        \Big(
+            b\lb{y,z} + I 
+        \Big)
+        \\
+        &=
+        a\lb{x+I,z+I} + b\lb{y+I,z+I}.
+    \end{align*}
+    \[
+        \lb{x+I,x+I}
+        =
+        \lb{xx} + I
+        =
+        0 + I
+    \]
+\end{proof}
+
+\newcommand{\barphi}{\ensuremath{\overline{\phi}}}
+
+\subsection{Homomorphisms}
+
+There is a natural definition of a Lie algebra homomorphism--- it's a map that respects brackets.
+
+\begin{definition}
+    Let $\frkg$ and $\frkh$ be two Lie algebras.
+    We say that a map $\phi: \frkg \to \frkh$ is a \defstyle{Lie algebra homomorphism} if it is a linear map for which
+    \[
+        \phi\Big(\lb{xy}\Big)
+        =
+        \lb{\phi(x)\phi(y)}
+    \]
+    for all $x,y \in \frkg$. 
+    A \defstyle{Lie algebra isomorphism} is a Lie algebra morphism that is also an isomorphism of vector spaces.
+\end{definition}
+
+
+\begin{definition}
+    A \defstyle{representation} of a Lie algebra $\frkg$ is a Lie algebra morphism $\frkg \to \glalg(V)$.
+\end{definition}
+
+
+\begin{theorem}[Lie algebra isomorphism theorems]
+    Let $\frkg$ and $\frkh$ be Lie algerbas.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            If $\phi: \frkg \to \frkh$ is a homomorphism, then $\frkg / \ker \phi \simeq \im \phi$.
+            If $\frki \subseteq \ker \phi$ is an ideal of $\frkg$, there exists a unique homomorphism $\barphi: \frkg/\frki \to \frkh$ that makes the following diagram commute:
+            \[
+                \begin{tikzcd}
+                    \frkg \arrow[r, "\phi"] \arrow[d, "\pi"'] & \frkh \\ 
+                                                             \frkg/\frki \arrow[ur, "\barphi"']
+                \end{tikzcd}
+            \]
+        \item 
+            if $\frki$ and $\frkj$ are ideals of $\frkg$ such that $\frki \subseteq \frkj$, then $\frkj/\frki$ is an ideal of $\frkg/\frki$ and there is a natural isomorphism
+            \[
+                (\frkg/\frki)/(\frkj/\frki)
+                \simeq
+                \frkg/\frkj.
+            \]
+        \item 
+            if $\frki, \frkj$ are ideals of $\frkg$, there is a natural isomorphism
+            \[
+                (\frki + \frkj)(\frkj)
+                \simeq
+                \frki/(\frki \cap \frkj).
+            \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            The map
+            \begin{align*}
+                \barphi:
+                \frkg/\ker\phi
+                &\to
+                \im \phi
+                \\
+                x + \ker \phi
+                &\mapsto
+                \phi(x)
+            \end{align*}
+            is the desired isomorphism $\frkg / \ker \phi \simeq \im \phi$.
+            We verify that it is well defined: let $x + \ker \phi = x' + \ker \phi$.
+            Then there exists $k, k' \in \ker \phi$ such that $x + k = x' + k'$, and we have that
+            \[
+                \phi(x)
+                =
+                \phi(x + k)
+                =
+                \phi(x + k')
+                =
+                \phi(x'),
+            \]
+            so $\barphi$ is a well-defined function on the cosets in $\frkg / \ker \phi$.
+
+            Next, we check that it respects brackets:
+            \begin{align*}
+                \barphi
+                \Big(
+                    \lb{x+\ker\phi, y +\ker\phi}
+                \Big)
+                &=
+                \barphi
+                \Big(
+                    \lb{xy} + \ker\phi
+                \Big)
+                \\
+                &=
+                \phi\Big(\lb{xy}\Big)
+                \\
+                &=
+                \lb{\phi(x)\phi(y)}
+                \\
+                &=
+                \lb{
+                    \barphi\Big(x + \ker\phi\Big),
+                    \barphi\Big(y + \ker\phi\Big)
+                }.
+            \end{align*}
+            Then, it is a homomorphism.
+            To show that it is an isomorphism, we note that it has a trival kernel, trivially:
+            \[
+                \ker\barphi
+                =
+                \{x + \ker \phi : x + \ker\phi = \ker \phi\}
+                =
+                \{0 + \ker \phi\}.
+            \]
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}
+    The adjoint representation $\ad: \frkg \to \glalg(\frkg)$ is a representation of $\frkg$.
+\end{theorem}
+
+\begin{proof}
+    $\ad$ is evidently linear.
+    Next, we just check that it is a homomorphism:
+    \begin{align*}
+        \lb{\ad_x \ad_y}(z)
+        &=
+        \Big(\ad_x \ad_y - \ad_y \ad_x\Big)(z) 
+        \\
+        &=
+        \Big(\ad_x \ad_y\Big)(z) - \Big(\ad_y \ad_x\Big)(z) 
+        \\
+        &=
+        \ad_x \lb{yz} - \ad_y \lb{xz}
+        \\
+        &=
+        \lb{x\lb{yz}} - \lb{y\lb{xz}}
+        \\
+        &=
+        \lb{x\lb{yz}} + \lb{y\lb{zx}}
+        \\
+        &=
+        \lb{\lb{xy}z}
+        \\
+        &=
+        \ad_{\lb{xy}}(z).
+    \end{align*}
+\end{proof}
+
+\begin{corollary}
+    Any simple Lie algebra is isomorphic to a linear Lie algebra.
+\end{corollary}
+
+\begin{proof}
+    Let $\frkg$ be a Lie algebra.
+    We have that
+    \[
+        \ker \ad 
+        =
+        \Big\{
+            x \in \frkg: \ad_x = 0
+        \Big\}
+        =
+        \Big\{
+            x \in \frkg: \lb{xy} = 0 \text{ for all } y \in \frkg
+        \Big\}
+        =
+        Z(\frkg).
+    \]
+    Hence, if $\frkg$ is simple, i.e if $Z(\frkg) = 0$, then $\ad$ has a trivial kernel, so it is an isomorphism. 
+\end{proof}
+
+\section{Automorphisms}
+
+\begin{definition}
+    A \defstyle{automorphism} of a Lie algebra $\frkg$ is an isomorphism $\frkg \to \frkg$.
+\end{definition}
+
+\begin{proposition}
+    Let $V$ be a vector space and let $g \in \GL(V)$ be an invertible element of $\End V$.
+    Then the map
+    \[
+        x \mapsto gxg^{-1}
+    \]
+    is an automorphism of $\glalg(V)$.
+\end{proposition}
+\begin{proof}
+    The aforementioned map is a vector space isomorphism, with explicit inverse
+    \[
+        x \mapsto g^{-1}xg
+    \]
+    and it is a homomorphism, as
+    \begin{align*}
+        g\lb{xy}g^{-1}
+        &=
+        g\Big(xy - yx\Big)g^{-1}
+        \\
+        &=
+        \Big(gxyg^{-1}\Big)
+        -
+        \Big(gyxg^{-1}\Big)
+        \\
+        &=
+        \Big(gxg^{-1}gyg^{-1}\Big)
+        -
+        \Big(gyg^{-1}gxg^{-1}\Big)
+        \\
+        &=
+        \lb{gxg^{-1},gyg^{-1}}.
+    \end{align*}
+\end{proof}
+
+\section{Solvable and nilpotent Lie algebras}
+
+\subsection{The derived series, solvability}
+
+\begin{definition}
+    The \defstyle{derived series} of a Lie algebra $\frkg$ is a sequence of ideals $\frkg^{(0)}, \frkg^{(1)}, \ldots$ defined
+    \[
+        \begin{cases}
+            \frkg^{(0)} \coloneq \frkg \\
+            \frkg^{(i)} \coloneq \lb{\frkg^{(i-1)}\frkg^{(i-1)}} \\
+        \end{cases}.
+    \]
+\end{definition}
+
+In other words, $\frkg^{(i)}$ is all those elements of $\frkg$ which can be written as linear combinations of $i$ ``binary trees'' of brackets in $\frkg$.
+
+\begin{definition}
+    A Lie algebra $\frkg$ is said to be \defstyle{solvable} if $\frkg^{(n)} = 0$ for some $n$.
+\end{definition}
+
+For example, abelian Lie algebras are solvable, whereas simple Lie algebras are never solvable.
+
+\begin{proposition}
+    The Lie algebra of upper triangular matrices $\talg_n(\FF)$ is solvable.
+\end{proposition}
+\begin{proof}
+\end{proof}
+
+\subsection{The descending central series, nilpotency}
+
+\begin{definition}
+    The \defstyle{descending central series} of a Lie algebra $\frkg$ is a sequence of ideals $\frkg^0, \frkg^1, \ldots$ defined
+    \[
+        \begin{cases}
+            \frkg^0 \coloneq \frkg \\
+            \frkg^i \coloneq \lb{\frkg\frkg^{i-1}} \\
+        \end{cases}.
+    \]
+\end{definition}
+
+\begin{definition}
+    A Lie algebra $\frkg$ is said to be \defstyle{nilpotent} if $\frkg^n = 0$ for some $n$.
+\end{definition}
+
+\begin{proposition}
+    All nilpotent Lie algebras are solvable.
+\end{proposition}
+
+\begin{definition}
+    Let $\frkg$ be a Lie algebra.
+    We say that $x \in \frkg$ is \defstyle{ad-nilpotent} if $(\ad_x)^n = 0$ for some $n$.
+\end{definition}
+
+\subsection{Engel's theorem}
+
+We will prove \defstyle{Engel's theorem}
+
+\begin{theorem}[Engel]
+    Let $\frkg$ be a Lie algebra.
+    Then the following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            $\frkg$ is nilpotent,
+        \item 
+            All the elments of $\frkg$ are $\ad$-nilpotent.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof of Engel's theorem]
+
+\end{proof}
+
+\section{Solutions to exercises}
+
+\begin{exercise}[Humphreys 1.1]
+    Verify that $\RR^3$ with the bracket given by the \textit{cross product}
+    \[
+        [xy]
+        \coloneq
+        x \times y
+    \]
+    is a Lie algebra, and write down its structure constants relative to the usual basis of $\RR^3$.
+\end{exercise}
+
+Let 
+\[
+    x
+    =
+    \begin{pmatrix}
+        x_1 \\ x_2 \\ x_3
+    \end{pmatrix}, \qquad
+    y
+    =
+    \begin{pmatrix}
+        y_1 \\ y_2 \\ y_3
+    \end{pmatrix}, \qquad
+    z
+    =
+    \begin{pmatrix}
+        z_1 \\ z_2 \\ z_3
+    \end{pmatrix}, \qquad
+    w
+    =
+    \begin{pmatrix}
+        w_1 \\ w_2 \\ w_3
+    \end{pmatrix}.
+\]
+The cross product is defined
+\[
+    x \times y
+    =
+    \begin{pmatrix}
+        x_2y_3 - x_3y_2 \\
+        x_3y_1 - x_1y_3 \\
+        x_1y_2 - x_2y_1 \\
+    \end{pmatrix}
+\]
+Then we directly verify the Lie algebra axioms.
+
+For \ref{ax:LBIsBilinear},
+\begin{align*}
+    \Big( ax + by \Big) \times z
+    &=
+    \begin{pmatrix}
+        (ax_2 + by_2)z_3 - (ax_3 + by_3)z_2 \\
+        (ax_3 + by_3)z_1 - (ax_1 + by_1)z_3 \\
+        (ax_1 + by_1)z_2 - (ax_2 + by_2)z_1 \\
+    \end{pmatrix}
+    \\
+    &=
+    \begin{pmatrix}
+        \Big(ax_2z_3 + by_2z_3\Big) - \Big(ax_3z_2 + by_3z_2\Big) \\
+        \Big(ax_3z_1 + by_3z_1\Big) - \Big(ax_1z_3 + by_1z_3\Big) \\
+        \Big(ax_1z_2 + by_1z_2\Big) - \Big(ax_2z_1 + by_2z_1\Big) \\
+    \end{pmatrix}
+    \\
+    &=
+    \begin{pmatrix}
+        a\Big(x_2z_3 - x_3z_2\Big) + b\Big(y_2z_3 + y_3z_2\Big) \\
+        a\Big(x_3z_1 - x_1z_3\Big) + b\Big(y_3z_1 + y_1z_3\Big) \\
+        a\Big(x_1z_2 - x_2z_1\Big) + b\Big(y_1z_2 + y_2z_1\Big) \\
+    \end{pmatrix}
+    \\
+    &=
+    a(x \times z) + b (y \times z).
+\end{align*}
+And, via an almost identical calculation,
+\[
+    x \times \Big(ay \times bz\Big) = a(x \times y) + b(x \times z).
+\]
+Next, we verify \ref{ax:LBNilpotent}
+\[
+    x \times x
+    =
+    \begin{pmatrix}
+        x_2x_3 - x_3x_2 \\
+        x_3x_1 - x_1x_3 \\
+        x_1x_2 - x_2x_1 \\
+    \end{pmatrix}
+    =
+    0.
+\]
+And finally, we verify the Jacobi identity \ref{ax:LBJacobiIdentity}
+\[
+    x \times x
+    =
+    \begin{pmatrix}
+        x_2x_3 - x_3x_2 \\
+        x_3x_1 - x_1x_3 \\
+        x_1x_2 - x_2x_1 \\
+    \end{pmatrix}
+    =
+    0.
+\]
+
+\end{document}

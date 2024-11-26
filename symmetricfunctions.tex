@@ -26,6 +26,7 @@
 \usepackage[garamond, tableau]{jaspercommon}
 \usepackage{algorithm2e}
 \usetikzlibrary{arrows.meta}
+\setcounter{MaxMatrixCols}{20}
 
 % ----- end includes -----------------------------------------------------------
 
@@ -39,6 +40,15 @@
 \newcommand{\pring}[2]{#1 [ {#2} ]}
 % Big Comma (yes, a big comma)
 \newcommand{\bigcomma}{\ensuremath{\mathop{\scalebox{3}{\:,\:}}\limits}}
+% Inner product
+\newcommand{\InnerProduct}[1]{
+    \ensuremath{
+        \left\langle
+            {#1}
+        \right\rangle
+    }
+}
+\newcommand{\IP}[1]{\InnerProduct{#1}}
 
 % Robinson-Schensted-Knuth correspondence
 \DeclareMathOperator{\RSK}{RSK}
@@ -75,6 +85,8 @@
 \DeclareMathOperator{\cyc}{cyc}
 \DeclareMathOperator{\tr}{t}
 \DeclareMathOperator{\s}{s}
+\DeclareMathOperator{\rw}{rw}
+\DeclareMathOperator{\oln}{oln}
 
 % The simple reflection r_i
 \DeclareMathOperator{\refl}{r}
@@ -88,25 +100,19 @@
 % The symmetric group
 \DeclareMathOperator{\Sym}{Sym}
 
-% Underlined letter shorthands
-\newcommand{\ulX}{\ensuremath{\underline{X}}}
-\newcommand{\ulY}{\ensuremath{\underline{Y}}}
-\newcommand{\ulZ}{\ensuremath{\underline{Z}}}
-\newcommand{\ulx}{\ensuremath{\underline{x}}}
-\newcommand{\uly}{\ensuremath{\underline{y}}}
-\newcommand{\ulz}{\ensuremath{\underline{z}}}
-
 %   RSK
 % ------->
 \newcommand{\rskarrow}{\ensuremath\xrightarrow{\RSK}}
 
-\setcounter{MaxMatrixCols}{20}
+% ----- end newcommands --------------------------------------------------------
+
 
 \title{Symmetric Functions}
 \author{Jasper Ty}
 \date{}
 
 \titleauthorhead
+
 
 % ===== end preamble ==========================================================
 
@@ -222,33 +228,34 @@ $\pring{\KK}{x}$ will denote the polynomial ring over $\KK$ in the indeterminate
 We will fix notation for sets of indeterminates:
 
 \begin{enumerate}[label=(\alph*)]
-    \item $\ulx_N \coloneq (x_1, x_2, \ldots x_N)$ for a set of $N$ indeterminates.
-    \item $\ulx_\infty \coloneq (x_1, x_2, \ldots)$ for a set of countably many indeterminates.
-    \item $\ulx$ for either the finite or countable case when it is clear from context.
-    \item $\uly$, $\uly_N$, $\uly_\infty$, $\ulz$, $\ulz_N$, $\ulz_\infty$, and so on are defined similarly.
+    \item $\bfx_N \coloneq (x_1, x_2, \ldots x_N)$ for a set of $N$ indeterminates.
+    \item $\bfx_\infty \coloneq (x_1, x_2, \ldots)$ for a set of countably many indeterminates.
+    \item $\bfx$ for either the finite or countable case when it is clear from context.
+    \item $\bfy$, $\bfy_N$, $\bfy_\infty$, $\bfz$, $\bfz_N$, $\bfz_\infty$, and so on are defined similarly.
 \end{enumerate}
 
 With compositions, partitions, or otherwise any finitely supported tuple of nonnegative integers $\alpha$, we define \textit{multi-index notation} for compactly writing down monomials in a set of variables.
 \[
-    \ulx^\alpha
+    \bfx^\alpha
     \coloneq
     x_1^{\alpha_1}x_2^{\alpha_2}x_3^{\alpha_3}\cdots.
 \]
 As a notation in between, we will also write
 \[
-    \ulx^{\alpha_1,\alpha_2,\ldots}
+    \bfx^{\alpha_1,\alpha_2,\ldots}
 \]
-for the monomial $\ulx^\alpha$.
+for the monomial $\bfx^\alpha$.
 This allows us to ``anonymously'' use multi-indices.
 
-In the context of multi-index notation, $\alpha$ will also be called $x$'s \textit{exponent vector}.
-We will let $[x^\alpha]f$ denote the coefficient of $[x^\alpha]$ in the formal power series $f$.
+In the context of multi-index notation, $\alpha$ will also be called $\bfx$'s \textit{exponent vector}.
+We will let $[\bfx^\alpha]f$ denote the coefficient of $[\bfx^\alpha]$ in the formal power series $f$.
+Sometimes, this is written as $\InnerProduct{f,\bfx^\alpha}$.
 
 \subsection*{Permutations and the symmetric group}
 
-$\Sym_n$ will denote the symmetric group on $n$ letters.
-In general, $\Sym_A$ will denote the group of permutations of the set $A$.
-In this case, we have defined $\Sym_n \coloneq \Sym_{[n]} = \Sym_{\{1,2,\ldots,n\}}$.
+$S_n$ will denote the symmetric group on $n$ letters.
+In general, $S_A$ will denote the group of permutations of the set $A$.
+In this case, we have defined $S_n \coloneq S_{[n]} = S_{\{1,2,\ldots,n\}}$.
 
 I will use the standard one-line and two-line notation, generally, for permutations.
 
@@ -261,7 +268,7 @@ For example, the transposition that swaps 4 and 8 will be written as $\tr_{48}$.
 
 The simple transpositions $\tr_{i,i+1}$ will be denoted $\refl_i$.
 
-Permutations will act on functions (somewhat incorrectly!) by permuting places, so if $w \in \Sym_n$ and $f$ is a function of $n$ variables, then
+Permutations will act on functions (somewhat incorrectly!) by permuting places, so if $w \in S_n$ and $f$ is a function of $n$ variables, then
 \[
     wf(x_1,\ldots,x_n) \coloneq f(x_{w(1)},\ldots,x_{w(n)}).
 \]
@@ -277,7 +284,7 @@ Permutations will act on functions (somewhat incorrectly!) by permuting places, 
 
 \subsection*{Iverson brackets}
 
-I use the \textit{Iverson bracket}, which is defined to be
+I use the \defstyle{Iverson bracket}, which is defined to be
 \[
     [\psi]^? \coloneq \begin{cases}
         1 & \psi\text{ is true} \\
@@ -296,8 +303,8 @@ It's an important remark that the Iverson bracket is a \textit{function of the f
 We first define \textit{symmetric polynomials}.
 
 \begin{definition}
-    Fix $n \in \NN$, and let $\KK$ be a commutative ring.
-    We call a polynomial $f \in \pring{\KK}{x_1,\ldots,x_n}$ \textit{symmetric} if, for all permutations $w \in \Sym_n$, we have that
+    Fix $n \in \NN$, and let $\mathbb{k}$ be a commutative ring.
+    We call $f \in \pring{\KK}{x_1,\ldots,x_n}$ a \defstyle{symmetric polynomial} if, for all permutations $w \in S_n$, we have that
     \[
         wf = f.
     \]
@@ -307,10 +314,12 @@ We first define \textit{symmetric polynomials}.
         =
         f(x_1,x_2,\ldots,x_n)
     \]
-    for all $w \in \Sym_n$.
+    for all $w \in S_n$.
 
-    We will denote the set of all such polynomials $\pring{\KK}{x_1,\ldots,x_n}^{\Sym_n}$.
+    We will denote the set of all such polynomials $\pring{\KK}{x_1,\ldots,x_n}^{S_n}$.
 \end{definition}
+
+This is a specific case of a more general idea of the \defstyle{ring of invariants} of a group action on a ring $G \curvearrowright R$, which is denoted $R^G$.
 
 \begin{example}
     The polynomial
@@ -325,7 +334,7 @@ We first define \textit{symmetric polynomials}.
 \begin{remark}
     The sum and product of two symmetric polynomials is again symmetric.
     Also, $0$ and $1$ are clearly symmetric.
-    Hence, $\pring{\KK}{\ulx}^{\Sym_n}$ is a \textit{subring} of $\pring{\KK}{\ulx}$.
+    Hence, $\pring{\KK}{\bfx}^{S_n}$ is a \textit{subring} of $\pring{\KK}{\bfx}$.
 \end{remark}
 
 
@@ -339,26 +348,26 @@ The reason for this mouthful is that we want a space into which all of the facts
 Unfortunately, this means we \textit{have} to do some paperwork with regards to constructing this ring.
 \begin{definition}
     Fix a ground ring $\KK$.
-    The ring $\fps{\KK}{\ulx_\infty}$ of \textit{formal power series in countably many variables} $\ulx_\infty \coloneq (x_1, x_2, \ldots)$ is defined to be the set of all formal linear combinations 
+    The ring $\fps{\KK}{\bfx_\infty}$ of \textit{formal power series in countably many variables} $\bfx_\infty \coloneq (x_1, x_2, \ldots)$ is defined to be the set of all formal linear combinations 
     \[
-        \sum_{\alpha\in\Com} c_\alpha \ulx^\alpha,
+        \sum_{\alpha\in\Com} c_\alpha \bfx^\alpha,
     \]
-    where $c_a \in \KK$, and $\Com$ is the set of all weak compositions, or equivalently, all finitely supported $\NN$-sequences, and where $\ulx^\alpha \coloneq x_1^{\alpha_1}x_2^{\alpha_2}\cdots$.
+    where $c_a \in \KK$, and $\Com$ is the set of all weak compositions, or equivalently, all finitely supported $\NN$-sequences, and where $\bfx^\alpha \coloneq \bfx_\infty^\alpha = x_1^{\alpha_1}x_2^{\alpha_2}\cdots$.
 
     The ring operations are defined in the morally correct way:
-    if $f = \sum_\alpha a_\alpha x^\alpha$ and $g = \sum_\alpha b_\alpha x^\alpha$, then $f + g$ and $fg$ are defined to be
+    if $f = \sum_\alpha a_\alpha \bfx^\alpha$ and $g = \sum_\alpha b_\alpha \bfx^\alpha$, then $f + g$ and $fg$ are defined to be
     \[
         f+g
         \coloneq
         \sum_\alpha
-        (a_\alpha+b_\alpha)\ulx^\alpha
+        (a_\alpha+b_\alpha)\bfx^\alpha
     \]
     and
     \[
         fg
         \coloneq
         \sum_\gamma \prod_{\alpha+\beta=\gamma}
-        (a_\alpha b_\beta) \ulx^\gamma.
+        (a_\alpha b_\beta) \bfx^\gamma.
     \]
 \end{definition}
 
@@ -367,29 +376,29 @@ Indexing over all \textit{weak compositions} $\alpha$ means that all the monomia
 \begin{example}
     The formal power series
     \[
-        f(\ulx_\infty)
+        f(\bfx)
         =
         x_1 + x_2 + x_3 + \cdots
     \]
-    is an element of $\fps{\KK}{\ulx_\infty}$.
+    is an element of $\fps{\KK}{\bfx_\infty}$.
 \end{example}
 
 Next, we add another ingredient which generalizes, in a similar way, what we mean when we say ``symmetric''.
 
 \begin{definition}
-    Let $\Sym_\infty$ denote the subgroup of $\Sym_\NN$ consisting of permutations of $\NN$ with ``finite support''.
+    Let $S_\infty$ denote the subgroup of $S_\NN$ consisting of permutations of $\NN$ with ``finite support''.
     That is,
     \[
-        \Sym_\infty
+        S_\infty
         \coloneq
         \Big\{
-            w \in \Sym_\NN: w(t) = t\text{ for all but finitely many }t
+            w \in S_\NN: w(t) = t\text{ for all but finitely many }t
         \Big\}.
     \]
 \end{definition}
 
-This contains as a subgroup $\Sym_n$ for all $n \in \NN$.
-Importantly, every permutation in $\Sym_\infty$ is an extension of a permutation that lives in some finite symmetric group.
+This contains as a subgroup $S_n$ for all $n \in \NN$.
+Importantly, every permutation in $S_\infty$ is an extension of a permutation that lives in some finite symmetric group.
 
 \subsubsection{Homogeneous symmetric functions}
 
@@ -399,27 +408,27 @@ Now we can start defining the ring of symmetric functions.
     A \textit{homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
     \[
         \sum_{\alpha \in \Com_n}
-        c_\alpha x^\alpha
-        \in \fps{\KK}{\ulx_\infty},
+        c_\alpha \bfx^\alpha
+        \in \fps{\KK}{\bfx_\infty},
     \]
     where we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar such that $c_\alpha = c_\beta$ whenever $\beta$ can be obtained by permuting the parts of $\alpha$.
     
     We denote the set of all such formal power series by $\Lambda_\KK^n$.
 \end{definition}
 
-These form a $\KK$-module, as a submodule of $\fps{\KK}{\ulx_\infty}$.
+These form a $\KK$-module, as a submodule of $\fps{\KK}{\bfx_\infty}$.
 Moreover, these are in fact defined correctly, meaning that these are symmetric ``functions''.
 
 \begin{remark}
-    Consider the action $\Sym_\infty \curvearrowright \fps{\KK}{\ulx_\infty}$ given by
+    Consider the action $S_\infty \curvearrowright \fps{\KK}{\bfx_\infty}$ given by
     \[
         wf(x_1,x_2,\ldots)
         =
-        f(x_{w(1)},x_{w(2)},\ldots), \quad \forall w \in \Sym_\infty.
+        f(x_{w(1)},x_{w(2)},\ldots), \quad \forall w \in S_\infty.
     \]
-    Equivalently, the action is also given by corresponding each $w \in \Sym_\infty$ to the automorphism of $\fps{\KK}{\ulx_\infty}$ which replaces each indeterminate $x_i$ with $x_{w(i)}$.
+    Equivalently, the action is also given by corresponding each $w \in S_\infty$ to the automorphism of $\fps{\KK}{\bfx_\infty}$ which replaces each indeterminate $x_i$ with $x_{w(i)}$.
 
-    $\Lambda_{\KK}^n$ is precisely all the elements of $\fps{\KK}{\ulx_\infty}$ invariant under $\Sym_\infty$.
+    $\Lambda_{\KK}^n$ is precisely all the elements of $\fps{\KK}{\bfx_\infty}$ invariant under $S_\infty$.
 \end{remark}
 
 The following is a simple example of an element of $\Lambda_\KK^n$:
@@ -427,7 +436,7 @@ The following is a simple example of an element of $\Lambda_\KK^n$:
 \begin{example}
     The formal power series 
     \[
-        f(\ulx_\infty)
+        f(\bfx_\infty)
         =
         \sum_i
         x_i^2 
@@ -440,7 +449,7 @@ The following is a simple example of an element of $\Lambda_\KK^n$:
 
 \subsubsection{Symmetric functions}
 
-We note that multiplying (inside $\fps{\KK}{\ulx_\infty}$) any two homogeneous symmetric functions $f$, $g$ of degrees $m$ and $n$ respectively give us a homogeneous symmetric function of degree $m+n$.
+We note that multiplying (inside $\fps{\KK}{\bfx_\infty}$) any two homogeneous symmetric functions $f$, $g$ of degrees $m$ and $n$ respectively give us a homogeneous symmetric function of degree $m+n$.
 The following definition gives us the right subalgebra this remark hints at.
 
 
@@ -518,7 +527,7 @@ We put notation for talking about partitions and compositions.
 
 \begin{definition}
     We write $\lambda \vdash n$ to say ``$\lambda$ is a partition of $n$.''
-    Similarly, we will write $\alpha \models n$ to say that ``$\alpha$ is a composition of $n$.''
+    Similarly, we will write $\alpha \models n$ to say ``$\alpha$ is a composition of $n$.''
 
     We denote the set of all partitions by $\Par$.
     The set of all partitions $\lambda$ such that $\lambda \vdash n$ will be denoted $\Par_n$.
@@ -613,9 +622,9 @@ Typically, our entries will either be positive integers or elements of a family 
 This allows us to encode the entries in a convenient way
 
 \begin{definition}
-    Let $T$ be a Young tableau filled in with \textit{by positive integers}.
+    Let $T$ be a Young tableau filled in with \textit{positive integers}.
     Consider the multiset $\{T_{ij}\}_{ij \in \boxplus T}$ of all its entries, counted with multiplicities.
-    The \textit{content} of $T$, written $\content T$ or $\ct T$, is the sequence defined to be
+    The \defstyle{content} of $T$, written $\content T$ or $\ct T$, is the sequence defined to be
     \[
         \content T
         \coloneq
@@ -624,7 +633,7 @@ This allows us to encode the entries in a convenient way
             \text{multiplicity of }n\text{ in }T\text{'s entries}
         \right).
     \]
-    This is also sometimes referred to as the \textit{weight} of $T$.
+    This is also sometimes referred to as the \defstyle{weight} of $T$.
 \end{definition}
 
 \begin{example}
@@ -666,10 +675,9 @@ These have really obvious meanings on the level of ``filling numbers in boxes''.
 With this, we can define two important classes of Young tableau.
 
 \begin{definition}
-    A Young tableau $T$ is called \textit{standard} if both its rows and columns are strongly increasing. $T$ is called \textit{semistandard} if its rows are weakly increasing and its columns are strongly increasing.
+    A Young tableau $T$ is called \defstyle{standard} if both its rows and columns are strongly increasing. $T$ is called \defstyle{semistandard} if its rows are weakly increasing and its columns are strongly increasing.
 
-    Let $\lambda \vdash n$. We denote the set of all standard Young tableau of shape $\lambda$ by $\SYT_{\shape \lambda}$, and the set of all semistandard Young tableau by $\SSYT_{\shape \lambda}$.
-
+    We will denote the set of \textit{all} standard and semistandard Young tableaux by $\SYT$ and $\SSYT$ respectively.
 \end{definition}
 
 Semistandard Young tableau are explored in more detail in Section \ref{ch:schurs}, as the \textit{Schur functions} enumerate them.
@@ -679,9 +687,9 @@ Semistandard Young tableau are explored in more detail in Section \ref{ch:schurs
 We have several orders on \textit{partitions themselves}.
 The first one, \textit{containment}, is defined on all partitions.
 
-\begin{definition}[Containment order]
-    Young diagrams, as subsets of $\NN^2$, have a partial order induced by containment. 
-    \textit{Containment order} for partitions is precisely this order that diagrams induce on partitions.
+\begin{definition}
+    Young diagrams, as subsets of $\NN^2$, have a partial order induced by the subset relation. 
+    \defstyle{Containment order} for partitions is precisely this order that diagrams induce on partitions.
 
     We will use $\subseteq$ to denote this order, so we have defined
     \[
@@ -767,11 +775,9 @@ The next two orders are not so sensitive to a partition's size, because they are
 
 \subsection{Partition transposition}
 
-Partition
-
 \begin{definition}
     Let $\lambda \in \Par$.
-    We define its \textit{transpose} $\lambda^\top$ to be the partition
+    We define its \defstyle{transpose} $\lambda^\top$ to be the partition
     \[
         \lambda^\top
         \coloneq
@@ -780,28 +786,31 @@ Partition
             \# \text{ parts of }\lambda\text{ with size }\leq i
         \right)
     \]
-    This is also sometimes called $\lambda$'s \textit{conjugate} partition $\lambda^\top$, and sometimes denoted $\lambda^\ast$, $\lambda'$, or $\lambda^T$.
+    This is also sometimes called $\lambda$'s \defstyle{conjugate}, and sometimes denoted $\lambda^\ast$, $\lambda'$, or $\lambda^T$.
 \end{definition}
 
-\begin{theorem}
+\begin{example}
+\end{example}
+
+\begin{proposition}
     Fix $m \in \NN$.
-    Partition transposition is a bijection between $\Par_{\ell = m}$ and $\Par_{\Pi_0 = m}$.
-\end{theorem}
+    Partition transposition is a bijection between partitions of length $m$ and partitions whose largest part is $m$.
+\end{proposition}
 
 \section{Some distinguished bases of symmetric functions}
 
-We cover a few interesting bases of the ring of symmetric functions. These are \textit{all} indexed by partitions.
+We cover some key bases of the ring of symmetric functions. These are \textit{all} indexed by partitions.
 
 \subsection{Monomial symmetric functions}
 
-The first basis, the monomials, has the amazing property where it's \textit{immediately obvious the fact that it even is a basis}.
+This first basis has the property where it's \textit{immediately obvious the fact that it even is a basis}.
 
-This is in total analogy to taking the \textit{monomial basis of a polynomial ring}. In this case, we group together monomials by the orbits of the variable permuting $\Sym_n$ action.
+This is in total analogy to taking the \textit{monomial basis of a polynomial ring}. In this case, we group together monomials by the orbits of the variable permuting $S_n$ action.
 
 \begin{definition}
-    Let $\lambda \in \Par$. The \textit{monomial symmetric function} $m_\lambda$ is 
+    Let $\lambda \in \Par$. The \defstyle{monomial symmetric function} $m_\lambda$ is 
     \[
-        m_\lambda \coloneq \sum_{\alpha \sim \lambda} x^\alpha.
+        m_\lambda \coloneq \sum_{\alpha \sim \lambda} \bfx^\alpha.
     \]
     Where $\alpha \sim \lambda$ means that $\alpha$ may be obtained by permuting the parts of $\lambda$.
 \end{definition}
@@ -816,7 +825,7 @@ The above definition involves permuting around the exponent vector $\alpha$. I p
             + &x_{i_1}^3x_{i_2}^5x_{i_3}^2x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^5x_{i_4}^2 + x_{i_1}^3x_{i_2}^2x_{i_3}^2x_{i_4}^5  \\
         + &x_{i_1}^2x_{i_2}^3x_{i_3}^5x_{i_4}^2 + x_{i_1}^2x_{i_2}^3x_{i_3}^2x_{i_4}^5 + x_{i_1}^2x_{i_2}^2x_{i_3}^3x_{i_4}^5 \Big).
     \end{align*}
-    when you view the action of $\Sym_n$ as permuting the exponents. When viewed as permuting the subscripts, we have that
+    when you view the action of $S_n$ as permuting the exponents. When viewed as permuting the subscripts, we have that
     \begin{align*}
         m_\lambda = m_{5322} = \sum_{i_1<i_2<i_3<i_4} \Big(
         &x_{i_1}^5x_{i_2}^3x_{i_3}^2x_{i_4}^2
@@ -864,8 +873,8 @@ Our next basis will be the \textit{elementary symmetric functions}, which we wil
     The elementary symmetric function $e_2$ is
     \begin{align*}
         e_2 = x_1x_2 + x_1x_3 + x_1x_4 + &\cdots \\
-        x_2x_3 + x_2x_4 + &\cdots \\
-        x_3x_4 + &\cdots
+        + x_2x_3 + x_2x_4 + &\cdots \\
+        + x_3x_4 + &\cdots
     \end{align*}
 \end{example}
 
@@ -885,7 +894,7 @@ Now we examine the relationship between the elementaries and the monomials.
 \end{definition}
 
 \begin{definition}
-    A \textit{zero-one matrix} is an infinite two-dimensional array $(a_{ij})_{i,j \geq 1}$ whose entries are either zero or one, and for which only \textit{finitely many entries are one}.
+    A \defstyle{zero-one matrix} is an infinite two-dimensional array $(a_{ij})_{i,j \geq 1}$ whose entries are either zero or one, and for which \textit{all but finitely many entries are zero}.
     Denote the set of all zero-one matrices by $\Mat_\infty(01)$.
 
     By this finiteness, the \textit{row sums} and \textit{column sums} of a zero-one matrix are well-defined.
@@ -934,7 +943,8 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
         e_\lambda 
         =
         \left(\sum_{\substack{S:\lambda_1\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in S]^?}x_2^{[2\in S]^?}\cdots\right)
-        \left(\sum_{\substack{T:\lambda_2\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in T]^?}x_2^{[2\in T]^?}\cdots\right).
+        \left(\sum_{\substack{T:\lambda_2\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in T]^?}x_2^{[2\in T]^?}\cdots\right)
+        \cdots
     \]
     Where we have used the Iverson bracket to pick out the $x$'s we need.
 
@@ -947,6 +957,7 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
         =
         \left(\sum_{\substack{(a_i)_{i\geq 1}\text{ is a}\\\text{zero-one sequence} \\ \sum_i a_i = \lambda_1}}x_1^{a_1}x_2^{a_2}\cdots\right)
         \left(\sum_{\substack{(b_i)_{i\geq 1}\text{ is a}\\\text{zero-one sequence} \\ \sum_i b_i = \lambda_2}}x_1^{b_1}x_2^{b_2}\cdots\right)
+        \cdots
     \]
     We're almost there.
     Next, we expand this product, and we will use suggestive notation: to name a term in this product, we pick out a zero-one sequence $(a_{i,j})$ for each factor $e_{\lambda_j}$, of which there are $\len(\lambda)$ many, so if we let $m=\len(\lambda)$, we can pick out sequences
@@ -970,7 +981,7 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
         &= 
         \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} x_1^{\left(\sum_i a_{i1}\right)}x_2^{\left(\sum_i a_{i2}\right)} \cdots \\
         &= 
-        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} x^{\col(a_{ij})}
+        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} \bfx^{\col(a_{ij})}
     \end{align*}
     And now we're almost there.
     It's clear that if we pick out the coefficient of $\mu$ in the above sum, it must have come from a zero-one matrix whose column sum is $\mu$.
@@ -1023,7 +1034,7 @@ We establish a key fact about the numbers $M_{\lambda\mu}$.
 The \textit{complete homogeneous symmetric functions}, or the \textit{completes}, or the $h$'s, have a very similar definition as the elementaries, but with distinctness relaxed.
 
 \begin{definition}
-    Let $n\in\NN$. The \textit{complete homogeneous symmetric function} $h_n$ is defined to be
+    Let $n\in\NN$. The \defstyle{complete homogeneous symmetric function} $h_n$ is defined to be
     \[
         h_n \coloneq \sum_{i_1\leq i_2\leq\ldots\leq i_n} x_{i_1}x_{i_2}\cdots x_{i_n}.
     \]
@@ -1104,7 +1115,7 @@ We have one more simple basis for $\Lambda$, which has many not-so-simple theore
 \subsubsection{Cycle type}
 
 \begin{definition}
-    Let $w \in \Sym_n$. The \textit{cycle type} $\rho(w)$ of $w$ is the partition of $n$ whose parts are the cycle lengths of $w$'s disjoint cycle decomposition.
+    Let $w \in S_n$. The \textit{cycle type} $\rho(w)$ of $w$ is the partition of $n$ whose parts are the cycle lengths of $w$'s disjoint cycle decomposition.
 \end{definition}
 
 \begin{example}
@@ -1124,7 +1135,7 @@ We have one more simple basis for $\Lambda$, which has many not-so-simple theore
 This quantity is important for enumeration with regards to cycle type.
 
 \begin{theorem}
-    The number of permutations $w \in \Sym_n$ of cycle type $\rho = \langle 1^{m_1}2^{m_2}\cdots\rangle$ is
+    The number of permutations $w \in S_n$ of cycle type $\rho = \langle 1^{m_1}2^{m_2}\cdots\rangle$ is
     \[
         \frac{n!}{1^{m_1}m_1!2^{m_2}m_2!\cdots} = n!z_\rho^{-1}.
     \]
@@ -1151,7 +1162,7 @@ This quantity is important for enumeration with regards to cycle type.
 
 \subsection{Distinguished generating functions}
 
-We define the following, natural, generating functions in $\fps{\Lambda}{t}$.
+We define the following, natural, generating functions in the ring $\fps{\Lambda}{t}$.
 \begin{definition}
     \begin{align*}
         H(t) &\coloneq \sum_{n\geq0}h_n t^n \\
@@ -1160,7 +1171,7 @@ We define the following, natural, generating functions in $\fps{\Lambda}{t}$.
     \end{align*}
 \end{definition}
 
-Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant term one!
+Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant term one.
 
 \begin{theorem}\label{thm:HEPPowerSeries}
     We have that
@@ -1176,7 +1187,7 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
     \begin{align*}
         \prod_{n\geq0}\frac{1}{1-x_nt} &= \prod_{n\geq0}\sum_{k\geq0}x_n^kt^k\\
                                         &= \prod_{n \geq 0}\Big(1 + x_nt + x_n^2t^2 + \cdots\Big) \\
-                                        &= \sum_{k \geq 0}\sum_{\alpha \models k} \ulx^\alpha t^k \\
+                                        &= \sum_{k \geq 0}\sum_{\alpha \models k} \bfx^\alpha t^k \\
                                         &= \sum_{k \geq 0} h_kt^k.
     \end{align*}
     Similarly,
@@ -1278,20 +1289,49 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
         (1+x_iy_j)
         =
         \sum_{\lambda\in\Par}
-        m_\lambda(\ulx)e_\lambda(\uly).
+        m_\lambda(\bfx)e_\lambda(\bfy).
     \]
 \end{theorem}
 
 \begin{proof}
-    The coefficient of $x^\alpha y^\beta$ is obtained by taking a zero-one matrix $A$ whose row sum is $\alpha$ and whose column sum is $\beta$. Then
+    The coefficient of $\bfx^\alpha \bfy^\beta$ is obtained by taking a zero-one matrix $A$ whose row sum is $\alpha$ and whose column sum is $\beta$. Then
     \begin{align*}
-        \prod_{i,j\geq1}(1+x_iy_j) &= \sum_{A \in \Mat_\infty(01)}x^{\row A}y^{\col A} \\
-                                   &= \sum_{\alpha,\beta \in \Com} M_{\alpha\beta}x^\alpha y^\beta \\
-                                   &= \sum_{\lambda,\mu\in\Par} \left[\sum_{\alpha \in \Com(\lambda), \beta \in \Com(\mu)} M_{\alpha\beta}x^\alpha y^\beta\right] \\
-                                   &= \sum_{\lambda,\mu\in\Par} M_{\lambda\mu}\left[\sum_{\alpha \in \Com(\lambda), \beta \in \Com(\mu)} x^\alpha y^\beta\right] \\
-                                   &= \sum_{\lambda,\mu \in \Par} M_{\lambda\mu} \Big(m_\lambda(\ulx) m_\mu(\uly)\Big) \\
-                                   &= \sum_{\lambda \in \Par} m_\lambda(\ulx) \left[\sum_{\mu\in\Par} M_{\lambda\mu} m_\mu(\uly)\right]\\
-                                   &= \sum_{\lambda \in \Par} m_\lambda(\ulx) e_\lambda(\uly).
+        \prod_{i,j\geq1}(1+x_iy_j)
+        &=
+        \sum_{A \in \Mat_\infty(01)}
+        \ulx^{\row A}\uly^{\col A} \\
+        &=
+        \sum_{\alpha,\beta \in \Com}
+        M_{\alpha\beta}\ulx^\alpha \uly^\beta \\
+        &=
+        \sum_{\lambda,\mu\in\Par}
+        \left[
+            \sum_{\alpha \in \Com(\lambda), \beta \in \Com(\mu)}
+            M_{\alpha\beta} \ulx^\alpha \uly^\beta
+        \right] \\
+        &=
+        \sum_{\lambda,\mu\in\Par}
+        M_{\lambda\mu}
+        \left[
+            \sum_{\alpha \in \Com(\lambda), \beta \in \Com(\mu)}
+            \ulx^\alpha \uly^\beta
+        \right] \\
+        &=
+        \sum_{\lambda,\mu \in \Par}
+        M_{\lambda\mu}
+        \Big(
+            m_\lambda(\ulx) m_\mu(\uly)
+        \Big) \\
+        &=
+        \sum_{\lambda \in \Par}
+        m_\lambda(\ulx)
+        \left[
+            \sum_{\mu\in\Par}
+            M_{\lambda\mu} m_\mu(\uly)
+        \right] \\
+        &=
+        \sum_{\lambda \in \Par}
+        m_\lambda(\ulx) e_\lambda(\uly).
     \end{align*}
 \end{proof}
 
@@ -1315,35 +1355,231 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
 \begin{theorem}\label{CauchyIdentityForPP}
     We have that
     \[
-        \prod_{i,j \geq 1} (1-x_iy_j)^{-1} = \sum_{\lambda\in\Par} z_\lambda^{-1}p_\lambda(\underline{X}) p_\lambda(\underline{Y}).
+        \prod_{i,j \geq 1} (1-x_iy_j)^{-1}
+        =
+        \sum_{\lambda\in\Par}
+        z_\lambda^{-1} p_\lambda(\ulx) p_\lambda(\uly).
     \]
     Additionally,
     \[
-        \prod_{i,j \geq 1} (1+x_iy_j) = \sum_{\lambda\in\Par} z_\lambda^{-1}\varepsilon_{\lambda}p_\lambda(\underline{X}) p_\lambda(\underline{Y}).
+        \prod_{i,j \geq 1}
+        (1+x_iy_j)
+        =
+        \sum_{\lambda\in\Par}
+        z_\lambda^{-1}\varepsilon_{\lambda} p_\lambda(\ulx) p_\lambda(\uly).
     \]
 \end{theorem}
 
 \begin{proof}
     We apply $\log$ to the left hand side, and grind to obtain
     \begin{align*}
-        \log \prod_{i,j \geq 1} (1-x_iy_j)^{-1} &= \sum_{i,j\geq1} \log(1-x_iy_j)^{-1} \\
-                                                &= - \sum_{i,j \geq 1} \log(1-x_iy_j) \\
-                                                &= - \sum_{i,j \geq 1} \sum_{n\geq 1}\frac{(-1)^{n-1}}{n} (-x_iy_j)^n \\
-                                                &= - \sum_{i,j \geq 1} \sum_{n\geq 1}\frac{(-1)^{n-1}(-1)^n}{n} x_i^ny_j^n \\
-                                                &= - \sum_{i,j \geq 1} \sum_{n\geq 1}-\frac{1}{n} x_i^ny_j^n \\
-                                                &= \sum_{i,j \geq 1} \sum_{n\geq 1}\frac{1}{n} x_i^ny_j^n \\
-                                                &= \sum_{n \geq 1} \sum_{i,j\geq 1}\frac{1}{n} x_i^ny_j^n \\
-                                                &= \sum_{n \geq 1} \frac{1}{n} \left(\sum_{i\geq1}x_i^n\right)\left(\sum_{j\geq1}y_j^n\right) \\
-                                                &= \sum_{n \geq 1} \frac{1}{n} p_n(\underline{X}) p_n(\underline{Y})
+        \log \prod_{i,j \geq 1}
+        (1-x_iy_j)^{-1}
+        &=
+        \sum_{i,j\geq1}
+        \log(1-x_iy_j)^{-1} \\
+        &=
+        -\sum_{i,j \geq 1}
+        \log(1-x_iy_j) \\
+        &=
+        -\sum_{i,j \geq 1}
+        \sum_{n\geq 1}
+        \frac{(-1)^{n-1}}{n}(-x_iy_j)^n \\
+        &=
+        \sum_{i,j \geq 1}
+        \sum_{n\geq 1}
+        \frac{1}{n} x_i^ny_j^n \\
+        &=
+        \sum_{n \geq 1}
+        \sum_{i,j\geq 1}
+        \frac{1}{n} x_i^ny_j^n \\
+        &=
+        \sum_{n \geq 1}
+        \frac{1}{n}
+        \left(\sum_{i\geq1}x_i^n\right)
+        \left(\sum_{j\geq1}y_j^n\right) \\
+        &=
+        \sum_{n \geq 1}
+        \frac{1}{n} p_n(\ulx) p_n(\uly).
     \end{align*}
     Hence we have that
     \[
         \prod_{i,j\geq1}(1-x_iy_j)^{-1} = \exp \log \prod_{i,j\geq1}(1-x_iy_j)^{-1} = \exp \sum_{n \geq 1} \frac{1}{n} p_n(\underline{X}) p_n(\underline{Y}).
     \]
-    Then, we apply the \textit{permutation version of the exponential formula}, which tells us that, for the function $f: \PP \to \Lambda(\underline{X}, \underline{Y})$,
+    Then, we apply the \textit{permutation version of the exponential formula}, which tells us that, for any function $f: \PP \to \KK$ where $\KK$ is some commutative ring,
     \[
-        f(n) = p_n(\underline{X})p_n(\underline{Y})
-    \],
+        \exp
+        \left(
+            \sum_{n=1}^\infty
+            f(n)
+            \frac{t^n}{n}
+        \right)
+        =
+        \sum_{n=0}^\infty
+        \left[
+            \sum_{
+                \pi \in S_n
+            }
+            f(\rho(\pi)_1) \cdots f(\rho(\pi)_{\ell(\rho(\pi))})
+        \right]
+        \frac{t^n}{n!},
+    \]
+    where $\rho(\pi)$ is $\pi$'s cycle type.
+    Alternatively, we can express it in the form
+    \begin{align*}
+        \exp
+        \left(
+            \sum_{n=1}^\infty
+            f(n)
+            \frac{t^n}{n}
+        \right)
+        &=
+        \sum_{n=1}^\infty
+        \left[
+            \sum_{\lambda \vdash n}
+            \sum_{
+                \substack{
+                \pi \in S_n \\
+                \rho(\pi) = \lambda
+                }
+            }
+            f(\lambda_1) \cdots f(\lambda_k)
+        \right]
+        \frac{t^n}{n!} \\
+        &=
+        \sum_{n=1}^\infty
+        \left[
+            \sum_{\lambda \vdash n}
+            f(\lambda_1) \cdots f(\lambda_k)
+            \sum_{
+                \substack{
+                \pi \in S_n \\
+                \rho(\pi) = \lambda
+                }
+            }
+            1 
+        \right]
+        \frac{t^n}{n!} \\
+        &=
+        \sum_{n=1}^\infty
+        \left[
+            \sum_{\lambda \vdash n}
+            f(\lambda_1) \cdots f(\lambda_k)
+            n!
+            z_\lambda^{-1}
+        \right]
+        \frac{t^n}{n!} \\
+        &=
+        \sum_{n=1}^\infty
+        \left[
+            \sum_{\lambda \vdash n}
+            f(\lambda_1) \cdots f(\lambda_k)
+            z_\lambda^{-1}
+        \right]
+        t^n \\
+        &=
+        \sum_{\lambda \in \Par}
+        f(\lambda_1) \cdots f(\lambda_k) z_\lambda^{-1}
+        t^{|\lambda|}
+    \end{align*}
+    Then, if we put $f(n) = p_n(\ulx)p_n(\uly)$,
+    \begin{align*}
+        \exp
+        \sum_{n=1}^\infty
+        \frac{t^n}{n}
+        p_n(\ulx) p_n(\uly)
+        &=
+        \sum_{\lambda \in \Par}
+        p_{\lambda_1}(\ulx) p_{\lambda_1}(\uly)
+        \cdots
+        p_{\lambda_k}(\ulx) p_{\lambda_k}(\uly)
+        z_\lambda^{-1}
+        t^{|\lambda|} \\
+        &=
+        \sum_{\lambda \in \Par}
+        \underbrace{
+            \Big(
+                p_{\lambda_1}(\ulx) \cdots p_{\lambda_k}(\ulx)
+            \Big)
+        }_{=p_\lambda(\ulx)}
+        \underbrace{
+            \Big(
+                p_{\lambda_1}(\uly) \cdots p_{\lambda_k}(\uly)
+            \Big)
+        }_{=p_\lambda(\uly)}
+        z_\lambda^{-1}
+        t^{|\lambda|} \\
+        &=
+        \sum_{\lambda \in \Par}
+        p_\lambda(\ulx) p_\lambda(\uly) z_\lambda^{-1}
+        t^{|\lambda|}.
+    \end{align*}
+    Finally, putting $t=1$, we have
+    \[
+        \exp
+        \sum_{n \geq 1}
+        \frac{1}{n}
+        p_n(\ulx) p_n(\uly)
+        =
+        \sum_{\lambda \in \Par}
+        p_\lambda(\ulx) p_\lambda(\uly) z_\lambda^{-1},
+    \]
+    which proves the first equality.
+
+    The second equality is proven very similarly.
+
+    \begin{align*}
+        \log \prod_{i,j \geq 1}
+        (1+x_iy_j)
+        &=
+        \sum_{i,j\geq1}
+        \log(1+x_iy_j) \\
+        &=
+        \sum_{i,j \geq 1}
+        \sum_{n\geq 1}
+        \frac{(-1)^{n-1}}{n}(x_iy_j)^n \\
+        &=
+        \sum_{n \geq 1}
+        \frac{(-1)^{n-1}}{n} p_n(\ulx) p_n(\uly).
+    \end{align*}
+    Using the exponential formula again,
+    \begin{align*}
+        &\exp
+        \sum_{n=1}^\infty
+        \frac{t^n}{n}
+        (-1)^{n-1}
+        p_n(\ulx) p_n(\uly)
+        \\
+        &=
+        \sum_{\lambda \in \Par}
+        \Big(
+            (-1)^{\lambda_1-1}
+            p_{\lambda_1}(\ulx) p_{\lambda_1}(\uly)
+        \Big)
+        \cdots
+        \Big(
+            (-1)^{\lambda_k-1}
+            p_{\lambda_k}(\ulx) p_{\lambda_k}(\uly)
+        \Big)
+        z_\lambda^{-1}
+        t^{|\lambda|} \\
+        &=
+        \sum_{\lambda \in \Par}
+        (-1)^{(\lambda_1 - 1) + \cdots + (\lambda_{\ell(\lambda)} - 1)}
+        p_\lambda(\ulx) p_\lambda(\uly) z_\lambda^{-1}
+        t^{|\lambda|} \\
+        &=
+        \sum_{\lambda \in \Par}
+        (-1)^{n - \ell(\lambda)}
+        p_\lambda(\ulx) p_\lambda(\uly) z_\lambda^{-1}
+        t^{|\lambda|} \\
+        &=
+        \sum_{\lambda \in \Par}
+        \varepsilon_\lambda
+        p_\lambda(\ulx) p_\lambda(\uly) z_\lambda^{-1}
+        t^{|\lambda|}.
+    \end{align*}
+    Now we prove the second equality by again putting $t=1$.
 \end{proof}
 
 \section{Some algebraic gadgets}
@@ -1384,9 +1620,9 @@ Since $\Lambda = \pring{\QQ}{e_1,e_2,\ldots}$, which we recall means that $\Lamb
 
 \subsection{The Hall inner product}
 
-We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the following rule:
+We define an inner product $\langle -, - \rangle$ on $\Lambda$ via the following rule:
 
-\begin{definition} Let $\langle\cdot,\cdot\rangle$ be the scalar product defined by the relationship
+\begin{definition} Let $\langle -,- \rangle$ be the scalar product defined by the relationship
     \[
         \langle m_\lambda, h_\nu \rangle \coloneq \delta_{\lambda\nu}.
     \]
@@ -1401,7 +1637,7 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
 \end{theorem}
 
 \begin{proof}
-    It suffices to prove that products of basis elements are symmetric for some bases of $\Lambda$.
+    It suffices to prove that products of basis elements are symmetric for some basis of $\Lambda$.
     We'll use the basis $\{h_\lambda\}_{\lambda\in\Par}$.
     By their Cauchy identity (Theorem \ref{CauchyIdentityForMH}), we have that
     \[
@@ -1413,7 +1649,10 @@ We define an inner product $\langle \cdot, \cdot \rangle$ on $\Lambda$ via the f
 \begin{theorem}\label{thm:CauchyIdentityImpliesOrthonormal}
     Any two bases $\{u_\lambda\}_{\lambda\in\Par}$ and $\{v_\lambda\}_{\lambda\in\Par}$ of $\Lambda$ that have a Cauchy identity
     \begin{equation}\label{eq:CauchyIdentityArbitrary}
-        \prod_{i,j \geq 1}(1 - x_iy_j)^{-1} = \sum_{\lambda\in\Par} u_\lambda(\underline{X}) v_\lambda(\underline{Y})
+        \prod_{i,j \geq 1}(1 - x_iy_j)^{-1}
+        =
+        \sum_{\lambda\in\Par}
+        u_\lambda(\ulx) v_\lambda(\uly)
     \end{equation}
     are orthonormal with respect to the Hall inner product.
 \end{theorem}
@@ -1493,7 +1732,9 @@ We first define a Schur function as a generating function of semistandard Young 
 \begin{definition}
     Let $\lambda \in \Par$. The \textit{Schur function} $s_\lambda$ is defined to be
     \[
-        s_\lambda \coloneq \sum_{T\in\SSYT_{\shape \lambda}} x^{\content T}.
+        s_\lambda(\ulx)
+        \coloneq
+        \sum_{T\in\SSYT_{\shape \lambda}} \ulx^{\content T}.
     \]
 \end{definition}
 
@@ -1502,14 +1743,16 @@ We use the following shorthand for doing computations involving SSYT:
 \begin{definition}
     Let $T$ be a tableau. Then define $x^T$ to be the monomial
     \[
-        x^T \coloneq x_1^{a_1}x_2^{a_2}\cdots = x^{\content T}.
+        \ulx^T
+        \coloneq 
+        \ulx^{\content T}.
     \]
 \end{definition}
 
 \begin{example}
     \[
         \ytabalign{bottom}
-        x^{\ytableaushort{11,23}} = x_1^2x_2x_3.
+        \ulx^{\ytableaushort{11,23}} = x_1^2x_2x_3.
     \]
 \end{example}
 
@@ -1598,20 +1841,20 @@ Since these notes are about symmetric functions, we have to prove the following 
 \begin{proof}
     We will prove that $s_{\lambda/\nu}$ is invariant under the action of simple transpositions, meaning that
     \[
-        \s_i s_{\lambda/\nu} = s_{\lambda/\nu}
+        \refl_i s_{\lambda/\nu} = s_{\lambda/\nu}
     \]
-    for any $\s_i$, which we recall is the simple transposition which swaps $i$ and $i+1$.
-    Since any permutation $w \in \Sym_\infty$ can be written as a product of simple transpositions $\s_{i_1}\cdots \s_{i_k}$, proving the above tells us that 
+    for any $\refl_i$, which we recall is the simple transposition which swaps $i$ and $i+1$.
+    Since any permutation $w \in S_\infty$ can be written as a product of simple transpositions $\refl_{i_1}\cdots \refl_{i_k}$, proving the above tells us that 
     \[
         ws_{\lambda/\nu} = ws_{\lambda\nu}
     \]
-    for all $w \in \Sym_\infty$.
+    for all $w \in S_\infty$.
 
     Rephrased, we wish to now show that 
     \[
-        K_{\lambda\setminus\nu,\alpha} = K_{\lambda\setminus\nu,\s_i\alpha}
+        K_{\lambda\setminus\nu,\alpha} = K_{\lambda\setminus\nu,\refl_i\alpha}
     \]
-    for all $\s_i$ and for all weak compositions $\alpha$.
+    for all $\refl_i$ and for all weak compositions $\alpha$.
 
     We will prove this by bijection.
     The key fact here is that due to the column-strictness of semistandard Young tableau, \textit{if $i$ and $i+1$ appear in the same column, they must be vertically adjacent}. 
@@ -1938,7 +2181,7 @@ By properties of the determinant, we have the following
 
     We know, a priori, the degree of $\alt_\delta$: $n(n+1)/2$. We read this off the definition of $\alt_\delta$, which is
     \[
-        \alt_\delta = \det\left(x_j^{i}\right)_{i,j=1}^n = \sum_{\pi \in \Sym_n} (\sgn \pi) \cdot x_1^nx_2^{n-1}\cdots x_n
+        \alt_\delta = \det\left(x_j^{i}\right)_{i,j=1}^n = \sum_{\pi \in S_n} (\sgn \pi) \cdot x_1^nx_2^{n-1}\cdots x_n
     \]
     Knowing this, we conclude that $\alt_\delta$ factorizes into \textit{at most} $n(n+1)/2$ linear factors.
 
@@ -1952,10 +2195,12 @@ By properties of the determinant, we have the following
 \subsubsection{The bialternant formula}
 
 \begin{theorem}
-    Fix $n$.
+    Fix $n \in \NN$.
     We have that
     \[
-        s_\lambda(x_1,\ldots,x_n) = \frac{\alt_{\lambda + \delta}}{\alt_\delta}.
+        s_\lambda(\bfx_n) 
+        = 
+        \frac{\alt_{\lambda + \delta}(\bfx_n)}{\alt_\delta(\bfx_n)}.
     \]
 \end{theorem}
 
@@ -1964,25 +2209,40 @@ By properties of the determinant, we have the following
     \[
         e_\mu = \sum_{\lambda \in \Par} K_{\shape\lambda^\top,\content\mu} \cdot s_\lambda.
     \]
-    So, by specializing $f \mapsto f(x_1,\ldots,x_n)$, which we will shorthand as $f(\underline{x})$, we have that
+    So, by specializing $f \mapsto f(\bfx_n)$, we have that
     \[
-        e_\mu(\underline{x}) = \sum_{\lambda \in \Par} K_{\sh\lambda^\top,\ct\mu} \cdot s_\lambda(\underline{x}).
+        e_\mu(\bfx) 
+        = 
+        \sum_{\lambda \in \Par} 
+        K_{\sh\lambda^\top,\ct\mu} \cdot s_\lambda(\bfx).
     \]
     And we want to show that
     \[
-        e_\mu(\underline{x}) = \sum_{\lambda \in \Par} K_{\sh\lambda^\top,\ct\mu} \cdot \frac{\alt_{\lambda+\delta}}{\alt_\delta},
+        e_\mu(\bfx) 
+        = 
+        \sum_{\lambda \in \Par} 
+        K_{\sh\lambda^\top,\ct\mu} 
+        \cdot 
+        \frac{\alt_{\lambda+\delta}(\bfx)}{\alt_\delta(\bfx)},
     \]
     which is equivalent to showing that
     \[
-        \alt_\delta \cdot e_\mu(\underline{x}) = \sum_{\lambda \in \Par} K_{\sh\lambda^\top,\ct\mu} \cdot \alt_{\lambda+\delta}.
+        \alt_\delta(\bfx) \cdot e_\mu(\bfx) 
+        = 
+        \sum_{\lambda \in \Par} K_{\sh\lambda^\top,\ct\mu} \cdot \alt_{\lambda+\delta}(\bfx).
     \]
     Both sides are antisymmetric polynomials.
     Hence, we may group together monomials based on their orbit under variable permutation--- these will have the same coefficients up to a sign.
-    Each orbit is \textit{precisely} the monomials that appear in $\alt_{\lambda+\delta}$--- generated by permuting $x^{\lambda+\delta}$'s exponent.
+    Each orbit is \textit{precisely} the monomials that appear in $\alt_{\lambda+\delta}(\bfx)$--- generated by permuting the exponent of $\bfx^{\lambda+\delta}$'s.
 
     Hence, to prove the above formula, we want to show that 
     \[
-    \left[x^{\lambda+\delta}\right] (\alt_\delta e_\mu(\underline{x})) = K_{\shape \lambda^\top, \content \mu}
+    \left[\bfx^{\lambda+\delta}\right] 
+    \Big(
+        \alt_\delta (\bfx) e_\mu(\bfx)
+    \Big) 
+    = 
+    K_{\shape \lambda^\top, \content \mu}
     \]
 \end{proof}
 
@@ -2048,7 +2308,7 @@ We state a property of insertion paths that will allow us to prove that row inse
 \end{definition}
 
 \begin{definition}
-    Let $A \in \Mat_\NN$.
+    Let $A \in \Mat_\infty(\NN)$.
     We define $A$'s \textit{biword}, which we denote $\biword A$, to be.
 
     This is also often denoted $w_A$.
@@ -2251,15 +2511,33 @@ The fact that $P$ is called the insertion tableaux has to do with the fact that 
 
 \begin{theorem}[Cauchy identity]    We have
     \begin{equation}\label{eq:CauchyIdentityForSchurs}
-        \prod_{i,j \geq 1}(1-x_iy_j)^{-1} = \sum_{\lambda\in\Par}s_\lambda\left(\underline{X}\right) s_\lambda\left(\underline{Y}\right).
+        \prod_{i,j \geq 1}(1-x_iy_j)^{-1}
+        =
+        \sum_{\lambda\in\Par}
+        s_\lambda(\bfx)s_\lambda(\bfy).
     \end{equation}
 \end{theorem}
 
 \begin{proof}
     We have that
     \begin{align*}
-        \left[x^\alpha y^\beta\right]\left(\prod_{i,j\geq1}(1-x_iy_j)^{-1}\right) &= \left(\#A \in \Mat_\NN \text{ such that } \row A = \alpha, \col A = \beta\right), \\
-        \left[x^\alpha y^\beta\right]\left(\sum_{\lambda\in\Par} s_\lambda(\underline{X}) s_\lambda(\underline{Y}) \right) &= \left(\#(P,Q) \in \biSSYT \text{ such that } \ct P = \alpha, \ct Q = \beta\right).
+        \left[\bfx^\alpha \bfy^\beta\right]
+        \left(
+            \prod_{i,j\geq1}(1-x_iy_j)^{-1}
+        \right)
+        &=
+        \left(
+            \#A \in \Mat_\infty(\NN) \text{ such that } \row A = \alpha, \col A = \beta
+        \right), \\
+        \left[\bfx^\alpha \bfy^\beta\right]
+        \left(
+            \sum_{\lambda\in\Par} 
+            s_\lambda(\bfx) s_\lambda(\bfy)
+        \right) 
+        &= 
+        \left(
+            \#(P,Q) \in \biSSYT \text{ such that } \ct P = \alpha, \ct Q = \beta
+        \right).
     \end{align*}
     RSK tells us that both counts are the same, hence both sides of the identity are equal as power series, since their coefficients agree for all monomials.
 \end{proof}
@@ -2279,7 +2557,7 @@ The fact that $P$ is called the insertion tableaux has to do with the fact that 
 \end{corollary}
 
 \begin{proof}
-    Take the coefficient of $x^\mu y^\nu$ in (\ref{eq:CauchyIdentityForSchurs}).
+    Take the coefficient of $\bfx^\mu \bfy^\nu$ in (\ref{eq:CauchyIdentityForSchurs}).
 \end{proof}
 
 \begin{corollary}\label{thm:HToSIsKostka}
@@ -2652,7 +2930,7 @@ We can now state an important lemma that makes use of all the machinery we've ju
 We have a special case of the forthcoming \textit{Littlewood-Richardson rule}, called the \textit{Pieri rule}.
 
 \begin{definition}
-
+    A \textit{horizontal strip} is a skew diagram such that each column contains at most one box.
 \end{definition}
 
 \begin{theorem}[Pieri rule]
@@ -2663,6 +2941,32 @@ We have a special case of the forthcoming \textit{Littlewood-Richardson rule}, c
     \]
     where $\mu$ ranges over all partitions obtained by adding a horizontal strip to $\lambda$.
 \end{theorem}
+
+\begin{proof}
+    In other words, we wish to show that
+    \[
+        \InnerProduct{h_ns_\lambda,s_\mu}
+        =
+        \begin{cases}
+            1 & \text{if $\mu$ is $\lambda$ plus a horizontal strip} \\
+            0 & \text{otherwise}.
+        \end{cases}
+    \]
+    We use the fact that skewing and multiplying by a Schur are adjoint, so
+    \[
+        \InnerProduct{h_ns_\lambda,s_\mu}
+        =
+        \InnerProduct{h_n,s_{\mu/\lambda}}.
+    \]
+    But we know this quantity--- it is a Kostka number
+    \[
+        \InnerProduct{h_n,s_{\mu/\lambda}}
+        =
+        K_{\shape \mu/\lambda, \content n}.
+    \]
+    Now, $\mu / \lambda$ must be a skew tableaux filled with $n$ $1$'s.
+    This can only be possible if $\mu$ is $\lambda$ piled with a horizontal strip of size $n$.
+\end{proof}
 
 
 \subsection{The Murnaghan-Nakayama rule}
@@ -2685,11 +2989,308 @@ The \textit{Murnaghan-Nakayama rule} is an analogous rule with the $p_\lambda$'s
 \subsection{Knuth equivalence}
 
 \begin{definition}
+    Let $u = \underline{u_1 u_2 \cdots u_n}$ be a permutation.
+    A \textit{elementary Knuth transformation} is a replacement of a substring of three consecutive letters given by the following rules
+    \[
+        \begin{cases}
+            abc \equiv bac, \\
+            cab \equiv cba, \\
+            baa \equiv aba, \\
+            bba \equiv bab.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{definition}
     We say that two permutations $u$ and $v$ are \textit{Knuth-equivalent} whenever there is a sequence of \textit{elementary Knuth transformations} which turns one into another.
 \end{definition}
+
+We state an important property of Knuth-equivalence
+
+\begin{theorem}
+    Two permutations are Knuth equivalent if and only if their insertion tableaux coincide.
+\end{theorem}
+
+\begin{proof}
+    We will induct on the number of rows.
+    So, it suffices to prove it for a row.
+
+    Let $a < c < b$.
+    Then, for any positive integer $x$, either $x \leq a$, or $a < x \leq c$, or $c < x \leq b$, or $b < x$.
+
+    Then, let $(A_1,A_2,\ldots)$, $(B_1,B_2,\ldots)$, and $(C_1,C_2,\ldots)$ be letters such that
+    \begin{align*}
+        & a < A_1 \leq A_2 \leq \cdots \leq c, \\ 
+        & c < C_1 \leq C_2 \leq \cdots \leq b, \\
+        & b < B_1 \leq B_2 \leq \cdots.
+    \end{align*}
+    Namely, the $A_i$'s are letters $A$ can bump, the $B_i$'s are letters $B$ can bump, and so on.
+
+    Then we do the casework.
+    \makeatletter
+    \def\font@YT{\scriptstyle}
+    \makeatother
+    \begin{enumerate}
+        \item 
+            $\varnothing$:
+            \begin{align*}
+                \ytableausetup{aligntableaux=top, boxsize=12pt}
+                &
+                \varnothing
+                \xrightarrow{a}
+                \ytableaushort{a} 
+                \xrightarrow{b}
+                \ytableaushort{ab}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow b
+                }{\ytableaushort{ac}}
+                \\
+                &
+                \varnothing
+                \xrightarrow{b}
+                \ytableaushort{b} 
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow b
+                }{\ytableaushort{a}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow b
+                }{\ytableaushort{ac}}
+            \end{align*}
+        \item 
+            $A$:
+            \begin{align*}
+                &
+                \ytableaushort{A}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow A
+                }{\ytableaushort{a}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow A
+                }{\ytableaushort{ab}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow Ab
+                }{\ytableaushort{ac}}
+                \\
+                &
+                \ytableaushort{A}
+                \xrightarrow{b}
+                \ytableaushort{ Ab } 
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow A
+                }{\ytableaushort{ab}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow Ab
+                }{\ytableaushort{ac}}
+            \end{align*}
+        \item 
+            $A_1 A_2 \cdots A_j$:
+            \begin{align*}
+                &
+                \ytableaushort{{A_1}{A_2}\cdots{A_j}}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow A_1
+                }{\ytableaushort{a{A_2}\cdots{A_j}}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow A_1
+                }{\ytableaushort{a{A_2}\cdots{A_j}b}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow A_1b
+                }{\ytableaushort{a{A_2}\cdots{A_j}c}}
+                \\
+                &
+                \ytableaushort{{A_1}{A_2}\cdots{A_j}}
+                \xrightarrow{b}
+                \ytableaushort{{A_1}{A_2}\cdots{A_j}b}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow A_1
+                }{\ytableaushort{a{A_2}\cdots{A_j}b}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow A_1b
+                }{\ytableaushort{a{A_2}\cdots{A_j}c}}
+            \end{align*}
+        \item 
+            $C$:
+            \begin{align*}
+                &
+                \ytableaushort{C}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow C
+                }{\ytableaushort{a}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow C
+                }{\ytableaushort{ab}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow Cb
+                }{\ytableaushort{ac}}
+                \\
+                &
+                \ytableaushort{C}
+                \xrightarrow{b}
+                \ytableaushort{Cb} 
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow C
+                }{\ytableaushort{ab}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow Cb
+                }{\ytableaushort{ac}}
+            \end{align*}
+        \item 
+            $C_1 C_2$:
+            \begin{align*}
+                &
+                \ytableaushort{{C_1}{C_2}}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow C_1
+                }{\ytableaushort{a{C_2}}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow C_1
+                }{\ytableaushort{a{C_2}b}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow C_1C_2
+                }{\ytableaushort{acb}}
+                \\
+                &
+                \ytableaushort{{C_1}{C_2}}
+                \xrightarrow{b}
+                \ytableaushort{{C_1}{C_2}b}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow C_1
+                }{\ytableaushort{a{C_2}b}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow C_1C_2
+                }{\ytableaushort{acb}}
+            \end{align*}
+        \item 
+            $B$:
+            \begin{align*}
+                &
+                \ytableaushort{B}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow B
+                }{\ytableaushort{a}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow B
+                }{\ytableaushort{ab}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow Bb
+                }{\ytableaushort{ac}}
+                \\
+                &
+                \ytableaushort{B}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow B
+                }{\ytableaushort{b}}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow Bb
+                }{\ytableaushort{a}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow Bb
+                }{\ytableaushort{ac}}
+            \end{align*}
+        \item 
+            $B_1B_2$:
+            \begin{align*}
+                &
+                \ytableaushort{{B_1}{B_2}}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow B_1
+                }{\ytableaushort{a{B_2}}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow B_1B_2
+                }{\ytableaushort{ab}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow B_1B_2b
+                }{\ytableaushort{ac}}
+                \\
+                &
+                \ytableaushort{{B_1}{B_2}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow B_1
+                }{\ytableaushort{b{B_2}}}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow B_1b
+                }{\ytableaushort{a{B_2}}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow B_1bB_2
+                }{\ytableaushort{ac}}
+            \end{align*}
+        \item 
+            $AC$:
+            \begin{align*}
+                &
+                \ytableaushort{AC}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow A
+                }{\ytableaushort{aC}}
+                \xrightarrow{b}
+                \underset{
+                    \hookleftarrow A
+                }{\ytableaushort{aCb}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow AC
+                }{\ytableaushort{acb}}
+                \\
+                &
+                \ytableaushort{AC}
+                \xrightarrow{b}
+                \ytableaushort{ACb}
+                \xrightarrow{a}
+                \underset{
+                    \hookleftarrow A
+                }{\ytableaushort{aCb}}
+                \xrightarrow{c}
+                \underset{
+                    \hookleftarrow AC
+                }{\ytableaushort{acb}}
+            \end{align*}
+        \item 
+            $ACB$
+    \end{enumerate}
+    Then, if we insert into $A$
+\end{proof}
+
 \subsection{Jeu-de-taquin}
 
 \section{Representation theory of the symmetric group}
+
+
 
 \iffalse 
 
@@ -2852,7 +3453,7 @@ We
             \[
                 Y_n = \sum_w p_{\rho(w)},
             \]
-            where $w$ ranges over all permutations in $\Sym_n$ satisfying $w(i) \geq i-1$ for all $i$.
+            where $w$ ranges over all permutations in $S_n$ satisfying $w(i) \geq i-1$ for all $i$.
     \end{enumerate}
 \end{exercise}
 
@@ -2897,14 +3498,14 @@ Now, let's compute $Y_n$.
                      &= \sum_{n=1}^\infty \left[\sum_{\substack{\alpha \text{ is a strong} \\ \text{composition of } n}}p_\alpha\right]t^n.
 \end{align*}
 
-We will now show that strong compositions of $n$ are in bijection with the cycle types of permutations $w \in \Sym_n$ such that $w(i) \geq i-1$.
+We will now show that strong compositions of $n$ are in bijection with the cycle types of permutations $w \in S_n$ such that $w(i) \geq i-1$.
 We claim that any such $w$ is made up of cycles made up of one big jump up and several steps down by one.
 Then $w$ is specified by parenthesizing $123\cdots n$.
 By stars and bars, this is the same as the number of strong compositions of $n$.
 
 \begin{exercise}
     $[2+]$
-    Let $w \in \Sym_n$ have cycle type $\lambda$. Give a direct bijective proof of 
+    Let $w \in S_n$ have cycle type $\lambda$. Give a direct bijective proof of 
 \end{exercise}
 
 \fi 
