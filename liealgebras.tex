@@ -1,3 +1,5 @@
+% !TEX TS-program = xelatex
+
 \documentclass{article}
 
 % See https://github.com/Jasper-Ty/dotfiles
@@ -19,6 +21,10 @@
 \DeclareMathOperator{\tr}{tr}
 
 \DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\nullity}{nullity}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\opspan}{span}
 
 % The algebra of derivations
 \DeclareMathOperator{\Der}{Der}
@@ -29,13 +35,15 @@
 % An anonymous differential
 \newcommand{\dd}{\ensuremath{\text{d}}}
 
-\newcommand{\frka}{\ensuremath{\mathfrak{a}}}
-\newcommand{\frkg}{\ensuremath{\mathfrak{g}}}
-\newcommand{\frkh}{\ensuremath{\mathfrak{h}}}
-\newcommand{\frku}{\ensuremath{\mathfrak{u}}}
-\newcommand{\frki}{\ensuremath{\mathfrak{i}}}
-\newcommand{\frkj}{\ensuremath{\mathfrak{j}}}
-\newcommand{\frkU}{\ensuremath{\mathfrak{U}}}
+% Zoo of fraktur letter shorthands
+\newcommand{\frka}{{\ensuremath{\mathfrak{a}}}}
+\newcommand{\frkb}{{\ensuremath{\mathfrak{b}}}}
+\newcommand{\frkg}{{\ensuremath{\mathfrak{g}}}}
+\newcommand{\frkh}{{\ensuremath{\mathfrak{h}}}}
+\newcommand{\frku}{{\ensuremath{\mathfrak{u}}}}
+\newcommand{\frki}{{\ensuremath{\mathfrak{i}}}}
+\newcommand{\frkj}{{\ensuremath{\mathfrak{j}}}}
+\newcommand{\frkU}{{\ensuremath{\mathfrak{U}}}}
 
 \newcommand{\GL}{\ensuremath{\text{GL}}}
 \newcommand{\SL}{\ensuremath{\text{SL}}}
@@ -44,6 +52,8 @@
 \newcommand{\slalg}{\ensuremath{\mathfrak{sl}}}
 \newcommand{\spalg}{\ensuremath{\mathfrak{sp}}}
 \newcommand{\talg}{\ensuremath{\mathfrak{t}}}
+\newcommand{\dalg}{\ensuremath{\mathfrak{d}}}
+\newcommand{\nalg}{\ensuremath{\mathfrak{n}}}
 \newcommand{\oalg}{\ensuremath{\mathfrak{o}}}
 
 \title{Lie algebras}
@@ -64,10 +74,11 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
 
 \newpage
 
-\section{Definitions}
+\section{Basic definitions and examples}
 
 \begin{convention}
-    All vector spaces are finite dimensional and no assumptions are made about the field they are over.
+    All vector spaces considered are finite dimensional and no assumptions are made yet about underlying fields.
+    We use $V$ and $\FF$ to denote generic vector spaces and fields respectively.
 \end{convention}
 
 \subsection{Lie algebras}
@@ -134,7 +145,7 @@ As an exercise in using this definition, we show the following:
     which completes the proof.
 \end{proof}
 
-We will look at our first example of a Lie algebra, which is closely related to the $\GL(V)$.
+We will look at our first example of a Lie algebra--- that closely associated with the \defstyle{general linear group} $\GL(V)$ of invertible endomorphisms of a vector space $V$.
 
 \begin{definition}[$\glalg$, abstractly]
     Let $V$ be a vector space.
@@ -144,11 +155,11 @@ We will look at our first example of a Lie algebra, which is closely related to 
         =
         xy - yx
     \]
-    defined with $\End V$ natural ring structure.
+    defined with $\End V$'s natural ring structure.
 \end{definition}
 
-    Put in a more concrete sense, $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
-    Then, the following definition makes sense, and is in a sense ``the only'' finite dimensional general linear algebra.
+    $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
+    Then, the following definition gives us a more concrete avatar of $\glalg$, and is in a sense ``the only'' finite dimensional general linear algebra.
 
 \begin{definition}[$\glalg$, concretely]
     Let $\FF$ be some field and let $n$ be a positive integer.
@@ -160,7 +171,7 @@ We will look at our first example of a Lie algebra, which is closely related to 
     \]
 \end{definition}
 
-We can ea
+In this setting, we can easily compute the bracket of $\glalg$ relative to its standard basis:
 
 \begin{proposition}
     Let $\{e_{pq}\}_{p,q = 0}^n$ be the standard basis of $\glalg_n(\FF)$.
@@ -211,34 +222,338 @@ We can ea
     $e_{rs}e_{pq} = \delta_{sp}e_{rq}$.
 \end{proof}
 
-Importantly, many Lie algebras, and in fact all the Lie algebras we are concerned with, occur as subalgebras of the general linear algebra--- a \defstyle{subalgebra} of a Lie algebra $\frkg$ is a vector subspace of $\frkg$ that is closed under the bracket.
+Importantly, many Lie algebras, and in fact all the Lie algebras we are concerned with, occur as subalgebras of the general linear algebra--- a \defstyle{subalgebra} of a Lie algebra $\frkg$ is a subspace of $\frkg$ that is closed under $\frkg$'s bracket.
 
 \begin{definition}
     A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\FF)$ for some $n$.
 \end{definition}
 
+All finite dimensional Lie algebras are linear, in the sense that they are isomorphic to some linear Lie algebra.
+
+\subsection{Examples}
+
+We have four distinguished families of Lie algebras:
+\[
+    \sfA_\ell,\qquad
+    \sfB_\ell,\qquad
+    \sfC_\ell,\qquad
+    \sfD_\ell.
+\]
+These are parameterized by a positive integer $\ell$, and they classify all but five of the so-called \defstyle{semisimple Lie algebras}.
+
+
+\subsubsection{Type \sfA: the special linear algebra}
+
+\begin{definition}
+    Let $V$ be a $\FF$-vector space, and fix a basis $\{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\{v^1, \ldots, v^n\}$ of the dual space $V^\vee$.
+    The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
+    \[
+        \sum_{i=1}^n 
+        v^i\Big(x(v_i)\Big).
+    \]
+\end{definition}
+
+In other words, it is the sum of the diagonal entries of the matrix representation of $x$.
+The trace is independent of the basis used to compute it (see Theorem \ref{thm:TraceIsBasisIndependent} in the Appendix), hence it is a well defined quantity.
+
+\begin{definition}[The type $\sfA_\ell$ Lie algebra]
+    Let $V$ have dimension $n = \ell + 1$.
+    We define $\sfA_\ell$ to be the \defstyle{special linear algebra} $\slalg(V)$, the set of all \defstyle{traceless} endomorphisms of $V$, which means
+    \[
+        A_\ell
+        \coloneq
+        \slalg(V)
+        \coloneq
+        \Big\{
+            x \in \glalg(V) : \tr x = 0
+        \Big\}.
+    \]
+    As is the case with $\glalg(V)$ and $\glalg_n(\FF)$, we also define 
+    \[
+        A_\ell
+        \coloneq
+        \slalg_{\ell+1}(\FF)
+        \coloneq
+        \Big\{
+            x \in \glalg_{\ell+1}(\FF) : \tr x = 0
+        \Big\}
+    \]
+    and will refer to them interchangeably.
+\end{definition}
+
+This algebra is so named because of its connection with the \defstyle{special linear group} $\SL(V)$, a distinguished subgroup of $\GL(V)$.
+Unsurprisingly, $\slalg(V)$ is also a substructure of $\glalg(V)$.
+
+\begin{proposition}
+    $\slalg(V)$ is a subalgebra of $\glalg(V)$.
+\end{proposition}
+\begin{proof}
+    The trace is a linear operator $\tr: \glalg_n(\FF) \to \FF$.
+    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\slalg_n(\FF) = \ker \tr$ is a subspace of $\glalg$.
+
+    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg_n(\FF)$ means that $\glalg_n(\FF)$'s Lie bracket is closed in $\slalg_n(\FF)$.
+\end{proof}
+
+Lastly, we will compute the dimension of $\slalg(V)$.
+Firstly, it has to be strictly less than that of $\glalg(V)$'s, as it is a proper subalgebra of $\glalg(V)$.
+Hence
+\[
+    \dim \slalg(V) < \dim \glalg(V) = (\ell+1)^2.
+\]
+So
+\[
+    \dim \slalg(V) \leq (\ell+1)^2 - 1 = \ell(\ell+2)
+\]
+However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\slalg_n(\FF)$:
+\begin{enumerate}
+    \item 
+        All the off-diagonal entries $e_{ij}$ where $i \neq j$--- there are $(\ell+1)^2 - (\ell + 1) = \ell^2 + \ell$ of these.
+    \item 
+        All of the elements $e_{ii} - e_{i+1,i+1}$, of which there are $(\ell + 1) -1 = \ell$. 
+\end{enumerate}
+So,
+\[
+    \dim \slalg(V) \geq \ell+2 + \ell + \ell = \ell(\ell + 2).
+\]
+And, putting it together, we have proven:
+\begin{proposition}
+    \[
+        \dim A_\ell
+        =
+        \dim \slalg(V)
+        =
+        \dim \slalg_n(\FF)
+        =
+        \ell(\ell+2).
+    \]
+\end{proposition}
+
+\subsubsection{Type \sfB: the odd-dimensional orthogonal algebra}
+
+\begin{definition}
+    The \defstyle{orthogonal algebra} $\oalg_{2\ell+1}(\FF)$ is defined to be
+\end{definition}
+
+\subsubsection{Type \sfC: the symplectic algebra}
+
+\begin{definition}
+    A \defstyle{symplectic form} on a vector space $V$ is a bilinear form $\omega$ such that
+    \begin{enumerate}[label=(\alph*)]
+        \item
+            $\omega$ is bilinear,
+        \item 
+            $\omega(v,u) = -\omega(u,v)$, and
+        \item 
+            $\omega(v,u) = 0$ for all $v \in V$ implies that $u=0$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[The type $\sfC_\ell$ Lie algebra]
+    Let $\dim V = 2\ell$, and let $V$ be endowed with a symplectic form $\omega$.
+
+    We define $\sfC_\ell$ to be the \defstyle{symplectic algebra} $\spalg(V)$, the set of all $x \in \End V$ such that
+    \[
+        \sfC_\ell
+        \coloneq
+        \spalg(V)
+        \coloneq
+        \Big\{
+            x \in \glalg(V)
+            :
+            \omega\Big(x(\wc),\wc\Big)
+            + \omega\Big(\wc,x(\wc)\Big)
+            =
+            0
+        \Big\}
+    \]
+    In matrix form, we define
+    \[
+        \sfC_\ell
+        \coloneq
+        \spalg(V)
+        \coloneq
+        \Big\{
+            x \in \glalg(V)
+            :
+            Jx + x^\top J = 0
+        \Big\}
+    \]
+    where
+    \[
+        J
+        =
+        \begin{pmatrix}
+            0 & I_\ell \\
+            -I_\ell & 0
+        \end{pmatrix}
+    \]
+    is the standard symplectic form on $\FF^{2\ell}$.
+\end{definition}
+
+\subsubsection{Type \sfD: the even-dimensional orthogonal algebra}
+
+\begin{definition}[Type $\sfD$ Lie algebra]
+    Let $\dim V = 2\ell$.
+    We define $\sfD$ to be the \defstyle{orthogonal algebra} $\oalg(V)$, the set of all compatible bilinear transformations.
+    \[
+        \sfD_\ell
+        \coloneq
+        \oalg(V)
+        \coloneq
+        \Big\{
+            x \in \glalg(V)
+            :
+            x + 
+        \Big\}
+    \]
+\end{definition}
 
 \subsection{Derivations, the adjoint representation}
 
 \begin{definition}
-    Let $\frkU$ be a $\FF$-algebra.
-    A \defstyle{derivation} of $\frkU$ is a linear map $\dd: \frkU \to \frkU$ which satisfies the \textit{Leibniz rule}
+    Let $\scrA$ be a $\FF$-algebra.
+    A \defstyle{derivation} of $\scrA$ is a linear map $\dd: \scrA \to \scrA$ which satisfies the \textit{Leibniz rule}:
     \[
-        \dd(ab)
+        \dd(xy)
         =
-        a(\dd b) + (\dd a) b.
+        x(\dd y) + (\dd x) y.
     \]
-    The collection of all derivations of $\frkU$ is denoted $\Der \frkU$.
+    The collection of all derivations of $\scrA$ is denoted $\Der \scrA$.
 \end{definition}
+
+Derivations play nicely with the vector space structure of $\End \scrA$ as well as with the bracket inherited from $\glalg(\scrA)$.
+
+\begin{proposition}
+    Let $\scrA$ be a $\FF$-algebra.
+    Then $\Der \scrA$ is a subspace of $\End \scrA$.
+    Moreover, it is a subalgebra of $\glalg(\scrA)$
+\end{proposition}
+
+\begin{proof}
+    If $\dd$ and $\dd'$ are two derivations, then
+    \begin{align*}
+        (a\dd + b\dd')(xy)
+        &=
+        (a\dd)(xy) + (b\dd')(xy)
+        \\
+        &=
+        x(a\dd y) + (a\dd x)y
+        +
+        x(b\dd'y) + (b\dd'x)y
+        \\
+        &=
+        x
+        \Big(
+            a\dd y + b\dd'y
+        \Big)
+        +
+        \Big(
+            a\dd x + b\dd'x
+        \Big)
+        y
+        \\
+        &=
+        x(a\dd + b\dd')(y)
+        +
+        (a\dd + b\dd')(x)y.
+    \end{align*}
+    Hence $a\dd + b\dd' \in \Der \scrA$, so $\Der \scrA$ is a subspace of $\End \scrA$.
+
+    Moreover, 
+    \begin{align*}
+        &\lb{\dd\dd'}(xy)
+        \\
+        &=
+        (\dd\dd' - \dd'\dd)(xy)
+        \\
+        &=
+        (\dd\dd')(xy) - (\dd'\dd)(xy)
+        \\
+        &=
+        \dd
+        \Big(
+            x(\dd'y) + (\dd'x)y
+        \Big)
+        -
+        \dd'
+        \Big(
+            x(\dd y) + (\dd x)y
+        \Big)
+        \\
+        &=
+        \dd\Big(x(\dd'y)\Big) 
+        +
+        \dd\Big((\dd'x)y\Big) 
+        -
+        \dd'\Big(x(\dd y)\Big) 
+        -
+        \dd'\Big((\dd x)y\Big) 
+        \\
+        &=
+        x\dd\dd'y
+        +
+        \dd x \dd' y
+        +
+        \dd'x \dd y
+        +
+        \dd\dd'x y
+        -
+        x\dd'\dd y
+        -
+        \dd' x \dd y
+        -
+        \dd x \dd' y
+        -
+        \dd' \dd x y
+        \\
+        &=
+        x\dd\dd'y
+        +
+        \dd\dd'x y
+        -
+        x\dd'\dd y
+        -
+        \dd' \dd x y
+        \\
+        &=
+        x
+        \Big(
+            \dd\dd'y - \dd'\dd y
+        \Big)
+        +
+        \Big(
+            \dd\dd'x - \dd'\dd x 
+        \Big)
+        y
+        \\
+        &=
+        x\Big((\dd\dd' - \dd'\dd)y\Big)
+        +
+        \Big((\dd\dd' - \dd'\dd)x\Big)y
+        \\
+        &=
+        x\Big(\lb{\dd\dd'}y\Big)
+        +
+        \Big(\lb{\dd\dd'}x\Big)y.
+    \end{align*}
+    So $\Der \scrA$ is a subalgebra of $\glalg(\scrA)$.
+\end{proof}
 
 \begin{definition}
     The \defstyle{adjoint representation} of a Lie algebra $\frkg$ is the mapping
-    \[
-        x \mapsto \ad_x
-    \]
-    where $\ad_x \in \Der \frkg$ is defined to be
     \begin{align*}
-        \ad_x: 
+        \ad_\frkg:
+        \frkg 
+        &\to
+        \Der \frkg
+        \\
+        x 
+        &\mapsto 
+        \ad_\frkg x
+    \end{align*}
+    where $\ad_\frkg x$ is defined to be the linear map
+    \begin{align*}
+        \ad_\frkg x: 
         \frkg 
         &\to 
         \frkg \\
@@ -246,10 +561,11 @@ Importantly, many Lie algebras, and in fact all the Lie algebras we are concerne
         &\mapsto
         \lb{x,y}.
     \end{align*}
+    We will often write $\ad x$ for $\ad_\frkg x$ unless there is an ambiguity.
 \end{definition}
 
 \begin{proposition}
-    $\ad_x$ is a derivation.
+    $\ad x$ is a derivation.
 \end{proposition}
 \begin{proof}
     We start with the Jacobi identity \ref{ax:LBJacobiIdentity}
@@ -266,150 +582,157 @@ Importantly, many Lie algebras, and in fact all the Lie algebras we are concerne
     \]
     But this is saying that
     \[
-        \ad_x\lb{yz}
+        (\ad x)\Big(\lb{yz}\Big)
         =
-        \lb{y, \ad_x z}
+        \lb{y, (\ad x) (z)}
         +
-        \lb{\ad_xy, z}
+        \lb{(\ad x)(y), z}
     \]
     which is exactly the defining identity for derivations.
 \end{proof}
 
 
-\subsection{Examples}
-
-We have four distinguished families of Lie algebras:
-\[
-    \sfA_\ell,\qquad
-    \sfB_\ell,\qquad
-    \sfC_\ell,\qquad
-    \sfD_\ell.
-\]
-These classify all but five of the so-called \defstyle{semisimple Lie algebras}.
-
-
-\subsubsection{Type \sfA}
+\subsection{Abstract Lie algebras}
 
 \begin{definition}
-    Let $V$ be a $\FF$-vector space, and fix a basis $\{v_1,\ldots,v_n\}$ of $V$.
-    The \defstyle{trace} of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
+    Let $\frkg$ be a Lie algebra, and fix some basis $\{x_1,\ldots,x_n\}$ of $\frkg$.
+    We define $\frkg$'s \defstyle{structure constants} $a^k_{ij}$ relative to this basis to be the basis coefficients of the Lie brackets of basis elements--- the numbers such that
     \[
-        \sum_{i=1}^n\ip{v_i,x(v_i)}
+        \lb{x_ix_j}
+        =
+        \sum_{k=1}^n
+        a^k_{ij}
+        x_k.
     \]
-    where $\ip{-,-}$ is the canonical pairing.
-
-    In other words, it is the sum of the diagonal entries of the matrix representation of $x$.
-
-    We say that $x$ is \defstyle{traceless} if $\tr x = 0$.
 \end{definition}
 
 \begin{definition}
-    The \defstyle{special linear algebra} $\slalg(V)$ is defined to be the set of all traceless endomorphisms of $V$.
+    An \defstyle{abelian} Lie algebra $\frkg$ is a Lie algebra with trivial bracket--- $\lb{xy} = 0$ for all $x,y \in \frkg$.
 \end{definition}
 
 \begin{proposition}
-    $\slalg(V)$ is a subalgebra of $\glalg(V)$.
+    Let $V$ be a vector space with basis $x_1,\ldots,x_n$, and let $a_{ij}^k$ be an array of structure coefficients.
+    Then, the bracket defined by $a_{ij}^k$ gives $V$ a Lie algebra structure if and only if
+    \[
+        \begin{cases}
+            a_{ii}^k = 0 \\
+            a_{ij}^k + a_{ji}^k = 0 \\
+            \sum_k
+            a_{ij}^ka_{kl}^m
+            + a_{jl}^ka_{ki}^m
+            + a_{l}^ka_{kij}^m
+            =
+            0
+        \end{cases}
+    \]
+    for any values of $i,j,k,l,m$.
 \end{proposition}
+
+We will classify all the Lie algebras of dimensions $1$ and $2$.
+
+\begin{proposition}
+    There are only two Lie algebras of dimension two up to isomorphism:
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            The abelian two-dimensonal Lie algebra,
+        \item 
+            and the Lie algebra with basis $(x,y)$ and product $[x,y] = x$.
+    \end{enumerate}
+\end{proposition}
+
 \begin{proof}
-    The trace is a linear operator $\tr: \glalg(n, \FF) \to \FF$.
-    Since the kernel of a linear operator is a vector subspace, we conclude that $\slalg(n, \FF)$ is a vector subspace of $\glalg$.
-
-    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg(n,\FF)$ means that $\glalg(n,\FF)$'s Lie bracket is closed in $\slalg(n,\FF)$.
-\end{proof}
-
-\subsubsection{Type \sfB}
-
-\begin{definition}
-    The \defstyle{orthogonal algebra} $\oalg(2n+1,\FF)$ is defined to be
-\end{definition}
-
-\subsubsection{Type \sfC}
-
-\begin{definition}
-    Let $\dim V = 2\ell$.
-    We define a skew-symmetric bilinear form $f$ on $V$ via the matrix
+    If $\frkg$ is nonabelian, then $\lb{xy} = ax + by$, where at least one of $a, b$ is nonzero.
+    Without loss of generality, let $a$ be nonzero.
+    Then
     \[
-        s
-        \coloneq
-        \begin{pmatrix}
-            0 & I_\ell \\
-            -I_\ell & 0 \\
-        \end{pmatrix}.
-    \]
-    Namely,
-    \[
-        f(u,v)
-        \coloneq
-        u^Tsv.
-    \]
-    The \defstyle{symplectic algebra} $\spalg(V)$ is defined to be the set of all $x \in \End V$ such that
-    \[
-        f\Big(x(u),v\Big)
+        \lb{\lb{xy}y}
         =
-        -f\Big(u,x(v)\Big).
+        \lb{ax + by,y}
+        =
+        a\lb{xy}.
     \]
-\end{definition}
-
-\subsubsection{Type \sfD}
-
-\begin{definition}
-    The \defstyle{orthogonal algebra} $\oalg(2n,\FF)$ is defined to be
-\end{definition}
-
-\subsection{Abstract Lie algebras}
+    Now put $u = \lb{xy}$ and $v = a^{-1}y$.
+    Then
+    \[
+        \lb{uv}
+        =
+        \lb{\lb{xy},(a^{-1}y)}
+        =
+        \lb{xy}
+        =
+        u.
+    \]
+\end{proof}
 
 \section{Ideals and homomorphisms}
 
+\subsection{Ideals}
+
 \begin{definition}
-    A subspace $I$ of a Lie algebra $L$ is called an \defstyle{ideal} of $L$ if $\lb{xy} \in I$ for all $x \in L$ and $y \in I$.
+    A subspace $\frki$ of a Lie algebra $\frkg$ is called an \defstyle{ideal} of $\frkg$ if $\lb{xy} \in \frki$ for all $x \in \frkg$ and $y \in \frki$.
 \end{definition}
 
+The \defstyle{sum} and the \defstyle{bracket} of the ideals $\frki, \frkj$ are defined in the obvious way:
+\[
+    \frki + \frkj
+    \coloneq
+    \left\{
+        x + y : x \in \frki, y \in \frkj
+    \right\},\qquad
+    \lb{\frki,\frkj}
+    \coloneq
+    \left\{
+        \sum_{i=0}^rc_i\lb{x_iy_i}
+        :
+        c_i \in \FF, x_i \in \frki, y_i \in \frkj
+    \right\}.
+\]
 
 \begin{definition}
-    The \defstyle{quotient of a Lie algebra} $L$ by an ideal $I$, denoted $L/I$, is defined to be the quotient of $L$ as a vector space by $I$ as a subspace, equipped with the product
+    The \defstyle{quotient of a Lie algebra} $\frkg$ by an ideal $\frki$, denoted $\frkg/\frki$, is defined to be the quotient of $\frkg$ as a vector space by $\frki$ as a subspace, equipped with the product
     \[
-        \lb{x+I,y+I}
+        \lb{x+\frki,y+\frki}
         \coloneq
-        \lb{xy} + I.
+        \lb{xy} + \frki.
     \]
 \end{definition}
 
 \begin{proposition}
-    $L/I$ is a Lie algebra.
+    $\frkg/\frki$ is a Lie algebra.
 \end{proposition}
 \begin{proof}
     These are all easy to check.
     \begin{align*}
-        \lb{ax+by+I,z+I}
+        \lb{ax+by+\frki,z+\frki}
         &=
-        \\
-        \Big(\lb{ax+by,z}\Big) + I
+        \Big(\lb{ax+by,z}\Big) + \frki
+        \\\
         &=
         \Big(
             a\lb{x,z}  
             +
             b\lb{y,z}  
         \Big)
-        + I
+        + \frki
         \\
         &=
         \Big(
-            a\lb{x,z} + I
+            a\lb{x,z} + \frki
         \Big)
         +
         \Big(
-            b\lb{y,z} + I 
+            b\lb{y,z} + \frki 
         \Big)
         \\
         &=
-        a\lb{x+I,z+I} + b\lb{y+I,z+I}.
+        a\lb{x+\frki,z+\frki} + b\lb{y+\frki,z+\frki}.
     \end{align*}
     \[
-        \lb{x+I,x+I}
+        \lb{x+\frki,x+\frki}
         =
-        \lb{xx} + I
+        \lb{xx} + \frki
         =
-        0 + I
+        0 + \frki
     \]
 \end{proof}
 
@@ -428,19 +751,20 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
         \lb{\phi(x)\phi(y)}
     \]
     for all $x,y \in \frkg$. 
-    A \defstyle{Lie algebra isomorphism} is a Lie algebra morphism that is also an isomorphism of vector spaces.
+    A \defstyle{Lie algebra isomorphism} is a Lie algebra homomorphism that is also an isomorphism of vector spaces.
 \end{definition}
 
 
 \begin{definition}
-    A \defstyle{representation} of a Lie algebra $\frkg$ is a Lie algebra morphism $\frkg \to \glalg(V)$.
+    A \defstyle{representation} of a Lie algebra $\frkg$ is a Lie algebra homomorphism $\frkg \to \glalg(V)$ where $V$ is some vector space.
 \end{definition}
 
+\subsection{Isomorphism theorems}
 
 \begin{theorem}[Lie algebra isomorphism theorems]
     Let $\frkg$ and $\frkh$ be Lie algerbas.
     \begin{enumerate}[label=(\alph*)]
-        \item 
+        \item \label{thm:FirstIsomorphismThm}
             If $\phi: \frkg \to \frkh$ is a homomorphism, then $\frkg / \ker \phi \simeq \im \phi$.
             If $\frki \subseteq \ker \phi$ is an ideal of $\frkg$, there exists a unique homomorphism $\barphi: \frkg/\frki \to \frkh$ that makes the following diagram commute:
             \[
@@ -450,18 +774,18 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
                 \end{tikzcd}
             \]
         \item 
-            if $\frki$ and $\frkj$ are ideals of $\frkg$ such that $\frki \subseteq \frkj$, then $\frkj/\frki$ is an ideal of $\frkg/\frki$ and there is a natural isomorphism
+            If $\frka$ and $\frkb$ are ideals of $\frkg$ such that $\frkb \subseteq \frka$, then $\frka/\frkb$ is an ideal of $\frkg/\frkb$ and there is a natural isomorphism
             \[
-                (\frkg/\frki)/(\frkj/\frki)
+                (\frkg/\frkb)/(\frka/\frkb)
                 \simeq
-                \frkg/\frkj.
+                \frkg/\frka.
             \]
         \item 
-            if $\frki, \frkj$ are ideals of $\frkg$, there is a natural isomorphism
+            If $\frka, \frkb$ are ideals of $\frkg$, there is a natural isomorphism
             \[
-                (\frki + \frkj)(\frkj)
+                (\frka + \frkb)/\frkb
                 \simeq
-                \frki/(\frki \cap \frkj).
+                \frka/(\frka \cap \frkb).
             \]
     \end{enumerate}
 \end{theorem}
@@ -527,6 +851,84 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
                 =
                 \{0 + \ker \phi\}.
             \]
+            Now, let $\frki$ be an ideal of $\frkg$ contained in $\ker \phi$.
+            We define in a similar way
+            \begin{align*}
+                \barphi:
+                \frkg/\frki
+                &\to
+                \im \phi
+                \\
+                x + \frki
+                &\mapsto
+                \phi(x),
+            \end{align*}
+            and via a similar argument as above, this map is well-defined. 
+            It is moreover clear that $\barphi \circ \pi = \phi$ and that it is the only such homomorphism that has these properties.
+        \item 
+            Let $\frka$ and $\frkb$ be ideals of $\frkg$ such that $\frkb \subseteq \frka$.
+            We define the map
+            \begin{align*}
+                \phi:
+                \frkg/\frkb
+                &\to
+                \frkg/\frka
+                \\
+                x + \frkb
+                &\mapsto
+                x + \frka.
+            \end{align*}
+            This map is surjective.
+            The kernel of this map is all the cosets $a + \frkb$, namely the ideal $\frka/\frkb$.
+            Then, by \ref{thm:FirstIsomorphismThm}, 
+            \[
+                (\frkg/\frkb)(\frka/\frkb)
+                =
+                (\frkg/\frkb)/\ker\phi
+                \simeq
+                \im\phi
+                =
+                \frkg/\frka.
+            \]
+        \item 
+            Let $\frka$ and $\frkb$ be ideals of $\frkg$.
+            Define the map
+            \begin{align*}
+                \phi:
+                \frka 
+                &\to 
+                (\frka+\frkb)/(\frkb)
+                \\
+                a
+                &\mapsto
+                a + \frkb.
+            \end{align*}
+            This map is surjective, as, if $(a + b) + \frkb \in (\frka+\frkb)/(\frkb)$, then
+            \[
+                \phi(a)
+                =
+                a + \frkb
+                =
+                a + (b + \frkb)
+                =
+                (a + b) + \frkb.
+            \]
+            Moreover, since
+            \[
+                \ker \phi
+                =
+                \frka \cap \frkb
+            \]
+            we have that, by \ref{thm:FirstIsomorphismThm} again,
+            \[
+                (\frka+\frkb)/\frkb
+                =
+                \im \phi
+                \simeq
+                \frka/\ker\phi
+                =
+                \frka/(\frka \cap \frkb).
+            \]
     \end{enumerate}
 \end{proof}
 
@@ -538,15 +940,15 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
     $\ad$ is evidently linear.
     Next, we just check that it is a homomorphism:
     \begin{align*}
-        \lb{\ad_x \ad_y}(z)
+        \lb{\ad x, \ad y}(z)
         &=
-        \Big(\ad_x \ad_y - \ad_y \ad_x\Big)(z) 
+        \Big(\ad x \ad y - \ad y \ad x\Big)(z) 
         \\
         &=
-        \Big(\ad_x \ad_y\Big)(z) - \Big(\ad_y \ad_x\Big)(z) 
+        \Big(\ad x \ad y\Big)(z) - \Big(\ad y \ad x\Big)(z) 
         \\
         &=
-        \ad_x \lb{yz} - \ad_y \lb{xz}
+        \ad x \lb{yz} - \ad y \lb{xz}
         \\
         &=
         \lb{x\lb{yz}} - \lb{y\lb{xz}}
@@ -558,7 +960,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
         \lb{\lb{xy}z}
         \\
         &=
-        \ad_{\lb{xy}}(z).
+        \Big(\ad \lb{xy}\Big)(z).
     \end{align*}
 \end{proof}
 
@@ -573,7 +975,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
         \ker \ad 
         =
         \Big\{
-            x \in \frkg: \ad_x = 0
+            x \in \frkg: \ad x = 0
         \Big\}
         =
         \Big\{
@@ -592,7 +994,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
 \end{definition}
 
 \begin{proposition}
-    Let $V$ be a vector space and let $g \in \GL(V)$ be an invertible element of $\End V$.
+    Let $V$ be a vector space and let $g \in \GL(V)$.
     Then the map
     \[
         x \mapsto gxg^{-1}
@@ -639,7 +1041,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
     \]
 \end{definition}
 
-In other words, $\frkg^{(i)}$ is all those elements of $\frkg$ which can be written as linear combinations of $i$ ``binary trees'' of brackets in $\frkg$.
+In other words, $\frkg^{(i)}$ is all those elements of $\frkg$ which can be written as linear combinations of $i$ ``full binary trees'' of brackets in $\frkg$.
 
 \begin{definition}
     A Lie algebra $\frkg$ is said to be \defstyle{solvable} if $\frkg^{(n)} = 0$ for some $n$.
@@ -651,12 +1053,52 @@ For example, abelian Lie algebras are solvable, whereas simple Lie algebras are 
     The Lie algebra of upper triangular matrices $\talg_n(\FF)$ is solvable.
 \end{proposition}
 \begin{proof}
+    \todo{boring proof--- the diagonal keeps receding every time you do a commutator}
+\end{proof}
+
+\begin{theorem}
+    Let $\frkg$ be a Lie algebra.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            If $\frkg$ is solvable, then so are all subalgebras and homomorphic images of $\frkg$.
+        \item 
+            If $\frki$ is a solvable ideal of $\frkg$ such that $\frkg/\frki$ is also solvable, then $\frkg$ is solvable.
+        \item 
+            If $\frki$, $\frkj$ are solvable ideals of $\frkg$, then so is $\frki + \frkj$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The first statement of (a) follows if we show that
+    \[
+        \frkh^{(i)} \subseteq \frkg^{(i)}
+    \]
+    for any subalgebra $\frkh$ of $\frkg$--- this is an easy induction.
+    Similarly, the second statement of (a) follows from
+    \[
+        (\phi\frkg)^{(i)} 
+        = 
+        \phi\Big(\frkg^{(i)}\Big)
+    \]
+    for any homomorphism $\phi$.
+    This is another easy induction.
+
+    For (b), we stack together $L/I$ and $I$'s solvability--- the former being solvable means that $L^{(i)} \subseteq I$ eventually, but that means that $L^{(i)}$ is a subalgebra of a solvable Lie algebra $I$, so it is itself solvable and we can go further.
+
+    Specifically, if $L^{(n)} \subseteq I$, and $I^{(m)} = 0$, then
+    \[
+        L^{(n+m)}
+        =
+        0.
+    \]
+
+
 \end{proof}
 
 \subsection{The descending central series, nilpotency}
 
 \begin{definition}
-    The \defstyle{descending central series} of a Lie algebra $\frkg$ is a sequence of ideals $\frkg^0, \frkg^1, \ldots$ defined
+    The \defstyle{descending central series} of a Lie algebra $\frkg$ is a sequence of ideals $\frkg^0, \frkg^1, \ldots$ defined to be
     \[
         \begin{cases}
             \frkg^0 \coloneq \frkg \\
@@ -675,27 +1117,87 @@ For example, abelian Lie algebras are solvable, whereas simple Lie algebras are 
 
 \begin{definition}
     Let $\frkg$ be a Lie algebra.
-    We say that $x \in \frkg$ is \defstyle{ad-nilpotent} if $(\ad_x)^n = 0$ for some $n$.
+    We say that $x \in \frkg$ is \defstyle{ad-nilpotent} if $(\ad x)^n = 0$ for some $n$.
 \end{definition}
 
 \subsection{Engel's theorem}
 
-We will prove \defstyle{Engel's theorem}
+We will prove \defstyle{Engel's theorem}.
 
 \begin{theorem}[Engel]
     Let $\frkg$ be a Lie algebra.
     Then the following are equivalent:
     \begin{enumerate}[label=(\roman*)]
         \item 
-            $\frkg$ is nilpotent,
+            $\frkg$ is nilpotent.
         \item 
             All the elments of $\frkg$ are $\ad$-nilpotent.
     \end{enumerate}
 \end{theorem}
 
+We will prove the equivalent theorem:
+
+\begin{theorem}
+    Let $\frkg$ be a subalgebra of $\glalg(V)$, where $V$ has positive dimension.
+    If $x$ is nilpotent for all $x \in \frkg$, then there exists a nonzero vector $v \in V$ so that $\frkg v = 0$.
+\end{theorem}
+
+\begin{proof}
+    We induct on $\dim \frkg$.
+
+    The $\dim \frkg = 0$ case is trivial--- $\frkg$ will only contain the zero transformation.
+
+    The $\dim \frkg = 1$ case is also easy.
+    Let $x \in \frkg$ be nonzero and nilpotent.
+    Then  we can find a nonzero vector $v$ so that $xv = 0$, and so $\frkg v = (\FF x)v = 0$.
+
+    Now supppose $\dim \frkg > 1$.
+    Let $\frkh$ be a proper subalgebra of $\frkg$ of positive dimension.
+    Then the set
+    \[
+        \ad_\frkg(\frkh)
+        =
+        \Big\{
+            \ad_\frkg(h) : h \in \frkh
+        \Big\}
+    \]
+    is a Lie algebra--- a subalgebra of $\glalg(\frkg)$.
+    Then, $\ad_{\frkg/\frkh}(\frkh)$ is also a Lie algebra.
+    By the inductive hypothesis, we may find a nonzero vector $x + \frkh \in \frkg/\frkh$ such that $\ad_{\frkg/\frkh}(\frkh)(x + \frkh) = 0$.
+    This means that $(\ad_{\frkg/\frkh} h)(x + \frkh) = \frkh$ for all $h \in \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$.
+    Hence $[hx] \in \frkh$ for all $h \in \frkh$, but $x \notin \frkh$.
+
+    Now if $\frkh$ is maximal, then this means that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ is a larger proper subalgebra of $\frkg$.
+
+    Hence, $\frkh$ is an ideal of $\frkg$.
+    We will show that it has codimension one.
+    Suppose it has codimension at least two.
+    Then, we can pull back a one-dimensional subalgebra of the quotient $\frkg / \frkh$ along the projection map and obtain a proper subalgebra of $\frkg$ that properly contains $\frkh$, which is impossible.
+
+    Now, consider the subspace $W = \{ v \in V : \frkh v = 0 \}$.
+    Since $\frkh$ is an ideal of $\frkg$, $\frkg$ stabilizes $W$--- for all $g \in \frkg$, $h \in \frkh$, and $w \in W$, we have that
+    \[
+        hgw
+        = 
+        \Big(gh - \lb{gh}\Big)w
+        =
+        g(hw) + \lb{hg}w
+        =
+        0 + 0
+        =
+        0.
+    \]
+    Then, if we pick $g \in \frkg$ and restrict it to $W$, we have a nilpotent endomorphism of $W$, hence $g$ has an eigenvector $v$ in $W$.
+
+    Then, $(\frkh + \FF g)v = 0$, completing the theorem.
+\end{proof}
+
 \begin{proof}[Proof of Engel's theorem]
 
 \end{proof}
+
+\begin{corollary}
+\end{corollary}
 
 \section{Solutions to exercises}
 
@@ -787,17 +1289,1005 @@ Next, we verify \ref{ax:LBNilpotent}
     =
     0.
 \]
-And finally, we verify the Jacobi identity \ref{ax:LBJacobiIdentity}
+And finally, we verify the Jacobi identity \ref{ax:LBJacobiIdentity}.
+\begin{align*}
+    &x \times (y \times z)
+    +
+    y \times (z \times x)
+    +
+    z \times (x \times y)
+    \\
+    &=
+    \varepsilon_{ijk}x_j(y \times z)_k
+    +
+    \varepsilon_{ijk}y_j(z \times x)_k
+    +
+    \varepsilon_{ijk}z_j(x \times y)_k
+    \\
+    &=
+    \varepsilon_{ijk}
+    \Big(
+        x_j(y \times z)_k
+        + y_j(z \times x)_k
+        + z_j(x \times y)_k
+    \Big)
+    \\
+    &=
+    \varepsilon_{ijk}
+    \Big(
+        x_j(\varepsilon_{klm}y_lz_m)
+        + y_j(\varepsilon_{klm}z_lx_m)
+        + z_j(\varepsilon_{klm}x_ly_m)
+    \Big)
+    \\
+    &=
+    \varepsilon_{ijk}
+    \varepsilon_{klm}
+    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
+    \\
+    &=
+    (\delta_{im}\delta_{lj} - \delta_{il}\delta_{jm})
+    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
+    \\
+    &=
+    \delta_{im}\delta_{lj}
+    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
+    -
+    \delta_{il}\delta_{jm}
+    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
+    \\
+    &=
+    \Big(x_ly_lz_i + y_lz_lx_i + z_lx_ly_i\Big)
+    -
+    \Big(x_my_iz_m + y_mz_ix_m + z_mx_iy_m\Big)
+    \\
+    &=
+    (y_lz_l - z_my_m)x_i
+    + (x_ly_l - y_mx_m)z_i
+    + (z_lx_l - x_mz_m)y_i
+    \\
+    &=
+    0.
+\end{align*}
+
+\begin{exercise}[Humphreys 1.2]
+    Verify that the following equations and those implied by \ref{ax:LBNilpotent} \ref{ax:LBIsBilinear} define a Lie algebra structure on a three dimensional vector space with basis $(x, y, z)$: $\lb{xy} = z$, $\lb{xz} = y$, $\lb{yz} = 0$.
+\end{exercise}
+
+The only $\lb{\wc\lb{\wc,\wc}}$ terms consisting of basis elements that are nonzero are $\lb{x\lb{xy}}$ and $\lb{x\lb{xz}}$, so if
 \[
-    x \times x
+    a
     =
-    \begin{pmatrix}
-        x_2x_3 - x_3x_2 \\
-        x_3x_1 - x_1x_3 \\
-        x_1x_2 - x_2x_1 \\
-    \end{pmatrix}
+    a_xx + a_yy + a_zz,
+\]
+\begin{align*}
+    &\lb{
+        a_x x + a_y y + a_z z
+        \lb{
+            b_x x + b_y y + b_z z,
+            c_x x + c_y y + c_z z
+        }
+    }
+    \\
+    &=
+    (a_xb_xc_z - a_xb_zc_x)z
+    + (a_xb_xc_y - a_xb_xc_x)y
+\end{align*}
+so, permuting indices, 
+\[
+    (a_xb_xc_z - a_xb_zc_x)z
+    + (a_xb_xc_y - a_xb_xc_x)y
+    + (b_xc_xa_z - b_xc_za_x)z
+    + (b_xc_xa_y - b_xc_xa_x)y
+    + (c_xa_xb_z - c_xa_zb_x)z
+    + (c_xa_xb_y - c_xa_xb_x)y
     =
     0.
 \]
+So the Jacobi identity is satisfied.
+
+\begin{exercise}[Humphreys 1.3]
+    Let 
+    \[
+        e 
+        = 
+        \begin{pmatrix}
+            0 & 1 \\
+            0 & 0
+        \end{pmatrix}
+        ,\qquad
+        f 
+        = 
+        \begin{pmatrix}
+            0 & 0 \\
+            1 & 0
+        \end{pmatrix}
+        ,\qquad
+        h 
+        = 
+        \begin{pmatrix}
+            1 & 0 \\
+            0 & -1 
+        \end{pmatrix}
+    \]
+    be an ordered basis for $\slalg(2, \FF)$.
+    Compute the matrices of $\ad e$, $\ad f$, $\ad h$ relative to this basis.
+\end{exercise}
+
+We will compute the structure constants relative to $e,f,h$--- there are $3(3-1)/2 = 3$ brackets to check:
+\[
+    \lb{ef}
+    =
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    \begin{pmatrix}
+        0 & 0 \\
+        1 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & 0 \\
+        1 & 0 
+    \end{pmatrix}
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & 0 \\
+        0 & 1 
+    \end{pmatrix}
+    =
+    h.
+\]
+\[
+    \lb{he}
+    =
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & -1 
+    \end{pmatrix}
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & -1 
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & -1 \\
+        0 & 0 
+    \end{pmatrix}
+    =
+    2e.
+\]
+\[
+    \lb{hf}
+    =
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & -1 
+    \end{pmatrix}
+    \begin{pmatrix}
+        0 & 0 \\
+        1 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & 0 \\
+        1 & 0 
+    \end{pmatrix}
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & -1 
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        0 & 0 \\
+        -1 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & 0 \\
+        1 & 0 
+    \end{pmatrix}
+    =
+    -2f.
+\]
+Now, if we order this basis as, $(e, f, h)$, the matrix representing $\ad e$ is
+\[
+    \begin{pmatrix}
+        0 & 0 & -2 \\
+        0 & 0 & 0 \\
+        0 & 1 & 0 
+    \end{pmatrix}.
+\]
+And similarly,
+\[
+    \ad f
+    =
+    \begin{pmatrix}
+        0 & 0 & 0 \\
+        0 & 0 & 2 \\
+        -1 & 0 & 0 
+    \end{pmatrix}
+    ,\qquad
+    \ad h
+    =
+    \begin{pmatrix}
+        2 & 0 & 0 \\
+        0 & -2 & 0 \\
+        0 & 0 & 0 
+    \end{pmatrix}.
+\]
+
+\begin{exercise}
+    Find a linear Lie algebra isomorphic to the nonabelian two dimensional algebra constructed in (1.4). [Hint: Look at the adjoint representation.]
+\end{exercise}
+
+We look at the adjoint representation at the Lie algebra given by $x, y$
+\[
+    x
+    =
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+\]
+\[
+    y
+    =
+    \begin{pmatrix}
+        -1 & 0 \\
+        0 & 0 
+    \end{pmatrix}
+\]
+and we verify that $\lb{xy} = x$:
+\[
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    \begin{pmatrix}
+        -1 & 0 \\
+        0 & 0 
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        -1 & 0 \\
+        0 & 0 
+    \end{pmatrix}
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        0 & 0 \\
+        0 & 0
+    \end{pmatrix}
+    -
+    \begin{pmatrix}
+        0 & -1 \\
+        0 & 0 
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}.
+\]
+
+\begin{exercise}
+    Verify the assertions made in (1.2) about $\talg(n,\FF)$, $\dalg(n,\FF)$, $\nalg(n,\FF)$ and compute the dimension of each algebra, by exhibiting bases.
+\end{exercise}
+
+A basis for $\talg(n, \FF)$ is all $e_{ij}$ where $1 \leq i \leq j \leq n$.
+
+A basis for $\dalg(n, \FF)$ is all $e_{ii}$ where $1 \leq i \leq n$.
+
+A basis for $\nalg(n, \FF)$ is all $e_{ij}$ where $1 \leq i < j \leq n$.
+
+\section{Appendix}
+
+\subsection{Definitions}
+
+\begin{definition}
+    Let $\psi$ be some statement that can be evaluated to be true or false.
+    The \defstyle{Iverson bracket} of $\psi$ is
+    \[
+        [\psi]^? \coloneq \begin{cases}
+            1, & \text{if }\psi\text{ is true} \\
+            0, & \text{otherwise}.
+        \end{cases}
+    \]
+    a function of the free variables of $\psi$.
+\end{definition}
+
+\subsection{Some linear algebra}
+
+I never really got a chance to learn much foundational \textit{abstract} linear algebra.
+Learning this material was a great way for me to brush up on a lot of this stuff, so here's a short dump of some important results.
+
+\subsubsection{Definitions}
+
+\begin{definition}
+    The \defstyle{endomorphism ring} $\End V$ of the vector space $V$ is the collection of all linear maps from $V$ to itself.
+\end{definition}
+
+\begin{definition}
+    Let $\KK$ be a field.
+    The \defstyle{$\mathbf{n}\times\mathbf{n}$ matrix ring} $M_n(\KK)$ is defined to be the ring whose underlying set is $\KK^{n \times n}$ with pointwise scaling and addition, and with product given by matrix multiplication.
+\end{definition}
+
+\begin{definition}
+    Let $V$ be a vector space over the field $\KK$.
+    The \defstyle{dual space} $V^\vee$ of $V$ is the collection of all linear maps $V \to \KK$.
+\end{definition}
+
+\subsubsection{Rank-nullity}
+
+\begin{theorem}[\defstyle{Rank-nullity}]
+    \label{thm:RankNullity}
+    Let $x \in \End V$.
+    xhen
+    \[
+        \rank x + \nullity x
+        =
+        \dim V,
+    \]
+    where
+    \[
+        \rank x
+        \coloneq
+        \dim \im x
+        ,\qquad
+        \nullity x
+        \coloneq
+        \dim \ker x.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Let $n = \dim V$, $r = \rank x$ and let $\ell = \nullity x$.
+
+    Let $\{p_1,p_2,\ldots,p_\ell\}$ be a basis for $\ker x$.
+
+    We may extend this into a basis of $V$ by adjoining more vectors $q_{\ell+1},\ldots,q_n$, so that $\{p_1,\ldots,p_\ell,q_{\ell+1},\ldots,q_n\}$ is a basis of $V$.
+
+    Then, we claim that the set $\{x(q_{\ell+1}), \ldots, x(q_n)\}$ is a basis of $\im x$.
+
+    Evidently, it spans $\im x$, as
+    \begin{align*}
+        &\im x
+        \\
+        &=
+        \Big\{
+            x(v): v \in V
+        \Big\}
+        \\
+        &=
+        \Big\{
+            x(a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n)
+            :  
+            a_1,\ldots,a_n \in \FF
+        \Big\}
+        \\
+        &=
+        \Big\{
+            \underbrace{
+                x(a_1p_1 + \cdots + a_\ell p_\ell)
+            }_{=0}
+            + x(a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n)
+            :  
+            a_1,\ldots,a_n \in \FF
+        \Big\}
+        \\
+        &=
+        \Big\{
+            x(a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n)
+            :  
+            a_{\ell+1},\ldots,a_n \in \FF
+        \Big\}
+        \\
+        &=
+        \Big\{
+            a_{\ell+1} x(q_{\ell+1}) + \cdots + a_n x(q_n)
+            :  
+            a_{\ell+1},\ldots,a_n \in \FF
+        \Big\}
+        \\
+        &=
+        \opspan\Big\{x(q_{\ell+1}), \ldots, x(q_n)\Big\}.
+    \end{align*}
+    Moreover, it is linearly independent--- suppose that there existed $a_{\ell+1}, \ldots, a_n$ such that
+    \[
+        a_{\ell+1} x(q_{\ell+1}) + \cdots + a_n x(q_n)
+        \neq
+        0.
+    \]
+    But this means that
+    \[
+        x(a_{\ell+1}q_{\ell+1} + \cdots + a_n q_n)
+        \neq
+        0,
+    \]
+    and so the vector $a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n$ is in the kernel of $x$, however it is not in the span of $\{p_1,\ldots,p_\ell\}$, which contradicts the fact that $p_1,\ldots,p_\ell$ is a basis for $\ker x$.
+
+    Hence $\{x(q_{\ell+1}), \ldots, x(q_n)\}$ is linearly independent, and thus we have proved that it is a basis of $\im x$.
+
+    Then $r = \dim \im x = n - \ell$, and so
+    \[
+        r + \ell 
+        = 
+        n,
+    \]
+    which proves the theorem.
+\end{proof}
+
+\begin{corollary}
+    Let $x \in \End V$.
+    The following are equivalent:
+    \begin{enumerate}[label=(\alph*)]
+        \item
+            $x$ is injective.
+        \item
+            $x$ is surjective.
+        \item
+            $x$ is bijective.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    We have the easily verifiable propositions:
+    \[
+        \dim \ker x = 0 \iff x \text{ is injective}
+    \]
+    \[
+        \dim \im x = \dim V \iff x \text{ is surjective}
+    \]
+    And, by rank nullity,
+    \[
+        \dim \ker x = 0
+        \iff
+        \dim \im x = \dim V,
+    \]
+    hence $x$ is injective if and only if it is surjective.
+\end{proof}
+
+\subsubsection{The matrix representation}
+
+\begin{definition}
+    Let $V$ be a vector space and fix a basis $\bfv = \{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\bfv^\ast = \{v^1, \ldots, v^n\}$ of the dual space $V^\ast$.
+
+    By abuse of notation, we define the function
+    \begin{align*}
+        \bfv:
+        \KK^n
+        &\to
+        V
+        \\
+        (a_1, \ldots, a_n) 
+        &\mapsto 
+        a_1v_1 + \cdots + a_nv_n,
+    \end{align*}
+    and the function
+    \begin{align*}
+        \bfv^\ast:
+        V
+        &\to
+        \KK^n
+        \\
+        u 
+        &\mapsto 
+        \Big(v^1(u), \cdots, v^n(u)\Big).
+    \end{align*}
+    \begin{align*}
+        \bfv^\ast:
+        \KK^n
+        &\to
+        V^\ast
+        \\
+        (a_1, \ldots, a_n) 
+        &\mapsto 
+        a_1v^1 + \cdots + a_nv^n,
+    \end{align*}
+\end{definition}
+
+Evidently $\bfv^\ast \bfv = \id_V$ and $\bfv \bfv^\ast = \id_{\KK^n}$.
+
+It's also clear that both maps have trivial kernel, so by rank-nullity they are both vector isomorphisms.
+
+Let $e_{ij}$ be the standard basis for $M_n(\KK)$.
+Let $v_{i\to j}$ denote the map $x \mapsto v^i(x)v_j$.
+
+Then
+\[
+    \bfv e_{ij} \bfv^\ast
+    =
+    v_{i \to j}
+\]
+and
+\[
+    \bfv^\ast v_{i \to j} \bfv
+    =
+    e_{ij}
+\]
+Moreover
+
+\begin{proposition}
+    \[
+        (\bfv^\ast T \bfv)
+        (\bfv^\ast x)
+        =
+        \bfv^\ast Tx
+    \]
+\end{proposition}
+
+We also have the map
+\[
+    \id \otimes \bfv
+\]
+which embeds $M_n(\KK)$ in $V^\ast \otimes V$.
+\begin{align*}
+    &\Big(
+        v^1 \otimes (c_{11}, \cdots, c_{1n}) + \cdots + v^n \otimes (c_{n1}, \ldots, c_{nn})
+    \Big)
+    \\
+    \mapsto
+    &\Big(
+        v^1 \otimes (c_{11}v_1 + \cdots + c_{1n}v_n) + \cdots + v^n \otimes (c_{n1}v_1 + \ldots + c_{nn}v_n)
+    \Big)
+    \\
+    =
+    &\sum_{i=1}^n
+    \sum_{j=1}^n
+    c_{ij} (v^i \otimes v_j).
+\end{align*}
+
+And the map
+\[
+    \bfv^\ast \otimes \id
+\]
+goes backwards.
+
+Then if $T \in \End V$,
+\[
+    \id \otimes T
+\]
+\begin{align*}
+    &\Big(
+        v^1 \otimes (c_{11}, \cdots, c_{1n}) + \cdots + v^n \otimes (c_{n1}, \ldots, c_{nn})
+    \Big)
+    \\
+    \mapsto
+    &\Big(
+        v^1 \otimes (c_{11}v_1 + \cdots + c_{1n}v_n) + \cdots + v^n \otimes (c_{n1}v_1 + \ldots + c_{nn}v_n)
+    \Big)
+    \\
+    =
+    &\sum_{i=1}^n
+    \sum_{j=1}^n
+    c_{ij} (v^i \otimes v_j).
+\end{align*}
+\begin{definition}
+    Let $V$ be a vector space and fix a basis $\bfv = \{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\bfv^\ast = \{v^1, \ldots, v^n\}$ of the dual space $V^\ast$.
+
+    The \defstyle{matrix representation} of a linear map $T \in \End V$ is the matrix $a_{ij}$ defined by
+    \[
+        =
+        v^i\Big(x(v_j)\Big)
+        (e^i \otimes e_j)
+    \]
+\end{definition}
+
+\begin{align*}
+    \bfV:
+    V
+    &\to
+    V^\ast \otimes V
+    \\
+    u
+    &\mapsto 
+    \bfv^\ast \otimes u
+\end{align*}
+
+\begin{align*}
+    \bfV^\ast:
+    V^\ast \otimes V
+    &\to
+    V^\ast \otimes V
+    \\
+    u
+    &\mapsto 
+    \sum_i v^i \otimes u
+\end{align*}
+
+\begin{theorem}
+    Let $V$ be a vector space over $\KK$ of dimension $n$.
+    Then
+    \[
+        \End V
+        \simeq
+        V^\ast \otimes V
+        \simeq
+        M_n(\KK).
+    \]
+\end{theorem}
+
+\begin{proof}
+    Fix a basis $\bfv$ and dual basis $\bfv^\ast$ of $V$.
+    The tensor product $V^\ast \otimes V$ has the basis
+    \[
+        \Big\{
+            v^i \otimes v_j 
+            :
+            v^i \in \bfv^\ast,
+            v_j \in \bfv
+        \Big\}.
+    \]
+    Now consider the spaces $V^\ast \otimes \KK$ and $\KK \otimes V$.
+    By abuse of language, let $\bfv$ and $\bfv^\ast$ denote
+    \[
+        \bfv
+        \coloneq
+        1 \otimes v_1 + \cdots + 1 \otimes v_n
+        ,\qquad
+        \bfv^\ast
+        \coloneq
+        v^1 \otimes 1 + \cdots + v^n \otimes 1
+    \]
+    We can endow an action of $V$ on $V^\ast \otimes V$:
+    \[
+        x(v^i \otimes v_j)
+        =
+        v^ix \otimes v_j.
+    \]
+    And similarly for $V^\ast$:
+    \[
+        (v^i \otimes v_j)x
+        =
+        v^i \otimes x(v_j).
+    \]
+    and we can also endow an action of $V^\ast \otimes V$ on $V$:
+    \[
+        (v^i \otimes v_j)x
+        =
+        v^i(x)v_j.
+    \]
+    Now, by abuse of language, let $\bfv$ and $\bfv^\ast$ denote
+    \[
+        \bfv
+        \coloneq
+        v_1 + \cdots + v_n
+        ,\qquad
+        \bfv^\ast
+        \coloneq
+        v^1 + \cdots + v^n
+    \]
+    Then
+    \[
+        \bfv^\ast \bfv
+        =
+        \sum_{i=1}^n
+        v^i \otimes v_i.
+    \]
+    We can turn $V^\ast \otimes V$ into an algebra by defining
+    \[
+        (v^i \otimes v_j)(v^k \otimes v_l)
+        =
+        v^kv_j
+        (v^i \otimes v_l).
+    \]
+    Note that this means $\bfv^\ast \bfv$ is the identity element, making $V^\ast \otimes V$ unital.
+    Now define more generally
+    \[
+        \bfv^\ast T \bfv
+        \coloneq
+        \sum_{i=1}^n
+        v^i \otimes Tv_i.
+    \]
+    So
+    \[
+        \bfv^\ast AB \bfv
+        \coloneq
+        \bfv^\ast \otimes AB\bfv.
+    \]
+    Which we expand:
+    Also, define
+    \[
+        AB
+        =
+        \sum_{i,j}
+        \sum_{k=1}^n
+        a_{ik}b_{kj}
+        v^i \otimes v_j
+    \]
+\end{proof}
+
+\begin{proposition}
+    Let $T, S \in \End V$.
+    Then
+    \[
+        (\bfv^\ast T \bfv)(\bfv^\ast S \bfv)
+        =
+        \bfv^\ast TS \bfv.
+    \]
+\end{proposition}
+
+\begin{proof}
+    Let $T = (t_{ij})$ and let $S = (s_{ij})$.
+    Then
+    \[
+        \bfv^\ast T \bfv
+        =
+        \sum_{i,j}
+        t_{ij}
+        v^i \otimes v_j
+        ,\qquad
+        \bfv^\ast S \bfv
+        =
+        \sum_{i,j}
+        s_{ij}
+        v^i \otimes v_j.
+    \]
+    so
+    \begin{align*}
+        (\bfv^\ast T \bfv)
+        (\bfv^\ast S \bfv)
+        &=
+        \left(
+            \sum_{i,j}
+            t_{ij}
+            v^i \otimes v_j
+        \right)
+        \left(
+            \sum_{i,j}
+            s_{ij}
+            v^i \otimes v_j
+        \right)
+        \\
+        &=
+        \sum_{i,j,k,l}
+        t_{ij}
+        s_{kl}
+        (v^kv_j)
+        (v^i \otimes v_l)
+        \\
+        &=
+        \sum_{i,l}
+        \left(
+            \sum_k
+            t_{ik}
+            s_{kl}
+        \right)
+        (v^i \otimes v_l)
+        \\
+        &=
+        \sum_{i,l}
+        v^i
+        \otimes
+        \left(
+            \sum_k
+            t_{ik}
+            s_{kl}
+        \right)
+        v_l
+        \\
+        &=
+        \sum_{i,l}
+        v^i \otimes TSv_l.
+    \end{align*}
+    \begin{align*}
+        \sum_{i,j}
+        v^i \otimes TSv_j
+        &=
+        \sum_{i,j}
+        v^i \otimes T
+        \left(
+            \sum_k
+            s_{jk}
+            v_k
+        \right)
+        \\
+        &=
+        \sum_{i,j,k}
+        s_{jk}
+        v^i \otimes Tv_k
+        \\
+        &=
+        \sum_{i,j,k}
+        s_{jk}
+        v^i \otimes 
+        \left(
+            \sum_l
+            t_{kl}v_l
+        \right)
+        \\
+        &=
+        \sum_{i,j,k,l}
+        s_{jk}
+        t_{kl}
+        (v^i \otimes v_l)
+    \end{align*}
+\end{proof}
+
+\subsubsection{Trace}
+
+\begin{definition}
+    Let $V$ be a vector space and fix a basis $\{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\{v^1, \ldots, v^n\}$ of the dual space $V^\vee$.
+    The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
+    \[
+        \sum_{i=1}^n 
+        v^i\Big(x(v_i)\Big).
+    \]
+\end{definition}
+
+\begin{theorem}
+    The trace is a linear operator, i.e if $x, y \in \End V$ and $a,b \in \FF$,
+    \[
+        \tr(ax + by)
+        =
+        a\tr x + b \tr y.
+    \]
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \tr (ax + by)
+        &=
+        \sum_{i=1}^n 
+        v^i\Big((ax + by)(v_i)\Big)
+        \\
+        &=
+        \sum_{i=1}^n 
+        v^i\Big(ax(v_i) + by(v_i)\Big)
+        \\
+        &=
+        \sum_{i=1}^n 
+        av^i\Big(x(v_i)\Big)
+        + bv^i\Big(y(v_i)\Big)
+        \\
+        &=
+        a
+        \sum_{i=1}^n 
+        v^i\Big(x(v_i)\Big)
+        + 
+        b
+        \sum_{i=1}^n 
+        v^i\Big(y(v_i)\Big)
+        \\
+        &=
+        a \tr x + b \tr y.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}\label{thm:TraceIsBasisIndependent}
+    The trace of a linear operator $x \in \End V$ is basis invariant--- its value is independent of the basis used to compute it.
+\end{theorem}
+
+\begin{proof}
+    Let $\{v_1,\ldots,v_n\}$ and $\{w_1,\ldots,w_n\}$ be two bases of $V$, and let $\{v^1,\ldots,v^n\}$ and $\{w^1,\ldots,w^n\}$ be the corresponding dual bases of $V^\vee$.
+
+    We write the transition coefficients $S_{ij}$ and $S^{ij}$, which record the expansions of $w_i$ and $w^i$ in terms of $v_j$ and $v^j$ respectively.
+    \[
+        w_i
+        =
+        \sum_{k=1}^n
+        S_{ki}v_k
+        ,\qquad
+        w^i
+        =
+        \sum_{k=1}^n
+        S^{ik}v^k.
+    \]
+    Importantly,
+    \begin{align*}
+        \delta_{ij}
+        &=
+        w^iw_j
+        \\
+        &=
+        \left(
+            \sum_{k=1}^n
+            S^{ik}v^k
+        \right)
+        \left(
+            \sum_{l=1}^n
+            S_{jl}v_l
+        \right)
+        \\
+        &=
+        \sum_{k=1}^n
+        \sum_{l=1}^n
+        S^{ik}S_{jl}
+        v^kv_l
+        \\
+        &=
+        \sum_{k=1}^n
+        \sum_{l=1}^n
+        S^{ik}S_{jl}
+        \delta_{kl}
+        \\
+        &=
+        \sum_{k=1}^n
+        S_{jk}S^{ik},
+    \end{align*}
+    Hence,
+    \begin{align*}
+        \sum_{i=1}^n
+        w^i\Big(x(w_i)\Big)
+        &=
+        \sum_{i=1}^n
+        \left(
+            \sum_{k=1}^n
+            S^{ik}v^k
+        \right)
+        \left(
+            x
+            \left(
+                \sum_{j=1}^n
+                S_{ji}v_j
+            \right)
+        \right)
+        \\
+        &=
+        \sum_{i=1}^n
+        \left(
+            \sum_{k=1}^n
+            S^{ik}v^k
+        \right)
+        \left(
+            \sum_{j=1}^n
+            S_{ji}x(v_j)
+        \right)
+        \\
+        &=
+        \sum_{i=1}^n
+        \sum_{j=1}^n
+        \sum_{k=1}^n
+        S_{ji}S^{ik}
+        v^i\Big(x(v_j)\Big)
+        \\
+        &=
+        \sum_{j=1}^n
+        \sum_{k=1}^n
+        \left(
+            \sum_{i=1}^n
+            S_{ji}S^{ik}
+        \right)
+        v^k\Big(x(v_j)\Big)
+        \\
+        &=
+        \sum_{j=1}^n
+        \sum_{k=1}^n
+        \delta_{jk}
+        v^k\Big(x(v_j)\Big)
+        \\
+        &=
+        \sum_{j=1}^n
+        v^j\Big(x(v_j)\Big).
+    \end{align*}
+    Hence the trace gives the same value regardless of basis.
+\end{proof}
 
 \end{document}
