@@ -6,7 +6,7 @@
 \usepackage[garamond]{jaspercommon}
 \usepackage{tikz-cd}
 
-\newcommand*\wc{{\mkern 3mu\_\mkern 3mu}}
+\newcommand*\wc{{\mkern 1mu-\mkern 1mu}}
 \newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
 \newcommand{\ip}[1]{\ensuremath{\left\langle{#1}\right\rangle}}
 \newcommand{\lb}[1]{\ensuremath{\left[{#1}\right]}}
@@ -17,7 +17,11 @@
 \DeclareMathOperator{\ogroup}{O}
 \DeclareMathOperator{\Dih}{Dih}
 \DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\Lie}{Lie}
+\DeclareMathOperator{\lie}{lie}
 \DeclareMathOperator{\tr}{tr}
 
 \DeclareMathOperator{\im}{im}
@@ -78,7 +82,14 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
 
 \begin{convention}
     All vector spaces considered are finite dimensional and no assumptions are made yet about underlying fields.
-    We use $V$ and $\FF$ to denote generic vector spaces and fields respectively.
+    We use $V$ and $\KK$ to denote generic vector spaces and fields respectively.
+
+    We will often use $\rightharpoonup$ to denote action in general, so if $v \in V$ and $x \in \End V$, we will define
+    \[
+        x \rightharpoonup v
+        \coloneq
+        x(v).
+    \]
 \end{convention}
 
 \subsection{Lie algebras}
@@ -145,7 +156,7 @@ As an exercise in using this definition, we show the following:
     which completes the proof.
 \end{proof}
 
-We will look at our first example of a Lie algebra--- that closely associated with the \defstyle{general linear group} $\GL(V)$ of invertible endomorphisms of a vector space $V$.
+We will look at our first example of a Lie algebra, closely associated with the \defstyle{general linear group} $\GL(V)$ of invertible endomorphisms of a vector space $V$.
 
 \begin{definition}[$\glalg$, abstractly]
     Let $V$ be a vector space.
@@ -159,22 +170,22 @@ We will look at our first example of a Lie algebra--- that closely associated wi
 \end{definition}
 
     $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
-    Then, the following definition gives us a more concrete avatar of $\glalg$, and is in a sense ``the only'' finite dimensional general linear algebra.
+    Then, the following definition gives us a more concrete avatar of $\glalg$, and is in a sense ``the only'' finite dimensional $\glalg$.
 
 \begin{definition}[$\glalg$, concretely]
-    Let $\FF$ be some field and let $n$ be a positive integer.
-    The \defstyle{general linear algebra} $\glalg_n(\FF)$ is defined to be the Lie algebra with underlying vector space the set of all $n \times n$ matrices over $\FF$, with bracket given by
+    Let $\KK$ be some field and let $n$ be a positive integer.
+    The \defstyle{general linear algebra} $\glalg_n(\KK)$ is defined
     \[
-        \lb{xy}
-        =
-        xy - yx.
+        \glalg_n(\KK)
+        \coloneq
+        \glalg\big(\Mat_n(\KK)\big).
     \]
 \end{definition}
 
 In this setting, we can easily compute the bracket of $\glalg$ relative to its standard basis:
 
 \begin{proposition}
-    Let $\{e_{pq}\}_{p,q = 0}^n$ be the standard basis of $\glalg_n(\FF)$.
+    Let $\{e_{pq}\}_{p,q = 0}^n$ be the standard basis of $\glalg_n(\KK)$.
     Then
     \[
         \lb{e_{pq}e_{rs}}
@@ -187,11 +198,13 @@ In this setting, we can easily compute the bracket of $\glalg$ relative to its s
 \end{proposition}
 
 \begin{proof}
-    Using the Iverson bracket,
+    Using the Iverson bracket (see Definition \ref{def:Iverson}),
     \[
         (e_{pq})_{ij}
         =
         \iverson{p=i \wedge q=j}
+        =
+        \iverson{p=i}\iverson{q=j}
     \]
     and so
     \begin{align*}
@@ -205,6 +218,14 @@ In this setting, we can easily compute the bracket of $\glalg$ relative to its s
         \sum_{k=1}^n
         \iverson{p=i \wedge q=k}
         \iverson{r=k \wedge s=j}
+        \\
+        &=
+        \sum_{k=1}^n
+        \Big(
+            \iverson{q=k}\iverson{r=k}
+        \Big)
+        \iverson{p=i}
+        \iverson{s=j}
         \\
         &=
         \left(
@@ -225,7 +246,7 @@ In this setting, we can easily compute the bracket of $\glalg$ relative to its s
 Importantly, many Lie algebras, and in fact all the Lie algebras we are concerned with, occur as subalgebras of the general linear algebra--- a \defstyle{subalgebra} of a Lie algebra $\frkg$ is a subspace of $\frkg$ that is closed under $\frkg$'s bracket.
 
 \begin{definition}
-    A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\FF)$ for some $n$.
+    A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\KK)$ for some $n$.
 \end{definition}
 
 All finite dimensional Lie algebras are linear, in the sense that they are isomorphic to some linear Lie algebra.
@@ -241,11 +262,10 @@ We have four distinguished families of Lie algebras:
 \]
 These are parameterized by a positive integer $\ell$, and they classify all but five of the so-called \defstyle{semisimple Lie algebras}.
 
-
 \subsubsection{Type \sfA: the special linear algebra}
 
 \begin{definition}
-    Let $V$ be a $\FF$-vector space, and fix a basis $\{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\{v^1, \ldots, v^n\}$ of the dual space $V^\vee$.
+    Let $V$ be a vector space with basis $\bfv = (v_1, \ldots, v_n)$ and dual basis $\bfv^\ast = (v^1, \ldots, v^n)$
     The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
     \[
         \sum_{i=1}^n 
@@ -268,30 +288,30 @@ The trace is independent of the basis used to compute it (see Theorem \ref{thm:T
             x \in \glalg(V) : \tr x = 0
         \Big\}.
     \]
-    As is the case with $\glalg(V)$ and $\glalg_n(\FF)$, we also define 
+    As is the case with $\glalg(V)$ and $\glalg_n(\KK)$, we also define 
     \[
         A_\ell
         \coloneq
-        \slalg_{\ell+1}(\FF)
+        \slalg_{\ell+1}(\KK)
         \coloneq
         \Big\{
-            x \in \glalg_{\ell+1}(\FF) : \tr x = 0
+            x \in \glalg_{\ell+1}(\KK) : \tr x = 0
         \Big\}
     \]
     and will refer to them interchangeably.
 \end{definition}
 
 This algebra is so named because of its connection with the \defstyle{special linear group} $\SL(V)$, a distinguished subgroup of $\GL(V)$.
-Unsurprisingly, $\slalg(V)$ is also a substructure of $\glalg(V)$.
+Unsurprisingly, $\slalg(V)$ shares a similar relationship to $\glalg(V)$.
 
 \begin{proposition}
     $\slalg(V)$ is a subalgebra of $\glalg(V)$.
 \end{proposition}
 \begin{proof}
-    The trace is a linear operator $\tr: \glalg_n(\FF) \to \FF$.
-    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\slalg_n(\FF) = \ker \tr$ is a subspace of $\glalg$.
+    The trace is a linear operator $\tr: \glalg_n(\KK) \to \KK$.
+    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\slalg_n(\KK) = \ker \tr$ is a subspace of $\glalg$.
 
-    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg_n(\FF)$ means that $\glalg_n(\FF)$'s Lie bracket is closed in $\slalg_n(\FF)$.
+    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg_n(\KK)$ means that $\glalg_n(\KK)$'s Lie bracket is closed in $\slalg_n(\KK)$.
 \end{proof}
 
 Lastly, we will compute the dimension of $\slalg(V)$.
@@ -304,7 +324,7 @@ So
 \[
     \dim \slalg(V) \leq (\ell+1)^2 - 1 = \ell(\ell+2)
 \]
-However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\slalg_n(\FF)$:
+However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\slalg_n(\KK)$:
 \begin{enumerate}
     \item 
         All the off-diagonal entries $e_{ij}$ where $i \neq j$--- there are $(\ell+1)^2 - (\ell + 1) = \ell^2 + \ell$ of these.
@@ -322,7 +342,7 @@ And, putting it together, we have proven:
         =
         \dim \slalg(V)
         =
-        \dim \slalg_n(\FF)
+        \dim \slalg_n(\KK)
         =
         \ell(\ell+2).
     \]
@@ -331,7 +351,7 @@ And, putting it together, we have proven:
 \subsubsection{Type \sfB: the odd-dimensional orthogonal algebra}
 
 \begin{definition}
-    The \defstyle{orthogonal algebra} $\oalg_{2\ell+1}(\FF)$ is defined to be
+    The \defstyle{orthogonal algebra} $\oalg_{2\ell+1}(\KK)$ is defined to be
 \end{definition}
 
 \subsubsection{Type \sfC: the symplectic algebra}
@@ -370,10 +390,10 @@ And, putting it together, we have proven:
     \[
         \sfC_\ell
         \coloneq
-        \spalg(V)
+        \spalg_{2\ell}(\KK)
         \coloneq
         \Big\{
-            x \in \glalg(V)
+            x \in \glalg_{2\ell}(\KK)
             :
             Jx + x^\top J = 0
         \Big\}
@@ -387,7 +407,7 @@ And, putting it together, we have proven:
             -I_\ell & 0
         \end{pmatrix}
     \]
-    is the standard symplectic form on $\FF^{2\ell}$.
+    is the standard symplectic form on $\KK^{2\ell}$.
 \end{definition}
 
 \subsubsection{Type \sfD: the even-dimensional orthogonal algebra}
@@ -408,10 +428,141 @@ And, putting it together, we have proven:
     \]
 \end{definition}
 
+\subsection{Lie algebras from algebras}
+
+\begin{definition}[Algebras over a field]
+    Let $\KK$ be a field.
+    An \defstyle{algebra over $\KK$}, or a \defstyle{$\KK$-algebra} is a $\KK$-vector space equipped with a bilinear product.
+
+    We will use qualifiers like \textit{associative} and \textit{unital} to indicate that this product is associative and has unit respectively.
+\end{definition}
+
+Put another way, a unital associative algebra over a field is 
+\begin{itemize}
+    \item 
+        a vector space with a compatible ring structure, (vector space + bilinear product)
+    \item 
+        or a ring with a compatible vector space structure.
+        (ring + bilinear scaling map)
+\end{itemize}
+For example, $\Mat_n(\KK)$ is a unital associative algebra over $\KK$.
+
+However, we don't in general expect algebras to have unit or to be associative--- $\RR^3$ with the cross product is neither unital nor associative.
+Hence, the following is clear:
+
+\begin{proposition}
+    Lie algebras are algebras, with the product given by the Lie bracket.
+\end{proposition}
+
+To go along with this definition, we have notion of a homomorphism of algebras.
+
+\begin{definition}
+    An \defstyle{algebra homomorphism} $f: \scrA \to \scrB$ between two algebras $\scrA$ and $\scrB$ is a vector space homomorphism that respects the product, i.e
+    \[
+        f(xy) 
+        = 
+        f(x)f(y)
+    \]
+    for all $x, y \in \scrA$.
+
+    We say that an algebra homomorphism is an \defstyle{algebra isomorphism} if it is also a vector space isomorphism.
+\end{definition}
+
+For example, the determinant is an algebra homomorphism from $\Mat_n(\KK)$ to $\KK$.
+
+$\KK$-algebras can be turned into Lie algebras by defining the bracket $\lb{xy} \coloneq xy - yx$.
+
+\begin{definition}
+    Let $\scrA$ be a $\KK$-algebra.
+    Then $\Lie[\scrA]$ is defined to be the Lie algebra whose underlying vector space is $\scrA$ and whose bracket is given by
+    \[
+        \lb{xy}
+        \coloneq
+        xy - yx
+    \]
+    for all $x, y \in \scrA$.
+\end{definition}
+
+We can check the following nice fact: 
+
+\begin{proposition}
+    Let $\scrA$ and $\scrB$ be two $\KK$-algebras, and let $\phi: \scrA \to \scrB$ be an algebra homomorphism.
+
+    Then $\phi$ is also a \textit{Lie algebra homomorphism} (see Definition \ref{def:LieAlgHom}) between $\Lie[\scrA]$ and $\Lie[\scrB]$.
+\end{proposition}
+\begin{proof}
+    \begin{align*}
+        \phi\Big(\lb{xy}\Big)
+        &=
+        \phi(xy - yx)
+        \\
+        &=
+        \phi(xy) - \phi(yx)
+        \\
+        &=
+        \phi(x)\phi(y) - \phi(y)\phi(x)
+        \\
+        &=
+        \lb{\phi(x)\phi(y)}.
+    \end{align*}
+\end{proof}
+
+Hence $\Lie[\wc]$ is actually \textit{functorial}, with mapping of arrows given by the identity map.
+
+What happens when we consider $\Lie[\frkg]$, where $\frkg$ is \textit{already} a Lie algebra?
+
+Let the new bracket of $\Lie[\frkg]$ be denoted by $\lBrack \wc, \wc \rBrack$.
+Then
+\[
+    \left\lBrack xy \right\rBrack
+    =
+    \lb{xy} - \lb{yx}
+    =
+    \lb{xy} + \lb{xy}
+    =
+    2\lb{xy}
+\]
+for all $x, y \in \frkg$.
+
+Then $\lBrack \wc, \wc \rBrack = 2[\wc, \wc]$.
+This fact actually characterizes Lie algebras.
+
+\begin{proposition}
+    Let $\scrA$ be a $\KK$-algebra with product $\ast$.
+    If $\Lie[\scrA]$ has product $2\ast$, then $\scrA$ is a Lie algebra with bracket given by $\lb{xy} = x \ast y$.
+\end{proposition}
+
+\begin{proof}
+    The product is bilinear by definition, so we have \ref{ax:LBIsBilinear}.
+
+    Next, we check \ref{ax:LBNilpotent}:
+    \[
+        x \ast x
+        =
+        \frac{2(x \ast x)}{2}
+        =
+        \frac{\lb{xx}}{2}
+        =
+        0.
+    \]
+    And finally, in the exact same way, we check the Jacobi identity, \ref{ax:LBJacobiIdentity}:
+    \[
+        x \ast (y \ast z)
+        + y \ast (z \ast x)
+        + z \ast (x \ast y)
+        =
+        \frac{\lb{x\lb{yz}} + \lb{y\lb{xz}} + \lb{z\lb{xy}}}{4}
+        =
+        0.
+    \]
+\end{proof}
+
+The number $2$ is special here--- this appears when we consider actions on the \textit{adjoint representation} of a Lie algebra $\frkg$.
+
 \subsection{Derivations, the adjoint representation}
 
 \begin{definition}
-    Let $\scrA$ be a $\FF$-algebra.
+    Let $\scrA$ be a $\KK$-algebra.
     A \defstyle{derivation} of $\scrA$ is a linear map $\dd: \scrA \to \scrA$ which satisfies the \textit{Leibniz rule}:
     \[
         \dd(xy)
@@ -424,7 +575,7 @@ And, putting it together, we have proven:
 Derivations play nicely with the vector space structure of $\End \scrA$ as well as with the bracket inherited from $\glalg(\scrA)$.
 
 \begin{proposition}
-    Let $\scrA$ be a $\FF$-algebra.
+    Let $\scrA$ be a $\KK$-algebra.
     Then $\Der \scrA$ is a subspace of $\End \scrA$.
     Moreover, it is a subalgebra of $\glalg(\scrA)$
 \end{proposition}
@@ -539,6 +690,8 @@ Derivations play nicely with the vector space structure of $\End \scrA$ as well 
     So $\Der \scrA$ is a subalgebra of $\glalg(\scrA)$.
 \end{proof}
 
+We have a special representation of \textit{any} Lie algebra, which is given by its action on itself.
+
 \begin{definition}
     The \defstyle{adjoint representation} of a Lie algebra $\frkg$ is the mapping
     \begin{align*}
@@ -559,9 +712,11 @@ Derivations play nicely with the vector space structure of $\End \scrA$ as well 
         \frkg \\
         y 
         &\mapsto
-        \lb{x,y}.
+        \lb{xy}.
     \end{align*}
-    We will often write $\ad x$ for $\ad_\frkg x$ unless there is an ambiguity.
+    We will write $\ad x$ for $\ad_\frkg x$ unless there is any ambiguity.
+
+    As a set, we define $\ad \frkg \coloneq \ad_\frkg(\frkg) \subseteq \glalg(\frkg)$.
 \end{definition}
 
 \begin{proposition}
@@ -582,11 +737,11 @@ Derivations play nicely with the vector space structure of $\End \scrA$ as well 
     \]
     But this is saying that
     \[
-        (\ad x)\Big(\lb{yz}\Big)
+        \ad x \rightharpoonup \lb{yz}
         =
-        \lb{y, (\ad x) (z)}
+        \lb{y, \ad x \rightharpoonup z}
         +
-        \lb{(\ad x)(y), z}
+        \lb{\ad x \rightharpoonup y, z}
     \]
     which is exactly the defining identity for derivations.
 \end{proof}
@@ -678,13 +833,13 @@ The \defstyle{sum} and the \defstyle{bracket} of the ideals $\frki, \frkj$ are d
     \coloneq
     \left\{
         x + y : x \in \frki, y \in \frkj
-    \right\},\qquad
+    \right\},\quad
     \lb{\frki,\frkj}
     \coloneq
     \left\{
         \sum_{i=0}^rc_i\lb{x_iy_i}
         :
-        c_i \in \FF, x_i \in \frki, y_i \in \frkj
+        c_i \in \KK, x_i \in \frki, y_i \in \frkj
     \right\}.
 \]
 
@@ -743,6 +898,7 @@ The \defstyle{sum} and the \defstyle{bracket} of the ideals $\frki, \frkj$ are d
 There is a natural definition of a Lie algebra homomorphism--- it's a map that respects brackets.
 
 \begin{definition}
+    \label{def:LieAlgHom}
     Let $\frkg$ and $\frkh$ be two Lie algebras.
     We say that a map $\phi: \frkg \to \frkh$ is a \defstyle{Lie algebra homomorphism} if it is a linear map for which
     \[
@@ -940,15 +1096,21 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
     $\ad$ is evidently linear.
     Next, we just check that it is a homomorphism:
     \begin{align*}
-        \lb{\ad x, \ad y}(z)
+        \lb{\ad x, \ad y} \rightharpoonup z
         &=
-        \Big(\ad x \ad y - \ad y \ad x\Big)(z) 
+        \Big(\ad x \ad y - \ad y \ad x\Big) \rightharpoonup z 
         \\
         &=
-        \Big(\ad x \ad y\Big)(z) - \Big(\ad y \ad x\Big)(z) 
+        \Big(\ad x \ad y \rightharpoonup z\Big) - \Big(\ad y \ad x \rightharpoonup z\Big) 
         \\
         &=
-        \ad x \lb{yz} - \ad y \lb{xz}
+        \Big(
+            \ad x \rightharpoonup \lb{yz}
+        \Big)
+        - 
+        \Big(
+            \ad y \rightharpoonup \lb{xz}
+        \Big)
         \\
         &=
         \lb{x\lb{yz}} - \lb{y\lb{xz}}
@@ -960,7 +1122,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
         \lb{\lb{xy}z}
         \\
         &=
-        \Big(\ad \lb{xy}\Big)(z).
+        \ad \lb{xy} \rightharpoonup z.
     \end{align*}
 \end{proof}
 
@@ -1050,10 +1212,120 @@ In other words, $\frkg^{(i)}$ is all those elements of $\frkg$ which can be writ
 For example, abelian Lie algebras are solvable, whereas simple Lie algebras are never solvable.
 
 \begin{proposition}
-    The Lie algebra of upper triangular matrices $\talg_n(\FF)$ is solvable.
+    The Lie algebra of upper triangular matrices $\talg_n(\KK)$ is solvable.
 \end{proposition}
 \begin{proof}
-    \todo{boring proof--- the diagonal keeps receding every time you do a commutator}
+    We use the following definition of an upper triangular matrix:
+    \[
+        (a_{ij}) \text{ is upper triangular }
+        \iff
+        a_{ij} = 0 \text{ if } j - i < 0.
+    \]
+    Let $(a_{ij})$ and $(b_{ij})$ be two upper triangular matrices, and let $j - i < 1$, then
+    \begin{align*}
+        (ab - ba)_{ij}
+        &=
+        (ab)_{ij}
+        -
+        (ba)_{ij}
+        \\
+        &=
+        \sum_{k=1}^n
+        a_{ik}b_{kj}
+        -
+        \sum_{k=1}^n
+        b_{ik}a_{kj}
+        \\
+        &=
+        \left(
+            \sum_{k=1}^{i-1}
+            a_{ik}b_{kj}
+            +
+            \sum_{k=i}^j
+            a_{ik}b_{kj}
+            +
+            \sum_{k=j+1}^n
+            a_{ik}b_{kj}
+        \right)
+        -
+        \sum_{k=1}^n
+        b_{ik}a_{kj}
+        \\
+        &=
+        \left(
+            \sum_{k=1}^{i-1}
+            0 \cdot b_{kj}
+            +
+            \sum_{k=i}^j
+            a_{ik}b_{kj}
+            +
+            \sum_{k=j+1}^n
+            a_{ik} \cdot 0
+        \right)
+        -
+        \sum_{k=1}^n
+        b_{ik}a_{kj}
+        \\
+        &=
+        \sum_{k=i}^j
+        a_{ik}b_{kj}
+        -
+        \sum_{k=1}^n
+        b_{ik}a_{kj}
+        \\
+        &=
+        \sum_{k=i}^j
+        a_{ik}b_{kj}
+        -
+        \sum_{k=i}^j
+        b_{ik}a_{kj}
+        \\
+        &=
+        \sum_{k=i}^j
+        (a_{ik}b_{kj} - b_{ik}a_{kj})
+        \\
+        &=
+        \begin{cases}
+            0 & \text{if }j < i \\
+            a_{jj}b_{jj} - b_{jj}a_{jj} & \text{if }j = i \\
+        \end{cases}
+        \\
+        &=
+        0.
+    \end{align*}
+    Hence, $(ab - ba)$ is \textit{strictly} upper triangular, so $\lb{ab} \in \nalg$.
+    Then $\talg^{(1)} = \lb{\talg\talg} \subseteq \nalg$.
+
+    Now suppose that, for some $l \geq 0$,
+    \[
+        (a_{ij}) \in \nalg^{(l)} 
+        \implies
+        a_{ij} = 0 \text{ if } j - i < m.
+    \]
+    Then, we can do a similar, in fact easier calculation to show that if $(a_{ij}), (b_{ij}) \in \talg^{(m)}$ and $j-i < 2m$.
+    \[
+        (ab - ba)_{ij}
+        =
+        \sum_{k=i+m}^{j-m}
+        (a_{ik}b_{kj}-b_{ik}a_{kj})
+        =
+        0.
+    \]
+    Hence, we have shown that
+    \[
+        (a_{ij}) \in \talg^{(l+1)} 
+        \implies
+        a_{ij} = 0 \text{ if } j - i < 2m.
+    \]
+    Combined with our initial conditions, we have shown in general that
+    \[
+        (a_{ij}) \in \talg^{(l)} 
+        \implies
+        a_{ij} = 0 \text{ if } j - i < 2^l.
+    \]
+    Clearly, if $l$ is large enough, $(a_{ij})$ is forced to be the zero matrix.
+    Hence $\nalg$ is solvable, as $\nalg^{(l)} = 0$ for some positive integer $l$.
+    Then $\talg$ is also solvable, as $\talg^{(l+1)} \subseteq \nalg^{(l)} = 0$.
 \end{proof}
 
 \begin{theorem}
@@ -1083,11 +1355,13 @@ For example, abelian Lie algebras are solvable, whereas simple Lie algebras are 
     for any homomorphism $\phi$.
     This is another easy induction.
 
-    For (b), we stack together $L/I$ and $I$'s solvability--- the former being solvable means that $L^{(i)} \subseteq I$ eventually, but that means that $L^{(i)}$ is a subalgebra of a solvable Lie algebra $I$, so it is itself solvable and we can go further.
-
-    Specifically, if $L^{(n)} \subseteq I$, and $I^{(m)} = 0$, then
+    For (b), we stack together $\frkg/\frki$ and $\frki$'s solvability--- the former being solvable means that $\frkg^{(n)} \subseteq \frki$ for large enough $n$, but that means that $\frkg^{(i)}$ is a subalgebra of $\frki$, for which $\frki^{(m)} = 0$ for large enough $m$, so we can ``push in'' $\frkg$ further, namely
     \[
-        L^{(n+m)}
+        \frkg^{(n+m)}
+        =
+        \Big(\frkg^{(n)}\Big)^{(m)}
+        \subseteq
+        \frki^{(m)}
         =
         0.
     \]
@@ -1120,6 +1394,15 @@ For example, abelian Lie algebras are solvable, whereas simple Lie algebras are 
     We say that $x \in \frkg$ is \defstyle{ad-nilpotent} if $(\ad x)^n = 0$ for some $n$.
 \end{definition}
 
+\begin{theorem}
+    Let $\frkg$ be a Lie algebra.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        \item 
+        \item 
+    \end{enumerate}
+\end{theorem}
+
 \subsection{Engel's theorem}
 
 We will prove \defstyle{Engel's theorem}.
@@ -1135,11 +1418,11 @@ We will prove \defstyle{Engel's theorem}.
     \end{enumerate}
 \end{theorem}
 
-We will prove the equivalent theorem:
+We will prove the following equivalent theorem:
 
 \begin{theorem}
     Let $\frkg$ be a subalgebra of $\glalg(V)$, where $V$ has positive dimension.
-    If $x$ is nilpotent for all $x \in \frkg$, then there exists a nonzero vector $v \in V$ so that $\frkg v = 0$.
+    If $\frkg$ consists only of nilpotent transformations, then there exists a nonzero vector $v \in V$ so that $\frkg \rightharpoonup v = 0$.
 \end{theorem}
 
 \begin{proof}
@@ -1149,470 +1432,261 @@ We will prove the equivalent theorem:
 
     The $\dim \frkg = 1$ case is also easy.
     Let $x \in \frkg$ be nonzero and nilpotent.
-    Then  we can find a nonzero vector $v$ so that $xv = 0$, and so $\frkg v = (\FF x)v = 0$.
+    Then  we can find a nonzero vector $v \in V$ so that $x \rightharpoonup v = 0$, and so $\frkg \rightharpoonup v = \KK x \rightharpoonup v = 0$.
 
     Now supppose $\dim \frkg > 1$.
     Let $\frkh$ be a proper subalgebra of $\frkg$ of positive dimension.
-    Then the set
+    Then,
     \[
-        \ad_\frkg(\frkh)
-        =
+        \ad \frkg/\frkh
+        \coloneq
         \Big\{
-            \ad_\frkg(h) : h \in \frkh
+            \ad_{\frkg/\frkh}(x + \frkh)
+            :
+            x \in \frkg
         \Big\}
     \]
-    is a Lie algebra--- a subalgebra of $\glalg(\frkg)$.
-    Then, $\ad_{\frkg/\frkh}(\frkh)$ is also a Lie algebra.
-    By the inductive hypothesis, we may find a nonzero vector $x + \frkh \in \frkg/\frkh$ such that $\ad_{\frkg/\frkh}(\frkh)(x + \frkh) = 0$.
-    This means that $(\ad_{\frkg/\frkh} h)(x + \frkh) = \frkh$ for all $h \in \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$.
-    Hence $[hx] \in \frkh$ for all $h \in \frkh$, but $x \notin \frkh$.
+    is a Lie algebra--- it is the homomorphic image of $\frkg$ under the composition
+    \[
+        \begin{tikzcd}
+            \frkg \arrow[r, "\pi", two heads] & \frkg/\frkh \arrow[r, "\ad", two heads] & \ad \frkg/\frkh. 
+        \end{tikzcd}
+    \]
+    Moreover, 
+    \[
+        \dim \frkg > \dim \frkg/\frkh \geq \dim \ad \frkg/\frkh,
+    \]
+    as $\frkh$ has positive dimension.
+    By the inductive hypothesis, we may find a nonzero vector $x + \frkh \in \frkg/\frkh$ such that
+    \[
+        \ad \frkg/\frkh \rightharpoonup (x + \frkh) 
+        = 
+        0 + \frkh = \frkh.
+    \]
+    This means that
+    \begin{align*}
+        \lb{hx} + \frkh
+        &=
+        \lb{h + \frkh, x + \frkh}
+        \\
+        &=
+        \ad_{\frkg/\frkh} (h + \frkh) \rightharpoonup (x + \frkh) 
+        \\
+        &= 
+        \frkh
+    \end{align*}
+    for all $h \in \frkh$, so $x \in N_\frkg(\frkh)$.
 
-    Now if $\frkh$ is maximal, then this means that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ is a larger proper subalgebra of $\frkg$.
+    But $x + \frkh$ being nonzero in $\frkg/\frkh$ means exactly that $x \notin \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$.
+    We will use this fact to produce a nontrivial maximal ideal of $\frkg$.
+
+    We are always able to find a proper subalgebra of positive dimension--- choose the span of any single element in $\frkg$. 
+    Then, there must exist maximal proper subalgebras. 
+    Let $\frkh$ be maximal now. 
+    Then we have that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ is a larger proper subalgebra of $\frkg$.
 
     Hence, $\frkh$ is an ideal of $\frkg$.
     We will show that it has codimension one.
     Suppose it has codimension at least two.
     Then, we can pull back a one-dimensional subalgebra of the quotient $\frkg / \frkh$ along the projection map and obtain a proper subalgebra of $\frkg$ that properly contains $\frkh$, which is impossible.
 
-    Now, consider the subspace $W = \{ v \in V : \frkh v = 0 \}$.
+    Now, consider the subspace $W = \{ v \in V : \frkh \rightharpoonup v = 0 \}$ of $V$.
     Since $\frkh$ is an ideal of $\frkg$, $\frkg$ stabilizes $W$--- for all $g \in \frkg$, $h \in \frkh$, and $w \in W$, we have that
-    \[
-        hgw
-        = 
-        \Big(gh - \lb{gh}\Big)w
-        =
-        g(hw) + \lb{hg}w
-        =
-        0 + 0
-        =
-        0.
-    \]
+    \begin{align*}
+        h \rightharpoonup g \rightharpoonup w
+        &=
+        hg \rightharpoonup w
+        \\
+        &= 
+        \Big(gh - \lb{gh}\Big) \rightharpoonup w
+        \\
+        &=
+        \Big( g \rightharpoonup \underbrace{h \rightharpoonup w}_{=0} \Big) + \Big(\underbrace{\lb{hg}}_{\in \frkh} \rightharpoonup w\Big)
+        \\
+        &=
+        \Big( g \rightharpoonup 0 \Big) + 0
+        \\
+        &=
+        0,
+    \end{align*}
+    hence $\frkg \rightharpoonup W = W$.
+
     Then, if we pick $g \in \frkg$ and restrict it to $W$, we have a nilpotent endomorphism of $W$, hence $g$ has an eigenvector $v$ in $W$.
 
-    Then, $(\frkh + \FF g)v = 0$, completing the theorem.
+    Then, $(\frkh + \KK g) \rightharpoonup v = 0$, completing the theorem.
 \end{proof}
 
-\begin{proof}[Proof of Engel's theorem]
+Now, we can prove Engel's theorem:
 
+\begin{proof}[Proof of Engel's theorem]
+    As before, the $\dim \frkg = 0$ and $\dim \frkg = 1$ cases are trivial.
+    So, we induct on $\dim \frkg$.
+
+    Let $\frkg$ be a Lie algebra whose elements are all ad-nilpotent.
+
+    Then $\ad \frkg$ is a subalgebra of $\glalg(\frkg)$ consisting of nilpotent transformations, hence there exists a nonzero vector $x \in \frkg$ such that $\ad \frkg \rightharpoonup x = 0$.
+
+    But, from the definition of $\ad$, this means that $\lb{\frkg x} = 0$, hence $x \in Z(\frkg)$, so $Z(\frkg)$ has positive dimension, and $\dim \frkg / Z(\frkg) < \dim \frkg$.
+
+    Now, we want to show that $\frkg/Z(\frkg)$ consists of ad-nilpotent elements.
+    This follows from the observation that
+    \begin{align*}
+        \ad \Big(x + Z(\frkg)\Big) \rightharpoonup \Big(y + Z(\frkg)\Big)
+        &= 
+        \lb{x + Z(\frkg), y + Z(\frkg)} 
+        \\
+        &= \lb{xy} + Z(\frkg) 
+        \\
+        &= (\ad x \rightharpoonup y) + Z(\frkg),
+    \end{align*}
+    hence it easily follows that $\ad \Big(x + Z(\frkg)\Big)$ is nilpotent given that $\ad x$ is nilpotent.
+    
+    Then, by the induction hypothesis, $\frkg/Z(\frkg)$ is a nilpotent Lie algebra.
+
+    By Theorem, $\frkg$ is a nilpotent Lie algebra, completing the proof.
 \end{proof}
 
 \begin{corollary}
 \end{corollary}
 
-\section{Solutions to exercises}
+\section{Semisimple Lie algebras}
 
-\begin{exercise}[Humphreys 1.1]
-    Verify that $\RR^3$ with the bracket given by the \textit{cross product}
+\subsection{Lie's theorem}
+
+Similar to Engel's theorem, which concerned \textit{nilpotent} Lie algebras, we have \defstyle{Lie's theorem}, which concerns \textit{solvable} Lie algebras.
+
+\begin{theorem}[Lie's theorem]
+    Let $\frkg$ be a solvable subalgebra of $\glalg(V)$.
+    Then $\frkg$ stabilizes some flag in $V$.
+\end{theorem}
+
+In other words, relative to some basis of $V$, the matrix representation of all elements of $\frkg$ are upper triangular.
+
+Again, we will prove it by proving an equivalent formulation in terms of the existence of a common eigenvector.
+
+\begin{theorem}
+    Let $\frkg$ be a solvable subalgebra of $\glalg(V)$.
+    Then there exists $v \in V$ that is an eigenvector for all $x \in \frkg$.
+\end{theorem}
+
+\subsection{Cartan's criterion}
+
+\begin{theorem}[Cartan's criterion]
+\end{theorem}
+
+\subsection{Killing form}
+
+\begin{definition}
+    The \defstyle{Killing form}
+\end{definition}
+
+\subsection{\texorpdfstring{$\frkg$}{g}-modules}
+
+\begin{definition}
+    Let $\frkg$ be a Lie algebra.
+    A \defstyle{$\frkg$-module} is a vector space $V$ equipped with a \textit{scaling map}
+    \begin{align*}
+        \wc . \wc:
+        \frkg \times V
+        &\to
+        V
+        \\
+        (x, v)
+        &\mapsto
+        x.v
+    \end{align*}
+    which satisfies the following axioms:
+    \begin{enumerate}[label=(M\arabic*)]
+        \item \label{ax:ModuleLeftDistribute}
+            $(ax + by).v  = ax.v + by.v$,
+        \item \label{ax:ModuleRightDistribute}
+            $x.(av + bw) = ax.v + bx.w$,
+        \item \label{ax:ModuleBracket}
+            $\lb{xy}.v = x.y.v - y.x.v$.
+    \end{enumerate}
+
+\end{definition}
+
+\begin{proposition}
+    $\frkg$-modules are in one-to-one correspondence with representations of $\frkg$.
+\end{proposition}
+
+\begin{proof}
+    Let $V$ be a vector space, and let $\frkg$ be a Lie algebra.
+    We will demonstrate a correspondence between $\frkg$-module structures on $V$ and representations of $\frkg$ in $\glalg(V)$.
+
+    Let $\phi: \frkg \to \glalg(V)$ be a representation of $\frkg$.
+
+    Define a $\frkg$-module structure on $V$ by
     \[
-        [xy]
+        x.v
         \coloneq
-        x \times y
+        \phi(x) \rightharpoonup v.
     \]
-    is a Lie algebra, and write down its structure constants relative to the usual basis of $\RR^3$.
-\end{exercise}
+    Then, \ref{ax:ModuleLeftDistribute} and \ref{ax:ModuleRightDistribute} follow easily from the fact that $\phi(x) \in \glalg(V)$.
 
-Let 
-\[
-    x
-    =
-    \begin{pmatrix}
-        x_1 \\ x_2 \\ x_3
-    \end{pmatrix}, \qquad
-    y
-    =
-    \begin{pmatrix}
-        y_1 \\ y_2 \\ y_3
-    \end{pmatrix}, \qquad
-    z
-    =
-    \begin{pmatrix}
-        z_1 \\ z_2 \\ z_3
-    \end{pmatrix}, \qquad
-    w
-    =
-    \begin{pmatrix}
-        w_1 \\ w_2 \\ w_3
-    \end{pmatrix}.
-\]
-The cross product is defined
-\[
-    x \times y
-    =
-    \begin{pmatrix}
-        x_2y_3 - x_3y_2 \\
-        x_3y_1 - x_1y_3 \\
-        x_1y_2 - x_2y_1 \\
-    \end{pmatrix}
-\]
-Then we directly verify the Lie algebra axioms.
-
-For \ref{ax:LBIsBilinear},
-\begin{align*}
-    \Big( ax + by \Big) \times z
-    &=
-    \begin{pmatrix}
-        (ax_2 + by_2)z_3 - (ax_3 + by_3)z_2 \\
-        (ax_3 + by_3)z_1 - (ax_1 + by_1)z_3 \\
-        (ax_1 + by_1)z_2 - (ax_2 + by_2)z_1 \\
-    \end{pmatrix}
-    \\
-    &=
-    \begin{pmatrix}
-        \Big(ax_2z_3 + by_2z_3\Big) - \Big(ax_3z_2 + by_3z_2\Big) \\
-        \Big(ax_3z_1 + by_3z_1\Big) - \Big(ax_1z_3 + by_1z_3\Big) \\
-        \Big(ax_1z_2 + by_1z_2\Big) - \Big(ax_2z_1 + by_2z_1\Big) \\
-    \end{pmatrix}
-    \\
-    &=
-    \begin{pmatrix}
-        a\Big(x_2z_3 - x_3z_2\Big) + b\Big(y_2z_3 + y_3z_2\Big) \\
-        a\Big(x_3z_1 - x_1z_3\Big) + b\Big(y_3z_1 + y_1z_3\Big) \\
-        a\Big(x_1z_2 - x_2z_1\Big) + b\Big(y_1z_2 + y_2z_1\Big) \\
-    \end{pmatrix}
-    \\
-    &=
-    a(x \times z) + b (y \times z).
-\end{align*}
-And, via an almost identical calculation,
-\[
-    x \times \Big(ay \times bz\Big) = a(x \times y) + b(x \times z).
-\]
-Next, we verify \ref{ax:LBNilpotent}
-\[
-    x \times x
-    =
-    \begin{pmatrix}
-        x_2x_3 - x_3x_2 \\
-        x_3x_1 - x_1x_3 \\
-        x_1x_2 - x_2x_1 \\
-    \end{pmatrix}
-    =
-    0.
-\]
-And finally, we verify the Jacobi identity \ref{ax:LBJacobiIdentity}.
-\begin{align*}
-    &x \times (y \times z)
-    +
-    y \times (z \times x)
-    +
-    z \times (x \times y)
-    \\
-    &=
-    \varepsilon_{ijk}x_j(y \times z)_k
-    +
-    \varepsilon_{ijk}y_j(z \times x)_k
-    +
-    \varepsilon_{ijk}z_j(x \times y)_k
-    \\
-    &=
-    \varepsilon_{ijk}
-    \Big(
-        x_j(y \times z)_k
-        + y_j(z \times x)_k
-        + z_j(x \times y)_k
-    \Big)
-    \\
-    &=
-    \varepsilon_{ijk}
-    \Big(
-        x_j(\varepsilon_{klm}y_lz_m)
-        + y_j(\varepsilon_{klm}z_lx_m)
-        + z_j(\varepsilon_{klm}x_ly_m)
-    \Big)
-    \\
-    &=
-    \varepsilon_{ijk}
-    \varepsilon_{klm}
-    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
-    \\
-    &=
-    (\delta_{im}\delta_{lj} - \delta_{il}\delta_{jm})
-    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
-    \\
-    &=
-    \delta_{im}\delta_{lj}
-    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
-    -
-    \delta_{il}\delta_{jm}
-    \Big(x_jy_lz_m + y_jz_lx_m + z_jx_ly_m\Big)
-    \\
-    &=
-    \Big(x_ly_lz_i + y_lz_lx_i + z_lx_ly_i\Big)
-    -
-    \Big(x_my_iz_m + y_mz_ix_m + z_mx_iy_m\Big)
-    \\
-    &=
-    (y_lz_l - z_my_m)x_i
-    + (x_ly_l - y_mx_m)z_i
-    + (z_lx_l - x_mz_m)y_i
-    \\
-    &=
-    0.
-\end{align*}
-
-\begin{exercise}[Humphreys 1.2]
-    Verify that the following equations and those implied by \ref{ax:LBNilpotent} \ref{ax:LBIsBilinear} define a Lie algebra structure on a three dimensional vector space with basis $(x, y, z)$: $\lb{xy} = z$, $\lb{xz} = y$, $\lb{yz} = 0$.
-\end{exercise}
-
-The only $\lb{\wc\lb{\wc,\wc}}$ terms consisting of basis elements that are nonzero are $\lb{x\lb{xy}}$ and $\lb{x\lb{xz}}$, so if
-\[
-    a
-    =
-    a_xx + a_yy + a_zz,
-\]
-\begin{align*}
-    &\lb{
-        a_x x + a_y y + a_z z
-        \lb{
-            b_x x + b_y y + b_z z,
-            c_x x + c_y y + c_z z
-        }
-    }
-    \\
-    &=
-    (a_xb_xc_z - a_xb_zc_x)z
-    + (a_xb_xc_y - a_xb_xc_x)y
-\end{align*}
-so, permuting indices, 
-\[
-    (a_xb_xc_z - a_xb_zc_x)z
-    + (a_xb_xc_y - a_xb_xc_x)y
-    + (b_xc_xa_z - b_xc_za_x)z
-    + (b_xc_xa_y - b_xc_xa_x)y
-    + (c_xa_xb_z - c_xa_zb_x)z
-    + (c_xa_xb_y - c_xa_xb_x)y
-    =
-    0.
-\]
-So the Jacobi identity is satisfied.
-
-\begin{exercise}[Humphreys 1.3]
-    Let 
+    Then, the fact that $\phi$ is a Lie algebra homomorphism shows \ref{ax:ModuleBracket}, as
+    \begin{align*}
+        \lb{xy}.v
+        &=
+        \phi\Big(\lb{xy}\Big) \rightharpoonup v
+        \\
+        &=
+        \lb{\phi(x)\phi(y)} \rightharpoonup v
+        \\
+        &=
+        \Big(
+            \phi(x)\phi(y) - \phi(y)\phi(x)
+        \Big)
+        \rightharpoonup v
+        \\
+        &=
+        \Big(
+            \phi(x) \rightharpoonup \phi(y) \rightharpoonup v
+        \Big) 
+        -
+        \Big(
+            \phi(y) \rightharpoonup \phi(x) \rightharpoonup v
+        \Big) 
+        \\
+        &=
+        x.y.v - y.x.v.
+    \end{align*}
+    Conversely, suppose that $V$ has a $\frkg$-module structure.
+    Then for all $x \in \frkg$ we can define $\phi(x) \in \End V$ by
     \[
-        e 
-        = 
-        \begin{pmatrix}
-            0 & 1 \\
-            0 & 0
-        \end{pmatrix}
-        ,\qquad
-        f 
-        = 
-        \begin{pmatrix}
-            0 & 0 \\
-            1 & 0
-        \end{pmatrix}
-        ,\qquad
-        h 
-        = 
-        \begin{pmatrix}
-            1 & 0 \\
-            0 & -1 
-        \end{pmatrix}
+        \phi(x) \rightharpoonup v
+        \coloneq
+        x.v.
     \]
-    be an ordered basis for $\slalg(2, \FF)$.
-    Compute the matrices of $\ad e$, $\ad f$, $\ad h$ relative to this basis.
-\end{exercise}
+\end{proof}
 
-We will compute the structure constants relative to $e,f,h$--- there are $3(3-1)/2 = 3$ brackets to check:
-\[
-    \lb{ef}
-    =
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    \begin{pmatrix}
-        0 & 0 \\
-        1 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & 0 \\
-        1 & 0 
-    \end{pmatrix}
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
-        1 & 0 \\
-        0 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & 0 \\
-        0 & 1 
-    \end{pmatrix}
-    =
-    h.
-\]
-\[
-    \lb{he}
-    =
-    \begin{pmatrix}
-        1 & 0 \\
-        0 & -1 
-    \end{pmatrix}
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    \begin{pmatrix}
-        1 & 0 \\
-        0 & -1 
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & -1 \\
-        0 & 0 
-    \end{pmatrix}
-    =
-    2e.
-\]
-\[
-    \lb{hf}
-    =
-    \begin{pmatrix}
-        1 & 0 \\
-        0 & -1 
-    \end{pmatrix}
-    \begin{pmatrix}
-        0 & 0 \\
-        1 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & 0 \\
-        1 & 0 
-    \end{pmatrix}
-    \begin{pmatrix}
-        1 & 0 \\
-        0 & -1 
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
-        0 & 0 \\
-        -1 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & 0 \\
-        1 & 0 
-    \end{pmatrix}
-    =
-    -2f.
-\]
-Now, if we order this basis as, $(e, f, h)$, the matrix representing $\ad e$ is
-\[
-    \begin{pmatrix}
-        0 & 0 & -2 \\
-        0 & 0 & 0 \\
-        0 & 1 & 0 
-    \end{pmatrix}.
-\]
-And similarly,
-\[
-    \ad f
-    =
-    \begin{pmatrix}
-        0 & 0 & 0 \\
-        0 & 0 & 2 \\
-        -1 & 0 & 0 
-    \end{pmatrix}
-    ,\qquad
-    \ad h
-    =
-    \begin{pmatrix}
-        2 & 0 & 0 \\
-        0 & -2 & 0 \\
-        0 & 0 & 0 
-    \end{pmatrix}.
-\]
 
-\begin{exercise}
-    Find a linear Lie algebra isomorphic to the nonabelian two dimensional algebra constructed in (1.4). [Hint: Look at the adjoint representation.]
-\end{exercise}
+\begin{theorem}[Schur's lemma]
+\end{theorem}
 
-We look at the adjoint representation at the Lie algebra given by $x, y$
-\[
-    x
-    =
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-\]
-\[
-    y
-    =
-    \begin{pmatrix}
-        -1 & 0 \\
-        0 & 0 
-    \end{pmatrix}
-\]
-and we verify that $\lb{xy} = x$:
-\[
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    \begin{pmatrix}
-        -1 & 0 \\
-        0 & 0 
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        -1 & 0 \\
-        0 & 0 
-    \end{pmatrix}
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
-        0 & 0 \\
-        0 & 0
-    \end{pmatrix}
-    -
-    \begin{pmatrix}
-        0 & -1 \\
-        0 & 0 
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
-        0 & 1 \\
-        0 & 0 
-    \end{pmatrix}.
-\]
+\subsection{Weyl's theorem}
 
-\begin{exercise}
-    Verify the assertions made in (1.2) about $\talg(n,\FF)$, $\dalg(n,\FF)$, $\nalg(n,\FF)$ and compute the dimension of each algebra, by exhibiting bases.
-\end{exercise}
+\begin{theorem}[Weyl's theorem]
+    If $\frkg$ is semisimple Lie algebra, then any representation of $\frkg$ is completely reducible.
+\end{theorem}
 
-A basis for $\talg(n, \FF)$ is all $e_{ij}$ where $1 \leq i \leq j \leq n$.
+\section{Representations of \texorpdfstring{$\slalg_2$}{sl2} and the root space decomposition}
 
-A basis for $\dalg(n, \FF)$ is all $e_{ii}$ where $1 \leq i \leq n$.
+\begin{theorem}
+\end{theorem}
 
-A basis for $\nalg(n, \FF)$ is all $e_{ij}$ where $1 \leq i < j \leq n$.
+\section{Root systems}
+
+\begin{definition}
+\end{definition}
 
 \section{Appendix}
 
 \subsection{Definitions}
 
 \begin{definition}
+    \label{def:Iverson}
     Let $\psi$ be some statement that can be evaluated to be true or false.
     The \defstyle{Iverson bracket} of $\psi$ is
     \[
@@ -1633,16 +1707,18 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 
 \begin{definition}
     The \defstyle{endomorphism ring} $\End V$ of the vector space $V$ is the collection of all linear maps from $V$ to itself.
+
+    If $T \in \End V$ and $v \in V$, we will write $T \rightharpoonup v$ to denote $T(v)$.
 \end{definition}
 
 \begin{definition}
     Let $\KK$ be a field.
-    The \defstyle{$\mathbf{n}\times\mathbf{n}$ matrix ring} $M_n(\KK)$ is defined to be the ring whose underlying set is $\KK^{n \times n}$ with pointwise scaling and addition, and with product given by matrix multiplication.
+    The \defstyle{$\mathbf{n}\times\mathbf{n}$ matrix ring} $\Mat_n(\KK)$ is defined to be the ring whose underlying set is $\KK^{n \times n}$ with pointwise scaling and addition, and with product given by matrix multiplication.
 \end{definition}
 
 \begin{definition}
     Let $V$ be a vector space over the field $\KK$.
-    The \defstyle{dual space} $V^\vee$ of $V$ is the collection of all linear maps $V \to \KK$.
+    The \defstyle{dual space} $V^\ast$ of $V$ is the collection of all linear maps $V \to \KK$.
 \end{definition}
 
 \subsubsection{Rank-nullity}
@@ -1671,70 +1747,83 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 \begin{proof}
     Let $n = \dim V$, $r = \rank x$ and let $\ell = \nullity x$.
 
-    Let $\{p_1,p_2,\ldots,p_\ell\}$ be a basis for $\ker x$.
+    Let $\bfp=(p_1,p_2,\ldots,p_\ell)$ be a basis for $\ker x$.
 
-    We may extend this into a basis of $V$ by adjoining more vectors $q_{\ell+1},\ldots,q_n$, so that $\{p_1,\ldots,p_\ell,q_{\ell+1},\ldots,q_n\}$ is a basis of $V$.
+    We may extend this into a basis of $V$ by adjoining more vectors $\bfq=(q_{\ell+1},\ldots,q_n)$, so that $(\bfp,\bfq) = (p_1,\ldots,p_\ell,q_{\ell+1},\ldots,q_n)$ is a basis of $V$.
 
-    Then, we claim that the set $\{x(q_{\ell+1}), \ldots, x(q_n)\}$ is a basis of $\im x$.
-
-    Evidently, it spans $\im x$, as
-    \begin{align*}
-        &\im x
-        \\
-        &=
-        \Big\{
-            x(v): v \in V
-        \Big\}
-        \\
-        &=
-        \Big\{
-            x(a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n)
-            :  
-            a_1,\ldots,a_n \in \FF
-        \Big\}
-        \\
-        &=
-        \Big\{
-            \underbrace{
-                x(a_1p_1 + \cdots + a_\ell p_\ell)
-            }_{=0}
-            + x(a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n)
-            :  
-            a_1,\ldots,a_n \in \FF
-        \Big\}
-        \\
-        &=
-        \Big\{
-            x(a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n)
-            :  
-            a_{\ell+1},\ldots,a_n \in \FF
-        \Big\}
-        \\
-        &=
-        \Big\{
-            a_{\ell+1} x(q_{\ell+1}) + \cdots + a_n x(q_n)
-            :  
-            a_{\ell+1},\ldots,a_n \in \FF
-        \Big\}
-        \\
-        &=
-        \opspan\Big\{x(q_{\ell+1}), \ldots, x(q_n)\Big\}.
-    \end{align*}
-    Moreover, it is linearly independent--- suppose that there existed $a_{\ell+1}, \ldots, a_n$ such that
+    Then, we claim that
     \[
-        a_{\ell+1} x(q_{\ell+1}) + \cdots + a_n x(q_n)
+        x \rightharpoonup \bfq
+        =
+        \Big(
+            x \rightharpoonup q_{\ell+1},
+            \cdots
+            x \rightharpoonup q_n,
+        \Big)
+    \]
+    is a basis for $\im x$.
+    We first show that it spans $\im x$: let $v \in V$, then $v = a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_nq_n$.
+
+    So
+    \begin{align*}
+        x \rightharpoonup v
+        &=
+        x \rightharpoonup 
+        \Big(
+            a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
+        \Big)
+        \\
+        &=
+        \underbrace{
+            \Big(
+                x \rightharpoonup a_1p_1 + \cdots + a_\ell p_\ell
+            \Big)
+        }_{=0}
+        + 
+        \Big(
+            x \rightharpoonup a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
+        \Big)
+        \\
+        &=
+        x \rightharpoonup 
+        \Big(
+            a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
+        \Big)
+        \\
+        &=
+        a_{\ell+1}\Big(
+            x \rightharpoonup q_{\ell+1}
+        \Big)
+        + \cdots
+        + a_n\Big(
+            x \rightharpoonup q_n
+        \Big).
+    \end{align*}
+    Hence $x \rightharpoonup v$ is in the span of $x \rightharpoonup \bfq$.
+    Next, we show that it is linearly independent--- suppose that there existed $a_{\ell+1}, \ldots, a_n$ such that
+    \[
+        a_{\ell+1}\Big(
+            x \rightharpoonup q_{\ell+1}
+        \Big)
+        + \cdots
+        + a_n\Big(
+            x \rightharpoonup q_n
+        \Big)
         \neq
         0.
     \]
     But this means that
     \[
-        x(a_{\ell+1}q_{\ell+1} + \cdots + a_n q_n)
+        x \rightharpoonup 
+        \Big(
+            a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
+        \Big)
         \neq
         0,
     \]
-    and so the vector $a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n$ is in the kernel of $x$, however it is not in the span of $\{p_1,\ldots,p_\ell\}$, which contradicts the fact that $p_1,\ldots,p_\ell$ is a basis for $\ker x$.
+    and so the vector $a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n$ is in the kernel of $x$, however it is not in the kernel of $x$ because it is not in the span of $\bfp$, a contradiction.
 
-    Hence $\{x(q_{\ell+1}), \ldots, x(q_n)\}$ is linearly independent, and thus we have proved that it is a basis of $\im x$.
+    Hence $x \rightharpoonup \bfq$ is linearly independent, completing our assertion that it is a basis of $\im x$.
 
     Then $r = \dim \im x = n - \ell$, and so
     \[
@@ -1777,151 +1866,153 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 
 \subsubsection{The matrix representation}
 
+We recall the definition of a tensor product:
+
 \begin{definition}
-    Let $V$ be a vector space and fix a basis $\bfv = \{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\bfv^\ast = \{v^1, \ldots, v^n\}$ of the dual space $V^\ast$.
+    Let $V$ and $W$ be two $\KK$-vector spaces with bases $\bfv = (v_1,\ldots,v_n)$ and $\bfw = (w_1,\ldots,w_m)$ respectively.
 
-    By abuse of notation, we define the function
-    \begin{align*}
-        \bfv:
-        \KK^n
-        &\to
-        V
-        \\
-        (a_1, \ldots, a_n) 
-        &\mapsto 
-        a_1v_1 + \cdots + a_nv_n,
-    \end{align*}
-    and the function
-    \begin{align*}
-        \bfv^\ast:
-        V
-        &\to
-        \KK^n
-        \\
-        u 
-        &\mapsto 
-        \Big(v^1(u), \cdots, v^n(u)\Big).
-    \end{align*}
-    \begin{align*}
-        \bfv^\ast:
-        \KK^n
-        &\to
-        V^\ast
-        \\
-        (a_1, \ldots, a_n) 
-        &\mapsto 
-        a_1v^1 + \cdots + a_nv^n,
-    \end{align*}
-\end{definition}
-
-Evidently $\bfv^\ast \bfv = \id_V$ and $\bfv \bfv^\ast = \id_{\KK^n}$.
-
-It's also clear that both maps have trivial kernel, so by rank-nullity they are both vector isomorphisms.
-
-Let $e_{ij}$ be the standard basis for $M_n(\KK)$.
-Let $v_{i\to j}$ denote the map $x \mapsto v^i(x)v_j$.
-
-Then
-\[
-    \bfv e_{ij} \bfv^\ast
-    =
-    v_{i \to j}
-\]
-and
-\[
-    \bfv^\ast v_{i \to j} \bfv
-    =
-    e_{ij}
-\]
-Moreover
-
-\begin{proposition}
+    The \defstyle{tensor product of vector spaces} $V \otimes W$, is the $\KK$-vector space with basis
     \[
-        (\bfv^\ast T \bfv)
-        (\bfv^\ast x)
-        =
-        \bfv^\ast Tx
-    \]
-\end{proposition}
-
-We also have the map
-\[
-    \id \otimes \bfv
-\]
-which embeds $M_n(\KK)$ in $V^\ast \otimes V$.
-\begin{align*}
-    &\Big(
-        v^1 \otimes (c_{11}, \cdots, c_{1n}) + \cdots + v^n \otimes (c_{n1}, \ldots, c_{nn})
-    \Big)
-    \\
-    \mapsto
-    &\Big(
-        v^1 \otimes (c_{11}v_1 + \cdots + c_{1n}v_n) + \cdots + v^n \otimes (c_{n1}v_1 + \ldots + c_{nn}v_n)
-    \Big)
-    \\
-    =
-    &\sum_{i=1}^n
-    \sum_{j=1}^n
-    c_{ij} (v^i \otimes v_j).
-\end{align*}
-
-And the map
-\[
-    \bfv^\ast \otimes \id
-\]
-goes backwards.
-
-Then if $T \in \End V$,
-\[
-    \id \otimes T
-\]
-\begin{align*}
-    &\Big(
-        v^1 \otimes (c_{11}, \cdots, c_{1n}) + \cdots + v^n \otimes (c_{n1}, \ldots, c_{nn})
-    \Big)
-    \\
-    \mapsto
-    &\Big(
-        v^1 \otimes (c_{11}v_1 + \cdots + c_{1n}v_n) + \cdots + v^n \otimes (c_{n1}v_1 + \ldots + c_{nn}v_n)
-    \Big)
-    \\
-    =
-    &\sum_{i=1}^n
-    \sum_{j=1}^n
-    c_{ij} (v^i \otimes v_j).
-\end{align*}
-\begin{definition}
-    Let $V$ be a vector space and fix a basis $\bfv = \{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\bfv^\ast = \{v^1, \ldots, v^n\}$ of the dual space $V^\ast$.
-
-    The \defstyle{matrix representation} of a linear map $T \in \End V$ is the matrix $a_{ij}$ defined by
-    \[
-        =
-        v^i\Big(x(v_j)\Big)
-        (e^i \otimes e_j)
+        \Big\{
+            v_i \otimes w_j: 1 \leq i \leq n, 1 \leq j \leq m
+        \Big\}.
     \]
 \end{definition}
 
-\begin{align*}
-    \bfV:
-    V
-    &\to
-    V^\ast \otimes V
-    \\
-    u
-    &\mapsto 
-    \bfv^\ast \otimes u
-\end{align*}
+As a structure, there isn't really ``anything happening'' with this construction.
+The following definition makes 
 
-\begin{align*}
-    \bfV^\ast:
-    V^\ast \otimes V
-    &\to
-    V^\ast \otimes V
-    \\
-    u
-    &\mapsto 
-    \sum_i v^i \otimes u
-\end{align*}
+\begin{definition}
+    Let $V, W$ be $\KK$-vector spaces as before.
+
+    Let $v = a_1v_1 + \cdots + a_nv_n \in V$ and $w = b_1w_1 + \cdots + b_mw_m \in W$.
+    The \defstyle{tensor product of vectors} $v \otimes w$ is defined 
+    \[
+        v \otimes w
+        =
+        \left(
+            \sum_{i=1}^n
+            a_iv_i
+        \right)
+        \otimes
+        \left(
+            \sum_{j=1}^n
+            b_jw_j
+        \right)
+        \coloneq
+        \sum_{i=1}^n
+        \sum_{j=1}^m
+        a_ib_j (v_i \otimes w_j).
+    \]
+    This defines a map $i: V \times W \to V \otimes W$ given by $(v, w) \mapsto v \otimes w$.
+\end{definition}
+
+Together, this pair of constructions satisfies a \textit{universal property}:
+
+\begin{theorem}
+    If $U$ and $V$ are two $\KK$-vector spaces, then any bilinear map $f: U \times V \to W$ factors through $\otimes: U \times V \to U \otimes V$--- there exists a unique linear map $\overline{f}$ that makes the following diagram commute:
+    \[
+        \begin{tikzcd}
+            U \times V \arrow[rd, "f"] \arrow[d, "i"'] \\ 
+            U \otimes V \arrow[r, "\overline{f}"'] & W
+        \end{tikzcd}
+    \]
+\end{theorem}
+
+\begin{proof}
+    Fix bases $\bfu = (u_1, \ldots, u_n)$ and $\bfv = (v_1, \ldots v_n)$ of $U$ and $V$.
+
+    Let $u = a_1u_1 + \cdots + a_nu_n$ and $v = b_1v_1 + \cdots + b_mv_m$.
+
+    Then, by bilinearity,
+    \begin{align*}
+        f(u, v)
+        &=
+        f\Big(
+            a_1u_1 + \cdots + a_nu_n,
+            b_1v_1 + \cdots + b_mv_m
+        \Big)
+        \\
+        &=
+        \sum_{i=1}^n
+        a_i
+        \cdot
+        f\Big(
+            u_i,
+            b_1v_1 + \cdots + b_mv_m
+        \Big)
+        \\
+        &=
+        \sum_{i=1}^n
+        \sum_{j=1}^m
+        a_i
+        b_j
+        \cdot
+        f(u_i,v_j).
+    \end{align*}
+    Hence, $f$ is completely determined by its values $f(u_i,v_j)$ where $1 \leq i \leq n$, $1 \leq j \leq m$.
+    Conversely, any array $w_{ij} \in V$ defines a bilinear map by putting $(u_i,v_j) \mapsto w_{ij}$.
+
+    Pick some $i,j$.
+    If $f = \overline{f} \circ i$, it must be that
+    \[
+        f(u_i, v_j)
+        =
+        \Big(\overline{f} \circ i\Big)(u_i, v_j)
+        =
+        \overline{f}(u_i \otimes v_j).
+    \]
+\end{proof}
+
+\begin{definition}
+    Let $U, V$ be $\KK$-vector spaces, and let $f: U \to U$ and $g: V \to V$ be linear maps.
+    We define the \defstyle{tensor product of linear maps} $f \otimes g$ to be the map
+    \begin{align*}
+        f \otimes g:
+        U \otimes V
+        &\to
+        U \otimes V
+        \\
+        \sum_i
+        u_i \otimes v_i
+        &\mapsto
+        \sum_i
+        f(u_i) \otimes g(v_i).
+    \end{align*}
+\end{definition}
+
+\begin{definition}
+    Let $V$ be a vector space over $\KK$ and fix a basis $\bfv = (v_1,\ldots,v_n)$ of $V$ with a dual basis $\bfv^\ast = (v^1, \ldots, v^n)$ of the dual space $V^\ast$.
+
+    By abuse of notation, we define the corresponding elements
+    \[
+        \bfv 
+        \coloneq 
+        \sum_{i=1}^n 
+        e^i \otimes v_i 
+        \in (\KK^n)^\ast \otimes V
+        ,\qquad
+        \bfv^\ast 
+        \coloneq 
+        \sum_{i=1}^n v^i \otimes e_i 
+        \in V^\ast \otimes \KK^n
+    \]
+    for the basis $\bfv$ and dual basis $\bfv^\ast$.
+\end{definition}
+
+\begin{definition}
+    Let $U, V, W$ be vector spaces with bases $\bfu$, $\bfv$, $\bfw$, then we define a product
+    \begin{align*}
+        (U^\ast \otimes V) \times (V^\ast \otimes W)
+        &\to
+        U^\ast \otimes W
+        \\
+        (u^i \otimes v_j)(v^k \otimes w_l)
+        &\mapsto
+        v^kv_j
+        (u^i \otimes w_l).
+    \end{align*}
+\end{definition}
 
 \begin{theorem}
     Let $V$ be a vector space over $\KK$ of dimension $n$.
@@ -1937,205 +2028,108 @@ Then if $T \in \End V$,
 
 \begin{proof}
     Fix a basis $\bfv$ and dual basis $\bfv^\ast$ of $V$.
-    The tensor product $V^\ast \otimes V$ has the basis
-    \[
-        \Big\{
-            v^i \otimes v_j 
-            :
-            v^i \in \bfv^\ast,
-            v_j \in \bfv
-        \Big\}.
-    \]
-    Now consider the spaces $V^\ast \otimes \KK$ and $\KK \otimes V$.
-    By abuse of language, let $\bfv$ and $\bfv^\ast$ denote
-    \[
-        \bfv
-        \coloneq
-        1 \otimes v_1 + \cdots + 1 \otimes v_n
-        ,\qquad
-        \bfv^\ast
-        \coloneq
-        v^1 \otimes 1 + \cdots + v^n \otimes 1
-    \]
-    We can endow an action of $V$ on $V^\ast \otimes V$:
-    \[
-        x(v^i \otimes v_j)
-        =
-        v^ix \otimes v_j.
-    \]
-    And similarly for $V^\ast$:
-    \[
-        (v^i \otimes v_j)x
-        =
-        v^i \otimes x(v_j).
-    \]
-    and we can also endow an action of $V^\ast \otimes V$ on $V$:
-    \[
-        (v^i \otimes v_j)x
-        =
-        v^i(x)v_j.
-    \]
-    Now, by abuse of language, let $\bfv$ and $\bfv^\ast$ denote
-    \[
-        \bfv
-        \coloneq
-        v_1 + \cdots + v_n
-        ,\qquad
-        \bfv^\ast
-        \coloneq
-        v^1 + \cdots + v^n
-    \]
-    Then
-    \[
-        \bfv^\ast \bfv
-        =
-        \sum_{i=1}^n
-        v^i \otimes v_i.
-    \]
-    We can turn $V^\ast \otimes V$ into an algebra by defining
-    \[
-        (v^i \otimes v_j)(v^k \otimes v_l)
-        =
-        v^kv_j
-        (v^i \otimes v_l).
-    \]
-    Note that this means $\bfv^\ast \bfv$ is the identity element, making $V^\ast \otimes V$ unital.
-    Now define more generally
-    \[
-        \bfv^\ast T \bfv
-        \coloneq
-        \sum_{i=1}^n
-        v^i \otimes Tv_i.
-    \]
-    So
-    \[
-        \bfv^\ast AB \bfv
-        \coloneq
-        \bfv^\ast \otimes AB\bfv.
-    \]
-    Which we expand:
-    Also, define
-    \[
-        AB
-        =
-        \sum_{i,j}
-        \sum_{k=1}^n
-        a_{ik}b_{kj}
-        v^i \otimes v_j
-    \]
+
+    Now, if $U$ is a vector space and $x \in \End V$, it has a linear action on $U^\ast \otimes V$ given by $u^i \otimes v_j \mapsto u^i \otimes xv_j$.
+
+    Now, we claim that the map $T \mapsto \bfv^\ast T \bfv$ is the desired isomorphism between $\End V$ and $V^\ast \otimes V$.
+
+    Then, the map $v^i \otimes v_j \mapsto e_{ij}$ provides the isomorphism between $V^\ast \otimes V$ and $M_n(\KK)$.
 \end{proof}
+
+\subsubsection{Change of basis}
 
 \begin{proposition}
-    Let $T, S \in \End V$.
-    Then
+    If $\bfv$ and $\bfw$ are two bases of $V$, then
     \[
-        (\bfv^\ast T \bfv)(\bfv^\ast S \bfv)
-        =
-        \bfv^\ast TS \bfv.
+        \bfv\bfw^\ast \in \KK^n \otimes \KK^n
     \]
-\end{proposition}
+    encodes the change of basis matrix expressing coordinates in $\bfv$ as coordinates in $\bfw$.
 
-\begin{proof}
-    Let $T = (t_{ij})$ and let $S = (s_{ij})$.
-    Then
+    Similarly,
     \[
-        \bfv^\ast T \bfv
-        =
-        \sum_{i,j}
-        t_{ij}
-        v^i \otimes v_j
-        ,\qquad
-        \bfv^\ast S \bfv
-        =
-        \sum_{i,j}
-        s_{ij}
-        v^i \otimes v_j.
+        \bfw^\ast\bfv \in V^\ast \otimes V
     \]
-    so
+    encodes the linear map $v_i \mapsto w_i$.
+\end{proposition}
+\begin{proof}
+    Define the array $S_{ij}$ to be the numbers for which
+    \[
+        v_i
+        =
+        \sum_{j=1}^n
+        S_{ij}w_j.
+    \]
+    Then
     \begin{align*}
-        (\bfv^\ast T \bfv)
-        (\bfv^\ast S \bfv)
-        &=
-        \left(
-            \sum_{i,j}
-            t_{ij}
-            v^i \otimes v_j
-        \right)
-        \left(
-            \sum_{i,j}
-            s_{ij}
-            v^i \otimes v_j
-        \right)
-        \\
-        &=
-        \sum_{i,j,k,l}
-        t_{ij}
-        s_{kl}
-        (v^kv_j)
-        (v^i \otimes v_l)
-        \\
-        &=
-        \sum_{i,l}
-        \left(
-            \sum_k
-            t_{ik}
-            s_{kl}
-        \right)
-        (v^i \otimes v_l)
-        \\
-        &=
-        \sum_{i,l}
-        v^i
-        \otimes
-        \left(
-            \sum_k
-            t_{ik}
-            s_{kl}
-        \right)
-        v_l
-        \\
-        &=
-        \sum_{i,l}
-        v^i \otimes TSv_l.
+       \bfv \bfw^\ast
+       &=
+       \left(
+           \sum_{i=1}^n
+           e^i \otimes v_i
+       \right)
+       \left(
+           \sum_{j=1}^n
+           w^j \otimes e_j
+       \right)
+       \\
+       &=
+       \sum_{i=1}^n
+       \sum_{j=1}^n
+       w^j(v_i)
+       (e_i \otimes e_j)
+       \\
+       &=
+       \sum_{i=1}^n
+       \sum_{j=1}^n
+       S_{ij}
+       (e_i \otimes e_j).
     \end{align*}
+
+    Now, consider the map $T \in \End V$ given by $w_i \mapsto v_i$.
+    Then
     \begin{align*}
-        \sum_{i,j}
-        v^i \otimes TSv_j
+        \bfw^\ast T \bfw
         &=
-        \sum_{i,j}
-        v^i \otimes T
+        \sum_{i=1}^n
+        w^i \otimes (T \rightharpoonup w_i)
+        \\
+        &=
+        \sum_{i=1}^n
+        w^i \otimes v_i
+        \\
+        &=
+        \sum_{i=1}^n
+        \sum_{j=1}^n
+        \delta_{ij}
+        (w^i \otimes v_j)
+        \\
+        &=
+        \sum_{i=1}^n
+        \sum_{j=1}^n
+        (e^i \rightharpoonup e_j)
+        (w^i \otimes v_j)
+        \\
+        &=
         \left(
-            \sum_k
-            s_{jk}
-            v_k
+            \sum_{i=1}^n
+            w^i \otimes e_i
+        \right)
+        \left(
+            \sum_{j=1}^n
+            e^j \otimes v_j
         \right)
         \\
         &=
-        \sum_{i,j,k}
-        s_{jk}
-        v^i \otimes Tv_k
-        \\
-        &=
-        \sum_{i,j,k}
-        s_{jk}
-        v^i \otimes 
-        \left(
-            \sum_l
-            t_{kl}v_l
-        \right)
-        \\
-        &=
-        \sum_{i,j,k,l}
-        s_{jk}
-        t_{kl}
-        (v^i \otimes v_l)
+        \bfw^\ast\bfv.
     \end{align*}
 \end{proof}
+
+
 
 \subsubsection{Trace}
 
 \begin{definition}
-    Let $V$ be a vector space and fix a basis $\{v_1,\ldots,v_n\}$ of $V$ with a dual basis $\{v^1, \ldots, v^n\}$ of the dual space $V^\vee$.
+    Let $V$ be a vector space with basis $\bfv = (v_1,\ldots,v_n)$
     The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
     \[
         \sum_{i=1}^n 
@@ -2143,8 +2137,12 @@ Then if $T \in \End V$,
     \]
 \end{definition}
 
+\begin{proposition}
+    $\tr x = \sum_{i=1}^n (\bfv^\ast x \bfv)_{ii}$
+\end{proposition}
+
 \begin{theorem}
-    The trace is a linear operator, i.e if $x, y \in \End V$ and $a,b \in \FF$,
+    The trace is a linear operator, i.e if $x, y \in \End V$ and $a,b \in \KK$,
     \[
         \tr(ax + by)
         =
@@ -2181,113 +2179,63 @@ Then if $T \in \End V$,
     \end{align*}
 \end{proof}
 
+\begin{theorem}
+    Let $V$ be a vector space.
+
+    For all $x, y \in \End V$, $\tr(xy) = \tr(yx)$.
+\end{theorem}
+
+\begin{proof}
+    Fix a basis $\bfv = (v_1, \ldots, v_n)$ of $V$.
+    \begin{align*}
+        \tr (xy)
+        &=
+        \sum_{i=1}^n 
+        v^i \rightharpoonup xy \rightharpoonup v_i
+        \\
+        &=
+        \sum_{i=1}^n 
+        \sum_{j=1}^n
+        \Big(
+            v^i \rightharpoonup x \rightharpoonup v_j
+        \Big) 
+        \Big(
+            v^j \rightharpoonup y \rightharpoonup v_i
+        \Big)
+        \\
+        &=
+        \sum_{j=1}^n
+        \sum_{i=1}^n 
+        \Big(
+            v^j \rightharpoonup y \rightharpoonup v_i
+        \Big)
+        \Big(
+            v^i \rightharpoonup x \rightharpoonup v_j
+        \Big) 
+        \\
+        &=
+        \sum_{i=1}^n 
+        v^i \rightharpoonup yx \rightharpoonup v_i
+        \\
+        &=
+        \tr (yx).
+    \end{align*}
+\end{proof}
+
 \begin{theorem}\label{thm:TraceIsBasisIndependent}
     The trace of a linear operator $x \in \End V$ is basis invariant--- its value is independent of the basis used to compute it.
 \end{theorem}
 
 \begin{proof}
-    Let $\{v_1,\ldots,v_n\}$ and $\{w_1,\ldots,w_n\}$ be two bases of $V$, and let $\{v^1,\ldots,v^n\}$ and $\{w^1,\ldots,w^n\}$ be the corresponding dual bases of $V^\vee$.
-
-    We write the transition coefficients $S_{ij}$ and $S^{ij}$, which record the expansions of $w_i$ and $w^i$ in terms of $v_j$ and $v^j$ respectively.
+    Let $\bfv$ and $\bfw$ be two bases of $\End V$.
+    Then
     \[
-        w_i
+        \tr (\bfv^\ast\bfw x \bfw^\ast\bfv)
         =
-        \sum_{k=1}^n
-        S_{ki}v_k
-        ,\qquad
-        w^i
+        \tr (\bfw^\ast \bfv \bfv^\ast \bfw x)
         =
-        \sum_{k=1}^n
-        S^{ik}v^k.
+        \tr x.
     \]
-    Importantly,
-    \begin{align*}
-        \delta_{ij}
-        &=
-        w^iw_j
-        \\
-        &=
-        \left(
-            \sum_{k=1}^n
-            S^{ik}v^k
-        \right)
-        \left(
-            \sum_{l=1}^n
-            S_{jl}v_l
-        \right)
-        \\
-        &=
-        \sum_{k=1}^n
-        \sum_{l=1}^n
-        S^{ik}S_{jl}
-        v^kv_l
-        \\
-        &=
-        \sum_{k=1}^n
-        \sum_{l=1}^n
-        S^{ik}S_{jl}
-        \delta_{kl}
-        \\
-        &=
-        \sum_{k=1}^n
-        S_{jk}S^{ik},
-    \end{align*}
-    Hence,
-    \begin{align*}
-        \sum_{i=1}^n
-        w^i\Big(x(w_i)\Big)
-        &=
-        \sum_{i=1}^n
-        \left(
-            \sum_{k=1}^n
-            S^{ik}v^k
-        \right)
-        \left(
-            x
-            \left(
-                \sum_{j=1}^n
-                S_{ji}v_j
-            \right)
-        \right)
-        \\
-        &=
-        \sum_{i=1}^n
-        \left(
-            \sum_{k=1}^n
-            S^{ik}v^k
-        \right)
-        \left(
-            \sum_{j=1}^n
-            S_{ji}x(v_j)
-        \right)
-        \\
-        &=
-        \sum_{i=1}^n
-        \sum_{j=1}^n
-        \sum_{k=1}^n
-        S_{ji}S^{ik}
-        v^i\Big(x(v_j)\Big)
-        \\
-        &=
-        \sum_{j=1}^n
-        \sum_{k=1}^n
-        \left(
-            \sum_{i=1}^n
-            S_{ji}S^{ik}
-        \right)
-        v^k\Big(x(v_j)\Big)
-        \\
-        &=
-        \sum_{j=1}^n
-        \sum_{k=1}^n
-        \delta_{jk}
-        v^k\Big(x(v_j)\Big)
-        \\
-        &=
-        \sum_{j=1}^n
-        v^j\Big(x(v_j)\Big).
-    \end{align*}
-    Hence the trace gives the same value regardless of basis.
 \end{proof}
 
 \end{document}
