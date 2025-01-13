@@ -15,7 +15,6 @@
 \newcommand*\tgeq{\ensuremath{\mathrel{\unrhd}}}
 
 % Wildcard
-\newcommand*\wc{{\mkern 0.5mu-\mkern 0.5mu}}
 \newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
 \newcommand{\ip}[1]{\ensuremath{\left\langle{#1}\right\rangle}}
 \newcommand{\lb}[1]{\ensuremath{\left[{#1}\right]}}
@@ -80,7 +79,7 @@
 % A field
 \newcommand*\kk{\ensuremath{\mathbb{k}}}
 
-\newcommand*\acts{\ensuremath{\rightharpoonup}}
+\newcommand*\acts{.}
 
 \title{Lie algebras}
 \author{Jasper Ty}
@@ -119,7 +118,7 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
         The ring of $n \times n$ matrices over the field $\bfk$
     \item [$e_{ij}$]
         The standard basis of $\Mat_n$
-    \item [$x \rightharpoonup v$]
+    \item [$x \acts v$]
         The action of $x$ on $v$.
     \item [$\delta_{ij}$]
         The Kronecker delta
@@ -147,9 +146,9 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
     All vector spaces considered are finite dimensional and no assumptions are made yet about underlying fields.
     We use $V$ and $\bfk$ to denote generic vector spaces and fields respectively.
 
-    We will often use $\rightharpoonup$ to denote action in general, so if $v \in V$ and $x \in \End V$, we will define
+    We will often use $\acts$ to denote action in general, so if $v \in V$ and $x \in \End V$, we will define
     \[
-        x \rightharpoonup v
+        x \acts v
         \coloneq
         x(v).
     \]
@@ -332,7 +331,7 @@ These are parameterized by a positive integer $\ell$, and they classify all but 
     The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
     \[
         \sum_{i=1}^n 
-        v^i \rightharpoonup x \rightharpoonup v_i.
+        v^i x v_i.
     \]
 \end{definition}
 
@@ -401,7 +400,7 @@ So,
 And, putting it together, we have proven:
 \begin{proposition}
     \[
-        \dim A_\ell
+        \dim \sfA_\ell
         =
         \dim \slalg(V)
         =
@@ -413,7 +412,7 @@ And, putting it together, we have proven:
 
 \subsubsection{The rest; bilinear forms}
 
-Types \sfB, \sfC, and \sfD are all defined with regards to certain bilinear forms.
+Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinear forms.
 
 \begin{definition}
     Let $V$ be a vector space over the field $\bfk$.
@@ -904,11 +903,11 @@ We have a special representation of \textit{any} Lie algebra, which is given by 
     \]
     But this is saying that
     \[
-        \ad x \rightharpoonup \lb{yz}
+        \ad x \acts \lb{yz}
         =
-        \lb{y, \ad x \rightharpoonup z}
+        \lb{y, \ad x \acts z}
         +
-        \lb{\ad x \rightharpoonup y, z}
+        \lb{\ad x \acts y, z}
     \]
     which is exactly the defining identity for derivations.
 \end{proof}
@@ -1342,20 +1341,20 @@ We have another, useful, isomorphism theorem, which is important enough to state
     $\ad$ is evidently linear.
     Next, we just check that it is a homomorphism:
     \begin{align*}
-        \lb{\ad x, \ad y} \rightharpoonup z
+        \lb{\ad x, \ad y} \acts z
         &=
-        \Big(\ad x \ad y - \ad y \ad x\Big) \rightharpoonup z 
+        \Big(\ad x \ad y - \ad y \ad x\Big) \acts z 
         \\
         &=
-        \Big(\ad x \ad y \rightharpoonup z\Big) - \Big(\ad y \ad x \rightharpoonup z\Big) 
+        \Big(\ad x \ad y \acts z\Big) - \Big(\ad y \ad x \acts z\Big) 
         \\
         &=
         \Big(
-            \ad x \rightharpoonup \lb{yz}
+            \ad x \acts \lb{yz}
         \Big)
         - 
         \Big(
-            \ad y \rightharpoonup \lb{xz}
+            \ad y \acts \lb{xz}
         \Big)
         \\
         &=
@@ -1368,7 +1367,7 @@ We have another, useful, isomorphism theorem, which is important enough to state
         \lb{\lb{xy}z}
         \\
         &=
-        \ad \lb{xy} \rightharpoonup z.
+        \ad \lb{xy} \acts z.
     \end{align*}
 \end{proof}
 
@@ -1709,7 +1708,7 @@ We will prove the following equivalent theorem:
 
 \begin{theorem}
     Let $\frkg$ be a subalgebra of $\glalg(V)$, where $V$ has positive dimension.
-    If $\frkg$ consists only of nilpotent transformations, then there exists a nonzero vector $v \in V$ so that $\frkg \rightharpoonup v = 0$.
+    If $\frkg$ consists only of nilpotent transformations, then there exists a nonzero vector $v \in V$ so that $\frkg \acts v = 0$.
 \end{theorem}
 
 \begin{proof}
@@ -1719,7 +1718,7 @@ We will prove the following equivalent theorem:
 
     The $\dim \frkg = 1$ case is also easy.
     Let $x \in \frkg$ be nonzero and nilpotent.
-    Then  we can find a nonzero vector $v \in V$ so that $x \rightharpoonup v = 0$, and so $\frkg \rightharpoonup v = \bfk x \rightharpoonup v = 0$.
+    Then  we can find a nonzero vector $v \in V$ so that $x \acts v = 0$, and so $\frkg \acts v = \bfk x \acts v = 0$.
 
     Now supppose $\dim \frkg > 1$.
     Let $\frkh$ be a proper subalgebra of $\frkg$ of positive dimension.
@@ -1746,7 +1745,7 @@ We will prove the following equivalent theorem:
     as $\frkh$ has positive dimension.
     By the inductive hypothesis, we may find a nonzero vector $x + \frkh \in \frkg/\frkh$ such that
     \[
-        \ad \frkg/\frkh \rightharpoonup (x + \frkh) 
+        \ad \frkg/\frkh \acts (x + \frkh) 
         = 
         0 + \frkh = \frkh.
     \]
@@ -1757,7 +1756,7 @@ We will prove the following equivalent theorem:
         \lb{h + \frkh, x + \frkh}
         \\
         &=
-        \ad_{\frkg/\frkh} (h + \frkh) \rightharpoonup (x + \frkh) 
+        \ad_{\frkg/\frkh} (h + \frkh) \acts (x + \frkh) 
         \\
         &= 
         \frkh
@@ -1778,30 +1777,30 @@ We will prove the following equivalent theorem:
     Then $\frka/\frkh = \frkg/\frkh$, so $\frkg/\frkh$ is one-dimensional.
     This shows that $\frkh$ has codimension one in $\frkg$.
 
-    Now, consider the subspace $W = \{ v \in V : \frkh \rightharpoonup v = 0 \}$ of $V$.
+    Now, consider the subspace $W = \{ v \in V : \frkh \acts v = 0 \}$ of $V$.
     Since $\frkh$ is an ideal of $\frkg$, $\frkg$ stabilizes $W$--- for all $g \in \frkg$, $h \in \frkh$, and $w \in W$, we have that
     \begin{align*}
-        h \rightharpoonup g \rightharpoonup w
+        h \acts g \acts w
         &=
-        hg \rightharpoonup w
+        hg \acts w
         \\
         &= 
-        \Big(gh - \lb{gh}\Big) \rightharpoonup w
+        \Big(gh - \lb{gh}\Big) \acts w
         \\
         &=
-        \Big( g \rightharpoonup \underbrace{h \rightharpoonup w}_{=0} \Big) + \Big(\underbrace{\lb{hg}}_{\in \frkh} \rightharpoonup w\Big)
+        \Big( g \acts \underbrace{h \acts w}_{=0} \Big) + \Big(\underbrace{\lb{hg}}_{\in \frkh} \acts w\Big)
         \\
         &=
-        \Big( g \rightharpoonup 0 \Big) + 0
+        \Big( g \acts 0 \Big) + 0
         \\
         &=
         0,
     \end{align*}
-    hence $\frkg \rightharpoonup W \subseteq W$.
+    hence $\frkg \acts W \subseteq W$.
 
     Then, if we pick $g \in \frkg$ and restrict it to $W$, we have a nilpotent endomorphism of $W$, hence $g$ has an eigenvector $v$ in $W$.
 
-    Then, $(\frkh + \bfk g) \rightharpoonup v = 0$, completing the theorem.
+    Then, $(\frkh + \bfk g) \acts v = 0$, completing the theorem.
 \end{proof}
 
 Now, we can prove Engel's theorem:
@@ -1812,20 +1811,20 @@ Now, we can prove Engel's theorem:
 
     Let $\frkg$ be a Lie algebra whose elements are all ad-nilpotent.
 
-    Then $\ad \frkg$ is a subalgebra of $\glalg(\frkg)$ consisting of nilpotent transformations, hence there exists a nonzero vector $x \in \frkg$ such that $\ad \frkg \rightharpoonup x = 0$.
+    Then $\ad \frkg$ is a subalgebra of $\glalg(\frkg)$ consisting of nilpotent transformations, hence there exists a nonzero vector $x \in \frkg$ such that $\ad \frkg \acts x = 0$.
 
     But, from the definition of $\ad$, this means that $\lb{\frkg x} = 0$, hence $x \in Z(\frkg)$, so $Z(\frkg)$ has positive dimension, and $\dim \frkg / Z(\frkg) < \dim \frkg$.
 
     Now, we want to show that $\frkg/Z(\frkg)$ consists of ad-nilpotent elements.
     This follows from the observation that
     \begin{align*}
-        \ad \Big(x + Z(\frkg)\Big) \rightharpoonup \Big(y + Z(\frkg)\Big)
+        \ad \Big(x + Z(\frkg)\Big) \acts \Big(y + Z(\frkg)\Big)
         &= 
         \lb{x + Z(\frkg), y + Z(\frkg)} 
         \\
         &= \lb{xy} + Z(\frkg) 
         \\
-        &= (\ad x \rightharpoonup y) + Z(\frkg),
+        &= (\ad x \acts y) + Z(\frkg),
     \end{align*}
     hence it easily follows that $\ad \Big(x + Z(\frkg)\Big)$ is nilpotent given that $\ad x$ is nilpotent.
     
@@ -2243,7 +2242,7 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
     \[
         x.v
         \coloneq
-        \phi(x) \rightharpoonup v.
+        \phi(x) \acts v.
     \]
     Then, \ref{ax:ModuleLeftDistribute} and \ref{ax:ModuleRightDistribute} follow easily from the fact that $\phi(x) \in \glalg(V)$.
 
@@ -2251,24 +2250,24 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
     \begin{align*}
         \lb{xy}.v
         &=
-        \phi\Big(\lb{xy}\Big) \rightharpoonup v
+        \phi\Big(\lb{xy}\Big) \acts v
         \\
         &=
-        \lb{\phi(x)\phi(y)} \rightharpoonup v
+        \lb{\phi(x)\phi(y)} \acts v
         \\
         &=
         \Big(
             \phi(x)\phi(y) - \phi(y)\phi(x)
         \Big)
-        \rightharpoonup v
+        \acts v
         \\
         &=
         \Big(
-            \phi(x) \rightharpoonup \phi(y) \rightharpoonup v
+            \phi(x) \acts \phi(y) \acts v
         \Big) 
         -
         \Big(
-            \phi(y) \rightharpoonup \phi(x) \rightharpoonup v
+            \phi(y) \acts \phi(x) \acts v
         \Big) 
         \\
         &=
@@ -2277,7 +2276,7 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
     Conversely, suppose that $V$ has a $\frkg$-module structure.
     Then for all $x \in \frkg$ we can define $\phi(x) \in \End V$ by
     \[
-        \phi(x) \rightharpoonup v
+        \phi(x) \acts v
         \coloneq
         x.v.
     \]
@@ -2340,7 +2339,7 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 \begin{definition}
     The \defstyle{endomorphism ring} $\End V$ of the vector space $V$ is the collection of all linear maps from $V$ to itself.
 
-    If $T \in \End V$ and $v \in V$, we will write $T \rightharpoonup v$ to denote $T(v)$.
+    If $T \in \End V$ and $v \in V$, we will write $T \acts v$ to denote $T(v)$.
 \end{definition}
 
 \begin{definition}
@@ -2385,12 +2384,12 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 
     Then, we claim that
     \[
-        x \rightharpoonup \bfq
+        x \acts \bfq
         =
         \Big(
-            x \rightharpoonup q_{\ell+1},
+            x \acts q_{\ell+1},
             \cdots
-            x \rightharpoonup q_n,
+            x \acts q_n,
         \Big)
     \]
     is a basis for $\im x$.
@@ -2398,9 +2397,9 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 
     So
     \begin{align*}
-        x \rightharpoonup v
+        x \acts v
         &=
-        x \rightharpoonup 
+        x \acts 
         \Big(
             a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
         \Big)
@@ -2408,45 +2407,45 @@ Learning this material was a great way for me to brush up on a lot of this stuff
         &=
         \underbrace{
             \Big(
-                x \rightharpoonup a_1p_1 + \cdots + a_\ell p_\ell
+                x \acts a_1p_1 + \cdots + a_\ell p_\ell
             \Big)
         }_{=0}
         + 
         \Big(
-            x \rightharpoonup a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
+            x \acts a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
         \Big)
         \\
         &=
-        x \rightharpoonup 
+        x \acts 
         \Big(
             a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
         \Big)
         \\
         &=
         a_{\ell+1}\Big(
-            x \rightharpoonup q_{\ell+1}
+            x \acts q_{\ell+1}
         \Big)
         + \cdots
         + a_n\Big(
-            x \rightharpoonup q_n
+            x \acts q_n
         \Big).
     \end{align*}
-    Hence $x \rightharpoonup v$ is in the span of $x \rightharpoonup \bfq$.
+    Hence $x \acts v$ is in the span of $x \acts \bfq$.
     Next, we show that it is linearly independent--- suppose that there existed $a_{\ell+1}, \ldots, a_n$ such that
     \[
         a_{\ell+1}\Big(
-            x \rightharpoonup q_{\ell+1}
+            x \acts q_{\ell+1}
         \Big)
         + \cdots
         + a_n\Big(
-            x \rightharpoonup q_n
+            x \acts q_n
         \Big)
         \neq
         0.
     \]
     But this means that
     \[
-        x \rightharpoonup 
+        x \acts 
         \Big(
             a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
         \Big)
@@ -2455,7 +2454,7 @@ Learning this material was a great way for me to brush up on a lot of this stuff
     \]
     and so the vector $a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n$ is in the kernel of $x$, however it is not in the kernel of $x$ because it is not in the span of $\bfp$, a contradiction.
 
-    Hence $x \rightharpoonup \bfq$ is linearly independent, completing our assertion that it is a basis of $\im x$.
+    Hence $x \acts \bfq$ is linearly independent, completing our assertion that it is a basis of $\im x$.
 
     Then $r = \dim \im x = n - \ell$, and so
     \[
@@ -2675,7 +2674,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \begin{proof}
     Fix a basis $\bfv$ and dual basis $\bfv^\ast$ of $V$.
 
-    Now, if $U$ is a vector space and $x \in \End V$, it has a linear action on $U^\ast \otimes V$ given by $u^i \otimes v_j \mapsto u^i \otimes (x \rightharpoonup v_j)$.
+    Now, if $U$ is a vector space and $x \in \End V$, it has a linear action on $U^\ast \otimes V$ given by $u^i \otimes v_j \mapsto u^i \otimes (x \acts v_j)$.
 
     The map $T \mapsto \bfv^\ast T \bfv$ is the desired isomorphism between $\End V$ and $V^\ast \otimes V$.
 
@@ -2737,7 +2736,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
         \bfw^\ast T \bfw
         &=
         \sum_{i=1}^n
-        w^i \otimes (T \rightharpoonup w_i)
+        w^i \otimes (T \acts w_i)
         \\
         &=
         \sum_{i=1}^n
@@ -2752,7 +2751,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
         &=
         \sum_{i=1}^n
         \sum_{j=1}^n
-        (e^i \rightharpoonup e_j)
+        (e^i \acts e_j)
         (w^i \otimes v_j)
         \\
         &=
@@ -2833,31 +2832,31 @@ Together, this pair of constructions satisfies a \textit{universal property}:
         \tr (xy)
         &=
         \sum_{i=1}^n 
-        v^i \rightharpoonup xy \rightharpoonup v_i
+        v^i \acts xy \acts v_i
         \\
         &=
         \sum_{i=1}^n 
         \sum_{j=1}^n
         \Big(
-            v^i \rightharpoonup x \rightharpoonup v_j
+            v^i \acts x \acts v_j
         \Big) 
         \Big(
-            v^j \rightharpoonup y \rightharpoonup v_i
+            v^j \acts y \acts v_i
         \Big)
         \\
         &=
         \sum_{j=1}^n
         \sum_{i=1}^n 
         \Big(
-            v^j \rightharpoonup y \rightharpoonup v_i
+            v^j \acts y \acts v_i
         \Big)
         \Big(
-            v^i \rightharpoonup x \rightharpoonup v_j
+            v^i \acts x \acts v_j
         \Big) 
         \\
         &=
         \sum_{i=1}^n 
-        v^i \rightharpoonup yx \rightharpoonup v_i
+        v^i \acts yx \acts v_i
         \\
         &=
         \tr (yx).
