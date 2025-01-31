@@ -16,8 +16,9 @@
 
 % Wildcard
 \newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
-\newcommand{\ip}[1]{\ensuremath{\left\langle{#1}\right\rangle}}
-\newcommand{\lb}[1]{\ensuremath{\left[{#1}\right]}}
+\DeclarePairedDelimiter\ip\langle\rangle
+\DeclarePairedDelimiter\ideal\langle\rangle
+\DeclarePairedDelimiter\lb\lbrack\rbrack
 
 \newcommand{\iverson}[1]{\ensuremath{\left[{#1}\right]^?}}
 
@@ -331,7 +332,7 @@ These are parameterized by a positive integer $\ell$, and they classify all but 
     The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
     \[
         \sum_{i=1}^n 
-        v^i x v_i.
+        v^i \acts x \acts v_i.
     \]
 \end{definition}
 
@@ -1310,7 +1311,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
     \end{enumerate}
 \end{proof}
 
-We have another, useful, isomorphism theorem, which is important enough to state on its own:
+We have a useful theorem, usually considered a consequence of the third isomorphism theorem, which is important enough to state on its own:
 
 \begin{theorem}[Correspondence theorem]
     \label{thm:CorrespondenceThm}
@@ -1329,6 +1330,17 @@ We have another, useful, isomorphism theorem, which is important enough to state
 
 \begin{proof}
     Similarly to Proposition \ref{thm:CorrespondenceThm}, this is true on the level of a Lie algebra's vector space structure.
+
+    The maps
+    \[
+        \frkh \mapsto \frkh/\frki
+    \]
+    and
+    \[
+        \frkh \mapsto \bigcup_{h \in \frkh} (h + \frki)
+    \]
+    are obviously mutual inverses, and this is an order is
+
     Hence, it proves the bijection.
     \todo{details!}
 \end{proof}
@@ -1721,61 +1733,71 @@ We will prove the following equivalent theorem:
     Then  we can find a nonzero vector $v \in V$ so that $x \acts v = 0$, and so $\frkg \acts v = \bfk x \acts v = 0$.
 
     Now supppose $\dim \frkg > 1$.
-    Let $\frkh$ be a proper subalgebra of $\frkg$ of positive dimension.
-    Then,
-    \[
-        \ad \frkg/\frkh
-        \coloneq
-        \Big\{
-            \ad_{\frkg/\frkh}(x + \frkh)
-            :
-            x \in \frkg
-        \Big\}
-    \]
-    is a Lie algebra--- it is the homomorphic image of $\frkg$ under the composition
-    \[
-        \begin{tikzcd}
-            \frkg \arrow[r, "\pi", two heads] & \frkg/\frkh \arrow[r, "\ad", two heads] & \ad \frkg/\frkh. 
-        \end{tikzcd}
-    \]
-    Moreover, 
-    \[
-        \dim \frkg > \dim \frkg/\frkh \geq \dim \ad \frkg/\frkh,
-    \]
-    as $\frkh$ has positive dimension.
-    By the inductive hypothesis, we may find a nonzero vector $x + \frkh \in \frkg/\frkh$ such that
-    \[
-        \ad \frkg/\frkh \acts (x + \frkh) 
-        = 
-        0 + \frkh = \frkh.
-    \]
-    This means that
-    \begin{align*}
-        \lb{hx} + \frkh
-        &=
-        \lb{h + \frkh, x + \frkh}
-        \\
-        &=
-        \ad_{\frkg/\frkh} (h + \frkh) \acts (x + \frkh) 
-        \\
-        &= 
-        \frkh
-    \end{align*}
-    for all $h \in \frkh$, so $x \in N_\frkg(\frkh)$.
+    The induction step is very algebraic, so we will break it down
+    \begin{itemize}
+        \item[\textbf{Step 1}] 
+            \textsc{\color{Crimson} Locate an ideal $\frkh$ of codimension one.}
 
-    But $x + \frkh$ being nonzero in $\frkg/\frkh$ means exactly that $x \notin \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$.
-    We will use this fact to produce a nontrivial maximal ideal of $\frkg$.
+            We will do this by demonstrating that subalgebras of $\frkg$ are \textit{not} self-normalizing, which will allow us to produce a maximal ideal $\frkh$ of codimension one.
 
-    We are always able to find a proper subalgebra of positive dimension--- choose the span of any single element in $\frkg$. 
-    Then, there must exist maximal proper subalgebras. 
-    Let $\frkh$ be maximal now. 
-    Then we have that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ is a larger proper subalgebra of $\frkg$.
+            Let $\frkh$ be a proper subalgebra of $\frkg$ of positive dimension.
+            Then,
+            \[
+                \ad \frkg/\frkh
+                \coloneq
+                \Big\{
+                    \ad_{\frkg/\frkh}(x + \frkh)
+                    :
+                    x \in \frkg
+                \Big\}
+            \]
+            is a Lie algebra--- it is the homomorphic image of $\frkg$ under the composition
+            \[
+                \begin{tikzcd}
+                    \frkg \arrow[r, "\pi", two heads] & \frkg/\frkh \arrow[r, "\ad", two heads] & \ad \frkg/\frkh. 
+                \end{tikzcd}
+            \]
+            Moreover, 
+            \[
+                \dim \frkg > \dim \frkg/\frkh \geq \dim \ad \frkg/\frkh,
+            \]
+            as $\frkh$ has positive dimension.
+            By the inductive hypothesis, we may find a nonzero vector $x + \frkh \in \frkg/\frkh$ such that
+            \[
+                \ad \frkg/\frkh \acts (x + \frkh) 
+                = 
+                0 + \frkh = \frkh.
+            \]
+            This means that
+            \begin{align*}
+                \lb{hx} + \frkh
+                &=
+                \lb{h + \frkh, x + \frkh}
+                \\
+                &=
+                \ad_{\frkg/\frkh} (h + \frkh) \acts (x + \frkh) 
+                \\
+                &= 
+                \frkh
+            \end{align*}
+            for all $h \in \frkh$, so $x \in N_\frkg(\frkh)$.
 
-    Hence, $\frkh$ is a proper ideal of $\frkg$, so $\frkg/\frkh$ must contain a one-dimensional subalgebra.
-    By Theorem \ref{thm:CorrespondenceThm}, this one-dimensional subalgebra has the form $\frka/\frkh$, where $\frkh \tle \frka \leq \frkg$.
-    Now, it must be that $\frka = \frkg$, as otherwise $\frka$ is a proper subalgebra of $\frkg$ containing $\frkh$.
-    Then $\frka/\frkh = \frkg/\frkh$, so $\frkg/\frkh$ is one-dimensional.
-    This shows that $\frkh$ has codimension one in $\frkg$.
+            But $x + \frkh$ being nonzero in $\frkg/\frkh$ means exactly that $x \notin \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$.
+            We will use this fact to produce a nontrivial maximal ideal of $\frkg$.
+
+            We are always able to find a proper subalgebra of positive dimension--- choose the span of any single element in $\frkg$. 
+            Then, there must exist maximal proper subalgebras. 
+            Let $\frkh$ be maximal now. 
+            Then we have that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ is a larger proper subalgebra of $\frkg$.
+
+            Hence, $\frkh$ is a proper ideal of $\frkg$, so $\frkg/\frkh$ must contain a one-dimensional subalgebra.
+            By Theorem \ref{thm:CorrespondenceThm}, this one-dimensional subalgebra has the form $\frka/\frkh$, where $\frkh \tle \frka \leq \frkg$.
+            Now, it must be that $\frka = \frkg$, as otherwise $\frka$ is a proper subalgebra of $\frkg$ containing $\frkh$.
+            Then $\frka/\frkh = \frkg/\frkh$, so $\frkg/\frkh$ is one-dimensional.
+            This shows that $\frkh$ has codimension one in $\frkg$.
+    \end{itemize}
+
+
 
     Now, consider the subspace $W = \{ v \in V : \frkh \acts v = 0 \}$ of $V$.
     Since $\frkh$ is an ideal of $\frkg$, $\frkg$ stabilizes $W$--- for all $g \in \frkg$, $h \in \frkh$, and $w \in W$, we have that
@@ -2033,6 +2055,8 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
 
 \subsection{Jordan-Chevalley decomposition}
 
+We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an algebraically closed field is \defstyle{semisimple} if all of its eigenvalues are distinct.
+
 \begin{theorem}[Jordan-Chevalley decomposition]
     Let $x \in \End V$.
     Then there exist unique $x_s, x_n \in \End V$ such that
@@ -2040,20 +2064,83 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
         \item 
             $x = x_s + x_n$,
         \item 
-            $x_s$ is semismple, $x_n$ is nilpotent.
+            $x_s$ is semismple and $x_n$ is nilpotent.
+        \item 
+            $x_s$ and $x_n$ are polynomials in $x$.
     \end{enumerate}
-    Moreover, $x_s$ and $x_n$ are polynomials in $x$, so they commute with all endomorphisms that commute with $x$.
 \end{theorem}
 
 \begin{proof}
-    Let
-    \[
-        p_x(t)
-        =
-        \prod_{i=1}^k
-        (t - a_i)^{m_i}
-    \]
-    be the characteristic polynomial of $x$.
+    We will explicitly construct $x_s$ as a certain polynomial in $x$.
+
+    \begin{itemize}
+        \item[\textbf{Step 1}] 
+            \textsc{\color{Crimson} Break up $V$ into $x$'s generalized eigenspaces.}
+
+            Let
+            \[
+                p_x(t)
+                =
+                \prod_{i=1}^k
+                (t - a_i)^{m_i}
+            \]
+            be the characteristic polynomial of $x$.
+
+            Define the generalized eigenspace
+            \[
+                V_i
+                \coloneq
+                \ker (x - a_i 1)^{m_i}
+            \]
+            for each $a_i$.
+            Then
+            \[
+                V 
+                =
+                V_1 \oplus \cdots \oplus V_k.
+            \]
+            Since $x$ stabilizes each $V_i$, we can consider the endomorphism $x_i \in \End V_i$ defined by restricting $x$ to $V_i$.
+            Then, clearly the characteristic polynomial of $x_i$ is
+            \[
+                p_i(t)
+                \coloneq
+                p_{x_i}(t)
+                =
+                (t-a_i)^{m_i}.
+            \]
+        \item[\textbf{Step 2}] 
+            \textsc{\color{Crimson} Use the Chinese Remainder Theorem to create an operator that is diagonal on each eigenspace.}
+
+            The ideals generated by each $p_i(t)$ is coprime--- consider $i \neq j$.
+            The maximal ideals $\ideal{t-a_i}$ and $\ideal{t-a_j}$ are coprime, hence $\ideal{(t-a_i)^{m_i}}$ and $\ideal{(t-a_j)^{m_j}}$ are coprime.
+
+            Now, use the Chinese remainder theorem to locate a polynomial $p(t) \in \bfk[t]$ that satisfies the congruences
+            \[
+                p(t)
+                \equiv
+                a_i \mod p_i(t)
+                ,\qquad
+                p(t)
+                \equiv
+                0 \mod t.
+            \]
+            We will show that $p(x)$ is semisimple, so put $x_s \coloneq p(x)$.
+
+            For all $i$, $t - a_i$ annihilates $x_s$ restricted to $V_i$:
+            \[
+                \big(x_s - a_i\big)\big\rvert_{V_i}
+                =
+                p(x_i) - a_i
+                =
+                \big[a_i + h(x_i)p_i(x_i)\big] - a_i
+                =
+                a_i - a_i
+                =
+                0.
+            \]
+            where we have used the fact that $p(t) \equiv a_i \mod p_i(t)$ to write $p(x_i) = a_i + h(x_i)p_i(x_i)$ and that $p_i(x_i) = 0$.
+    \end{itemize}
+
 \end{proof}
 
 \subsection{Cartan's criterion}
@@ -2068,6 +2155,10 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
             $\tr(xy) = 0$ for all $x \in \frkg$ and $y \in \lb{\frkg\frkg}$.
     \end{enumerate}
 \end{theorem}
+
+\begin{proof}
+    Put $x = s + n$, and let $s$ have 
+\end{proof}
 
 \subsection{Killing form}
 
@@ -2283,6 +2374,7 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
 \end{proof}
 
 \begin{theorem}[Schur's lemma]
+    Let
 \end{theorem}
 \begin{proof}
 \end{proof}
@@ -2867,6 +2959,10 @@ Together, this pair of constructions satisfies a \textit{universal property}:
     The trace of a linear operator $x \in \End V$ is basis invariant--- its value is independent of the basis used to compute it.
 \end{theorem}
 
+\subsection{Some commutative algebra}
+
+\subsubsection{The Chinese Remainder Theorem}
+
 \begin{theorem}[Chinese Remainder Theorem]
     Let $R$ be a principal ideal domain, and let $I_1, \ldots, I_n$ be coprime ideals of $R$.
 
@@ -2884,5 +2980,9 @@ Together, this pair of constructions satisfies a \textit{universal property}:
     \]
     is an isomorphism.
 \end{theorem}
+
+\begin{proof}
+    Let $I_{1,\ldots,n}$
+\end{proof}
 
 \end{document}

@@ -1,0 +1,75 @@
+% !TEX TS-program = xelatex
+
+\documentclass{article}
+
+% See https://github.com/Jasper-Ty/dotfiles
+\usepackage[garamond]{jaspercommon}
+\usepackage{bm}
+
+\newcommand*\bflam{\bm{\lambda}}
+
+\title{Ordinary differential equations}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+
+These are notes I am taking for the class MATH-623, \textit{Ordinary Differential Equations}, at Drexel University, taught by Yixin Guo.
+
+\tableofcontents
+
+\newpage
+
+\section{Basic theory}
+
+\subsection{Definitions}
+
+\begin{definition}
+    Let $J \subseteq \RR$, $U \subseteq \RR$, $\Lambda \subseteq \RR^k$ be open sets, and let $f: J \times U \times \Lambda \to \RR^n$ is a smooth function.
+    An \defstyle{ordinary differential equation (ODE)} is an equation of the form 
+    \begin{equation}
+        \label{eqn:ODE}
+        \dot{\bfx}
+        =
+        f(t, \bfx, \bm{\lambda})
+    \end{equation}
+    where the dot denotes differentiation with respect to the independent variable $t$.
+\end{definition}
+
+\begin{definition}
+    A \defstyle{solution} of an ODE (\ref{eqn:ODE}) is a function $\bfF: J_0 \to U$, where $J_0 \subseteq J \subseteq R$, such that 
+    \[
+        \frac{d}{dt}\bfF(t)
+        =
+        f(t, \bfF(t), \bflam),\qquad 
+        \forall t \in J_0
+    \]
+    i.e, a function for which we can put $\bfx = \bfF(t)$ in (\ref{eqn:ODE}).
+    The \defstyle{orbit} of the solution $\bfF$ is the set
+    \[
+        \{
+            \bfF(t) \in U: t \in J_0
+        \}
+        \subseteq \RR^n.
+    \]
+    This is also called the \defstyle{trajectory}, \defstyle{integral curve}, or \defstyle{solution curve}
+\end{definition}
+
+\begin{example}
+    The \defstyle{forced Van der Pol} equation is defined
+    \begin{equation}
+        \label{eqn:ForcedVanDerPol}
+        \begin{cases}
+            \dot{x_1} = x_2, \\
+            \dot{x_2} = b(1-x_1^2)x_2- \omega^2x_1 + a \cos \Omega t.
+        \end{cases}
+    \end{equation}
+\end{example}
+
+\end{document}

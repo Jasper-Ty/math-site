@@ -1,0 +1,447 @@
+% !TEX TS-program = xelatex
+\documentclass{article}
+
+% See https://github.com/Jasper-Ty/dotfiles
+\usepackage[garamond]{jaspercommon}
+
+% ≃
+\newcommand*\isom{\ensuremath{\simeq}}
+
+% automorphisms
+\newcommand*\Aut{\ensuremath{\operatorname{Aut}}}
+
+% endomorphisms
+\newcommand*\End{\ensuremath{\operatorname{End}}}
+
+\title{Modules}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+
+\section*{What is this?}
+
+These are notes I am taking about the theory of modules, while taking Jonah Blasiak's Abstract Algebra I class at Drexel.
+
+The content is being taken mostly from Nathan Jacobson's \textit{Basic Algebra I}, Chapter 3, although the class is using Dummit and Foote.
+
+\tableofcontents
+
+\section{Modules over a principal ideal domain}
+
+\subsection{The ring of endomorphisms of an abelian group}
+
+We extend the story of groups arising from considering composition of maps.
+
+\begin{definition}
+    The \defstyle{ring of endomorphisms} $\End M$ of an abelian group $(M, +)$ is the set of all homomorphisms $M \to M$, with ring structure given by 
+    \[
+        (\eta\zeta)(x)
+        \coloneq
+        \eta\big(\zeta(x)\big)
+        ,\qquad
+        (\eta + \zeta)(x)
+        \coloneq
+        \eta(x) + \zeta(x)
+    \]
+    for all $\eta, \zeta \in \End M$ and $x \in M$.
+    From this definition, it follows that $1$ is the map $x \mapsto x$ and $0$ is the map $x \mapsto 0$.
+\end{definition}
+
+Paperwork ahead!
+
+\begin{theorem}
+    \label{thm:EndMIsARing}
+    $\End M$ is a ring.
+\end{theorem}
+\begin{proof}
+    First we prove that $M$'s addition is an abelian group.
+
+    Every statement in this proof holds for all $A, B, C \in \End M$:
+    \begin{enumerate}
+        \item
+            \textsc{\color{Crimson} Addition is closed.}
+
+            In other words, the pointwise sum of two abelian group homomorphisms is again an abelian group homomorphism.
+
+            For all $x,y \in M$,
+            \begin{align*}
+                (A+B)(x+y)
+                &=
+                A(x+y) + B(x+y) \\
+                &=
+                \big(A(x)+A(y)\big) + \big(B(x)+B(y)\big) \\
+                &=
+                A(x) + B(x) + A(y) + B(y) \\
+                &=
+                (A+B)(x) + (A+B)(y),
+            \end{align*}
+            so $A+B \in \End M$.
+        \item
+            \textsc{\color{Crimson} Addition is associative.}
+
+            For all $x \in M$,
+            \begin{align*}
+                \big(A + (B+C)\big)(x)
+                &= 
+                A(x) + (B+C)(x) \\
+                &=
+                A(x) + \big(B(x) + C(x)\big) \\
+                &=
+                \big(A(x) + B(x)\big) + C(x) \\
+                &=
+                (A+B)(x) + C(x) \\
+                &=
+                \big((A+B)+C\big)(x).
+            \end{align*}
+            So $A+(B+C) = (A+B)+C$.
+        \item 
+            \textsc{\color{Crimson} The zero map is the unit of addition.}
+
+            Let $\overline0$ denote the map $x \mapsto 0$.
+            Then $\overline0$ is an abelian group homomorphism, as
+            \[
+                \overline0(x + y)
+                =
+                0
+                =
+                0 + 0
+                =
+                \overline0(x) + \overline0(y)
+            \]
+            for all $x, y \in M$.
+
+            For all $x \in M$,
+            \begin{align*}
+                (A + \overline0)(x)
+                &=
+                A(x) + \overline0(x) \\
+                &=
+                A(x) + 0 \\
+                &=
+                A(x).
+            \end{align*}
+            So, $A + \overline0 = A$, and a nearly-identical calculation shows $\overline0 + A = A$
+        \item 
+            \textsc{\color{Crimson} Every endomorphism has an additive inverse.}
+
+            Define $-A$ to be the map $x \mapsto -A(x)$.
+            Then it is a abelian group homomorphism, as
+            \begin{align*}
+                (-A)(x+y)
+                &=
+                -\big(A(x+y)\big) \\
+                &=
+                -\big(A(x) + A(y)\big) \\
+                &=
+                \big(-A(y)\big) + \big(-A(x)\big) \\
+                &=
+                \big(-A(x)\big) + \big(-A(y)\big) \\
+                &=
+                (-A)(x) + (-A)(y).
+            \end{align*}
+            for all $x, y \in M$.
+
+            For all $x \in M$,
+            \begin{align*}
+                \big(A + (-A)\big)(x)
+                &=
+                A(x) + (-A)(x) \\
+                &=
+                A(x) + \big(-A(x)\big) \\
+                &=
+                0,
+            \end{align*}
+            so $A + (-A) = \overline0$.
+        \item 
+            \textsc{\color{Crimson} Addition commutes.}
+
+            For all $x \in M$,
+            \[
+                (A+B)(x)
+                =
+                A(x) + B(x)
+                =
+                B(x) + A(x)
+                =
+                (B+A)(x),
+            \]
+            which shows that $A+B = B+A$.
+    \end{enumerate}
+    Next, we show that composition is a monoid.
+    This was already done earlier in the book, but we repeat it.
+    \begin{enumerate}
+        \item
+            \textsc{\color{Crimson} Multiplication is closed.}
+
+            In other words, the composition of two abelian group homomorphisms is again an abelian group homomorphism.
+
+            For all $x, y \in M$,
+            \begin{align*}
+                (AB)(x+y)
+                &=
+                A\big(B(x+y)\big) \\
+                &=
+                A\big(B(x) + B(y)\big) \\
+                &=
+                A\big(B(x)\big) + A\big(B(y)\big) \\
+                &=
+                (AB)(x) + (AB)(y).
+            \end{align*}
+            So $AB \in \End M$.
+        \item 
+            \textsc{\color{Crimson} Multiplication is associative.}
+
+            For all $x \in M$,
+            \begin{align*}
+                \big(A(BC)\big)(x)
+                &= 
+                A\big((BC)(x)\big) \\
+                &=
+                A\Big(B\big(C(x)\big)\Big) \\
+                &=
+                (AB)\big(C(x)\big) \\
+                &=
+                \big((AB)C\big)(x),
+            \end{align*}
+            so $A(BC) = (AB)C$.
+        \item 
+            \textsc{\color{Crimson} The identity map is the unit of multiplication.}
+
+            Let $\overline1$ denote the map $x \mapsto x$.
+            Then $\overline1$ is an abelian group homomorphism, as
+            \[
+                \overline1(x+y)
+                =
+                x+y
+                =
+                \overline1(x) + 1_{\End M}(y)
+            \]
+            for all $x,y \in M$.
+
+            For all $x \in M$,
+            \begin{align*}
+                (A\overline1)(x)
+                &=
+                A\big(\overline1(x)\big) \\
+                &=
+                A(x)
+            \end{align*}
+            and
+            \begin{align*}
+                (\overline1A)(x)
+                &=
+                \overline1\big(A(x)\big) \\
+                &=
+                A(x),
+            \end{align*}
+            so $\overline1A = A\overline1 = A$.
+    \end{enumerate}
+
+    Finally, we check that the distributive laws hold
+
+    \begin{enumerate}
+        \item
+            \textsc{\color{Crimson} Right multiplication distributes over addition.}
+
+            For all $x \in M$,
+            \begin{align*}
+                \big((A+B)C\big)(x)
+                &=
+                (A+B)\big(C(x)\big) \\
+                &=
+                A\big(C(x)\big) + B\big(C(x)\big) \\
+                &=
+                (AC)(x) + (BC)(x) \\
+                &=
+                (AC + BC)(x),
+            \end{align*}
+            so $(A+B)C = AC + BC$.
+        \item
+            \textsc{\color{Crimson} Left multiplication distributes over addition.}
+
+            For all $x \in M$,
+            \begin{align*}
+                \big(A(B+C)\big)(x)
+                &=
+                A\big((B+C)(x)\big) \\
+                &=
+                A\big(B(x) + C(x)\big) \\
+                &=
+                A\big(B(x)\big) + A\big(C(x)\big) \\
+                &=
+                (AB)(x) + AC(x) \\
+                &=
+                (AB + AC)(x),
+            \end{align*}
+            so $A(B+C) = AB + AC$.
+
+    \end{enumerate}
+
+    This completes the theorem.
+\end{proof}
+
+We have some examples.
+
+\begin{example}
+    The ring of endomorphisms of the infinite cyclic group $(\ZZ,+,0)$ is isomorphic to $(\ZZ,+,\cdot,1,0)$, so $\End \isom \ZZ$.
+\end{example}
+
+\begin{proof}
+    Since $\ZZ$ is generated by $1$, it suffices to know the image of $1$ to determine an endomorphism in $\End \ZZ$.
+\end{proof}
+
+\begin{example}
+    The ring of endomorphisms of $\ZZ \times \ZZ$ is isomorphic to $M_2(\ZZ)$.
+\end{example}
+
+\begin{example}
+    The ring of endomorpisms of $\ZZ/n\ZZ$ is isomorphic to $\ZZ/n\ZZ$.
+\end{example}
+
+We have the following analogue of Cayley's theorem
+
+\begin{theorem}
+    Any ring is isomorphic to the ring of endomorphisms of an abelian group.
+\end{theorem}
+
+\begin{proof}
+    Let $R$ be a ring, and let $R_+$ denote its additive group.
+    For all $a \in R$, define the left multiplication map $a_L: x \mapsto ax$.
+    By the distributive law, $a_L(x+y) = a(x+y) = ax + ay = a_L(x) + a_L(y)$, so $a_L \in \End R_+$ for all $a \in R$.
+
+    We will show that the map sending $a \mapsto a_L$ is a ring homomorphism $R \hookrightarrow \End R_+$.
+    Let $a, b \in R$.
+    For all $x \in R_+$,
+    \begin{align*}
+        (a + b)_L(x) 
+        &= 
+        (a+b)x \\
+        &= 
+        ax + bx \\
+        &=
+        a_L(x) + b_L(x) \\
+        &=
+        (a_L + b_L)(x).
+    \end{align*}
+    and
+    \begin{align*}
+        (ab)_L(x) 
+        &= 
+        (ab)(x) \\
+        &=
+        abx \\
+        &=
+        a_L\big(b_L(x)\big) \\
+        &=
+        (a_Lb_L)(x),
+    \end{align*}
+    so $(a+b)_L = a_L + b_L$, $(ab)_L = a_Lb_L$.
+    Finally, we note that $1_L$ is the map $x \mapsto 1x = x$, so $1_L = 1$.
+
+    So the map $a \mapsto a_L$ is a ring homomorphism.
+    Denote its image by $R_L$.
+
+    We will show that it is a monomorphism, so that $R \isom R_L \subseteq \End R_+$.
+
+    Suppose $a_L = b_L$.
+    Then $a = a_L(1) = b_L(1) = b$, so $a = b$.
+
+    This completes the proof--- by the first isomorphism theorem for rings, $R \isom R_L$.
+\end{proof}
+
+We can define the right action $R_R$ as well.
+\begin{theorem}
+    $R_L = Z(R_R)$ and $R_R = Z(R_L)$
+\end{theorem}
+
+\subsubsection*{Exercises}
+
+\begin{exercise}
+    Let $G$ be a group (written multiplicatively), and let $F = G^G$ be the set of maps of $G$ into $G$.
+    If $\eta, \zeta \in F$ define $\eta\zeta$ in the usual way as the composite $\eta$ following $\zeta$.
+    Define $1 \coloneq x \mapsto x$, $0 \coloneq x \mapsto 1$.
+    Investigate the properties of the structure $(F,+,\cdot,0,1)$.
+\end{exercise}
+
+Omitted.
+
+\begin{exercise}
+    Let $M$ be an abelian group.
+    Observe that $\Aut M$ is the group of units (invertible elements) of $\End M$.
+    Use this to show that $\Aut M$ for the cyclic group of order $n$ is isomorphic to the group of cosets $\overline{m} = m + (n)$ in $\ZZ/(n)$ such that $(m,n) = 1$.
+\end{exercise}
+
+Omitted.
+
+\begin{exercise}
+    Determine $\Aut M$ for $M = (\ZZ \times \ZZ, +, 0)$.
+\end{exercise}
+
+Two-by-two invertible integer matrices, namely the matrices
+\[
+    \begin{pmatrix}
+        a & b \\
+        c & d
+    \end{pmatrix}
+\]
+such that $ad - bc \in {+1,-1}$.
+
+\begin{exercise}
+    Determine $\End (\QQ,+,0)$.
+\end{exercise}
+
+Interesting! It should be infinite dimensional...
+
+\begin{exercise}
+    In several cases we have considered, we have $\End(R,+,0) \isom R$ for a ring $R$.
+    Does this hold in general? Does it hold if $R$ is a field?
+\end{exercise}
+
+I don't think so?
+
+\subsection{Left and right modules}
+
+\begin{definition}
+    Let $R$ be a ring.
+    A \defstyle{left $R$-module} is an abelian group $M$ together with a scaling map $\cdot : R \times M \mapsto M$ such that
+    \begin{enumerate}
+        \item
+            $a(x+y) = ax + ay$,
+        \item 
+            $(a+b)x = ax + bx$,
+        \item 
+            $(ab)x = a(bx)$,
+        \item 
+            $1x = x$,
+    \end{enumerate}
+    for all $x, y \in M$ and $a,b \in R$.
+\end{definition}
+
+\begin{proposition}
+    Any abelian group $M$ is a $\ZZ$-module with the scaling map
+    \[
+        ax
+        \coloneq
+        \begin{cases}
+            \underbrace{x + \cdots + x}_{a \text{ times}}, & a > 0 \\
+            \underbrace{(-x) + \cdots + (-x)}_{-a \text{ times}}, & a < 0 \\
+            0. & a = 0
+        \end{cases}
+    \]
+    where $a \in \ZZ$ and $x \in M$.
+\end{proposition}
+
+\subsection{Fundamental concepts and results}
+
+\begin{definition}
+    Fix a ring $R$.
+    A \defstyle{$R$-module homomorphism} between the two $R$-modules $M$ and $N$ is a map $\eta: M \to N$ such that $\eta$ is a group homomorphism of $M$ and $N$'s additive groups, and it ``commutes with scaling'': $\eta(ax) = a\eta(x)$ for all $a \in R$ and $x \in M$.
+\end{definition}
+
+\end{document}

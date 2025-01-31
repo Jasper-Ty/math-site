@@ -1,0 +1,183 @@
+% !TEX TS-program = xelatex
+
+\documentclass{article}
+
+% See https://github.com/Jasper-Ty/dotfiles
+\usepackage[garamond]{jaspercommon}
+\usepackage{bm}
+
+% Real part
+\renewcommand*\Re{\operatorname{Re}}
+
+\usepackage{scrextend}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+
+\DeclarePairedDelimiter\bra{\langle}{\rvert}
+\DeclarePairedDelimiter\ket{\lVert}{\rangle}
+\DeclarePairedDelimiterX\braket[2]{\langle}{\rangle}{#1\,\delimsize\vert\,\mathopen{}#2}
+
+% Wildcard
+\newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
+\newcommand{\ip}[1]{\ensuremath{\left\langle{#1}\right\rangle}}
+
+% The set of positive semidefinite matrices
+\DeclareMathOperator{\PSD}{PSD}
+
+% The set of matrices
+\DeclareMathOperator{\Mat}{Mat}
+
+% The set of matrices
+\newcommand*\Pol{\ensuremath{\mathfrak{pol}}}
+
+% Set of all Hermitian matrices
+\newcommand*\Herm{\ensuremath{\text{Herm}}}
+
+%
+\DeclareMathOperator{\End}{End}
+
+% Trace
+\DeclareMathOperator{\tr}{tr}
+
+% Torus
+\newcommand*\TT{\ensuremath{\mathbb{T}}}
+
+\title{Positive Polynomials and Sums}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+
+
+These are notes I am taking for the class ``Positive Polynomials and Sums'' at Drexel University, taught by Hugo Woerdeman.
+
+\tableofcontents
+
+\section{Cones of Hermitian matrices and trigonometric polynomials}
+
+\subsection{Cones}
+
+\begin{definition}
+    Let $\scrH$ be a real Hilbert space. 
+
+    A \defstyle{cone} $\scrC \subseteq \scrH$ is a nonempty subset of $\scrH$ such that
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            $\scrC + \scrC \subseteq \scrC$,
+        \item 
+            $\alpha\scrC \subseteq \scrC$ for all $\alpha > 0$.
+    \end{enumerate}
+\end{definition}
+
+Namely, a cone $\scrC$ is a set closed under taking \defstyle{conical combinations}.
+
+\begin{proposition}
+    The set of all cones of a Hilbert space $\scrH$ forms a lattice, with join and meet given by sum and intersection respectively.
+\end{proposition}
+\begin{proof}
+    Let $\scrC_1$ and $\scrC_2$ be cones in $\scrH$.
+
+    Let $x, y \in \scrC_1 \cap \scrC_2$.
+    Then $x + y \in \scrC_1 + \scrC_1$
+\end{proof}
+
+\begin{definition}
+    Let $\scrC$ be a cone.
+
+    The \defstyle{dual cone} $\scrC^\ast$ of $\scrC$ is 
+    \[
+        \scrC^\ast
+        \coloneq
+        \Big\{
+            L \in \scrH
+            :
+            \ip{L,K} \geq 0 \text{ for all } K \in \scrC
+        \Big\}.
+    \]
+    We say that $\scrC$ is \defstyle{self-dual} if $\scrC^\ast = \scrC$.
+\end{definition}
+
+\begin{proposition}
+    Let $\scrC$ be a cone.
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            $\scrC^\ast$ is a cone.
+        \item 
+            $\scrC^{\ast\ast} = \overline{\scrC}$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{definition}
+    A \defstyle{extreme ray} of a cone $\scrC$ is
+\end{definition}
+
+\subsection{The cone \texorpdfstring{$\PSD_n$}{PSDn}}
+
+\begin{definition}
+    Let $\Mat_n$ be the Hilbert space over $\CC$ consisting of $n \times n$ complex matrices, with inner product given by
+    \[
+        \ip{A,B}_{\Mat_n}
+        \coloneq
+        \tr (AB^\ast)
+    \]
+\end{definition}
+
+Let $\Herm_n$ be the \textit{real} Hilbert space consisting of Hermitian matrices.
+
+Namely, $\Herm_n \coloneq \RR.\Mat_n$.
+
+It's a neat fact that $\Herm_n \oplus i\Herm_n = \Mat_n$.
+
+\begin{definition}
+    The \defstyle{cone of positive semidefinite matrices} $\PSD_n$ is the subset of $\Herm_n$ consisting of positive semidefinite matrices.
+\end{definition}
+
+\subsection{Trigonometric polynomials}
+
+\begin{definition}
+    Let $\FF$ be a field and let $X$ be any set.
+    We denote the $\FF$-vector space with basis $X$ by $\FF.X$.
+
+    Moreover, if $M \in \PSD_{|X|}$
+\end{definition}
+
+\begin{definition}
+    Let $\bfx_d$ denote a column vector of variables
+    \[
+        \bfx_d
+        =
+        \begin{pmatrix}
+            x_1 \\
+            \vdots \\
+            x_d
+        \end{pmatrix}.
+    \]
+\end{definition}
+
+\iffalse
+\begin{definition}
+    Let $\bfK \subseteq \ZZ^d$ be a set of \defstyle{exponent vectors}.
+
+    The space $<\bfz^\bfK>$ is a \textit{complex} Hilbert space endowed with the inner product whose structure constants are given by
+    \[
+        \ip{\bfz^\lambda,\bfz^\mu}
+        =
+        \delta_{\lambda\mu}
+    \]
+
+    The \defstyle{set of trigonometric polynomials} $\Re<e^{i\pm\bfK\bfx}>$ is define to be the following the \textit{real} Hilbert space:
+
+    The \defstyle{cone of nonnegative $\bfK$-supported trigonometric polynomials is} $\CC[\TT^{\bfK\bfx}]^{+}$.
+
+\end{definition}
+
+Let $\CC[e^{i(\bm{\Lambda} - \bm{\Lambda})\bfx}]$
+\fi
+
+\end{document}
