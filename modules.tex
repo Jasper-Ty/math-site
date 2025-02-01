@@ -396,7 +396,43 @@ such that $ad - bc \in {+1,-1}$.
     Determine $\End (\QQ,+,0)$.
 \end{exercise}
 
-Interesting! It should be infinite dimensional...
+We have that $\End (\QQ,+,0) \isom \QQ$.
+
+First, we note that 
+\begin{align*}
+    a \cdot \frac{p}{q}
+    &=
+    \overbrace{
+        \frac{p}{q} + \cdots + \frac{p}{q}
+    }^{a \text{ times}}
+    \\
+    &=
+    \frac{
+        \overbrace{
+            p + \cdots + p
+        }^{a \text{ times}}
+    }{q}.
+    \\
+    &=
+    \frac{ap}{q}
+\end{align*}
+for all $a \in \ZZ$ and $p/q \in \QQ$.
+
+Then, 
+\[
+    a\frac{p}{q} = \frac{r}{s} \iff \frac{p}{q} = \frac{r}{sa},
+\]
+as both equalities hold if and only if
+\[
+    sap = rq.
+\]
+Finally, we have that
+\[
+    \phi\left(\frac{p}{q}\right)
+    =
+    \frac{p}{q} \phi(1)
+\]
+for any homomorphism $\phi: \QQ \to \QQ$.
 
 \begin{exercise}
     In several cases we have considered, we have $\End(R,+,0) \isom R$ for a ring $R$.
