@@ -6,7 +6,7 @@
 \usepackage[garamond]{jaspercommon}
 \usepackage{bm}
 
-\newcommand*\bflam{\bm{\lambda}}
+\newcommand*\ullam{\underline{\lambda}}
 
 \title{Ordinary differential equations}
 \author{Jasper Ty}
@@ -22,6 +22,8 @@
 
 These are notes I am taking for the class MATH-623, \textit{Ordinary Differential Equations}, at Drexel University, taught by Yixin Guo.
 
+Some notation is changed from her notes, and I try to add as many missing details from proofs as possible.
+
 \tableofcontents
 
 \newpage
@@ -31,26 +33,40 @@ These are notes I am taking for the class MATH-623, \textit{Ordinary Differentia
 \subsection{Definitions}
 
 \begin{definition}
-    Let $J \subseteq \RR$, $U \subseteq \RR$, $\Lambda \subseteq \RR^k$ be open sets, and let $f: J \times U \times \Lambda \to \RR^n$ is a smooth function.
-    An \defstyle{ordinary differential equation (ODE)} is an equation of the form 
+    Let $J \subseteq \RR$, $U \subseteq \RR$, $\Lambda \subseteq \RR^k$ be open sets, and let $\bff: J \times U \times \Lambda \to \RR^n$ is a smooth function.
+    An \defstyle{ordinary differential equation} is an equation of the form 
     \begin{equation}
         \label{eqn:ODE}
+        \tag{ODE}
         \dot{\bfx}
         =
-        f(t, \bfx, \bm{\lambda})
+        \bff(t, \bfx, \ullam)
     \end{equation}
     where the dot denotes differentiation with respect to the independent variable $t$.
 \end{definition}
 
+Morally, the individual parts of an ODE have the following meaning:
+\begin{itemize}
+    \item[$t$:]
+        an independent variable $t \in J$, typically time,
+    \item [$\bfx$:]
+        a dependent variable $\bfx \in U$,
+    \item[$\ullam$:]
+        a vector of parameters $\ullam \in \Lambda$, 
+    \item[$\bff$:]
+        a continuously differentiable function that encodes the (time) evolution of $\bfx$.
+\end{itemize}
+
 \begin{definition}
-    A \defstyle{solution} of an ODE (\ref{eqn:ODE}) is a function $\bfF: J_0 \to U$, where $J_0 \subseteq J \subseteq R$, such that 
+A \defstyle{solution} of (\ref{eqn:ODE}) is a function $\bfF: J_0 \to U$, where $J_0 \subseteq J \subseteq R$, such that 
     \[
         \frac{d}{dt}\bfF(t)
         =
-        f(t, \bfF(t), \bflam),\qquad 
+        \bff(t, \bfF(t), \ullam),\qquad 
         \forall t \in J_0
     \]
-    i.e, a function for which we can put $\bfx = \bfF(t)$ in (\ref{eqn:ODE}).
+    i.e, a function for which we can put $\bfx = \bfF(t)$ in (\ref{eqn:ODE}) for all $t \in J_0$.
+
     The \defstyle{orbit} of the solution $\bfF$ is the set
     \[
         \{
@@ -58,18 +74,189 @@ These are notes I am taking for the class MATH-623, \textit{Ordinary Differentia
         \}
         \subseteq \RR^n.
     \]
-    This is also called the \defstyle{trajectory}, \defstyle{integral curve}, or \defstyle{solution curve}
+    This is also called the \defstyle{trajectory}, \defstyle{integral curve}, or \defstyle{solution curve}.
+\end{definition}
+
+Evidently, an ODE can have many solutions.
+For example, if $J = U = \Lambda = R$ and $f(t,x,\lambda) = \lambda x$, then it's well known that $F(t) = Ce^{\lambda t}$ is a solution to this ODE for all $C \in \RR$.
+
+Fortunately, both real-life and abstract experience tells us that in many cases, the following is a natural way to restrict solutions to an ODE.
+
+\begin{definition}
+    An \defstyle{initial-value problem} (IVP) is the system of equations
+    \begin{equation}
+        \label{eqn:IVP}
+        \tag{IVP}
+        \begin{cases}
+            \dot\bfx = \bff(t, \bfx, \ullam), \\
+            \bfx(t_0) = \bfx_0.
+        \end{cases}
+    \end{equation}
+    Namely, it is an (\ref{eqn:ODE}) with additional data $(t_0,\bfx_0) \in J \times U$, encoding an \defstyle{initial value} constraint.
+
+    A \defstyle{solution} of (\ref{eqn:IVP}) is, again a function $\bfF: J_0 \to U$ that solves the underlying ODE, but now subject to the condition that $\bfF(t_0) = \bfx_0$.
 \end{definition}
 
 \begin{example}
-    The \defstyle{forced Van der Pol} equation is defined
+    The \defstyle{forced Van der Pol} equation is defined to be
     \begin{equation}
         \label{eqn:ForcedVanDerPol}
+        \tag{ForcedVanDerPol}
         \begin{cases}
             \dot{x_1} = x_2, \\
             \dot{x_2} = b(1-x_1^2)x_2- \omega^2x_1 + a \cos \Omega t.
         \end{cases}
     \end{equation}
 \end{example}
+
+\subsection{Existence and uniqueness}
+
+Let $J, U \subseteq \RR$, and consider the IVP
+\begin{equation}
+    \label{eqn:IVP1d}
+    \tag{IVP-$1$D}
+    \frac{dy}{dt} = f(t,y),\qquad
+    y(t_0)=y_0
+\end{equation}
+where $f: J \to U$ is continuously differentiable in $t$ on some open interval containing $t_0$.
+
+Supposing we can integrate (\ref{eqn:IVP1d}) from $t_0$ to a given point $t$,
+\begin{align*}
+    \int_{t_0}^t \frac{dy}{d\tau}d\tau
+    &=
+    \int_{t_0}^t f(\tau, y)d\tau, \\
+    y(t)-y(t_0)
+    &=
+    \int_{t_0}^t f(\tau, y)d\tau, \\
+    \label{eqn:IVP1dIntegralEqn}
+    \tag{$\int$IVP-$1$D}
+    y(t)
+    &=
+    y(t_0) + \int_{t_0}^t f(\tau, y)d\tau, \\
+    y(t)
+    &=
+    y_0 + \int_{t_0}^t f(\tau, y)d\tau.
+\end{align*}
+
+If $F$ satisfies (\ref{eqn:IVP1dIntegralEqn}), it satisifes (\ref{eqn:IVP1d}) and vice versa, and this is easily seen using the fundamental theorem of calculus.
+
+\begin{definition}
+    The \defstyle{Picard iterates} $y_i$, given the data for (\ref{eqn:IVP1d}), are defined recursively as follows:
+    \begin{equation}
+        \label{eqn:PicardIter}
+        \tag{PicardIter}
+        \begin{cases}
+            y_0(t) \coloneq y_0, \\
+            y_{i+1}(t) \coloneq y_0 + \int_{t_0}^tf\big(\tau,y_i(\tau)\big)d\tau.
+        \end{cases}
+    \end{equation}
+\end{definition}
+
+We have a weak but straightforward estimate on the $y_i$.
+
+\begin{lemma}
+    For all $a > 0$, $b > 0$, define $R$ to be the rectangle $[t_0, t_0 + a] \times [y_0-b,y_0+b]$.
+    Then if we define
+    \[
+        M
+        \coloneq
+        \max_{(t,y) \in R}
+        |f(t,y)|, \qquad
+        \alpha
+        \coloneq
+        \min\left\{a,\frac{b}{M}\right\}.
+    \]
+    Then 
+    \begin{equation}
+        |y_n(t)-y_0| \leq M(t-t_0)
+        \text{ for all }
+        t_0 \leq t \leq t + \alpha
+    \end{equation}
+    for all $n$.
+\end{lemma}
+\begin{proof}
+    We prove this by induction.
+
+    We note that if the statement holds for $n$, then for all $t_0 \leq t \leq \alpha$,
+    \begin{align*}
+        |y_n(t) - y_0| 
+        &\leq 
+        M(t-t_0) \\
+        &\leq 
+        M\alpha \\
+        &=
+        M \cdot \min\left\{a, \frac{b}{M}\right\} \\
+        &=
+        \min\left\{\frac{a}{M}, b\right\} \\
+        &\leq 
+        b.
+    \end{align*}
+    Hence
+    \begin{equation}
+        \label{eqn:PicardIteratesStayInRectangle}
+        |f\big(t, y_n(t)\big)| \leq M.
+    \end{equation}
+
+    \begin{itemize}
+        \item[$n=0$:]
+            We have that $|y_0(t) - y_0| = 0 \leq M(t-t_0)$ trivially for \textit{all} $t \geq t_0$.
+        \item[$n > 0$:]
+            Suppose that $|y_n(t) - y_0| \leq M(t-t_0)$ for all $t_0 \leq t \leq t_0 + \alpha$.
+            Then
+            \begin{align*}
+                |y_{n+1}(t)-y_0|
+                &=
+                \left\lvert
+                    \int_{t_0}^t
+                    f\big(\tau, y_n(\tau)\big)
+                    d\tau
+                \right\rvert
+                \\
+                &\leq
+                \int_{t_0}^t
+                \underbrace{
+                    \left\lvert
+                        f\big(\tau, y_n(\tau)\big)
+                    \right\rvert
+                }_{\text{use (\ref{eqn:PicardIteratesStayInRectangle})}}
+                d\tau
+                \\
+                &\leq
+                \int_{t_0}^t
+                M
+                d\tau
+                \\
+                &=
+                M(t-t_0)
+            \end{align*}
+            for all $t_0 \leq t \leq t_0 + \alpha$.
+            This completes the proof.
+    \end{itemize}
+\end{proof}
+
+Next we show that the the Picard iterates $y_n$ converge to a function $y$ on $[t_0, t_0 + \alpha]$ which satisfies (\ref{eqn:IVP1d}).
+
+\begin{theorem}
+    Let $f(t,y)$ be continuously differentiable in both $t$ and $y$.
+    Then
+\end{theorem}
+
+\begin{proof}
+
+We have that
+\begin{align*}
+    y_n(t)
+    &=
+    y_0(t) + [y_1(t)-y_0] + \cdots + [y_n(t)-y_{n-1}(t)] \\
+    &=
+    y_0(t)
+    +
+    \sum_{i=1}^n
+    y_i(t)-y_{i-1}(t).
+\end{align*}
+
+So, $y_n(t)$ converges if and only if $\sum_{i=1}^n y_i(t)-y_{i-1}(t)$ converges.
+
+\end{proof}
 
 \end{document}
