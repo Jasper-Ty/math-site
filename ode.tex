@@ -109,7 +109,9 @@ Fortunately, both real-life and abstract experience tells us that in many cases,
     \end{equation}
 \end{example}
 
-\subsection{Existence and uniqueness}
+\subsection{Local existence and uniqueness}
+
+\todo{I don't like the way these theorems are laid out in the notes--- I think I reorganize these much better}
 
 Let $J, U \subseteq \RR$, and consider the IVP
 \begin{equation}
@@ -118,7 +120,7 @@ Let $J, U \subseteq \RR$, and consider the IVP
     \frac{dy}{dt} = f(t,y),\qquad
     y(t_0)=y_0
 \end{equation}
-where $f: J \to U$ is continuously differentiable in $t$ on some open interval containing $t_0$.
+where $f: J \to \RR$ is continuously differentiable in $t$ on some open interval containing $t_0$.
 
 Supposing we can integrate (\ref{eqn:IVP1d}) from $t_0$ to a given point $t$,
 \begin{align*}
@@ -238,6 +240,7 @@ We have a weak but straightforward estimate on the $y_i$.
 Next we show that the the Picard iterates $y_n$ converge.
 
 \begin{theorem}
+    \label{thm:IVP1dExistence}
     Let $f(t,y)$ be continuously differentiable in both $t$ and $y$.
     Then, on $[t_0, t_0 + \alpha]$, the Picard iterates $y_n$ converge pointwise to a function $y$ that satisifes (\ref{eqn:IVP1d}).
 \end{theorem}
@@ -262,7 +265,7 @@ It suffices to prove that $\sum_{i=1}^n |y_i(t) - y_{i-1}(t)|$ converges.
 
 We compute that
 \begin{align*}
-    |y_i(t) - y_{i-1}(t)|
+    &|y_i(t) - y_{i-1}(t)| \\
     &=
     \Bigg|
         \left[
@@ -385,9 +388,131 @@ which is a finite number.
 
 So, we have shown that $y_n(t) \to y(t)$ for some function $y$.
 
-Next, we show that $y$ satisifes (\ref{eqn:IVP1d}).
+Next, we show that $y$ satisifes (\ref{eqn:IVP1d}), by showing that it satisfies (\ref{eqn:IVP1dIntegralEqn}).
 
+Since $f$ is continuous,  $f\big(\tau, y_n(\tau)\big)$ converges pointwise to $f\big(\tau, y(\tau)\big)$ as $n \to \infty$. 
+Moreover, $f$ is bounded on $R$, so by the dominated convergence theorem,
+\[
+    \lim_{n\to\infty}\int_{t_0}^t f\big(\tau,y_n(\tau)\big)d\tau
+    = 
+    \int_{t_0}^t f\big(\tau,y(\tau)\big)d\tau.
+\]
+So finally, we conclude that
+\begin{align*}
+    y(t)
+    &=
+    \lim_{n\to\infty}
+    y_{n+1}(t) \\
+    &=
+    \lim_{n\to\infty}
+    \left[
+        y_0 + \int_{t_0}^t
+        f\big(\tau, y_n(\tau)\big)
+        d\tau
+    \right] \\
+    &=
+    y_0 + \lim_{n\to\infty}
+    \left[
+        \int_{t_0}^t
+        f\big(\tau, y_n(\tau)\big)
+        d\tau
+    \right].
+\end{align*}
+
+Hence $y(t)$ satisfies (\ref{eqn:IVP1dIntegralEqn}), so it satisfies (\ref{eqn:IVP1d}).
 
 \end{proof}
+
+\begin{theorem}
+    Let $R$ be defined as before, given an IVP.
+    Then the solution produced by Theorem (\ref{thm:IVP1dExistence}) is unique.
+\end{theorem}
+
+\begin{proof}
+    Let $y(t)$ and $z(t)$ be two solutions to the IVP on $R$.
+    The function $|y(t) - z(t)|$ is nonnegative.
+    Using the same $P$ in the proof of Theorem (\ref{thm:IVP1dExistence}), we have
+    \[
+        |y(t)-z(t)| 
+        \leq 
+        \int_{t_0}^t|y(\tau)-z(\tau)|s\tau,
+    \]
+    so we use Lemma (\ref{lem:WTF}) with $w(t) = |y(t)-z(t)|$, to show that $|y(t)-z(t)| = 0$ for all $t_0 \leq t \leq t_0 + \alpha$, hence $y(t) = z(t)$ on $t_0 \leq t \leq t_0 + \alpha$.
+\end{proof}
+
+\begin{lemma}
+    \label{lem:WTF}
+    Let $P \in \RR$ and let $w: [t_0,t_1] \to \RR$ such that $w(t) \geq 0$ and suppose
+    \[
+        w(t)
+        \leq
+        P\int_{t_0}^t w(\tau)d\tau
+    \]
+    for all $t_0 \leq t \leq t_1$.
+    Then $w(t) = 0$ for all $t_0 \leq t \leq t_1$.
+\end{lemma}
+
+\begin{proof}
+    Let $U(t) \coloneq \int_{t_0}^t w(\tau)d\tau$.
+    Then
+    \[
+        \frac{dU(t)}{dt}
+        = w(t) 
+        \leq P \int_{t_0}^t w(\tau)d\tau
+        = PU(t),
+    \]
+    so
+    \begin{align*}
+        e^{-P(t-t_0)}
+        \frac{dU(t)}{dt}
+        &\leq
+        e^{-P(t-t_0)}
+        PU(t), \\
+        e^{-P(t-t_0)}
+        \frac{dU(t)}{dt}
+        -
+        e^{-P(t-t_0)}
+        PU(t)
+        &\leq 
+        0, \\
+        \int_{t_0}^t
+        e^{-P(s-t_0)}
+        \frac{dU(s)}{ds}
+        -
+        e^{-P(s-t_0)}
+        PU(s)
+        ds
+        &\leq 
+        0, \\
+        \int_{t_0}^t
+        \frac{d}{ds}
+        \left[
+            e^{-P(s-t_0)}U(s)
+        \right]
+        ds
+        &\leq 
+        0, \\
+        e^{-P(t-t_0)}U(t)
+        - e^{-P(t_0-t_0)}U(t_0)
+        &\leq 
+        0, \\
+        e^{-P(t-t_0)}U(t)
+        &\leq 
+        0.
+    \end{align*}
+    So,
+    \[
+        0 \leq e^{-P(t-t_0)}U(s) \leq 0,
+    \]
+    and we conclude that $e^{-P(t-t_0)}U(t) = 0$, since $e^{-P(t-t_0)} \neq 0$, it must be that $U(t) = 0$, so
+    \[
+        0 \leq w(t) \leq PU(t) = 0
+    \]
+    for all $t_0 \leq t \leq t_1$.
+\end{proof}
+
+
+\subsection{Extending solutions; global uniqueness}
+
 
 \end{document}
