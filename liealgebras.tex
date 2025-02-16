@@ -114,10 +114,10 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
         The set of positive integers
     \item [$V$]
         A generic vector space
-    \item [$\bfk$]
+    \item [$\FF$]
         A generic field
-    \item [$\Mat_n(\bfk)$]
-        The ring of $n \times n$ matrices over the field $\bfk$
+    \item [$\Mat_n(\FF)$]
+        The ring of $n \times n$ matrices over the field $\FF$
     \item [$e_{ij}$]
         The standard basis of $\Mat_n$
     \item [$x \acts v$]
@@ -146,7 +146,7 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
 
 \begin{convention}
     All vector spaces considered are finite dimensional and no assumptions are made yet about underlying fields.
-    We use $V$ and $\bfk$ to denote generic vector spaces and fields respectively.
+    We use $V$ and $\FF$ to denote generic vector spaces and fields respectively.
 
     We will often use $\acts$ to denote action in general, so if $v \in V$ and $x \in \End V$, we will define
     \[
@@ -237,19 +237,19 @@ We will look at our first example of a Lie algebra, closely associated with the 
     Then, the following definition gives us a more concrete avatar of $\glalg$, and is in a sense ``the only'' finite dimensional $\glalg$.
 
 \begin{definition}[$\glalg$, concretely]
-    Let $\bfk$ be some field and let $n$ be a positive integer.
-    The \defstyle{general linear algebra} $\glalg_n(\bfk)$ is defined
+    Let $\FF$ be some field and let $n$ be a positive integer.
+    The \defstyle{general linear algebra} $\glalg_n(\FF)$ is defined
     \[
-        \glalg_n(\bfk)
+        \glalg_n(\FF)
         \coloneq
-        \glalg\big(\Mat_n(\bfk)\big).
+        \glalg\big(\Mat_n(\FF)\big).
     \]
 \end{definition}
 
 In this setting, we can easily compute the bracket of $\glalg$ relative to its standard basis:
 
 \begin{proposition}
-    Let $\{e_{ij}\}_{i,j=0}^n$ be the standard basis of $\glalg_n(\bfk)$.
+    Let $\{e_{ij}\}_{i,j=0}^n$ be the standard basis of $\glalg_n(\FF)$.
     Then
     \[
         \lb{e_{ij}e_{kl}}
@@ -262,7 +262,7 @@ In this setting, we can easily compute the bracket of $\glalg$ relative to its s
 \end{proposition}
 
 \begin{proof}
-    Using the Iverson bracket (see Definition \ref{def:Iverson}),
+    Using the Iverson bracket,
     \[
         (e_{pq})_{ij}
         =
@@ -310,7 +310,7 @@ In this setting, we can easily compute the bracket of $\glalg$ relative to its s
 Importantly, many Lie algebras, and in fact all the Lie algebras we are concerned with, occur as subalgebras of the general linear algebra--- a \defstyle{subalgebra} of a Lie algebra $\frkg$ is a subspace of $\frkg$ that is closed under $\frkg$'s bracket.
 
 \begin{definition}
-    A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\bfk)$ for some $n$.
+    A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\FF)$ for some $n$.
 \end{definition}
 
 All finite dimensional Lie algebras are linear, in the sense that they are isomorphic to some linear Lie algebra.
@@ -338,7 +338,7 @@ These are parameterized by a positive integer $\ell$, and they classify all but 
 \end{definition}
 
 In other words, it is the sum of the diagonal entries of the matrix representation of $x$.
-The trace is independent of the basis used to compute it (see Theorem \ref{thm:TraceIsBasisIndependent} in the Appendix), hence it is a well defined quantity.
+The trace is independent of the basis used to compute it, hence it is a well defined quantity.
 
 \begin{definition}[The type $\sfA_\ell$ Lie algebra]
     Let $V$ have dimension $n = \ell + 1$.
@@ -352,14 +352,14 @@ The trace is independent of the basis used to compute it (see Theorem \ref{thm:T
             x \in \glalg(V) : \tr x = 0
         \Big\}.
     \]
-    As is the case with $\glalg(V)$ and $\glalg_n(\bfk)$, we also define 
+    As is the case with $\glalg(V)$ and $\glalg_n(\FF)$, we also define 
     \[
         A_\ell
         \coloneq
-        \slalg_{\ell+1}(\bfk)
+        \slalg_{\ell+1}(\FF)
         \coloneq
         \Big\{
-            x \in \glalg_{\ell+1}(\bfk) : \tr x = 0
+            x \in \glalg_{\ell+1}(\FF) : \tr x = 0
         \Big\}
     \]
     and will refer to them interchangeably.
@@ -372,10 +372,10 @@ Unsurprisingly, $\slalg(V)$ shares a similar relationship to $\glalg(V)$.
     $\slalg(V)$ is a subalgebra of $\glalg(V)$.
 \end{proposition}
 \begin{proof}
-    The trace is a linear operator $\tr: \glalg_n(\bfk) \to \bfk$.
-    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\slalg_n(\bfk) = \ker \tr$ is a subspace of $\glalg$.
+    The trace is a linear operator $\tr: \glalg_n(\FF) \to \FF$.
+    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\slalg_n(\FF) = \ker \tr$ is a subspace of $\glalg$.
 
-    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg_n(\bfk)$ means that $\glalg_n(\bfk)$'s Lie bracket is closed in $\slalg_n(\bfk)$.
+    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg_n(\FF)$ means that $\glalg_n(\FF)$'s Lie bracket is closed in $\slalg_n(\FF)$.
 \end{proof}
 
 Lastly, we will compute the dimension of $\slalg(V)$.
@@ -388,7 +388,7 @@ So
 \[
     \dim \slalg(V) \leq (\ell+1)^2 - 1 = \ell(\ell+2)
 \]
-However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\slalg_n(\bfk)$:
+However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\slalg_n(\FF)$:
 \begin{enumerate}
     \item 
         All the off-diagonal entries $e_{ij}$ where $i \neq j$--- there are $(\ell+1)^2 - (\ell + 1) = \ell^2 + \ell$ of these.
@@ -406,7 +406,7 @@ And, putting it together, we have proven:
         =
         \dim \slalg(V)
         =
-        \dim \slalg_n(\bfk)
+        \dim \slalg_n(\FF)
         =
         \ell(\ell+2).
     \]
@@ -417,9 +417,9 @@ And, putting it together, we have proven:
 Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinear forms.
 
 \begin{definition}
-    Let $V$ be a vector space over the field $\bfk$.
+    Let $V$ be a vector space over the field $\FF$.
 
-    A \defstyle{bilinear form} is a function $\omega: V \times V \to \bfk$ that is bilinear, i.e linear in each argument separately. 
+    A \defstyle{bilinear form} is a function $\omega: V \times V \to \FF$ that is bilinear, i.e linear in each argument separately. 
 \end{definition}
 
 \begin{definition}
@@ -512,7 +512,7 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
 \subsubsection{Type \sfB: the odd-dimensional orthogonal algebra}
 
 \begin{definition}
-    A \defstyle{symmetric nondegenerate form} on a vector space $V$ is a bilinear form $\omega: V \times V \to \bfk$ such that
+    A \defstyle{symmetric nondegenerate form} on a vector space $V$ is a bilinear form $\omega: V \times V \to \FF$ such that
     \begin{enumerate}[label=(\alph*)]
         \item 
             $\omega(v,u) = \omega(u,v)$, and
@@ -537,7 +537,7 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
 \subsubsection{Type \sfC: the symplectic algebra}
 
 \begin{definition}
-    A \defstyle{symplectic form} on a vector space $V$ is a function form $\omega: V \times V \to \bfk$ such that
+    A \defstyle{symplectic form} on a vector space $V$ is a function form $\omega: V \times V \to \FF$ such that
     \begin{enumerate}[label=(\alph*)]
         \item
             $\omega$ is bilinear,
@@ -563,10 +563,10 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
     \[
         \sfC_\ell
         \coloneq
-        \spalg_{2\ell}(\bfk)
+        \spalg_{2\ell}(\FF)
         \coloneq
         \Big\{
-            x \in \glalg_{2\ell}(\bfk)
+            x \in \glalg_{2\ell}(\FF)
             :
             Jx + x^\top J = 0
         \Big\}
@@ -580,7 +580,7 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
             -I_\ell & 0
         \end{pmatrix}
     \]
-    is the standard symplectic form on $\bfk^{2\ell}$.
+    is the standard symplectic form on $\FF^{2\ell}$.
 \end{definition}
 
 \subsubsection{Type \sfD: the even-dimensional orthogonal algebra}
@@ -601,8 +601,8 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
 \subsection{Lie algebras from algebras}
 
 \begin{definition}[Algebras over a field]
-    Let $\bfk$ be a field.
-    An \defstyle{algebra over $\bfk$}, or a \defstyle{$\bfk$-algebra} is a $\bfk$-vector space equipped with a bilinear product.
+    Let $\FF$ be a field.
+    An \defstyle{algebra over $\FF$}, or a \defstyle{$\FF$-algebra} is a $\FF$-vector space equipped with a bilinear product.
 
     We will use qualifiers like \textit{associative} and \textit{unital} to indicate that this product is associative and has unit respectively.
 \end{definition}
@@ -615,7 +615,7 @@ Put another way, a unital associative algebra over a field is
         or a ring with a compatible vector space structure.
         (ring + bilinear scaling map)
 \end{itemize}
-For example, $\Mat_n(\bfk)$ is a unital associative algebra over $\bfk$.
+For example, $\Mat_n(\FF)$ is a unital associative algebra over $\FF$.
 
 However, we don't in general expect algebras to have unit or to be associative--- $\RR^3$ with the cross product is neither unital nor associative.
 Hence, the following is clear:
@@ -638,12 +638,12 @@ To go along with this definition, we have notion of a homomorphism of algebras.
     We say that an algebra homomorphism is an \defstyle{algebra isomorphism} if it is also a vector space isomorphism.
 \end{definition}
 
-For example, the determinant is an algebra homomorphism from $\Mat_n(\bfk)$ to $\bfk$.
+For example, the determinant is an algebra homomorphism from $\Mat_n(\FF)$ to $\FF$.
 
-$\bfk$-algebras can be turned into Lie algebras by defining the bracket $\lb{xy} \coloneq xy - yx$.
+$\FF$-algebras can be turned into Lie algebras by defining the bracket $\lb{xy} \coloneq xy - yx$.
 
 \begin{definition}
-    Let $\scrA$ be a $\bfk$-algebra.
+    Let $\scrA$ be a $\FF$-algebra.
     Then $\Lie[\scrA]$ is defined to be the Lie algebra whose underlying vector space is $\scrA$ and whose bracket is given by
     \[
         \lb{xy}
@@ -656,7 +656,7 @@ $\bfk$-algebras can be turned into Lie algebras by defining the bracket $\lb{xy}
 We can check the following nice fact: 
 
 \begin{proposition}
-    Let $\scrA$ and $\scrB$ be two $\bfk$-algebras, and let $\phi: \scrA \to \scrB$ be an algebra homomorphism.
+    Let $\scrA$ and $\scrB$ be two $\FF$-algebras, and let $\phi: \scrA \to \scrB$ be an algebra homomorphism.
 
     Then $\phi$ is also a \textit{Lie algebra homomorphism} (see Definition \ref{def:LieAlgHom}) between $\Lie[\scrA]$ and $\Lie[\scrB]$.
 \end{proposition}
@@ -698,7 +698,7 @@ Then $\lBrack \wc, \wc \rBrack = 2[\wc, \wc]$.
 This fact actually characterizes Lie algebras.
 
 \begin{proposition}
-    Let $\scrA$ be a $\bfk$-algebra with product $\ast$.
+    Let $\scrA$ be a $\FF$-algebra with product $\ast$.
     If $\Lie[\scrA]$ has product $2\ast$, then $\scrA$ is a Lie algebra with bracket given by $\lb{xy} = x \ast y$.
 \end{proposition}
 
@@ -730,7 +730,7 @@ This fact actually characterizes Lie algebras.
 \subsection{Derivations, the adjoint representation}
 
 \begin{definition}
-    Let $\scrA$ be a $\bfk$-algebra.
+    Let $\scrA$ be a $\FF$-algebra.
     A \defstyle{derivation} of $\scrA$ is a linear map $\dd: \scrA \to \scrA$ which satisfies the \textit{Leibniz rule}:
     \[
         \dd(xy)
@@ -743,7 +743,7 @@ This fact actually characterizes Lie algebras.
 Derivations play nicely with the vector space structure of $\End \scrA$ as well as with the bracket inherited from $\glalg(\scrA)$.
 
 \begin{proposition}
-    Let $\scrA$ be a $\bfk$-algebra.
+    Let $\scrA$ be a $\FF$-algebra.
     Then $\Der \scrA$ is a subspace of $\End \scrA$.
     Moreover, it is a subalgebra of $\glalg(\scrA)$
 \end{proposition}
@@ -1011,7 +1011,7 @@ The \defstyle{sum} and the \defstyle{bracket} of the ideals $\frki, \frkj$ are d
     \left\{
         \sum_{i=0}^rc_i\lb{x_iy_i}
         :
-        c_i \in \bfk, x_i \in \frki, y_i \in \frkj
+        c_i \in \FF, x_i \in \frki, y_i \in \frkj
     \right\}.
 \]
 
@@ -1502,7 +1502,7 @@ In group theory, solvable groups are precisely those which can be constructed wi
 \end{proof}
 
 \begin{proposition}
-    The Lie algebra of upper triangular matrices $\talg_n(\bfk)$ is solvable.
+    The Lie algebra of upper triangular matrices $\talg_n(\FF)$ is solvable.
 \end{proposition}
 \begin{proof}
     We use the following definition of an upper triangular matrix:
@@ -1733,7 +1733,7 @@ We will prove the following equivalent theorem:
 
     The $\dim \frkg = 1$ case is also easy.
     Let $x \in \frkg$ be nonzero and nilpotent.
-    Then  we can find a nonzero vector $v \in V$ so that $x \acts v = 0$, and so $\frkg \acts v = \bfk x \acts v = 0$.
+    Then  we can find a nonzero vector $v \in V$ so that $x \acts v = 0$, and so $\frkg \acts v = \FF x \acts v = 0$.
 
     Now supppose $\dim \frkg > 1$.
     The induction step is very algebraic, so we will break it down
@@ -1825,7 +1825,7 @@ We will prove the following equivalent theorem:
 
     Then, if we pick $g \in \frkg$ and restrict it to $W$, we have a nilpotent endomorphism of $W$, hence $g$ has an eigenvector $v$ in $W$.
 
-    Then, $(\frkh + \bfk g) \acts v = 0$, completing the theorem.
+    Then, $(\frkh + \FF g) \acts v = 0$, completing the theorem.
 \end{proof}
 
 Now, we can prove Engel's theorem:
@@ -1870,7 +1870,7 @@ Now, we can prove Engel's theorem:
 \section{Semisimple Lie algebras}
 
 \begin{convention}
-    Let $\bfk$ denote an algebraically closed field of characteristic zero.
+    Let $\FF$ denote an algebraically closed field of characteristic zero.
 \end{convention}
 
 \subsection{Lie's theorem}
@@ -1887,10 +1887,11 @@ In other words, relative to some basis of $V$, the matrix representation of all 
 Again, we will prove it by proving an equivalent formulation in terms of the existence of a common eigenvector.
 
 \begin{theorem}
+    \label{thm:SolvableAlgebraHasCommonEigenvector}
     Let $\frkg$ be a solvable subalgebra of $\glalg(V)$.
     Then there exists $v \in V$ that is an eigenvector for all $x \in \frkg$.
 
-    In other words, there exists a linear functional $\lambda: \frkg \to \bfk$ such that 
+    In other words, there exists a linear functional $\lambda: \frkg \to \FF$ such that 
     \[
         x \acts v
         =
@@ -1913,7 +1914,7 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
 
             Suppose that the theorem were true for all $\frkh \leq \glalg(V)$ such that $\dim \frkh < \dim \frkg$.
 
-            Then there exists a linear functional $\lambda: \frkh \to \bfk$ such that
+            Then there exists a linear functional $\lambda: \frkh \to \FF$ such that
             \[
                 x \acts v 
                 =
@@ -2039,21 +2040,28 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
                 =
                 0,
             \]
-            which, because $\opchar \bfk = 0$, implies that $\lambda\Big(\lb{xy}\Big) = 0$.
+            which, because $\opchar \FF = 0$, implies that $\lambda\Big(\lb{xy}\Big) = 0$.
 
             Hence $y$ stabilizes $W$.
     \item[\textbf{Step 4}]
         \textsc{\color{Crimson} Find an eigenvector in $W$ for an endomorphism in $\frkg - \frkh$}
 
-        Now, write $\frkg = \frkh + \bfk z$ for some $z \in \frkg$.
+        Now, write $\frkg = \frkh + \FF z$ for some $z \in \frkg$.
 
-        Since $z$ stabilizes $W$, and since $\bfk$ is algebraically closed, it has an eigenvector $v_0$ in $W$.
+        Since $z$ stabilizes $W$, and since $\FF$ is algebraically closed, it has an eigenvector $v_0$ in $W$.
 
         But, by definition of $W$, $v_0$ is also an eigenvector for all endomorphisms in $\frkh$, hence we conclude that $v_0$ is a common eigenvector for all endomorphisms in $\frkg$.
 
         This completes the proof of the theorem.
     \end{itemize}
+\end{proof}
 
+Now, we can carry out the proof of Lie's theorem.
+
+\begin{proof}[Proof of Lie's theorem]
+    If $\frkg$ is solvable, then it stabilizes the subspace $\FF v$, where $v$ is the eigenvector produced by Theorem (\ref{thm:SolvableAlgebraHasCommonEigenvector}).
+
+    Then, consider the orthogonal subspace
 \end{proof}
 
 \subsection{Jordan-Chevalley decomposition}
@@ -2117,7 +2125,7 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
             The ideals generated by each $p_i(t)$ is coprime, as
             the maximal ideals $\ideal{t-a_i}$ and $\ideal{t-a_j}$ are coprime, hence $\ideal{(t-a_i)^{m_i}}$ and $\ideal{(t-a_j)^{m_j}}$ are coprime.
 
-            Now, use the Chinese remainder theorem to locate a polynomial $p(t) \in \bfk[t]$ that satisfies the congruences
+            Now, use the Chinese remainder theorem to locate a polynomial $p(t) \in \FF[t]$ that satisfies the congruences
             \[
                 p(t)
                 \equiv
@@ -2160,6 +2168,10 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 \end{theorem}
 
 \begin{proof}
+    We will use Engel's theorem to demonstrate the nilpotence of the derived algebra $\lb{\frkg\frkg}$.
+    \begin{itemize}
+        \item[\textbf{Step 1}]
+    \end{itemize}
     Put $x = s + n$, where $s$ is semisimple and $n$ is nilpotent.
 
     Fix a basis $v_1,\ldots,v_m$ for which $s$ has the matrix form $\diag(a_1,\ldots,a_m)$.
@@ -2415,8 +2427,10 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 \subsection{Maximal toral subalgebras}
 
 \begin{definition}
-    A \defstyle{maximal toral subalgebra} $\frkh$ of $\frkg$ is an algebra for $\ad x = \ad x_s$ for all $x \in \frkh$.
+    A \defstyle{maximal toral subalgebra} $\frkh$ of $\frkg$ is an algebra for which $\ad x = \ad x_s$ for all $x \in \frkh$.
 \end{definition}
+
+In other words, it is a subalgebra in which all elements act diagonally.
 
 \begin{proposition}
     Let $\frkh$ be a maximal toral subalgebra of $\frkg$.
@@ -2428,6 +2442,8 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 
 \begin{definition}
 \end{definition}
+
+\end{document}
 
 \section{Appendix}
 
@@ -2460,13 +2476,13 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 \end{definition}
 
 \begin{definition}
-    Let $\bfk$ be a field.
-    The \defstyle{$\mathbf{n}\times\mathbf{n}$ matrix ring} $\Mat_n(\bfk)$ is defined to be the ring whose underlying set is $\bfk^{n \times n}$ with pointwise scaling and addition, and with product given by matrix multiplication.
+    Let $\FF$ be a field.
+    The \defstyle{$\mathbf{n}\times\mathbf{n}$ matrix ring} $\Mat_n(\FF)$ is defined to be the ring whose underlying set is $\FF^{n \times n}$ with pointwise scaling and addition, and with product given by matrix multiplication.
 \end{definition}
 
 \begin{definition}
-    Let $V$ be a vector space over the field $\bfk$.
-    The \defstyle{dual space} $V^\ast$ of $V$ is the collection of all linear maps $V \to \bfk$.
+    Let $V$ be a vector space over the field $\FF$.
+    The \defstyle{dual space} $V^\ast$ of $V$ is the collection of all linear maps $V \to \FF$.
 \end{definition}
 
 \subsubsection{Rank-nullity}
@@ -2617,9 +2633,9 @@ Learning this material was a great way for me to brush up on a lot of this stuff
 We recall the definition of a tensor product:
 
 \begin{definition}
-    Let $V$ and $W$ be two $\bfk$-vector spaces with bases $\bfv = (v_1,\ldots,v_n)$ and $\bfw = (w_1,\ldots,w_m)$ respectively.
+    Let $V$ and $W$ be two $\FF$-vector spaces with bases $\bfv = (v_1,\ldots,v_n)$ and $\bfw = (w_1,\ldots,w_m)$ respectively.
 
-    The \defstyle{tensor product of vector spaces} $V \otimes W$, is the $\bfk$-vector space with basis
+    The \defstyle{tensor product of vector spaces} $V \otimes W$, is the $\FF$-vector space with basis
     \[
         \Big\{
             v_i \otimes w_j: 1 \leq i \leq n, 1 \leq j \leq m
@@ -2631,7 +2647,7 @@ As a structure, there isn't really ``anything happening'' with this construction
 The following definition makes 
 
 \begin{definition}
-    Let $V, W$ be $\bfk$-vector spaces as before.
+    Let $V, W$ be $\FF$-vector spaces as before.
 
     Let $v = a_1v_1 + \cdots + a_nv_n \in V$ and $w = b_1w_1 + \cdots + b_mw_m \in W$.
     The \defstyle{tensor product of vectors} $v \otimes w$ is defined 
@@ -2658,7 +2674,7 @@ The following definition makes
 Together, this pair of constructions satisfies a \textit{universal property}:
 
 \begin{theorem}
-    If $U$ and $V$ are two $\bfk$-vector spaces, then any bilinear map $f: U \times V \to W$ factors through $\otimes: U \times V \to U \otimes V$--- there exists a unique linear map $\overline{f}$ that makes the following diagram commute:
+    If $U$ and $V$ are two $\FF$-vector spaces, then any bilinear map $f: U \times V \to W$ factors through $\otimes: U \times V \to U \otimes V$--- there exists a unique linear map $\overline{f}$ that makes the following diagram commute:
     \[
         \begin{tikzcd}
             U \times V \arrow[rd, "f"] \arrow[d, "i"'] \\ 
@@ -2713,7 +2729,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \end{proof}
 
 \begin{definition}
-    Let $U, V, X, Y$ be $\bfk$-vector spaces, and let $f: U \to X$ and $g: V \to Y$ be linear maps.
+    Let $U, V, X, Y$ be $\FF$-vector spaces, and let $f: U \to X$ and $g: V \to Y$ be linear maps.
     We define the \defstyle{tensor product of linear maps} $f \otimes g$ to be the map
     \begin{align*}
         f \otimes g:
@@ -2734,7 +2750,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \end{definition}
 
 \begin{definition}
-    Let $V$ be a vector space over $\bfk$ and fix a basis $\bfv = (v_1,\ldots,v_n)$ of $V$ with a dual basis $\bfv^\ast = (v^1, \ldots, v^n)$ of the dual space $V^\ast$.
+    Let $V$ be a vector space over $\FF$ and fix a basis $\bfv = (v_1,\ldots,v_n)$ of $V$ with a dual basis $\bfv^\ast = (v^1, \ldots, v^n)$ of the dual space $V^\ast$.
 
     By abuse of notation, we define the corresponding elements
     \[
@@ -2742,12 +2758,12 @@ Together, this pair of constructions satisfies a \textit{universal property}:
         \coloneq 
         \sum_{i=1}^n 
         e^i \otimes v_i 
-        \in (\bfk^n)^\ast \otimes V
+        \in (\FF^n)^\ast \otimes V
         ,\qquad
         \bfv^\ast 
         \coloneq 
         \sum_{i=1}^n v^i \otimes e_i 
-        \in V^\ast \otimes \bfk^n
+        \in V^\ast \otimes \FF^n
     \]
     for the basis $\bfv$ and dual basis $\bfv^\ast$.
 \end{definition}
@@ -2777,14 +2793,14 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \end{theorem}
 
 \begin{theorem}
-    Let $V$ be a vector space over $\bfk$ of dimension $n$.
+    Let $V$ be a vector space over $\FF$ of dimension $n$.
     Then
     \[
         \End V
         \simeq
         V^\ast \otimes V
         \simeq
-        M_n(\bfk).
+        M_n(\FF).
     \]
 \end{theorem}
 
@@ -2795,7 +2811,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 
     The map $T \mapsto \bfv^\ast T \bfv$ is the desired isomorphism between $\End V$ and $V^\ast \otimes V$.
 
-    Then, the map $v^i \otimes v_j \mapsto e_{ij}$ provides the isomorphism between $V^\ast \otimes V$ and $M_n(\bfk)$.
+    Then, the map $v^i \otimes v_j \mapsto e_{ij}$ provides the isomorphism between $V^\ast \otimes V$ and $M_n(\FF)$.
 \end{proof}
 
 \subsubsection{Change of basis}
@@ -2803,7 +2819,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \begin{proposition}
     If $\bfv$ and $\bfw$ are two bases of $V$, then
     \[
-        \bfv\bfw^\ast \in (\bfk^n)^\ast \otimes \bfk^n
+        \bfv\bfw^\ast \in (\FF^n)^\ast \otimes \FF^n
     \]
     encodes the change of basis matrix expressing coordinates in $\bfv$ as coordinates in $\bfw$.
 
@@ -2900,7 +2916,7 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \end{definition}
 
 \begin{theorem}
-    The trace is a linear operator, i.e if $x, y \in \End V$ and $a,b \in \bfk$,
+    The trace is a linear operator, i.e if $x, y \in \End V$ and $a,b \in \FF$,
     \[
         \tr(ax + by)
         =
@@ -3009,5 +3025,3 @@ Together, this pair of constructions satisfies a \textit{universal property}:
 \begin{proof}
     Let $I_{1,\ldots,n}$
 \end{proof}
-
-\end{document}
