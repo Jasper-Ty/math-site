@@ -1,0 +1,414 @@
+\documentclass{article}
+
+\usepackage[garamond, tableau]{jaspercommon}
+
+\newcommand\arxiv[1]{\href{http://www.arxiv.org/abs/#1}{\texttt{arXiv:#1}}}
+
+\newcommand*\Mat{\mathrm{Mat}}
+\newcommand*\Sym{\mathrm{Sym}}
+\newcommand*\RCF{\mathsf{RCF}}
+\newcommand*\OrdField{\mathsf{OrdField}}
+
+\barenv{theorem}{Theorem}
+\barenv[bartheorem]{definition}{Definition}
+\barenv[bartheorem]{proposition}{Proposition}
+\barenv[bartheorem]{lemma}{Lemma}
+
+\title{Hillar-Nie 2006}
+\author{Jasper Ty}
+\date{}
+
+\titleauthorhead
+
+\begin{document}
+
+\maketitle
+
+\section*{What is this?}
+
+This are notes I took while reading ``An elementary and constructive solution to Hilbert's 17th Problem for matrices'' by Christopher J. Hillar and Jiawang Nie \cite{HN06}.
+
+\tableofcontents
+
+\section*{Notation}
+
+Let $\bfx = (x_1,\ldots,x_m)$ be a collection of indeterminates, and let $F[\bfx]$ and $F(\bfx)$ denote the polynomial ring and the ring of rational functions in the field $F$ respectively.
+
+For any commutative ring $R$, let $\Sigma R^2$ denote the \defstyle{sums of squares} of $R$, i.e
+\[
+    \Sigma R^2
+    \coloneq
+    \left\{
+        \sum_{i=1}^k r_i^2: r_1,\ldots,r_k \in R
+    \right\}.
+\]
+Similarly, let $R^2$ denote the \defstyle{squares} of $R$.
+
+Let $\Mat_d(R)$ denote the set of $d \times d$ matrices in the ring $R$. And, let $\Sym_d(R)$ denote the subset of $\Mat_d(R)$ consisting of symmetric matrices.
+
+If $A$ is a matrix and $J \subseteq \{1,\ldots,n\}$, let $A[J]$ denote the principal submatrix with indices picked out by $J$.
+
+\section{Introduction}
+
+We seek to give a proof for the main result in \cite{HN06}.
+
+\begin{theorem}[Procesi-Schacher, Gondard-Ribenboim]
+    \label{thm:1} 
+    Let $A \in \Sym_d(\RR[\bfx])$.
+    Let $A(\bfx_0)$ denote $A$ with all entries evaluated at $\bfx_0 \in \RR^d$.
+    If $A(\bfx_0) \in \Sym_d(\RR)$ is positive semidefinite for all choices of $\bfx_0 \in \RR^m$, then $A \in \Sigma \big[\Sym_d(\RR(\bfx))\big]^2$
+\end{theorem}
+
+This generalizes Artin's celebrated, classical result on nonnegative polynomials with real coefficients. 
+
+\begin{theorem}[Artin's solution to Hilbert's 17th Problem]
+    \label{thm:2}
+    Let $f \in \RR[\bfx]$.
+    The following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            $f(\bfx) \geq 0$ for all $\bfx$.
+        \item 
+            $f \in \Sigma \RR(\bfx)^2$.
+    \end{enumerate}
+\end{theorem}
+
+We will prove the more general statement, which proves Theorem \ref{thm:1} with the help of Theorem \ref{thm:2}.
+
+\begin{theorem}
+    \label{thm:3}
+    Let $F$ be a real field, and let $A \in \Sym_d(F)$ such that $\det A[J] \in \Sigma F^2$ for all $J \subseteq \{1,\ldots,n\}$.
+Then $A \in \Sigma \big[\Sym_d(F)\big]^2$.
+\end{theorem}
+
+\begin{proof}[Proof that Theorem \ref{thm:3} implies Theorem \ref{thm:1}]
+    Let $A \in \Sym_d(\RR[\bfx])$.
+
+    We will first show that all principal minors of $A$ are in fact non-negative polynomials.
+    We note that for all matrices $H \in \Mat_d(\RR[\bfx])$, $(\det H)(\bfx_0)=\det\big(H(\bfx_0)\big)$ and $H[J](\bfx_0) = H(\bfx_0)[J]$ for all $J \subseteq [n]$.
+    In other words, \textit{taking determinants and taking submatrices commutes with evaluation}.
+    So, if $J \subseteq [n]$,
+    \[
+        \big(\det A[J]\big)(\bfx_0)
+        = \det \big(A[J](\bfx_0)\big)
+        = \det \big(A(\bfx_0)[J]\big)
+        \geq 0,
+    \]
+    for all $\bfx_0 \in \RR^d$ supposing that $A(\bfx_0)$ is positive semidefinite for all $\bfx_0 \in \RR^d$.
+    Then we may apply Theorem \ref{thm:2} to $\det A[J] \in \RR[\bfx]$, to conclude that $\det A[J] \in \Sigma \RR(\bfx)^2$.
+
+    Now, take $A$ to live in $\Sym_d(\RR(\bfx))$, where we are simply extending the inclusion of $\RR[\bfx]$ into $\RR(\bfx)$, then we can apply Theorem \ref{thm:3}, with $F = \RR(\bfx)$, to say that $A \in \Sigma\big[\Sym_d(\RR(\bfx))\big]^2$.
+\end{proof}
+
+\section{Review of real algebra}
+
+We will recover basic results in the theory of real symmetric matrices in the more general context of real closed fields.
+
+First, a small digression about ordering.
+The data involving the order in an ordered field can be encoded as a set that names all the positive elements.
+
+\begin{definition}
+    An \defstyle{ordering} of a field $F$ is a set of elements $P \subseteq F$ such that $P+P\subseteq P$, $P \cdot P \subseteq P$, $F^2 \subseteq P$, $-1\notin P$, and $P \cup -P = F$.
+\end{definition}
+
+If one has an ordered field $F$, then one has an ordering $P$ by considering all the elements $p \in F$ such that $p \geq 0$.
+Conversely, if one has a field and an ordering $P$ and a field $F$, one can make $F$ an ordered field by putting $p \geq 0$ for all $p \in P$.
+
+Now, we discuss real closed fields.
+
+\begin{definition}
+The \defstyle{first order language of ordered fields} $\OrdField$ consists of well-formed sentences involving the usual logical symbols and connectives, as well as the non-logical symbols $+$, $\cdot$, $0$, $1$, $\ ^{-1}$, $\leq$.
+
+    A \defstyle{real closed field} is an ordered field for which a sentence $\psi$ in $\OrdField$ is true if and only if it is true in $\RR$.
+\end{definition}
+
+This is not the usual definition of a real closed field.
+We will discuss a few important, equivalent definitions.
+
+\begin{theorem}
+    [Artin-Schreier 1926]
+    \label{thm:ArtinSchreier1926}
+    Let $F$ be a field.
+    The following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            $-1 \notin \Sigma F^2$, and $-1 \in \Sigma G^2$ for any nontrivial algebraic extension $G$ of $F$.
+        \item 
+            $F^2$ is an ordering of $F$, and every odd degree polynomial with coefficients in $F$ has a root in $F$.
+        \item 
+            $F \neq F[\sqrt{-1}]$, and $F[\sqrt{-1}]$ is algebraically closed.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    See Theorem 1.2.9 in \cite{NetzerRAG}
+\end{proof}
+
+
+\begin{theorem}
+    [Tarski 19??]
+    Let $F$ be a field.
+    The following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            $F$ is real closed.
+        \item 
+            $F$ satisfies any of the statements in Theorem \ref{thm:ArtinSchreier1926}.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    We will define $\RCF$ to be the \defstyle{theory of real closed fields}, to be the field axioms adjoined with (the correct encoding of) statement (ii) in Theorem \ref{thm:ArtinSchreier1926}.
+
+    One can prove \defstyle{quantifier elimination} is possible in $\RCF$, and moreover algorithmically possible, hence $\RCF$ is a decidable theory.
+    Moreover, one can show that $\RCF$ can prove or disprove any quantifier free statement in $\OrdField$, hence $\RCF$ is complete.
+    Lastly, $\RR \models \RCF$, so by basic model theory, if $R \models \RCF$, $R$ and $\RR$ are elementarily equivalent, i.e, they agree on all sentences in $\OrdField$.
+\end{proof}
+
+With the logic out of the way, we can begin to glean some properties of real closed fields.
+
+\begin{proposition}
+    [The ordering on $\RCF$s]
+    \label{thm:RCFOrder}
+    In a real closed field $R$, the set $R^2$ identifies all the positive elements.
+\end{proposition}
+
+\begin{proof}
+    Consider the $\OrdField$ sentences
+    \[
+        \forall y (y^2 \geq 0)
+    \]
+    and
+    \[
+        \forall x \Big(x \geq 0 \iff \exists y (x = y^2)\Big),
+    \]
+    which are evidently true in $\RR$.
+\end{proof}
+
+\begin{proposition}
+    [Characterizations of PSD matrices over an RCF]
+    \label{prop:RCFpsd}
+    Let $R$ be a real-closed field and let $A \in \Sym_d(R)$.
+    The following are equivalent
+    \begin{enumerate}[label=(\roman*)]
+        \item 
+            All the principal minors of $A$ are nonnegative.
+        \item 
+            $\bfx^T A \bfx \geq 0$ for all $\bfx \in R^d$.
+        \item 
+            $A$ is diagonalizable with nonnegative eigenvalues.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    If we fix $d$, we may completely encode the statement (i) $\implies$ (ii) in $\OrdField$, hence its truth in $R$ coincides with its truth in $\RR$.
+
+    As an example, put $d = 2$.
+    Then our statement in the first order language of ordered fields is
+    \begin{align*}
+        &\forall a,b,c,d \\
+        &\Bigg[
+            \underbrace{
+                \Big(
+                    a \geq 0 
+                    \wedge d \geq 0
+                    \wedge ad - bc \geq 0
+                \Big)
+            }_{\text{nonnegative principal minors}}
+            \implies
+            \underbrace{
+                \forall x,y
+                \left(
+                    ax^2 + (b+c)xy + dy^2 \geq 0
+                \right)
+            }_{\text{positive-semidefiniteness}}
+        \Bigg].
+    \end{align*}
+    Similarly, we may do (ii) $\implies$ (iii).
+
+    The statement ``$\begin{pmatrix}a & b \\ c & d\end{pmatrix}$ is diagonalizable with nonnegative eigenvalues'', in the $d=2$ case, is \footnote{Trust me}
+    \begin{align*}
+        &\exists e,f,g,h \\
+        &\Bigg[
+        eh - fg = 1
+        \wedge e^2b + efd - fea + f^2c = 0
+        \wedge g^2b + ghd - hga + h^2c = 0
+        \\
+        &\wedge hea + hfc - geb - gfd \geq 0
+        \wedge egb + ehd - fga - fhc \geq 0
+        \Bigg]
+    \end{align*}
+    The point is, we can encode the whole theorem for a fixed $d$ entirely as a sentence in $\OrdField$.
+    Then, we use the fact that the theorem is true for real symmetric matrices.
+\end{proof}
+
+Next, we discuss weaker objects than real closed fields, which we will need.
+
+\begin{definition}
+    A \defstyle{real field} is a field $F$ in which $-1 \notin \Sigma F^2$.
+\end{definition}
+
+\begin{proposition}
+    All real fields $F$ have at least one ordering $\leq$ such that $(F, \leq)$ is an ordered field.
+    Moreover, when equipped with such an order, there exists an ordered field $R$ such that $R$ is real closed, $R$ is algebraic extension of $K$, and the order on $R$ extends the order on $F$.
+    We call $R$ a \defstyle{real closure} of $F$.
+\end{proposition}
+
+\begin{proof}
+    Theorem 1.4.2 in \cite{NetzerRAG}.
+\end{proof}
+
+\section{Proof of the theorem}
+
+We will need the following lemma.
+
+\begin{lemma}
+    \label{lem:4}
+    Let $F$ be a real field and suppose $A$ satisfies the hypotheses of Theorem 3; $A \in \Sym_d(F)$ such that $\det A[J] \in \Sigma F^2$ for all $J \subseteq \{1,\ldots,n\}$.
+
+    Then the minimal polynomial $m(t) \in F[t]$ of $A$ is of the form:
+    \[
+        m(t)
+        =
+        \sum_{i=0}^k
+        (-1)^{k-i}a_it^i
+        =
+        t^k - a_{k-1}t^{k-1} + \cdots + (-1)^ka_0.
+    \]
+    where $a_i \in \Sigma F^2$ for all $i$.
+    Moreover, $a_1 \neq 0$.
+\end{lemma}
+
+\begin{proof}
+    This proof happens fairly quickly in \cite{HN06}.
+    We will spend some more detail on this.
+    \begin{itemize}
+        \item[\textbf{Step 1}]
+            \textsc{\color{Crimson} Characterize sums of squares in terms of nonnegativity in real closures}
+
+            Sums of squares play a special role in real fields $K$.
+            We have that
+            \[
+                \tag{\cite{NetzerRAG} Theorem 1.1.16}
+                \Sigma K^2
+                =
+                \bigcap_{\substack{\text{$P$ is an}\\\text{ordering of $K$}}} P.
+            \]
+            One can interpret this as saying that they are the elements that will \textit{always} be positive regardless of the order one realizes on $K$.
+            So, if $x \in \Sigma F^2$, that means that $x \geq 0$ in \textit{any} ordering of $F$. 
+            In fact, if $x \geq 0$ in any real closure, then this means that $x \in \Sigma K^2$, as $x \geq 0$ in a real closure $R$ means that $x \in P$ in some ordering $P$ of $F$ which $R$ extends.
+            We conclude:
+            \begin{center}
+                \textit{If $x \geq 0$ in all real closures of $F$, then $x \in \Sigma F^2$, and conversely.}
+            \end{center}
+            Then the path ahead is clear: \textit{we want to show that $a_i \geq 0$ in all real closures $R$ of $F$}.
+
+        \item[\textbf{Step 2}]
+            \textsc{\color{Crimson} Show that $A$ has nonnegative eigenvalues in every real closure}
+
+            If $R$ is a real closure of $F$, all the principal minors $\det A[J]$ of $A$ are nonnegative in $R$, as, by the hypothesis, they are sums of squares in $F$, hence they are sums of squares in $R$, and the nonnegative elements of $R$ are precisely the squares (Theorem \ref{thm:RCFOrder}), so $\det A[J]$ is a sum of nonnegative elements of $R$.
+
+            Then, we have the following:
+            \begin{center}
+                \textit{In any real closure of $F$, all the principal minors of $A$ are nonnegative}.
+            \end{center}
+            Now, combined with \ref{prop:RCFpsd}, this statement reads
+            \begin{center}
+                \textit{In any real closure of $F$, $A$ is diagonalizable with nonnegative eigenvalues}.
+            \end{center}
+
+        \item[\textbf{Step 3}]
+            \textsc{\color{Crimson} Prove the lemma}
+
+            Each $a_i$ is a sum of products of eigenvalues of $A$.
+            (Specifically, it is an elementary symmetric polynomial in the distinct eigenvalues of $A$, since $A$ is diagonalizable).
+
+            Then $a_i$ is nonnegative in every real closure $R$ of $A$, as we have shown that its eigenvalues in $R$ are nonnegative.
+            But, as we have noted, this means that $a_i$ is a sum of squares in $F$!
+            This completes the proof of the first statement.
+    \end{itemize}
+
+    Finally, we complete the theorem by proving the second statement.
+
+    Since $A$ is diagonalizable, $m(t)$ has no repeated roots, hence $0$ can only appear at most once. 
+    This means that there is exactly $1$ term in $a_1$, the $k-1$th elementary symmetric polynomial in the roots of $m(t)$, that avoids this zero and is hence positive, hence $a_1 \neq 0$.
+\end{proof}
+
+There is a formula in \cite{HornJohnson} that expresses the characteristic polynomial directly in terms of principal minors, and I'm sure it simplifies this proof, but I haven't had the time to try it.
+
+We are now ready to prove the main theorem.
+
+\begin{proof}
+    [Proof of Theorem \ref{thm:3}]
+    Let $F$ be a real field and let $A \in \Sym_d(F)$ be a matrix whose principal minors are all nonnegative.
+
+    Let $m(t) = t^k - a_{k-1}t^{k-1} + \cdots + (-1)^k a_0$ be the minimal polynomial of $A$.
+
+    Then, by Cayley-Hamilton, $m(A) = 0$, so by splitting the even and odd degree terms, 
+    \[
+        (A^{k-1} + a_{k-2}A^{k-3} + \cdots + a_1I)A
+        =
+        a_{m-1}A^{k-1} + a_{m-3}A^{m-3} + \cdots + a_0I.
+    \]
+    Now put $B = A^{k-1} + a_{k-2}A^{k-3} + \cdots + a_1I \in \Sym_d(F)$.
+    $B$ is invertible, since $a_1 = 0$, hence it does not have $0$ as an eigenvalue.
+    Moreover, $B$'s inverse is also symmetric, i.e $B^{-1} \in \Sym_d(F)$.
+
+    Then, $B^{-1} = B \cdot B^{-2} = B \cdot (B^{-1})^2$, so
+    \[
+        A
+        =
+        B\Big(
+            a_{k-1}B^{-2}A^{k-1}
+            + a_{k-3}B^{-2}A^{k-3}
+            + \cdots
+            + a_0 B^{-2}
+        \Big).
+    \]
+    Everything ``in sight'' is a sum of squares.
+    \begin{itemize}
+        \item
+            All coefficients $a_i \in F$ appearing are sums of squares; $a_i \in \Sigma F^2$.
+        \item
+            Each $A^{k-2l}$ term is a square, as $k$ is odd; $A^{k-2l} \in \big[\Sym_d(F)\big]^2$. 
+        \item 
+            $B$ itself is a sum of squares, as $B = A^{k-1} + a_{k-2}A^{k-3} + \cdots + a_1I$, and $k$ is odd; $B \in \Sigma \big[\Sym_d(F)\big]^2$
+        \item 
+            And finally, $B^{-2} = (B^{-1})^2 \in \big[\Sym_d(F)\big]^2$.
+    \end{itemize}
+    So, in all, $A \in \Sigma \big[\Sym_d(F)\big]^2$.
+    The $k$ even case is similarly argued.
+\end{proof}
+
+\begin{thebibliography}{999999}
+    \raggedright\footnotesize
+
+    \bibitem[H\&J]{HornJohnson}
+    Roger Horn, Charles Johnson, 
+    \textit{Matrix Analysis}.
+
+    \bibitem[N]{NetzerRAG}
+    Tim Netzer, 
+    \textit{Real Algebra and Geometry}, 
+    Universit\"at Innsbruck, 
+
+    \url{https://www.uibk.ac.at/mathematik/algebra/media/teaching/ragen.pdf}.
+
+    \bibitem[S]{SchweighoferRAG}
+    Markus Schweighofer, 
+    \textit{Real Algebraic Geometry, Positivity and Convexity}, 
+    Universit\"at Konstanz, 
+
+    \url{https://www.uibk.ac.at/mathematik/algebra/media/teaching/ragen.pdf}.
+
+    \bibitem[HN06]{HN06}
+    Christopher Hillar and Jiewang Nie,
+    \textit{An elementary and constructive solution to Hilbert's 17th Problem for Matrices},
+    Proc. Amer. Math. Soc. \textbf{136} (2008), 73-76.
+
+    \url{https://doi.org/10.1090/S0002-9939-07-09068-5}. 
+
+    Also available as \arxiv{math/0610388v3}.
+\end{thebibliography}
+
+\end{document}
