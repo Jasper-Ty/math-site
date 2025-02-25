@@ -70,9 +70,11 @@
 \newcommand*\SL{\ensuremath{\text{SL}}}
 
 % Distinguished Lie algebras
-\newcommand*\glalg{\ensuremath{\mathfrak{gl}}}
-\newcommand*\slalg{\ensuremath{\mathfrak{sl}}}
-\newcommand*\spalg{\ensuremath{\mathfrak{sp}}}
+\newcommand*\gl{\ensuremath{\mathfrak{gl}}}
+\let\sl\slanted
+\newcommand*\sl{\ensuremath{\mathfrak{sl}}}
+\let\sp\superscript
+\newcommand*\sp{\ensuremath{\mathfrak{sp}}}
 \newcommand*\talg{\ensuremath{\mathfrak{t}}}
 \newcommand*\dalg{\ensuremath{\mathfrak{d}}}
 \newcommand*\nalg{\ensuremath{\mathfrak{n}}}
@@ -80,6 +82,13 @@
 
 % A field
 \newcommand*\kk{\ensuremath{\mathbb{k}}}
+
+\barenv[][section]{theorem}{Theorem}
+\barenv[bartheorem]{proposition}{Proposition}
+\barenv[bartheorem]{corollary}{Corollary}
+\barenv[bartheorem]{lemma}{Lemma}
+\barenv[bartheorem]{definition}{Definition}
+\barenv[bartheorem]{convention}{Convention}
 
 \newcommand*\acts{.}
 
@@ -95,7 +104,7 @@
 
 \section*{What is this?}
 
-These are notes based on my reading of Humphreys's ``Introduction to Lie Algebras and Representation Theory''.
+These are notes I am taking while reading of Humphreys's ``Introduction to Lie Algebras and Representation Theory''.
 
 \tableofcontents
 
@@ -126,13 +135,13 @@ These are notes based on my reading of Humphreys's ``Introduction to Lie Algebra
         The Kronecker delta
     \item [$\lbrack \wc \rbrack^?$]
         The Iverson bracket
-    \item [$\glalg$]
+    \item [$\gl$]
         The general linear Lie algebra
-    \item [$\slalg$]
+    \item [$\sl$]
         The special linear Lie algebra
     \item [$\oalg$]
         The orthogonal Lie algebra
-    \item [$\spalg$]
+    \item [$\sp$]
         The symplectic Lie algebra
     \item [$\talg$]
         The Lie algebra of upper triangular matrices
@@ -222,9 +231,9 @@ As an exercise in using this definition, we show the following:
 
 We will look at our first example of a Lie algebra, closely associated with the \defstyle{general linear group} $\GL(V)$ of invertible endomorphisms of a vector space $V$.
 
-\begin{definition}[$\glalg$, abstractly]
+\begin{definition}[$\gl$, abstractly]
     Let $V$ be a vector space.
-    The \defstyle{general linear algebra} $\glalg(V)$ is defined to be the Lie algebra with underlying vector space $\End V$ and bracket given by
+    The \defstyle{general linear algebra} $\gl(V)$ is defined to be the Lie algebra with underlying vector space $\End V$ and bracket given by
     \[
         \lb{xy}
         =
@@ -234,22 +243,22 @@ We will look at our first example of a Lie algebra, closely associated with the 
 \end{definition}
 
     $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
-    Then, the following definition gives us a more concrete avatar of $\glalg$, and is in a sense ``the only'' finite dimensional $\glalg$.
+    Then, the following definition gives us a more concrete avatar of $\gl$, and is in a sense ``the only'' finite dimensional $\gl$.
 
-\begin{definition}[$\glalg$, concretely]
+\begin{definition}[$\gl$, concretely]
     Let $\FF$ be some field and let $n$ be a positive integer.
-    The \defstyle{general linear algebra} $\glalg_n(\FF)$ is defined
+    The \defstyle{general linear algebra} $\gl_n(\FF)$ is defined
     \[
-        \glalg_n(\FF)
+        \gl_n(\FF)
         \coloneq
-        \glalg\big(\Mat_n(\FF)\big).
+        \gl\big(\Mat_n(\FF)\big).
     \]
 \end{definition}
 
-In this setting, we can easily compute the bracket of $\glalg$ relative to its standard basis:
+In this setting, we can easily compute the bracket of $\gl$ relative to its standard basis:
 
 \begin{proposition}
-    Let $\{e_{ij}\}_{i,j=0}^n$ be the standard basis of $\glalg_n(\FF)$.
+    Let $\{e_{ij}\}_{i,j=0}^n$ be the standard basis of $\gl_n(\FF)$.
     Then
     \[
         \lb{e_{ij}e_{kl}}
@@ -310,7 +319,7 @@ In this setting, we can easily compute the bracket of $\glalg$ relative to its s
 Importantly, many Lie algebras, and in fact all the Lie algebras we are concerned with, occur as subalgebras of the general linear algebra--- a \defstyle{subalgebra} of a Lie algebra $\frkg$ is a subspace of $\frkg$ that is closed under $\frkg$'s bracket.
 
 \begin{definition}
-    A \defstyle{linear Lie algebra} is a subalgebra of $\glalg_n(\FF)$ for some $n$.
+    A \defstyle{linear Lie algebra} is a subalgebra of $\gl_n(\FF)$ for some $n$.
 \end{definition}
 
 All finite dimensional Lie algebras are linear, in the sense that they are isomorphic to some linear Lie algebra.
@@ -342,53 +351,53 @@ The trace is independent of the basis used to compute it, hence it is a well def
 
 \begin{definition}[The type $\sfA_\ell$ Lie algebra]
     Let $V$ have dimension $n = \ell + 1$.
-    We define $\sfA_\ell$ to be the \defstyle{special linear algebra} $\slalg(V)$, the set of all \defstyle{traceless} endomorphisms of $V$, which means
+    We define $\sfA_\ell$ to be the \defstyle{special linear algebra} $\sl(V)$, the set of all \defstyle{traceless} endomorphisms of $V$, which means
     \[
         A_\ell
         \coloneq
-        \slalg(V)
+        \sl(V)
         \coloneq
         \Big\{
-            x \in \glalg(V) : \tr x = 0
+            x \in \gl(V) : \tr x = 0
         \Big\}.
     \]
-    As is the case with $\glalg(V)$ and $\glalg_n(\FF)$, we also define 
+    As is the case with $\gl(V)$ and $\gl_n(\FF)$, we also define 
     \[
         A_\ell
         \coloneq
-        \slalg_{\ell+1}(\FF)
+        \sl_{\ell+1}(\FF)
         \coloneq
         \Big\{
-            x \in \glalg_{\ell+1}(\FF) : \tr x = 0
+            x \in \gl_{\ell+1}(\FF) : \tr x = 0
         \Big\}
     \]
     and will refer to them interchangeably.
 \end{definition}
 
 This algebra is so named because of its connection with the \defstyle{special linear group} $\SL(V)$, a distinguished subgroup of $\GL(V)$.
-Unsurprisingly, $\slalg(V)$ shares a similar relationship to $\glalg(V)$.
+Unsurprisingly, $\sl(V)$ shares a similar relationship to $\gl(V)$.
 
 \begin{proposition}
-    $\slalg(V)$ is a subalgebra of $\glalg(V)$.
+    $\sl(V)$ is a subalgebra of $\gl(V)$.
 \end{proposition}
 \begin{proof}
-    The trace is a linear operator $\tr: \glalg_n(\FF) \to \FF$.
-    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\slalg_n(\FF) = \ker \tr$ is a subspace of $\glalg$.
+    The trace is a linear operator $\tr: \gl_n(\FF) \to \FF$.
+    Since the kernel of a linear operator is a subspace of its domain, we conclude that $\sl_n(\FF) = \ker \tr$ is a subspace of $\gl$.
 
-    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \glalg_n(\FF)$ means that $\glalg_n(\FF)$'s Lie bracket is closed in $\slalg_n(\FF)$.
+    Finally, the fact that $\tr(xy - yx) = \tr(xy) - \tr(yx) = 0$ for \textit{all} $x,y \in \gl_n(\FF)$ means that $\gl_n(\FF)$'s Lie bracket is closed in $\sl_n(\FF)$.
 \end{proof}
 
-Lastly, we will compute the dimension of $\slalg(V)$.
-Firstly, it has to be strictly less than that of $\glalg(V)$'s, as it is a proper subalgebra of $\glalg(V)$.
+Lastly, we will compute the dimension of $\sl(V)$.
+Firstly, it has to be strictly less than that of $\gl(V)$'s, as it is a proper subalgebra of $\gl(V)$.
 Hence
 \[
-    \dim \slalg(V) < \dim \glalg(V) = (\ell+1)^2.
+    \dim \sl(V) < \dim \gl(V) = (\ell+1)^2.
 \]
 So
 \[
-    \dim \slalg(V) \leq (\ell+1)^2 - 1 = \ell(\ell+2)
+    \dim \sl(V) \leq (\ell+1)^2 - 1 = \ell(\ell+2)
 \]
-However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\slalg_n(\FF)$:
+However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of $\sl_n(\FF)$:
 \begin{enumerate}
     \item 
         All the off-diagonal entries $e_{ij}$ where $i \neq j$--- there are $(\ell+1)^2 - (\ell + 1) = \ell^2 + \ell$ of these.
@@ -397,16 +406,16 @@ However, we can explicitly name $\ell(\ell+2)$ linearly independent elements of 
 \end{enumerate}
 So,
 \[
-    \dim \slalg(V) \geq \ell+2 + \ell + \ell = \ell(\ell + 2).
+    \dim \sl(V) \geq \ell+2 + \ell + \ell = \ell(\ell + 2).
 \]
 And, putting it together, we have proven:
 \begin{proposition}
     \[
         \dim \sfA_\ell
         =
-        \dim \slalg(V)
+        \dim \sl(V)
         =
-        \dim \slalg_n(\FF)
+        \dim \sl_n(\FF)
         =
         \ell(\ell+2).
     \]
@@ -438,7 +447,7 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
 \end{definition}
 
 \begin{theorem}
-    Let $\oalg_\omega(V)$ is a Lie subalgebra of $\glalg(V)$.
+    Let $\oalg_\omega(V)$ is a Lie subalgebra of $\gl(V)$.
 \end{theorem}
 \begin{proof}
     Let $x, y \in \oalg_\omega(V)$, and let $u, v \in V$.
@@ -551,11 +560,11 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
 \begin{definition}[The type $\sfC_\ell$ Lie algebra]
     Let $\dim V = 2\ell$, and let $V$ be endowed with a symplectic form $\omega$.
 
-    We define $\sfC_\ell$ to be the \defstyle{symplectic algebra} $\spalg(V)$:
+    We define $\sfC_\ell$ to be the \defstyle{symplectic algebra} $\sp(V)$:
     \[
         \sfC_\ell
         \coloneq
-        \spalg(V)
+        \sp(V)
         \coloneq
         \oalg_\omega(V).
     \]
@@ -563,10 +572,10 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
     \[
         \sfC_\ell
         \coloneq
-        \spalg_{2\ell}(\FF)
+        \sp_{2\ell}(\FF)
         \coloneq
         \Big\{
-            x \in \glalg_{2\ell}(\FF)
+            x \in \gl_{2\ell}(\FF)
             :
             Jx + x^\top J = 0
         \Big\}
@@ -677,56 +686,6 @@ We can check the following nice fact:
     \end{align*}
 \end{proof}
 
-Hence $\Lie[\wc]$ is actually \textit{functorial}, with mapping of arrows given by the identity map.
-
-What happens when we consider $\Lie[\frkg]$, where $\frkg$ is \textit{already} a Lie algebra?
-
-Let the new bracket of $\Lie[\frkg]$ be denoted by $\lBrack \wc, \wc \rBrack$.
-Then
-\[
-    \left\lBrack xy \right\rBrack
-    =
-    \lb{xy} - \lb{yx}
-    =
-    \lb{xy} + \lb{xy}
-    =
-    2\lb{xy}
-\]
-for all $x, y \in \frkg$.
-
-Then $\lBrack \wc, \wc \rBrack = 2[\wc, \wc]$.
-This fact actually characterizes Lie algebras.
-
-\begin{proposition}
-    Let $\scrA$ be a $\FF$-algebra with product $\ast$.
-    If $\Lie[\scrA]$ has product $2\ast$, then $\scrA$ is a Lie algebra with bracket given by $\lb{xy} = x \ast y$.
-\end{proposition}
-
-\begin{proof}
-    The product is bilinear by definition, so we have \ref{ax:LBIsBilinear}.
-
-    Next, we check \ref{ax:LBNilpotent}:
-    \[
-        x \ast x
-        =
-        \frac{2(x \ast x)}{2}
-        =
-        \frac{\lb{xx}}{2}
-        =
-        0.
-    \]
-    And finally, in the exact same way, we check the Jacobi identity, \ref{ax:LBJacobiIdentity}:
-    \[
-        x \ast (y \ast z)
-        + y \ast (z \ast x)
-        + z \ast (x \ast y)
-        =
-        \frac{\lb{x\lb{yz}} + \lb{y\lb{xz}} + \lb{z\lb{xy}}}{4}
-        =
-        0.
-    \]
-\end{proof}
-
 \subsection{Derivations, the adjoint representation}
 
 \begin{definition}
@@ -740,12 +699,12 @@ This fact actually characterizes Lie algebras.
     The collection of all derivations of $\scrA$ is denoted $\Der \scrA$.
 \end{definition}
 
-Derivations play nicely with the vector space structure of $\End \scrA$ as well as with the bracket inherited from $\glalg(\scrA)$.
+Derivations play nicely with the vector space structure of $\End \scrA$ as well as with the bracket inherited from $\gl(\scrA)$.
 
 \begin{proposition}
     Let $\scrA$ be a $\FF$-algebra.
     Then $\Der \scrA$ is a subspace of $\End \scrA$.
-    Moreover, it is a subalgebra of $\glalg(\scrA)$
+    Moreover, it is a subalgebra of $\gl(\scrA)$
 \end{proposition}
 
 \begin{proof}
@@ -855,7 +814,7 @@ Derivations play nicely with the vector space structure of $\End \scrA$ as well 
         +
         \Big(\lb{\dd\dd'}x\Big)y.
     \end{align*}
-    So $\Der \scrA$ is a subalgebra of $\glalg(\scrA)$.
+    So $\Der \scrA$ is a subalgebra of $\gl(\scrA)$.
 \end{proof}
 
 We have a special representation of \textit{any} Lie algebra, which is given by its action on itself.
@@ -884,7 +843,7 @@ We have a special representation of \textit{any} Lie algebra, which is given by 
     \end{align*}
     We will write $\ad x$ for $\ad_\frkg x$ unless there is any ambiguity.
 
-    As a set, we define $\ad \frkg \coloneq \ad_\frkg(\frkg) \subseteq \glalg(\frkg)$.
+    As a set, we define $\ad \frkg \coloneq \ad_\frkg(\frkg) \subseteq \gl(\frkg)$.
 \end{definition}
 
 \begin{proposition}
@@ -1136,7 +1095,7 @@ There is a natural definition of a Lie algebra homomorphism--- it's a map that r
 
 
 \begin{definition}
-    A \defstyle{representation} of a Lie algebra $\frkg$ is a Lie algebra homomorphism $\frkg \to \glalg(V)$ where $V$ is some vector space.
+    A \defstyle{representation} of a Lie algebra $\frkg$ is a Lie algebra homomorphism $\frkg \to \gl(V)$ where $V$ is some vector space.
 \end{definition}
 
 \subsection{Isomorphism theorems}
@@ -1330,26 +1289,11 @@ We have a useful theorem, usually considered a consequence of the third isomorph
 \end{theorem}
 
 \begin{proof}
-    Similarly to Proposition \ref{thm:CorrespondenceThm}, this is true on the level of a Lie algebra's vector space structure.
-
-    The maps
-    \[
-        \frkh \mapsto \frkh/\frki
-    \]
-    and
-    \[
-        \frkh \mapsto \bigcup_{h \in \frkh} (h + \frki)
-    \]
-    are mutual inverses.
-    Suppose $\frka \subseteq \frkb \subseteq \frkg$.
-    Then 
-
-    Hence, it proves the bijection.
-    \todo{details!}
+    Similarly to Proposition \ref{thm:CorrespondenceThm}, this is true on the level of a Lie algebra's vector space structure, since Lie algebra quotients are vector space quotients.
 \end{proof}
 
 \begin{theorem}
-    The adjoint representation $\ad: \frkg \to \glalg(\frkg)$ is a representation of $\frkg$.
+    The adjoint representation $\ad: \frkg \to \gl(\frkg)$ is a representation of $\frkg$.
 \end{theorem}
 
 \begin{proof}
@@ -1421,7 +1365,7 @@ We have a useful theorem, usually considered a consequence of the third isomorph
     \[
         x \mapsto gxg^{-1}
     \]
-    is an automorphism of $\glalg(V)$.
+    is an automorphism of $\gl(V)$.
 \end{proposition}
 \begin{proof}
     The aforementioned map is a vector space isomorphism, with explicit inverse
@@ -1476,7 +1420,7 @@ In group theory, solvable groups are precisely those which can be constructed wi
 \begin{proposition}
     A Lie algebra $\frkg$ is solvable if and only if there exists a filtration of ideals
     \[
-        \frkg = \frkg_0 \tge \frkg_1, \tge \cdots \tge \frkg_{k-1} \tge \frkg_k = \{0\}
+        \frkg = \frkg_0 \supsetneq \frkg_1, \supsetneq \cdots \supsetneq \frkg_{k-1} \supsetneq \frkg_k = \{0\}
     \]
     such that $\frkg_i / \frkg_{i+1}$ is abelian.
 \end{proposition}
@@ -1722,7 +1666,7 @@ We will prove \defstyle{Engel's theorem}.
 We will prove the following equivalent theorem:
 
 \begin{theorem}
-    Let $\frkg$ be a subalgebra of $\glalg(V)$, where $V$ has positive dimension.
+    Let $\frkg$ be a subalgebra of $\gl(V)$, where $V$ has positive dimension.
     If $\frkg$ consists only of nilpotent transformations, then there exists a nonzero vector $v \in V$ so that $\frkg \acts v = 0$.
 \end{theorem}
 
@@ -1736,7 +1680,7 @@ We will prove the following equivalent theorem:
     Then  we can find a nonzero vector $v \in V$ so that $x \acts v = 0$, and so $\frkg \acts v = \FF x \acts v = 0$.
 
     Now supppose $\dim \frkg > 1$.
-    The induction step is very algebraic, so we will break it down
+    The induction step is tricky, so we break it down.
     \begin{itemize}
         \item[\textbf{Step 1}] 
             \textsc{\color{Crimson} Locate an ideal $\frkh$ of codimension one.}
@@ -1798,34 +1742,39 @@ We will prove the following equivalent theorem:
             Now, it must be that $\frka = \frkg$, as otherwise $\frka$ is a proper subalgebra of $\frkg$ containing $\frkh$.
             Then $\frka/\frkh = \frkg/\frkh$, so $\frkg/\frkh$ is one-dimensional.
             This shows that $\frkh$ has codimension one in $\frkg$.
-    \end{itemize}
 
+        \item[\textbf{Step 2}] 
+            \textsc{\color{Crimson} Show that $\frkg$ leaves the subspace of common eigenvectors invariant}
 
+            Consider the subspace $W = \{ v \in V : \frkh \acts v = 0 \}$ of $V$.
+            Since $\frkh$ is an ideal of $\frkg$, $\frkg$ stabilizes $W$--- for all $g \in \frkg$, $h \in \frkh$, and $w \in W$, we have that
+            \begin{align*}
+                h \acts g \acts w
+                &=
+                hg \acts w
+                \\
+                &= 
+                \Big(gh - \lb{gh}\Big) \acts w
+                \\
+                &=
+                \Big( g \acts \underbrace{h \acts w}_{=0} \Big) + \Big(\underbrace{\lb{hg}}_{\in \frkh} \acts w\Big)
+                \\
+                &=
+                \Big( g \acts 0 \Big) + 0
+                \\
+                &=
+                0,
+            \end{align*}
+            hence $\frkg \acts W \subseteq W$.
 
-    Now, consider the subspace $W = \{ v \in V : \frkh \acts v = 0 \}$ of $V$.
-    Since $\frkh$ is an ideal of $\frkg$, $\frkg$ stabilizes $W$--- for all $g \in \frkg$, $h \in \frkh$, and $w \in W$, we have that
-    \begin{align*}
-        h \acts g \acts w
-        &=
-        hg \acts w
-        \\
-        &= 
-        \Big(gh - \lb{gh}\Big) \acts w
-        \\
-        &=
-        \Big( g \acts \underbrace{h \acts w}_{=0} \Big) + \Big(\underbrace{\lb{hg}}_{\in \frkh} \acts w\Big)
-        \\
-        &=
-        \Big( g \acts 0 \Big) + 0
-        \\
-        &=
-        0,
-    \end{align*}
-    hence $\frkg \acts W \subseteq W$.
+        \item[\textbf{Step 3}] 
+            \textsc{\color{Crimson} Write $\frkg$ as the sum of $\frkh$ and a one-dimensional subspace, and conclude the theorem.}
 
-    Then, if we pick $g \in \frkg$ and restrict it to $W$, we have a nilpotent endomorphism of $W$, hence $g$ has an eigenvector $v$ in $W$.
+            Now, pick $g \in \frkg \setminus \frkh$.
+            Then $\frkg = \frkh + \FF g$, and moreover, $g$ restricts to a nilpotent endomorphism of $W$, hence $g$ has an eigenvector $v$ in $W$.
 
-    Then, $(\frkh + \FF g) \acts v = 0$, completing the theorem.
+            Then, $\frkg.v = (\frkh + \FF g) \acts v = 0$, completing the theorem.
+        \end{itemize}
 \end{proof}
 
 Now, we can prove Engel's theorem:
@@ -1836,7 +1785,7 @@ Now, we can prove Engel's theorem:
 
     Let $\frkg$ be a Lie algebra whose elements are all ad-nilpotent.
 
-    Then $\ad \frkg$ is a subalgebra of $\glalg(\frkg)$ consisting of nilpotent transformations, hence there exists a nonzero vector $x \in \frkg$ such that $\ad \frkg \acts x = 0$.
+    Then $\ad \frkg$ is a subalgebra of $\gl(\frkg)$ consisting of nilpotent transformations, hence there exists a nonzero vector $x \in \frkg$ such that $\ad \frkg \acts x = 0$.
 
     But, from the definition of $\ad$, this means that $\lb{\frkg x} = 0$, hence $x \in Z(\frkg)$, so $Z(\frkg)$ has positive dimension, and $\dim \frkg / Z(\frkg) < \dim \frkg$.
 
@@ -1859,7 +1808,7 @@ Now, we can prove Engel's theorem:
 \end{proof}
 
 \begin{corollary}
-    If $\frkg$ is a nilpotent subalgebra of $\glalg(V)$, then there exists a flag in $V$ such that $\frkg \acts V_i \subseteq V_{i-1}$ for all $i$.
+    If $\frkg$ is a nilpotent subalgebra of $\gl(V)$, then there exists a flag in $V$ such that $\frkg \acts V_i \subseteq V_{i-1}$ for all $i$.
 
     Namely, there exists a basis of $V$ for which all the matrices of $\frkg$ are strictly upper triangular.
 \end{corollary}
@@ -1878,7 +1827,7 @@ Now, we can prove Engel's theorem:
 Similar to Engel's theorem, which concerned \textit{nilpotent} Lie algebras, we have \defstyle{Lie's theorem}, which concerns \textit{solvable} Lie algebras.
 
 \begin{theorem}[Lie's theorem]
-    Let $\frkg$ be a solvable subalgebra of $\glalg(V)$.
+    Let $\frkg$ be a solvable subalgebra of $\gl(V)$.
     Then $\frkg$ stabilizes some flag in $V$.
 \end{theorem}
 
@@ -1888,7 +1837,7 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
 
 \begin{theorem}
     \label{thm:SolvableAlgebraHasCommonEigenvector}
-    Let $\frkg$ be a solvable subalgebra of $\glalg(V)$.
+    Let $\frkg$ be a solvable subalgebra of $\gl(V)$.
     Then there exists $v \in V$ that is an eigenvector for all $x \in \frkg$.
 
     In other words, there exists a linear functional $\lambda: \frkg \to \FF$ such that 
@@ -1910,9 +1859,9 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
 
             Combined with the fact it is abelian, it then has an \textit{ideal} $\frkh/\lb{\frkg\frkg} \tle \frkg/\lb{\frkg\frkg}$ of codimension one, which, by the correspondence theorem (\ref{thm:CorrespondenceThm}), gives us an ideal $\frkh \tle \frkg$ of codimension one.
         \item[\textbf{Step 2}]
-            \textsc{\color{Crimson} Use induction to find a common eigenvector for $\frkh$.}
+            \textsc{\color{Crimson} Use induction to find a space of common eigenvectors $W$ of $\frkh$.}
 
-            Suppose that the theorem were true for all $\frkh \leq \glalg(V)$ such that $\dim \frkh < \dim \frkg$.
+            Suppose that the theorem were true for all $\frkh \leq \gl(V)$ such that $\dim \frkh < \dim \frkg$.
 
             Then there exists a linear functional $\lambda: \frkh \to \FF$ such that
             \[
@@ -2032,7 +1981,7 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
                 =
                 0,
             \]
-            being the commutator of two elements of $\glalg(W_n)$.
+            being the commutator of two elements of $\gl(W_n)$.
 
             Hence
             \[
@@ -2062,6 +2011,7 @@ Now, we can carry out the proof of Lie's theorem.
     If $\frkg$ is solvable, then it stabilizes the subspace $\FF v$, where $v$ is the eigenvector produced by Theorem (\ref{thm:SolvableAlgebraHasCommonEigenvector}).
 
     Then, consider the orthogonal subspace
+    \todo{finish lie's theorem}
 \end{proof}
 
 \subsection{Jordan-Chevalley decomposition}
@@ -2069,6 +2019,7 @@ Now, we can carry out the proof of Lie's theorem.
 We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an algebraically closed field is \defstyle{semisimple} if all of its eigenvalues are distinct.
 
 \begin{theorem}[Jordan-Chevalley decomposition]
+    \label{thm:JordanChevalley}
     Let $x \in \End V$.
     Then there exist unique $x_s, x_n \in \End V$ such that
     \begin{enumerate}[label=(\alph*)]
@@ -2150,51 +2101,165 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
                 0.
             \]
             where we have used the fact that $p(t) \equiv a_i \mod p_i(t)$ to write $p(x_i) = a_i + h(x_i)p_i(x_i)$ and that $p_i(x_i) = 0$.
+
+            \todo{finish jordan-chevalley}
     \end{itemize}
 
 \end{proof}
 
 \subsection{Cartan's criterion}
 
+We have \defstyle{Cartan's crtierion} for the solvability of a Lie algebra $\frkg$.
+
 \begin{theorem}[Cartan's criterion]
-    Let $\frkg$ be a subalgebra of $\glalg(V)$.
-    The following are equivalent
-    \begin{enumerate}[label=(\alph*)]
-        \item
-            $\frkg$ is solvable.
-        \item 
-            $\tr(xy) = 0$ for all $x \in \frkg$ and $y \in \lb{\frkg\frkg}$.
-    \end{enumerate}
+    Let $\frkg$ be a subalgebra of $\gl(V)$.
+    Then, if $\tr(xy) = 0$ for all $x \in \frkg$ and $y \in \lb{\frkg\frkg}$, $\frkg$ is solvable.
 \end{theorem}
 
+\begin{lemma}
+    \label{lem:TraceNilpotence}
+    Let $A \subseteq B$ be two subspaces of $\gl(V)$, where $\dim V < \infty$.
+    Let $M = \{x \in \gl(V) \mid \lb{x,B} \subseteq A\}$.
+    If $x \in M$ satisfies $\tr(xy) = 0$ for all $y \in M$, then $x$ is nilpotent.
+\end{lemma}
 \begin{proof}
-    We will use Engel's theorem to demonstrate the nilpotence of the derived algebra $\lb{\frkg\frkg}$.
+    Put $x = s + n$, where $s$ is semisimple and $n$ is nilpotent.
+    We will show that $s=0$, hence showing that $x$ is nilpotent.
     \begin{itemize}
         \item[\textbf{Step 1}]
+            \textsc{\color{Crimson} Fix a basis in which $x$ is in Jordan normal form}
+
+            Fix a basis $v_1,\ldots,v_m$ for which $s$ has the matrix form $\diag(a_1,\ldots,a_m)$ and in which $n$ is strictly upper triangular, namely, the Jordan normal form basis of $x$.
+            This is possible since $F$ is algebraically closed.
+
+        \item[\textbf{Step 2}]
+            \textsc{\color{Crimson} Characterize $s$ by the $\QQ$-dimension of its eigenvalues}
+
+            Let $E$ be the vector subspace of $F$ (over $\QQ$) spanned by the eigenvalues $a_1,\ldots,a_m$, i.e
+            \[
+                E = \opspan_\QQ(a_1,\ldots,a_m).
+            \]
+            Then
+            \[
+                s = 0 \iff E = \{0\} \iff E^\ast = \{0\},
+            \]
+            where $E^\ast$ is the dual space of $E$.
+            Since $E$ is finite dimensional, the fundamental pairing induces an isomorphism $E \simeq E^\ast$, so the last equivalence holds.
+
+        \item[\textbf{Step 3}]
+            \textsc{\color{Crimson} Encode a linear functional $f: E \to \QQ$ as a diagonal matrix $y \in M$}
+
+            Let $f: E \to \QQ$ be an element of $E^\ast$, then consider $y \in E$ such that the matrix of $y$ is $\diag\big(f(a_1),\ldots,f(a_m)\big)$.
+            In order to apply the trace hypothesis, we want to prove that $y \in M$.
+
+            We will show that $\ad y$ is a polynomial in $\ad x$.
+            First, we will show that it is a polynomial in $\ad s$.
+            It is easy to compute the adjoint action of semisimple elements:
+            \[
+                \ad s \acts e_{ij}
+                =
+                (a_i - a_j) \acts e_{ij}, \qquad
+                \ad y \acts e_{ij}
+                =
+                \big(f(a_i) - f(a_j)\big) \acts e_{ij}.
+            \]
+            Now, let $r(T) \in F[T]$ be a polynomial such that $r(a_i-a_j) = f(a_i)-f(a_j)$ for all pairs $i, j$.
+            The existence of $r(T)$ is given by Lagrange interpolation.
+            Then
+            \[
+                \ad y \acts e_{ij}
+                =
+                r(a_i-a_j) \acts e_{ij}
+                =
+                r(\ad s) \acts e_{ij}
+            \]
+            The Jordan-Chevalley decomposition of $\ad x$ is $\ad s + \ad n$, so by Theorem \ref{thm:JordanChevalley}, $\ad s$ is a polynomial in $\ad x$.
+            So, we conclude that $\ad y$ is a polynomial in $\ad x$, as $\ad y$ is a polynomial in $\ad s$, and $\ad s$ is a polynomial in $\ad x$.
+
+            Next, we will show that $y \in M$.
+            Since $\ad y$ is a polynomial in $\ad x$, if $\ad x.B \subseteq A$, then $\ad y.B \subseteq A$.
+            Hence $y \in M$.
+
+        \item[\textbf{Step 3}]
+            \textsc{\color{Crimson} Use the trace criterion on $xy$ to show that $f = 0$}
+
+            Since $s = \diag(a_1,\ldots,a_m)$, $y = \diag\big(f(a_1),\ldots,f(a_m)\big)$, we have that $sy = \diag\big(a_1f(a_1),\ldots,a_mf(a_m)\big)$.
+            Moreover, $n$ is upper triangular, as we are working in a basis in which $x = s+n$ is in Jordan normal form, so we conclude that $ny$ is upper triangular, as it is a product of an upper triangular matrix and a diagonal matrix.
+
+            So, if $\tr(xy) = 0$, we conclude that 
+            \[
+                0
+                =
+                \tr(xy)
+                =
+                \tr\big(sy + ny\big)
+                =
+                \tr(sy) + \underbrace{\tr(ny)}_{=0}
+                =
+                \tr(sy).
+            \]
+            So $0 = \tr(sy) = \sum_{i=1}^m a_if(a_i)$.
+            The right hand side is an element of the vector space $E$, since $f(a_i)$ is rational for all $i$.
+            If we apply $f$ to both sides, then we get that 
+            \[
+                0
+                =
+                f(0)
+                =
+                f\left(
+                    \sum_{i=1}^m
+                    a_if(a_i)
+                \right)
+                =
+                \sum_{i=1}^m
+                f(a_i)
+                f(a_i)
+                =
+                \sum_{i=1}^mf(a_i)^2.
+            \]
+            Since each $f(a_i)$ is rational, we conclude that $f(a_i) = 0$ for all $i$, so $f = 0$.
     \end{itemize}
-    Put $x = s + n$, where $s$ is semisimple and $n$ is nilpotent.
+\end{proof}
 
-    Fix a basis $v_1,\ldots,v_m$ for which $s$ has the matrix form $\diag(a_1,\ldots,a_m)$.
-    Let $E$ be the vector subspace of $F$ (over $\QQ$) spanned by the eigenvalues $a_1,\ldots,a_m$.
+With this, we can prove Cartan's criterion.
 
-    To show that $x$ is nilpotent, we need to show that $s = 0$, and so we need to show that $E = \{0\}$, and so we need to show that the dual space (with the fundamental pairing) $E^\ast = \{0\}$.
+\begin{proof}
+    We will use Engel's theorem to demonstrate the nilpotence of the derived algebra $\lb{\frkg\frkg}$ which will imply that $\frkg$ is solvable.
 
-    Let $f: E \to \QQ$ be an element of $E^\ast$, then consider $y \in E$ such that the matrix of $y$ is $\diag\big(f(a_1),\ldots,f(a_m)\big)$.
-    It is easy to compute the adjoint action of semisimple elements:
+    We need to prove that the trace criterion implies that all elements of $\lb{\frkg\frkg}$ are nilpotent.
+
+    Use Lemma \ref{lem:TraceNilpotence}, with $V = V$, $A = \lb{\frkg\frkg}$, $B = \frkg$, and so $M = \{x \in \gl(V): \lb{x,\frkg} \subseteq \lb{\frkg\frkg}\}$.
+
+    Then, to conclude that $x \in \lb{\frkg\frkg} \subseteq M$ is nilpotent, we want to show that $\tr(xy) = 0$ for all $y \in M$.
+
+    Let $x \in \lb{\frkg\frkg}$ and $y \in M$.
+    Put $x = \lb{zw}$, where $z,w \in \frkg$.
+    Then $\lb{wy} \in \lb{\frkg\frkg}$, by $M$'s definition.
+    So
     \[
-        \ad s (e_{ij})
+        \tr(xy)
         =
-        (a_i - a_j)e_{ij}, \qquad
-        \ad y (e_{ij})
+        \tr\big(\lb{zw}y\big)
         =
-        \big(f(a_i) - f(a_j)\big)e_{ij}.
+        \tr\big(z\lb{wy}\big)
+        =
+        \tr\big(\lb{wy}z\big)
+        =
+        0.
     \]
-    Now, let $r(T) \in F[T]$ be a polynomial such that $r(a_i-a_j) = f(a_i)-f(a_j)$ for all pairs $i, j$.
-    The existence of $r(T)$ is given by Lagrange interpolation.
+    So, if $x \in \lb{\frkg\frkg}$, $x$ is nilpotent.
+    By Engel's theorem, $\lb{\frkg\frkg}$ is a nilpotent subalgebra of $\gl(V)$.
+    We conclude that $\frkg$ is solvable.
+\end{proof}
 
-    Now $\ad s$ is the semisimple part of $\ad x$.
-    $\ad s$
+\begin{corollary}
+    Let $\frkg$ be a Lie algebra.
+    If $\tr(\ad x, \ad y) = 0$ for all $x \in \lb{\frkg\frkg}$, $y \in \frkg$, then $\frkg$ is solvable.
+\end{corollary}
 
+\begin{proof}
+    Apply Cartan's criterion to the subalgebra $\ad \frkg \subseteq \gl(\frkg)$, to conclude that $\ad \frkg$ is solvable.
+    Since $\ad \frkg$ is solvable if and only $\frkg$ is solvable, $\frkg$ is solvable.
 \end{proof}
 
 \subsection{Killing form}
@@ -2213,10 +2278,26 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 \end{proposition}
 
 \begin{proof}
+    Suppose that $\frkg$ is semisimple.
+    Then $\rad \frkg = 0$.
 \end{proof}
 
 \begin{theorem}
-    The Killing form on $\glalg_n(\FF)$ is given by
+    If $\frkg$ is semisimple, then it splits into the direct sum of its simple ideals
+    \[
+        \frkg
+        =
+        \frkg_1 \oplus \cdots \oplus \frkg_t.
+    \]
+    Moreover, the restriction of the Killing form $\kappa$ to each $\frkg_i$ is $\kappa|_{\frkg_i\times\frkg_i}$.
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
+
+\begin{theorem}
+    The Killing form on $\gl_n(\FF)$ is given by
     \[
         (x, y)
         \mapsto
@@ -2224,7 +2305,7 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
     \]
 \end{theorem}
 \begin{proof}
-    Let $x, y \in \glalg_n(\FF)$, and put $x = (x_{ij})$, $y = (y_{ij})$.
+    Let $x, y \in \gl_n(\FF)$, and put $x = (x_{ij})$, $y = (y_{ij})$.
 
     Then, by expanding the definition of matrix multiplication, we can see that
     \begin{align*}
@@ -2263,7 +2344,7 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
     \end{align*}
 
     Now define $\hat{x}_{ij}^{k\ell} \coloneq x_{ik}\delta_{\ell j} - \delta_{ik} x_{\ell j}$.
-    Then we have shown that $\hat{x}_{ij}^{k\ell} y_{k\ell} = \lb{xy}_{ij}$, which is namely the fact $\hat{x}_{ij}^{k\ell}$ is the matrix representation of $\ad x$ relative to the standard basis $e_{ij}$ of $\glalg_n(\FF)$.
+    Then we have shown that $\hat{x}_{ij}^{k\ell} y_{k\ell} = \lb{xy}_{ij}$, which is namely the fact $\hat{x}_{ij}^{k\ell}$ is the matrix representation of $\ad x$ relative to the standard basis $e_{ij}$ of $\gl_n(\FF)$.
 
     We now wish to know the value of $\tr (\hat{x} \hat{y})$.
     This is given by the contraction
@@ -2362,9 +2443,9 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 
 \begin{proof}
     Let $V$ be a vector space, and let $\frkg$ be a Lie algebra.
-    We will demonstrate a correspondence between $\frkg$-module structures on $V$ and representations of $\frkg$ in $\glalg(V)$.
+    We will demonstrate a correspondence between $\frkg$-module structures on $V$ and representations of $\frkg$ in $\gl(V)$.
 
-    Let $\phi: \frkg \to \glalg(V)$ be a representation of $\frkg$.
+    Let $\phi: \frkg \to \gl(V)$ be a representation of $\frkg$.
 
     Define a $\frkg$-module structure on $V$ by
     \[
@@ -2372,7 +2453,7 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
         \coloneq
         \phi(x) \acts v.
     \]
-    Then, \ref{ax:ModuleLeftDistribute} and \ref{ax:ModuleRightDistribute} follow easily from the fact that $\phi(x) \in \glalg(V)$.
+    Then, \ref{ax:ModuleLeftDistribute} and \ref{ax:ModuleRightDistribute} follow easily from the fact that $\phi(x) \in \gl(V)$.
 
     Then, the fact that $\phi$ is a Lie algebra homomorphism shows \ref{ax:ModuleBracket}, as
     \begin{align*}
@@ -2421,6 +2502,8 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 \begin{theorem}[Weyl's theorem]
     If $\frkg$ is a semisimple Lie algebra, then any representation of $\frkg$ is completely reducible.
 \end{theorem}
+
+\section{\texorpdfstring{$\sl_2(\FF)$}{sl2(F)}}
 
 \section{The root space decomposition}
 
