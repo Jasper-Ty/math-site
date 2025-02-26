@@ -16,7 +16,7 @@
 
 % Wildcard
 \newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
-\DeclarePairedDelimiter\ip\langle\rangle
+\newcommand\ip[1]{\left\langle{#1}\right\rangle}
 \DeclarePairedDelimiter\ideal\langle\rangle
 \DeclarePairedDelimiter\lb\lbrack\rbrack
 
@@ -48,7 +48,7 @@
 \DeclareMathOperator{\Der}{Der}
 
 % The adjoint representation of a Lie algebra
-\DeclareMathOperator{\ad}{ad}
+\newcommand*\ad{\operatorname{ad}}
 
 % An anonymous differential
 \newcommand{\dd}{\ensuremath{\text{d}}}
@@ -104,7 +104,7 @@
 
 \section*{What is this?}
 
-These are notes I am taking while reading of Humphreys's ``Introduction to Lie Algebras and Representation Theory''.
+These are notes I am taking while reading Humphreys's ``Introduction to Lie Algebras and Representation Theory'' \cite{Hum72}.
 
 \tableofcontents
 
@@ -147,11 +147,16 @@ These are notes I am taking while reading of Humphreys's ``Introduction to Lie A
         The Lie algebra of upper triangular matrices
     \item [$\nalg$]
         The Lie algebra of strictly upper triangular matrices
+    \item [$\ad$]
+        The adjoint representation
 \end{labeling}
 
 \newpage
 
-\section{Basic definitions and examples}
+\section{
+Basic definitions and examples 
+\texorpdfstring{\cite[\S 1]{Hum72}}{[Hum.\S 1]}
+}
 
 \begin{convention}
     All vector spaces considered are finite dimensional and no assumptions are made yet about underlying fields.
@@ -242,7 +247,7 @@ We will look at our first example of a Lie algebra, closely associated with the 
     defined with $\End V$'s natural ring structure.
 \end{definition}
 
-    $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
+    When $V$ is finite dimensional, $\End V$'s aforementioned ring structure is exactly that of $n \times n$ matrices, where $n = \dim V$.
     Then, the following definition gives us a more concrete avatar of $\gl$, and is in a sense ``the only'' finite dimensional $\gl$.
 
 \begin{definition}[$\gl$, concretely]
@@ -322,7 +327,8 @@ Importantly, many Lie algebras, and in fact all the Lie algebras we are concerne
     A \defstyle{linear Lie algebra} is a subalgebra of $\gl_n(\FF)$ for some $n$.
 \end{definition}
 
-All finite dimensional Lie algebras are linear, in the sense that they are isomorphic to some linear Lie algebra.
+Actually, all finite dimensional Lie algebras are linear, in the sense that they are isomorphic to some linear Lie algebra.
+This is \href{https://en.wikipedia.org/wiki/Ado%27s_theorem}{Ado's theorem}.
 
 \subsection{Examples}
 
@@ -375,7 +381,7 @@ The trace is independent of the basis used to compute it, hence it is a well def
 \end{definition}
 
 This algebra is so named because of its connection with the \defstyle{special linear group} $\SL(V)$, a distinguished subgroup of $\GL(V)$.
-Unsurprisingly, $\sl(V)$ shares a similar relationship to $\gl(V)$.
+$\sl(V)$ happens to shares a similar relationship to $\gl(V)$.
 
 \begin{proposition}
     $\sl(V)$ is a subalgebra of $\gl(V)$.
@@ -425,11 +431,8 @@ And, putting it together, we have proven:
 
 Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinear forms.
 
-\begin{definition}
-    Let $V$ be a vector space over the field $\FF$.
-
-    A \defstyle{bilinear form} is a function $\omega: V \times V \to \FF$ that is bilinear, i.e linear in each argument separately. 
-\end{definition}
+Fix a vector space $V$ over the field $\FF$.
+A \defstyle{bilinear form} is a function $\omega: V \times V \to \FF$ that is bilinear.
 
 \begin{definition}
     Let $V$ be a vector space with a bilinear form $\omega$.
@@ -447,7 +450,8 @@ Types $\sfB$, $\sfC$, and $\sfD$ are all defined with regards to certain bilinea
 \end{definition}
 
 \begin{theorem}
-    Let $\oalg_\omega(V)$ is a Lie subalgebra of $\gl(V)$.
+    Let $\omega$ be a bilinear form on $V$. 
+    Then $\oalg_\omega(V)$ is a Lie subalgebra of $\gl(V)$.
 \end{theorem}
 \begin{proof}
     Let $x, y \in \oalg_\omega(V)$, and let $u, v \in V$.
@@ -946,7 +950,10 @@ We will classify all the Lie algebras of dimensions $1$ and $2$.
     \]
 \end{proof}
 
-\section{Ideals and homomorphisms}
+\section{
+Ideals and homomorphisms 
+\texorpdfstring{\cite[\S 2]{Hum72}}{[Hum.\S 2]}
+}
 
 \subsection{Ideals}
 
@@ -955,7 +962,7 @@ We will classify all the Lie algebras of dimensions $1$ and $2$.
 \end{definition}
 
 \begin{convention}
-    In accordance with group theoretic notation, we write $\frkh \leq \frkg$ whenever $\frkh$ is a Lie subalgebra of $\frkg$, and $\frkh \tleq \frkg$ whenever $\frkh$ is an ideal of $\frkg$.
+    I like the group theoretic notation for normal subgroups, so we write $\frkh \leq \frkg$ whenever $\frkh$ is a Lie subalgebra of $\frkg$, and $\frkh \tleq \frkg$ whenever $\frkh$ is an ideal of $\frkg$.
 \end{convention}
 
 The \defstyle{sum} and the \defstyle{bracket} of the ideals $\frki, \frkj$ are defined in the obvious way:
@@ -1024,6 +1031,8 @@ As a nice consequence, we have effectively shown the following:
 \begin{proof}
     Ideals of $\frkg$ are subspaces of $\frkg$.
     By the previous theorem, it's clear that the set of ideals of $\frkg$ are a \textit{sublattice} of the set of subspaces of $\frkg$.
+
+    \todo{actually not enough of a proof here...}
 \end{proof}
 
 \begin{definition}
@@ -1290,6 +1299,7 @@ We have a useful theorem, usually considered a consequence of the third isomorph
 
 \begin{proof}
     Similarly to Proposition \ref{thm:CorrespondenceThm}, this is true on the level of a Lie algebra's vector space structure, since Lie algebra quotients are vector space quotients.
+    \todo{Need to prove this more detailed}
 \end{proof}
 
 \begin{theorem}
@@ -1353,7 +1363,7 @@ We have a useful theorem, usually considered a consequence of the third isomorph
     Hence, if $\frkg$ is simple, i.e if $Z(\frkg) = 0$, then $\ad$ has a trivial kernel, so it is an isomorphism. 
 \end{proof}
 
-\section{Automorphisms}
+\subsection{Automorphisms}
 
 \begin{definition}
     A \defstyle{automorphism} of a Lie algebra $\frkg$ is an isomorphism $\frkg \to \frkg$.
@@ -1393,7 +1403,10 @@ We have a useful theorem, usually considered a consequence of the third isomorph
     \end{align*}
 \end{proof}
 
-\section{Solvable and nilpotent Lie algebras}
+\section{
+Solvable and nilpotent Lie algebras 
+\texorpdfstring{\cite[\S 3]{Hum72}}{[Hum.\S 3]}
+}
 
 \subsection{The derived series, solvability}
 
@@ -1607,9 +1620,32 @@ The solvability of a Lie algebra measures how ``structured'' its nonabelianness 
     The \defstyle{radical} $\rad \frkg$ of a Lie algebra $\frkg$ is defined to be the maximal solvable ideal of $\frkg$.
 \end{definition}
 
+\begin{proposition}
+    Let $\frkg$ be a Lie algebra.
+    Then $\rad \frkg$ is uniquely defined.
+\end{proposition}
+
+The definition of the main objects of study is now given: 
+
 \begin{definition}
     A Lie algebra $\frkg$ is said to be \defstyle{semisimple} if $\rad \frkg = 0$.
 \end{definition}
+
+\begin{proposition}
+    \label{prop:SemisimpleIffNoAbelianIdeals}
+    A Lie algebra $\frkg$ is semisimple if and only if $\frkg$ has no nonzero abelian ideals.
+\end{proposition}
+
+\begin{proof}
+    Suppose $\frkg$ is semisimple.
+    Let $\frka$ be an abelian ideal of $\frkg$.
+    Then it is evidently solvable, so $\frka \subseteq \rad \frkg = 0$.
+
+    Suppose $\frkg$ has no nonzero abelian ideals.
+    Let $\frkh = \rad \frkg$. 
+    $\frkh/\lb{\frkh\frkh}$ is an abelian ideal of $\frkg$, so it must be that $\frkh/\lb{\frkh\frkh} = 0$.
+    Since $\frkh$ is solvable, $\frkh \neq \lb{\frkh\frkh}$, and so the only way that $\frkh/\lb{\frkh\frkh} = 0$ holds is that $\frkh = 0$.
+\end{proof}
 
 \subsection{The descending central series, nilpotency}
 
@@ -1648,7 +1684,7 @@ The solvability of a Lie algebra measures how ``structured'' its nonabelianness 
     \end{enumerate}
 \end{theorem}
 
-\subsection{Engel's theorem}
+\subsection{Engel's theorem \cite[\S 3.3]{Hum72}}
 
 We will prove \defstyle{Engel's theorem}.
 
@@ -1729,17 +1765,17 @@ We will prove the following equivalent theorem:
             \end{align*}
             for all $h \in \frkh$, so $x \in N_\frkg(\frkh)$.
 
-            But $x + \frkh$ being nonzero in $\frkg/\frkh$ means exactly that $x \notin \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$.
-            We will use this fact to produce a nontrivial maximal ideal of $\frkg$.
+            But $x + \frkh$ being nonzero in $\frkg/\frkh$ means exactly that $x \notin \frkh$, so $\frkh \subsetneq N_\frkg(\frkh)$, and we conclude that subalgebras of $\frkg$ are not self-normalizing.
 
-            We are always able to find a proper subalgebra of positive dimension--- choose the span of any single element in $\frkg$. 
-            Then, there must exist maximal proper subalgebras. 
-            Let $\frkh$ be maximal now. 
-            Then we have that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ is a larger proper subalgebra of $\frkg$.
+            We are always able to find a proper subalgebra of positive dimension--- take the one-dimensional subspace spanned by any single element in $\frkg$. 
+            Then there must exist maximal proper subalgebras of $\frkg$.
 
-            Hence, $\frkh$ is a proper ideal of $\frkg$, so $\frkg/\frkh$ must contain a one-dimensional subalgebra.
+            Let $\frkh$ be such a maximal subalgebra now. 
+            Then it must be that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ would be proper subalgebra of $\frkg$ properly containing $\frkh$, a contradiction to $\frkh$'s maximality.
+
+            Then $\frkh$ is a proper ideal of $\frkg$, which means $\frkg/\frkh$ has positive dimension, and so must contain a one-dimensional subalgebra.
             By Theorem \ref{thm:CorrespondenceThm}, this one-dimensional subalgebra has the form $\frka/\frkh$, where $\frkh \tle \frka \leq \frkg$.
-            Now, it must be that $\frka = \frkg$, as otherwise $\frka$ is a proper subalgebra of $\frkg$ containing $\frkh$.
+            Now, it must be that $\frka = \frkg$, as otherwise $\frka$ is again a proper subalgebra of $\frkg$ containing $\frkh$.
             Then $\frka/\frkh = \frkg/\frkh$, so $\frkg/\frkh$ is one-dimensional.
             This shows that $\frkh$ has codimension one in $\frkg$.
 
@@ -1814,12 +1850,16 @@ Now, we can prove Engel's theorem:
 \end{corollary}
 
 \begin{proof}
+    \todo{flag version of engel's}
 \end{proof}
 
-\section{Semisimple Lie algebras}
+\section{
+Lie's theorem and Cartan's criterion 
+\texorpdfstring{\cite[\S 4]{Hum72}}{[Hum.\S 4]}
+}
 
 \begin{convention}
-    Let $\FF$ denote an algebraically closed field of characteristic zero.
+    Let $\FF$ now denote an algebraically closed field of characteristic zero, unless stated otherwise.
 \end{convention}
 
 \subsection{Lie's theorem}
@@ -1855,21 +1895,21 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
         \item[\textbf{Step 1}] 
             \textsc{\color{Crimson} Locate an ideal $\frkh$ of codimension one.}
 
-            Since $\frkg$ is solvable, $\lb{\frkg\frkg} < \frkg$, and so $\frkg/\lb{\frkg\frkg}$ has positive dimension.
+            Since $\frkg$ is solvable, $\lb{\frkg\frkg} \subsetneq \frkg$, and so $\frkg/\lb{\frkg\frkg}$ has positive dimension.
 
-            Combined with the fact it is abelian, it then has an \textit{ideal} $\frkh/\lb{\frkg\frkg} \tle \frkg/\lb{\frkg\frkg}$ of codimension one, which, by the correspondence theorem (\ref{thm:CorrespondenceThm}), gives us an ideal $\frkh \tle \frkg$ of codimension one.
+            Combined with the fact it is abelian, it then has an \textit{ideal} $\frkh/\lb{\frkg\frkg} \subsetneq \frkg/\lb{\frkg\frkg}$ of codimension one, which, by the correspondence theorem (\ref{thm:CorrespondenceThm}), gives us an ideal $\frkh \subsetneq \frkg$ of codimension one.
         \item[\textbf{Step 2}]
-            \textsc{\color{Crimson} Use induction to find a space of common eigenvectors $W$ of $\frkh$.}
+            \textsc{\color{Crimson} Use induction to name a nonempty space of common eigenvectors $W$ of $\frkh$.}
 
-            Suppose that the theorem were true for all $\frkh \leq \gl(V)$ such that $\dim \frkh < \dim \frkg$.
+            Suppose that the theorem were true for all $\frka \leq \gl(V)$ such that $\dim \frka < \dim \frkg$.
 
-            Then there exists a linear functional $\lambda: \frkh \to \FF$ such that
+            Since $\dim \frkh < \dim \frkg$, there exists a linear functional $\lambda: \frkh \to \FF$ such that
             \[
                 x \acts v 
                 =
                 \lambda(x)v.
             \]
-            Now, define the amalgamation of eigenspaces 
+            Now, define
             \[
                 W
                 =
@@ -1878,8 +1918,9 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
                     x \acts w
                     =
                     \lambda(x)w
-                \Big\}.
+                \Big\},
             \]
+            which is a nonempty subspace of $V$ consisting of common eigenvectors for $\frkh$.
         \item[\textbf{Step 3}]
             \textsc{\color{Crimson} Prove that $\frkg$ leaves $W$ invariant.}
 
@@ -2028,7 +2069,7 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
         \item 
             $x_s$ is semismple and $x_n$ is nilpotent.
         \item 
-            $x_s$ and $x_n$ are polynomials in $x$.
+            $x_s$ and $x_n$ are polynomials in $x$ without constant term.
     \end{enumerate}
 \end{theorem}
 
@@ -2109,9 +2150,10 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
 
 \subsection{Cartan's criterion}
 
-We have \defstyle{Cartan's crtierion} for the solvability of a Lie algebra $\frkg$.
+We have \defstyle{Cartan's criterion} for the solvability of a Lie algebra $\frkg$.
 
 \begin{theorem}[Cartan's criterion]
+    \label{thm:Cartan'sCriterion}
     Let $\frkg$ be a subalgebra of $\gl(V)$.
     Then, if $\tr(xy) = 0$ for all $x \in \frkg$ and $y \in \lb{\frkg\frkg}$, $\frkg$ is solvable.
 \end{theorem}
@@ -2119,7 +2161,7 @@ We have \defstyle{Cartan's crtierion} for the solvability of a Lie algebra $\frk
 \begin{lemma}
     \label{lem:TraceNilpotence}
     Let $A \subseteq B$ be two subspaces of $\gl(V)$, where $\dim V < \infty$.
-    Let $M = \{x \in \gl(V) \mid \lb{x,B} \subseteq A\}$.
+    Let $M = \{x \in \gl(V) : \lb{x,B} \subseteq A\}$.
     If $x \in M$ satisfies $\tr(xy) = 0$ for all $y \in M$, then $x$ is nilpotent.
 \end{lemma}
 \begin{proof}
@@ -2223,7 +2265,7 @@ We have \defstyle{Cartan's crtierion} for the solvability of a Lie algebra $\frk
 
 With this, we can prove Cartan's criterion.
 
-\begin{proof}
+\begin{proof}[Proof of Theorem \ref{thm:Cartan'sCriterion}]
     We will use Engel's theorem to demonstrate the nilpotence of the derived algebra $\lb{\frkg\frkg}$ which will imply that $\frkg$ is solvable.
 
     We need to prove that the trace criterion implies that all elements of $\lb{\frkg\frkg}$ are nilpotent.
@@ -2262,16 +2304,37 @@ With this, we can prove Cartan's criterion.
     Since $\ad \frkg$ is solvable if and only $\frkg$ is solvable, $\frkg$ is solvable.
 \end{proof}
 
-\subsection{Killing form}
+\section{The Killing form \cite[\S 5]{Hum72}}
+
+\subsection{Definition}
 
 \begin{definition}
-    The \defstyle{Killing form} of a Lie algebra $\frkg$ is the bilinear form defined by
-    \[
+    The \defstyle{Killing form} $\kappa$ of a Lie algebra $\frkg$ over $\FF$ is the bilinear form defined
+    \begin{align*}
+        \kappa:
+        \frkg \times \frkg 
+        &\to
+        \FF, \\
         (x, y)
-        \mapsto
+        &\mapsto
         \tr(\ad x, \ad y).
+    \end{align*}
+\end{definition}
+
+\begin{definition}
+    Let $\beta$ be a symmetric bilinear form on $\frkg$.
+    We define the \defstyle{radical} $S$ of $\beta$ to be the set
+    \[
+        S
+        =
+        \{x \in \frkg: \beta(x,y) = 0 \text{ for all } y \in \frkg\}.
     \]
 \end{definition}
+
+\begin{lemma}
+    Let $\frkg$ be a Lie algebra and let $\kappa$ be its Killing form.
+    Then $\rad \kappa \subseteq \rad \frkg$.
+\end{lemma}
 
 \begin{proposition}
     A finite dimensional Lie algebra is semisimple if and only if its Killing form is nondegenerate.
@@ -2280,10 +2343,17 @@ With this, we can prove Cartan's criterion.
 \begin{proof}
     Suppose that $\frkg$ is semisimple.
     Then $\rad \frkg = 0$.
+    By Cartan's criterion (Theorem \ref{thm:Cartan'sCriterion}), $\ad_\frkg S$ is solvable, hence $S$ is solvable.
+    Then $S \subseteq \rad \frkg = 0$.
+
+    Suppose $S = 0$.
+    Then, if $\frka$ is an abelian ideal of $\frkg$,
+    
+    By Proposition \ref{prop:SemisimpleIffNoAbelianIdeals},
 \end{proof}
 
 \begin{theorem}
-    If $\frkg$ is semisimple, then it splits into the direct sum of its simple ideals
+    If $\frkg$ is semisimple, then it splits into a direct sum of its simple ideals
     \[
         \frkg
         =
@@ -2410,6 +2480,7 @@ With this, we can prove Cartan's criterion.
     \end{align*}
 \end{proof}
 
+\section{Complete reducibility of representations \cite[\S 6]{Hum72}}
 \subsection{\texorpdfstring{$\frkg$}{g}-modules}
 
 \begin{definition}
@@ -2492,10 +2563,67 @@ With this, we can prove Cartan's criterion.
 \end{proof}
 
 \begin{theorem}[Schur's lemma]
-    Let
 \end{theorem}
 \begin{proof}
 \end{proof}
+
+\subsection{The trace form and the Casimir element of a representation}
+
+\begin{definition}
+    Given a representation $\phi: \frkg \to \gl(V)$, we define the \defstyle{trace form} $\ip{\wc,\wc}_\phi$ by
+    \[
+        \ip{x,y}_\phi
+        \coloneq
+        \tr\big(
+            \phi(x)\phi(y)
+        \big).
+    \]
+\end{definition}
+
+Note that the Killing form $\kappa$ of a Lie algebra $\frkg$ is $\ip{\wc,\wc}_{\ad_\frkg}$.
+
+\begin{proposition}
+    Let $\frkg$ be a Lie algebra and let $\phi: \frkg \to \gl(V)$ be a representation of $\frkg$.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            $\ip{\wc,\wc}_\phi$ is symmetric.
+        \item 
+            $\ip{\wc,\wc}_\phi$ is associative, meaning that
+            \[
+                \ip{\lb{xy},z}_\phi
+                =
+                \ip{x,\lb{yz}}_\phi
+            \]
+            for all $x,y,z \in \frkg$.
+        \item 
+            If $\phi$ is faithful, $\ip{\wc,\wc}_\phi$ is nondegenerate.
+        \item 
+            The radical of $\ip{\wc,\wc}_\phi$ is an ideal of $\rad \frkg$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    (a) and (b) follow from the identities
+    \[
+        \tr(xy) 
+        = 
+        \tr(yx),\qquad
+        \tr\big(\lb{xy}z\big)
+        =
+        \tr\big(x,\lb{yz}\big)
+    \]
+    respectively.
+    
+\end{proof}
+
+\begin{definition}
+    The \defstyle{Casimir element} of a faithful representation $\phi: \frkg \to \gl(V)$ is
+    \[
+        \sum_{i=1}^n
+        \phi(x_i)\phi(x^i)
+    \]
+    where $(x_1,\ldots,x_n)$ and $(x^1, \ldots, x^n)$ are dual bases under $\ip{\wc,\wc}_\phi$.
+\end{definition}
 
 \subsection{Weyl's theorem}
 
@@ -2526,585 +2654,12 @@ In other words, it is a subalgebra in which all elements act diagonally.
 \begin{definition}
 \end{definition}
 
+\begin{thebibliography}{999999}
+    \raggedright\footnotesize
+
+    \bibitem[Humphreys]{Hum72}
+    James E. Humphreys, \textit{Introduction to Lie Algebras and Representation Theory}, Springer 1972.
+
+\end{thebibliography}
+
 \end{document}
-
-\section{Appendix}
-
-\subsection{Definitions}
-
-\begin{definition}
-    \label{def:Iverson}
-    Let $\psi$ be some statement that can be evaluated to be true or false.
-    The \defstyle{Iverson bracket} of $\psi$ is
-    \[
-        [\psi]^? \coloneq \begin{cases}
-            1, & \text{if }\psi\text{ is true} \\
-            0, & \text{otherwise}.
-        \end{cases}
-    \]
-    a function of the free variables of $\psi$.
-\end{definition}
-
-\subsection{Some linear algebra}
-
-I never really got a chance to learn much foundational \textit{abstract} linear algebra.
-Learning this material was a great way for me to brush up on a lot of this stuff, so here's a short dump of some important results.
-
-\subsubsection{Definitions}
-
-\begin{definition}
-    The \defstyle{endomorphism ring} $\End V$ of the vector space $V$ is the collection of all linear maps from $V$ to itself.
-
-    If $T \in \End V$ and $v \in V$, we will write $T \acts v$ to denote $T(v)$.
-\end{definition}
-
-\begin{definition}
-    Let $\FF$ be a field.
-    The \defstyle{$\mathbf{n}\times\mathbf{n}$ matrix ring} $\Mat_n(\FF)$ is defined to be the ring whose underlying set is $\FF^{n \times n}$ with pointwise scaling and addition, and with product given by matrix multiplication.
-\end{definition}
-
-\begin{definition}
-    Let $V$ be a vector space over the field $\FF$.
-    The \defstyle{dual space} $V^\ast$ of $V$ is the collection of all linear maps $V \to \FF$.
-\end{definition}
-
-\subsubsection{Rank-nullity}
-
-\begin{theorem}[\defstyle{Rank-nullity}]
-    \label{thm:RankNullity}
-    Let $x \in \End V$.
-    xhen
-    \[
-        \rank x + \nullity x
-        =
-        \dim V,
-    \]
-    where
-    \[
-        \rank x
-        \coloneq
-        \dim \im x
-        ,\qquad
-        \nullity x
-        \coloneq
-        \dim \ker x.
-    \]
-\end{theorem}
-
-\begin{proof}
-    Let $n = \dim V$, $r = \rank x$ and let $\ell = \nullity x$.
-
-    Let $\bfp=(p_1,p_2,\ldots,p_\ell)$ be a basis for $\ker x$.
-
-    We may extend this into a basis of $V$ by adjoining more vectors $\bfq=(q_{\ell+1},\ldots,q_n)$, so that $(\bfp,\bfq) = (p_1,\ldots,p_\ell,q_{\ell+1},\ldots,q_n)$ is a basis of $V$.
-
-    Then, we claim that
-    \[
-        x \acts \bfq
-        =
-        \Big(
-            x \acts q_{\ell+1},
-            \cdots
-            x \acts q_n,
-        \Big)
-    \]
-    is a basis for $\im x$.
-    We first show that it spans $\im x$: let $v \in V$, then $v = a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_nq_n$.
-
-    So
-    \begin{align*}
-        x \acts v
-        &=
-        x \acts 
-        \Big(
-            a_1p_1 + \cdots + a_\ell p_\ell + a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
-        \Big)
-        \\
-        &=
-        \underbrace{
-            \Big(
-                x \acts a_1p_1 + \cdots + a_\ell p_\ell
-            \Big)
-        }_{=0}
-        + 
-        \Big(
-            x \acts a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
-        \Big)
-        \\
-        &=
-        x \acts 
-        \Big(
-            a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
-        \Big)
-        \\
-        &=
-        a_{\ell+1}\Big(
-            x \acts q_{\ell+1}
-        \Big)
-        + \cdots
-        + a_n\Big(
-            x \acts q_n
-        \Big).
-    \end{align*}
-    Hence $x \acts v$ is in the span of $x \acts \bfq$.
-    Next, we show that it is linearly independent--- suppose that there existed $a_{\ell+1}, \ldots, a_n$ such that
-    \[
-        a_{\ell+1}\Big(
-            x \acts q_{\ell+1}
-        \Big)
-        + \cdots
-        + a_n\Big(
-            x \acts q_n
-        \Big)
-        \neq
-        0.
-    \]
-    But this means that
-    \[
-        x \acts 
-        \Big(
-            a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n
-        \Big)
-        \neq
-        0,
-    \]
-    and so the vector $a_{\ell+1} q_{\ell+1} + \cdots + a_n q_n$ is in the kernel of $x$, however it is not in the kernel of $x$ because it is not in the span of $\bfp$, a contradiction.
-
-    Hence $x \acts \bfq$ is linearly independent, completing our assertion that it is a basis of $\im x$.
-
-    Then $r = \dim \im x = n - \ell$, and so
-    \[
-        r + \ell 
-        = 
-        n,
-    \]
-    which proves the theorem.
-\end{proof}
-
-\begin{corollary}
-    Let $x \in \End V$.
-    The following are equivalent:
-    \begin{enumerate}[label=(\alph*)]
-        \item
-            $x$ is injective.
-        \item
-            $x$ is surjective.
-        \item
-            $x$ is bijective.
-    \end{enumerate}
-\end{corollary}
-
-\begin{proof}
-    We have the easily verifiable propositions:
-    \[
-        \dim \ker x = 0 \iff x \text{ is injective}
-    \]
-    \[
-        \dim \im x = \dim V \iff x \text{ is surjective}
-    \]
-    And, by rank nullity,
-    \[
-        \dim \ker x = 0
-        \iff
-        \dim \im x = \dim V,
-    \]
-    hence $x$ is injective if and only if it is surjective.
-\end{proof}
-
-\subsubsection{The matrix representation}
-
-We recall the definition of a tensor product:
-
-\begin{definition}
-    Let $V$ and $W$ be two $\FF$-vector spaces with bases $\bfv = (v_1,\ldots,v_n)$ and $\bfw = (w_1,\ldots,w_m)$ respectively.
-
-    The \defstyle{tensor product of vector spaces} $V \otimes W$, is the $\FF$-vector space with basis
-    \[
-        \Big\{
-            v_i \otimes w_j: 1 \leq i \leq n, 1 \leq j \leq m
-        \Big\}.
-    \]
-\end{definition}
-
-As a structure, there isn't really ``anything happening'' with this construction.
-The following definition makes 
-
-\begin{definition}
-    Let $V, W$ be $\FF$-vector spaces as before.
-
-    Let $v = a_1v_1 + \cdots + a_nv_n \in V$ and $w = b_1w_1 + \cdots + b_mw_m \in W$.
-    The \defstyle{tensor product of vectors} $v \otimes w$ is defined 
-    \[
-        v \otimes w
-        =
-        \left(
-            \sum_{i=1}^n
-            a_iv_i
-        \right)
-        \otimes
-        \left(
-            \sum_{j=1}^n
-            b_jw_j
-        \right)
-        \coloneq
-        \sum_{i=1}^n
-        \sum_{j=1}^m
-        a_ib_j (v_i \otimes w_j).
-    \]
-    This defines a map $i: V \times W \to V \otimes W$ given by $(v, w) \mapsto v \otimes w$.
-\end{definition}
-
-Together, this pair of constructions satisfies a \textit{universal property}:
-
-\begin{theorem}
-    If $U$ and $V$ are two $\FF$-vector spaces, then any bilinear map $f: U \times V \to W$ factors through $\otimes: U \times V \to U \otimes V$--- there exists a unique linear map $\overline{f}$ that makes the following diagram commute:
-    \[
-        \begin{tikzcd}
-            U \times V \arrow[rd, "f"] \arrow[d, "i"'] \\ 
-            U \otimes V \arrow[r, "\overline{f}"'] & W
-        \end{tikzcd}
-    \]
-\end{theorem}
-
-\begin{proof}
-    Fix bases $\bfu = (u_1, \ldots, u_n)$ and $\bfv = (v_1, \ldots v_n)$ of $U$ and $V$.
-
-    Let $u = a_1u_1 + \cdots + a_nu_n$ and $v = b_1v_1 + \cdots + b_mv_m$.
-
-    Then, by bilinearity,
-    \begin{align*}
-        f(u, v)
-        &=
-        f\Big(
-            a_1u_1 + \cdots + a_nu_n,
-            b_1v_1 + \cdots + b_mv_m
-        \Big)
-        \\
-        &=
-        \sum_{i=1}^n
-        a_i
-        \cdot
-        f\Big(
-            u_i,
-            b_1v_1 + \cdots + b_mv_m
-        \Big)
-        \\
-        &=
-        \sum_{i=1}^n
-        \sum_{j=1}^m
-        a_i
-        b_j
-        \cdot
-        f(u_i,v_j).
-    \end{align*}
-    Hence, $f$ is completely determined by its values $f(u_i,v_j)$ where $1 \leq i \leq n$, $1 \leq j \leq m$.
-    Conversely, any array $w_{ij} \in V$ defines a bilinear map by putting $(u_i,v_j) \mapsto w_{ij}$.
-
-    Pick some $i,j$.
-    If $f = \overline{f} \circ i$, it must be that
-    \[
-        f(u_i, v_j)
-        =
-        \Big(\overline{f} \circ i\Big)(u_i, v_j)
-        =
-        \overline{f}(u_i \otimes v_j).
-    \]
-\end{proof}
-
-\begin{definition}
-    Let $U, V, X, Y$ be $\FF$-vector spaces, and let $f: U \to X$ and $g: V \to Y$ be linear maps.
-    We define the \defstyle{tensor product of linear maps} $f \otimes g$ to be the map
-    \begin{align*}
-        f \otimes g:
-        U \otimes V
-        &\to
-        X \otimes Y
-        \\
-        \sum_i
-        u_i \otimes v_i
-        &\mapsto
-        \sum_i
-        f(u_i) \otimes g(v_i).
-    \end{align*}
-\end{definition}
-
-\begin{definition}
-    Let $U, V, W$ be vector spaces with bases $\bfu$, $\bfv$, $\bfw$, then any linear map $f: V \to W$ induces a linear map $U \otimes V \to U \otimes W$ given by $\id \otimes f$
-\end{definition}
-
-\begin{definition}
-    Let $V$ be a vector space over $\FF$ and fix a basis $\bfv = (v_1,\ldots,v_n)$ of $V$ with a dual basis $\bfv^\ast = (v^1, \ldots, v^n)$ of the dual space $V^\ast$.
-
-    By abuse of notation, we define the corresponding elements
-    \[
-        \bfv 
-        \coloneq 
-        \sum_{i=1}^n 
-        e^i \otimes v_i 
-        \in (\FF^n)^\ast \otimes V
-        ,\qquad
-        \bfv^\ast 
-        \coloneq 
-        \sum_{i=1}^n v^i \otimes e_i 
-        \in V^\ast \otimes \FF^n
-    \]
-    for the basis $\bfv$ and dual basis $\bfv^\ast$.
-\end{definition}
-
-\begin{definition}
-    Let $U, V, W$ be vector spaces with bases $\bfu$, $\bfv$, $\bfw$, then we define a product
-    \begin{align*}
-        (U^\ast \otimes V) \times (V^\ast \otimes W)
-        &\to
-        U^\ast \otimes W
-        \\
-        (u^i \otimes v_j)(v^k \otimes w_l)
-        &\mapsto
-        v^kv_j
-        (u^i \otimes w_l).
-    \end{align*}
-\end{definition}
-
-\begin{theorem}
-    Let $X: V \to W$ and $Y: U \to V$.
-    Then 
-    \[
-        \bfu^\ast(X \circ Y)\bfw
-        =
-        (\bfw^\ast X \bfv)(\bfv^\ast Y \bfu).
-    \]
-\end{theorem}
-
-\begin{theorem}
-    Let $V$ be a vector space over $\FF$ of dimension $n$.
-    Then
-    \[
-        \End V
-        \simeq
-        V^\ast \otimes V
-        \simeq
-        M_n(\FF).
-    \]
-\end{theorem}
-
-\begin{proof}
-    Fix a basis $\bfv$ and dual basis $\bfv^\ast$ of $V$.
-
-    Now, if $U$ is a vector space and $x \in \End V$, it has a linear action on $U^\ast \otimes V$ given by $u^i \otimes v_j \mapsto u^i \otimes (x \acts v_j)$.
-
-    The map $T \mapsto \bfv^\ast T \bfv$ is the desired isomorphism between $\End V$ and $V^\ast \otimes V$.
-
-    Then, the map $v^i \otimes v_j \mapsto e_{ij}$ provides the isomorphism between $V^\ast \otimes V$ and $M_n(\FF)$.
-\end{proof}
-
-\subsubsection{Change of basis}
-
-\begin{proposition}
-    If $\bfv$ and $\bfw$ are two bases of $V$, then
-    \[
-        \bfv\bfw^\ast \in (\FF^n)^\ast \otimes \FF^n
-    \]
-    encodes the change of basis matrix expressing coordinates in $\bfv$ as coordinates in $\bfw$.
-
-    Similarly,
-    \[
-        \bfw^\ast\bfv \in V^\ast \otimes V
-    \]
-    encodes the linear map $v_i \mapsto w_i$.
-\end{proposition}
-\begin{proof}
-    Define the array $S_{ij}$ to be the numbers for which
-    \[
-        v_i
-        =
-        \sum_{j=1}^n
-        S_{ij}w_j.
-    \]
-    Then
-    \begin{align*}
-       \bfv \bfw^\ast
-       &=
-       \left(
-           \sum_{i=1}^n
-           e^i \otimes v_i
-       \right)
-       \left(
-           \sum_{j=1}^n
-           w^j \otimes e_j
-       \right)
-       \\
-       &=
-       \sum_{i=1}^n
-       \sum_{j=1}^n
-       w^j(v_i)
-       (e_i \otimes e_j)
-       \\
-       &=
-       \sum_{i=1}^n
-       \sum_{j=1}^n
-       S_{ij}
-       (e_i \otimes e_j).
-    \end{align*}
-
-    Now, consider the map $T \in \End V$ given by $w_i \mapsto v_i$.
-    Then
-    \begin{align*}
-        \bfw^\ast T \bfw
-        &=
-        \sum_{i=1}^n
-        w^i \otimes (T \acts w_i)
-        \\
-        &=
-        \sum_{i=1}^n
-        w^i \otimes v_i
-        \\
-        &=
-        \sum_{i=1}^n
-        \sum_{j=1}^n
-        \delta_{ij}
-        (w^i \otimes v_j)
-        \\
-        &=
-        \sum_{i=1}^n
-        \sum_{j=1}^n
-        (e^i \acts e_j)
-        (w^i \otimes v_j)
-        \\
-        &=
-        \left(
-            \sum_{i=1}^n
-            w^i \otimes e_i
-        \right)
-        \left(
-            \sum_{j=1}^n
-            e^j \otimes v_j
-        \right)
-        \\
-        &=
-        \bfw^\ast\bfv.
-    \end{align*}
-\end{proof}
-
-
-
-\subsubsection{Trace}
-
-\begin{definition}
-    Let $V$ be a vector space with basis $\bfv = (v_1,\ldots,v_n)$
-    The \defstyle{trace} $\tr x$ of an endomorphism $x \in \End V$ of $V$ is defined to be the sum
-    \[
-        \sum_{i=1}^n 
-        v^i\Big(x(v_i)\Big).
-    \]
-\end{definition}
-
-\begin{theorem}
-    The trace is a linear operator, i.e if $x, y \in \End V$ and $a,b \in \FF$,
-    \[
-        \tr(ax + by)
-        =
-        a\tr x + b \tr y.
-    \]
-\end{theorem}
-\begin{proof}
-    \begin{align*}
-        \tr (ax + by)
-        &=
-        \sum_{i=1}^n 
-        v^i\Big((ax + by)(v_i)\Big)
-        \\
-        &=
-        \sum_{i=1}^n 
-        v^i\Big(ax(v_i) + by(v_i)\Big)
-        \\
-        &=
-        \sum_{i=1}^n 
-        av^i\Big(x(v_i)\Big)
-        + bv^i\Big(y(v_i)\Big)
-        \\
-        &=
-        a
-        \sum_{i=1}^n 
-        v^i\Big(x(v_i)\Big)
-        + 
-        b
-        \sum_{i=1}^n 
-        v^i\Big(y(v_i)\Big)
-        \\
-        &=
-        a \tr x + b \tr y.
-    \end{align*}
-\end{proof}
-
-\begin{theorem}
-    Let $V$ be a vector space.
-
-    For all $x, y \in \End V$, $\tr(xy) = \tr(yx)$.
-\end{theorem}
-
-\begin{proof}
-    Fix a basis $\bfv = (v_1, \ldots, v_n)$ of $V$.
-    \begin{align*}
-        \tr (xy)
-        &=
-        \sum_{i=1}^n 
-        v^i \acts xy \acts v_i
-        \\
-        &=
-        \sum_{i=1}^n 
-        \sum_{j=1}^n
-        \Big(
-            v^i \acts x \acts v_j
-        \Big) 
-        \Big(
-            v^j \acts y \acts v_i
-        \Big)
-        \\
-        &=
-        \sum_{j=1}^n
-        \sum_{i=1}^n 
-        \Big(
-            v^j \acts y \acts v_i
-        \Big)
-        \Big(
-            v^i \acts x \acts v_j
-        \Big) 
-        \\
-        &=
-        \sum_{i=1}^n 
-        v^i \acts yx \acts v_i
-        \\
-        &=
-        \tr (yx).
-    \end{align*}
-\end{proof}
-
-\begin{theorem}\label{thm:TraceIsBasisIndependent}
-    The trace of a linear operator $x \in \End V$ is basis invariant--- its value is independent of the basis used to compute it.
-\end{theorem}
-
-\subsection{Some commutative algebra}
-
-\subsubsection{The Chinese Remainder Theorem}
-
-\begin{theorem}[Chinese Remainder Theorem]
-    Let $R$ be a principal ideal domain, and let $I_1, \ldots, I_n$ be coprime ideals of $R$.
-
-    Put $I = I_1 \cap \cdots \cap I_n$.
-
-    The map $R/I \to R/I_1 \times \cdots \times R/I_n$ given by
-    \[
-        x + I
-        \mapsto
-        \Big(
-            x + I_1,
-            \cdots
-            x + I_n
-        \Big)
-    \]
-    is an isomorphism.
-\end{theorem}
-
-\begin{proof}
-    Let $I_{1,\ldots,n}$
-\end{proof}
