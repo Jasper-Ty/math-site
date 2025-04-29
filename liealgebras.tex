@@ -1702,6 +1702,7 @@ We will prove \defstyle{Engel's theorem}.
 We will prove the following equivalent theorem:
 
 \begin{theorem}
+    \label{thm:EngelsCommonEigenvector}
     Let $\frkg$ be a subalgebra of $\gl(V)$, where $V$ has positive dimension.
     If $\frkg$ consists only of nilpotent transformations, then there exists a nonzero vector $v \in V$ so that $\frkg \acts v = 0$.
 \end{theorem}
@@ -1850,7 +1851,48 @@ Now, we can prove Engel's theorem:
 \end{corollary}
 
 \begin{proof}
-    \todo{flag version of engel's}
+    We will prove this by induction on $\dim V$.
+    The one-dimensional case is trivial--- $L = \FF x$, where $x$ has an eigenvector.
+
+    Now let $\dim V$ be a vector space of dimension $n$, $\frkg$ a nilpotent subalgebra of $\gl(V)$, and suppose the theorem holds for all vector spaces of dimension less than $n$.
+    By Theorem \ref{thm:EngelsCommonEigenvector}, $\frkg$ has a common eigenvector, call it $v_1$.
+    Put $V_0 = \varnothing$, $V_1 = \FF v_1$.
+    Then $\frkg \acts V_1 = \varnothing$.
+
+    Now consider the vector space $W = V/V_1$.
+    The codimension of $V_1$ is $\dim V - 1$, so $\dim W = \dim V - 1 < \dim V$.
+
+    Moreover, the induced action of $\frkg$ on $W$ gives us a nilpotent subalgebra of $\gl(W)$. 
+    \todo{flag engels details}
+
+
+    Let $\frkg$ be a subalgebra of $\gl(V)$ and suppose $\frkg.W \subseteq W$ for some subspace $W$ of $V$.
+    Then the map $\pi: \gl(V) \to \gl(V/W)$ given by $\pi(x)(v + W) \mapsto x \acts v + W$ is a Lie algebra homomorphism.
+
+    I need to draw the diagrams for this shit
+    \todo{What is the homomorphism?}
+
+    Now, the induction hypothesis applies, and there exists a flag of $W$ that satisfies the conditions of the theorem.
+
+    Namely, this flag looks like $\varnothing = W_0 \subsetneq W_1 \subsetneq \cdots \subsetneq W_{n-1} = W$.
+    Pulled back by the projection map, we get the flag
+    \[
+        V_1 = W_0 + V_1 \subsetneq W_1 + V_1 \subsetneq \cdots \subsetneq W_{n-1} + V_1 = W + V_1 = V
+    \]
+    of $V$.
+    Naturally, then, we put $V_i = W_{i-1} + V_1$ for all $i \geq 1$, which gives us the flag we need.
+    for which
+    \[
+        \frkg.V_i
+        =
+        \frkg.(W_{i-1} + V_1) 
+        \subseteq
+        W_{i-2} + V_1
+        =
+        \frkg.V_{i-1}.
+    \]
+    \todo{flag engels}
+
 \end{proof}
 
 \section{
@@ -2165,6 +2207,8 @@ We have \defstyle{Cartan's criterion} for the solvability of a Lie algebra $\frk
     If $x \in M$ satisfies $\tr(xy) = 0$ for all $y \in M$, then $x$ is nilpotent.
 \end{lemma}
 \begin{proof}
+    This proof makes use of the ``trace trick'', which is actually unbelievable.
+
     Put $x = s + n$, where $s$ is semisimple and $n$ is nilpotent.
     We will show that $s=0$, hence showing that $x$ is nilpotent.
     \begin{itemize}
@@ -2172,7 +2216,7 @@ We have \defstyle{Cartan's criterion} for the solvability of a Lie algebra $\frk
             \textsc{\color{Crimson} Fix a basis in which $x$ is in Jordan normal form}
 
             Fix a basis $v_1,\ldots,v_m$ for which $s$ has the matrix form $\diag(a_1,\ldots,a_m)$ and in which $n$ is strictly upper triangular, namely, the Jordan normal form basis of $x$.
-            This is possible since $F$ is algebraically closed.
+            This is possible since $\FF$ is algebraically closed.
 
         \item[\textbf{Step 2}]
             \textsc{\color{Crimson} Characterize $s$ by the $\QQ$-dimension of its eigenvalues}
@@ -2337,6 +2381,7 @@ With this, we can prove Cartan's criterion.
 \end{lemma}
 
 \begin{proposition}
+    \label{prop:SemisimpleIffNondegenerateKillingForm}
     A finite dimensional Lie algebra is semisimple if and only if its Killing form is nondegenerate.
 \end{proposition}
 
@@ -2363,8 +2408,48 @@ With this, we can prove Cartan's criterion.
 \end{theorem}
 
 \begin{proof}
+    For any ideal $\frkh$ of $\frkg$, define $\frkh^\perp$ to be 
+    \[
+        \frkh^\perp
+        \coloneq
+        \{ 
+            x \in \frkg :
+            \kappa(x,y) = 0 \text{ for all } y \in \frkh
+        \}.
+    \]
+    We claim that $\frkh^\perp$ is an ideal of $\frkg$, since $\kappa(\lb{xy},z) = \kappa(x,\lb{yz})$, so for all $g \in \frkg$, $h \in \frkh^\perp$, and $y \in \frkh$,
+    \[
+        \kappa(\lb{hg},y)
+        =
+        \kappa(h,\lb{gy})
+        =
+        0,
+    \]
+    so $\lb{hg} \in \frkh^\perp$ whenever $h \in \frkh$ and $g \in \frkg$.
 
+    By Proposition \ref{prop:SemisimpleIffNondegenerateKillingForm}, we know that the Killing form $\kappa$ is nondegenerate since $\frkg$ is semisimple.
+    This means that $\frkh \cap \frkh^\perp = \{0\}$, and so, by dimensions, $\frkg = \frkh \oplus \frkh^\perp$.
+
+    Now, we will proceed by induction.
+    Suppose that $\frkg = \frkg_1 \oplus \cdots \oplus \frkg_{i-1} \oplus \frkh$, where $\frkg_1,\ldots,\frkg_{i-1}$ are simple ideals, and $\frkh$ is semisimple.
+    If $\frkh$ is simple, then we put $\frkg_i = \frkh$, and are done. 
+    If not, then let $\frkg_i$ be a minimal ideal of $\frkh$ and write
+    \[
+        \frkg 
+        = 
+        \frkg_1 \oplus \cdots \oplus \frkg_{i-1} 
+        \oplus \frkg_i \oplus \frkg_i^\perp
+        .
+    \]
+    By minimality, $\frkg_i$ is simple, and $\frkg_i^\perp$ is semisimple, since it is an ideal of a semisimple algebra.
+
+    Finally, we prove the uniqueness of this decomposition.
 \end{proof}
+
+\begin{corollary}
+    If $\frkg$ is semisimple, then $\frkg = \lb{\frkg\frkg}$, and all ideals and homomorphic images of $\frkg$ are semisimple.
+    Moreover, each ideal $\frkh$ of $\frkg$ is the direct sum of some list of distinct simple ideals of $\frkg$.
+\end{corollary}
 
 \begin{theorem}
     The Killing form on $\gl_n(\FF)$ is given by
@@ -2508,64 +2593,18 @@ With this, we can prove Cartan's criterion.
 
 \end{definition}
 
-\begin{proposition}
-    $\frkg$-modules are in one-to-one correspondence with representations of $\frkg$.
-\end{proposition}
-
-\begin{proof}
-    Let $V$ be a vector space, and let $\frkg$ be a Lie algebra.
-    We will demonstrate a correspondence between $\frkg$-module structures on $V$ and representations of $\frkg$ in $\gl(V)$.
-
-    Let $\phi: \frkg \to \gl(V)$ be a representation of $\frkg$.
-
-    Define a $\frkg$-module structure on $V$ by
-    \[
-        x.v
-        \coloneq
-        \phi(x) \acts v.
-    \]
-    Then, \ref{ax:ModuleLeftDistribute} and \ref{ax:ModuleRightDistribute} follow easily from the fact that $\phi(x) \in \gl(V)$.
-
-    Then, the fact that $\phi$ is a Lie algebra homomorphism shows \ref{ax:ModuleBracket}, as
-    \begin{align*}
-        \lb{xy}.v
-        &=
-        \phi\Big(\lb{xy}\Big) \acts v
-        \\
-        &=
-        \lb{\phi(x)\phi(y)} \acts v
-        \\
-        &=
-        \Big(
-            \phi(x)\phi(y) - \phi(y)\phi(x)
-        \Big)
-        \acts v
-        \\
-        &=
-        \Big(
-            \phi(x) \acts \phi(y) \acts v
-        \Big) 
-        -
-        \Big(
-            \phi(y) \acts \phi(x) \acts v
-        \Big) 
-        \\
-        &=
-        x.y.v - y.x.v.
-    \end{align*}
-    Conversely, suppose that $V$ has a $\frkg$-module structure.
-    Then for all $x \in \frkg$ we can define $\phi(x) \in \End V$ by
-    \[
-        \phi(x) \acts v
-        \coloneq
-        x.v.
-    \]
-\end{proof}
-
 \begin{theorem}[Schur's lemma]
+    Let $\phi: \frkg \to \gl(V)$ be irreducible.
+    Then the only endormorphisms of $V$ commuting with all $\phi(x)$ for all $g \in \frkg$ are the scalars.
 \end{theorem}
 \begin{proof}
 \end{proof}
+
+We will define a representation of $\frkg$
+
+\begin{definition}
+
+\end{definition}
 
 \subsection{The trace form and the Casimir element of a representation}
 
@@ -2610,9 +2649,11 @@ Note that the Killing form $\kappa$ of a Lie algebra $\frkg$ is $\ip{\wc,\wc}_{\
         \tr(yx),\qquad
         \tr\big(\lb{xy}z\big)
         =
-        \tr\big(x,\lb{yz}\big)
+        \tr\big(x\lb{yz}\big)
     \]
     respectively.
+
+    Suppose $\ip{\wc,\wc}_\phi$ is degenerate.
     
 \end{proof}
 
@@ -2625,13 +2666,104 @@ Note that the Killing form $\kappa$ of a Lie algebra $\frkg$ is $\ip{\wc,\wc}_{\
     where $(x_1,\ldots,x_n)$ and $(x^1, \ldots, x^n)$ are dual bases under $\ip{\wc,\wc}_\phi$.
 \end{definition}
 
+\begin{proposition}
+    Let $V$ be a $\frkg$-module.
+    Then the Casimir element $c_\phi \in \End V$ is $\frkg$-equivariant.
+\end{proposition}
+
+\begin{proof}
+    Let $x \in \frkg$.
+    Then
+\end{proof}
+
 \subsection{Weyl's theorem}
+
+\begin{lemma}
+    Let $V$ be a $\frkg$-module, and $W$ an \textit{irreducible} $\frkg$-submodule of $V$ of codimension $1$.
+    Then the sequence
+    \[
+        \begin{tikzcd}
+            0 \arrow[r] & W \arrow[r, "\iota"] & V \arrow[r, "\pi"] & \FF \arrow[r] & 0
+\end{tikzcd}
+    \]
+    splits.
+\end{lemma}
+
+\begin{proof}
+
+\end{proof}
+
+\begin{lemma}
+    Let $V$ be a $\frkg$-module, and $W$ an \textit{any} $\frkg$-submodule of $V$ of codimension $1$.
+    Then the exact sequence
+    \[
+        \begin{tikzcd}
+            0 \arrow[r] & W \arrow[r, "\iota"] & V \arrow[r, "\pi"] & \FF \arrow[r] & 0
+        \end{tikzcd}
+    \]
+    splits.
+\end{lemma}
+
+\begin{proof}
+    We will induct on $\dim W = n$.
+    Suppose the theorem held for all dimensions less than $n$. 
+
+    If $W$ is irreducible, we are done--- the previous lemma shows us that the sequence splits.
+    If $W$ is not irreducibe, let $W'$ be a nontrivial submodule of $W$.
+    We have another exact sequence
+    \[
+        \begin{tikzcd}
+            0 \arrow[r] & W/W' \arrow[r] & V/W' \arrow[r] & \FF \arrow[r] & 0
+        \end{tikzcd}.
+    \]
+    Now, $W/W'$ is a submodule of $V/W'$ of codimension $1$ of dimension less than $\dim W$.
+    Hence, we can apply the induction hypothesis to name a one-dimensional submodule $\tilde{W}/W'$ of $V/W'$ such that $V/W' \simeq W/W' \oplus \tilde{W}/W'$.
+
+    Once again, we can use the induction hypothesis on the sequence
+    \[
+        \begin{tikzcd}
+            0 \arrow[r] & W' \arrow[r] & \tilde{W} \arrow[r] & \FF \arrow[r] & 0
+        \end{tikzcd}.
+    \]
+    to produce a one-dimensional submodule $X$ of $\tilde{W}$ such that $\tilde{W} \simeq W' \oplus X$.
+
+    One can check that $X \cap W = \{0\}$, so $V \simeq W \oplus X$.
+\end{proof}
+
 
 \begin{theorem}[Weyl's theorem]
     If $\frkg$ is a semisimple Lie algebra, then any representation of $\frkg$ is completely reducible.
 \end{theorem}
 
-\section{\texorpdfstring{$\sl_2(\FF)$}{sl2(F)}}
+\begin{proof}
+    Let $V$ be a $\frkg$-module, and $W$ a $\frkg$-submodule of $V$ of codimension $1$.
+    We will consider the sequence
+    \[
+        \begin{tikzcd}
+            0 \arrow[r] & W \arrow[r, "\iota"] & V \arrow[r, "\pi"] & \FF \arrow[r] & 0
+        \end{tikzcd}
+    \]
+    where $W$ is a $\frkg$-submodule of $V$, and we identify $V/W$ with $\FF$.
+    We want to show that this sequence splits, i.e
+    \[
+        V 
+        \simeq 
+        W \oplus X,
+    \]
+    where $X$ is a one-dimensional submodule of $V$.
+
+    One can prove this using the apparently weaker statement that $W$ is irreducible.
+
+    Suppose $x \in X$.
+    Then $x \notin W'$.
+    Then $x + W' \neq 0$.
+    So $x \notin W/W'$
+    So $x \notin W$.
+\end{proof}
+
+\section{
+\texorpdfstring{$\sl_2(\FF)$}{sl2(F)}
+}
 
 \section{The root space decomposition}
 
