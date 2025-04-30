@@ -61,7 +61,6 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
         \ip{I, \gamma} = 0
     \}.
 \]
-So that the elements of $\calU/I$ are in correspondence with words in $I^\perp$.
 
 \section{
     Noncommutative 
@@ -90,7 +89,9 @@ So that the elements of $\calU/I$ are in correspondence with words in $I^\perp$.
 
 
 
-\subsection{Commutation relations}
+\subsection{
+    The ideal \texorpdfstring{$I_C$}{I\_C}
+}
 
 \begin{lemma}
     Let $I$ be an ideal.
@@ -118,8 +119,51 @@ So that the elements of $\calU/I$ are in correspondence with words in $I^\perp$.
 \end{definition}
 
 \begin{theorem}
+    \label{thm:ICImpliesEsCommute}
     $I_C$ is the smallest ideal in which the elementary symmetric functions $e_k(\bfu_S)$ and $e_\ell(\bfu_S)$ commute for any $k,\ell,S$.
 \end{theorem}
+
+\subsection{
+    The homomorphism
+}
+
+\begin{theorem}
+    [Fundamental theorem of symmetric functions]
+    \label{thm:FundThmSymFuncs}
+    Let $\Lambda(\bfx)$ denote the ring of symmetric polynomials in the commuting variables $\bfx = (x_1,\ldots,x_n)$.
+    Then
+    \[
+        \Lambda(\bfx)
+        \simeq
+        \QQ[e_1(\bfx), e_2(\bfx), \ldots, e_n(\bfx)].
+    \]
+\end{theorem}
+
+\begin{proof}
+    See Theorem 7.4.4 in \cite{EC2}.
+    One checks that products of the form.
+    One can prove this via the \textit{Gale-Ryser} theorem.
+\end{proof}
+
+\begin{corollary}
+    If $I$ contains $I_C$, then the map
+    \begin{align*}
+        \Lambda_n(\bfx)
+        &\to
+        \calU/I
+        \\
+        e_k(\bfx)
+        &\mapsto
+        e_k(\bfu)
+    \end{align*}
+    extends to a ring homomorphism.
+\end{corollary}
+
+\begin{proof}
+    Combine Theorems \ref{thm:FundThmSymFuncs} and \ref{thm:ICImpliesEsCommute}.
+\end{proof}
+
+
 
 \section{
     Noncommutative Schur functions
@@ -129,10 +173,15 @@ So that the elements of $\calU/I$ are in correspondence with words in $I^\perp$.
     The \defstyle{noncommutative Schur function} $\frkJ(\bfu)$ is defined to be
     \[
         \frkJ_\lambda(\bfu)
-        \coloneq
-        \sum_{T \in \SSYT(\lambda;N)}
-        \bfu^{\colword T}.
+        =
+        \sum_{\pi \in S_{t}}
+        \sgn(\pi)
+        e_{\lambda^\top_1+\pi(1)-1}(\bfu)
+        e_{\lambda^\top_2+\pi(2)-2}(\bfu)
+        \cdots
+        e_{\lambda^\top_{t}+\pi(t)-t}(\bfu),
     \]
+    where $t = \lambda_1$ is the number of parts of $\lambda^\top$.
 \end{definition}
 
 \begin{theorem}
@@ -140,31 +189,11 @@ So that the elements of $\calU/I$ are in correspondence with words in $I^\perp$.
     In the ideal $I_\varnothing$,
     \[
         \frkJ_\lambda(\bfu)
-        =
-        \sum_{\pi \in S_{t}}
-        \sgn(\pi)
-        e_{\lambda'_1+\pi(1)-1}(\bfu)
-        e_{\lambda'_2+\pi(2)-2}(\bfu)
-        \cdots
-        e_{\lambda'_{t}+\pi(t)-t}(\bfu),
+        \coloneq
+        \sum_{T \in \SSYT(\lambda;N)}
+        \bfu^{\colword T}.
     \]
-    where $t = \lambda_1$.
 \end{theorem}
-
-\begin{corollary}
-    [\cite{FG98}]
-    If $I$ contains the ideal $I_\varnothing$, the map 
-    \begin{align*}
-        \Lambda_n
-        &\to
-        \calU/I
-        \\
-        s_\lambda
-        &\mapsto
-        \frkJ_\lambda
-    \end{align*}
-    defines an algebra homomorphism.
-\end{corollary}
 
 \subsection{Cauchy kernel}
 
@@ -190,6 +219,11 @@ So that the elements of $\calU/I$ are in correspondence with words in $I^\perp$.
 
 \begin{thebibliography}{999999}
     \raggedright\footnotesize
+
+    \bibitem[EC2]{EC2}
+    Sergey Fomin and Curtis Greene, 
+    \textit{Noncommutative Schur functions and their applications}, 
+    Discrete Math. \textbf{193} (1998), 179-200.
 
     \bibitem[FG98]{FG98}
     Sergey Fomin and Curtis Greene, 
