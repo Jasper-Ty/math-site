@@ -12,6 +12,7 @@
 \newcommand*\frkJ{\mathfrak{J}}
 \newcommand*\SSYT{\operatorname{SSYT}}
 \newcommand*\sgn{\operatorname{sgn}}
+\newcommand*\Des{\operatorname{Des}}
 
 % See https://github.com/Jasper-Ty/dotfiles
 \usepackage[garamond]{jaspercommon}
@@ -35,7 +36,7 @@
 
 \section*{What is this?}
 
-This is (going to be) an ``infinite napkin'' set of notes I am taking about noncommutative Schur functions.
+This is (going to be) an ``infinite napkin'' set of notes I am taking about the Fomin-Greene theory of noncommutative Schur functions.
 
 \tableofcontents
 
@@ -94,9 +95,17 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
 }
 
 \begin{lemma}
-    Let $I$ be an ideal.
-    If the $e$'s commute modulo $I$, then the $h$'s commute modulo $I$ as well, and vice versa.
+    Let $I$ be an ideal of $\calU$.
+    The following are equivalent:
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            $e_k(\bfu)e_j(\bfu) \equiv e_j(\bfu)e_k(\bfu) \mod I$ for all $j,k$. 
+        \item 
+            $h_k(\bfu)h_j(\bfu) \equiv h_j(\bfu)h_k(\bfu) \mod I$ for all $j,k$.
+    \end{enumerate}
 \end{lemma}
+
+
 
 \begin{definition}
     We define the ideal $I_C$ to be the ideal consisting of exactly the elements
@@ -118,13 +127,21 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
     \end{align}
 \end{definition}
 
+Compactly, these are the relations
+\[
+    [u_au_b]u_a \equiv u_b[u_au_b], \quad
+    [u_au_c]u_b \equiv u_b[u_au_c], \quad
+    [u_cu_b]u_cu_a \equiv [u_cu_b]u_au_c
+\]
+for all $a<b<c$.
+
 \begin{theorem}
     \label{thm:ICImpliesEsCommute}
     $I_C$ is the smallest ideal in which the elementary symmetric functions $e_k(\bfu_S)$ and $e_\ell(\bfu_S)$ commute for any $k,\ell,S$.
 \end{theorem}
 
 \subsection{
-    The homomorphism
+    The map \texorpdfstring{$\Psi_I$}{Psi\_I}
 }
 
 \begin{theorem}
@@ -148,6 +165,7 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
 \begin{corollary}
     If $I$ contains $I_C$, then the map
     \begin{align*}
+        \Psi_I:
         \Lambda_n(\bfx)
         &\to
         \calU/I
@@ -158,6 +176,8 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
     \end{align*}
     extends to a ring homomorphism.
 \end{corollary}
+
+
 
 \begin{proof}
     Combine Theorems \ref{thm:FundThmSymFuncs} and \ref{thm:ICImpliesEsCommute}.
@@ -170,7 +190,8 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
 }
 
 \begin{definition}
-    The \defstyle{noncommutative Schur function} $\frkJ(\bfu)$ is defined to be
+    Let $I \supseteq I_C$.
+    The \defstyle{noncommutative Schur function} $\frkJ(\bfu) \in \calU/I$ is defined to be
     \[
         \frkJ_\lambda(\bfu)
         =
@@ -182,7 +203,91 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
         e_{\lambda^\top_{t}+\pi(t)-t}(\bfu),
     \]
     where $t = \lambda_1$ is the number of parts of $\lambda^\top$.
+    Alternatively, since the $h$'s commute whenever the $e$'s do,
+    \[
+        \frkJ_\lambda(\bfu)
+        =
+        \sum_{\pi \in S_{t}}
+        \sgn(\pi)
+        h_{\lambda_1+\pi(1)-1}(\bfu)
+        h_{\lambda_2+\pi(2)-2}(\bfu)
+        \cdots
+        h_{\lambda_t+\pi(t)-t}(\bfu).
+    \]
 \end{definition}
+
+The first definition is based on the \defstyle{Kostka-Naegelsbach identity}
+\[
+    s_\lambda(\bfx)
+    =
+    \det\big(e_{\lambda^\top_i+j-i}(\bfx)\big)_{i,j=1}^n,
+\]
+and the second is based on the \defstyle{Jacobi-Trudi identity}
+\[
+    s_\lambda(\bfx)
+    =
+    \det\big(h_{\lambda_i+j-i}(\bfx)\big)_{i,j=1}^n.
+\]
+Since these are purely polynomials of elementary symmetric and complete homogeneous polynomials, one sees the following
+\begin{definition}
+    If $I \supseteq I_C$, then
+    \[
+        \Psi_I\big(s_\lambda(\bfx)\big)
+        \equiv
+        \frkJ_\lambda(\bfu)
+        \mod I.
+    \]
+\end{definition}
+\begin{proof}
+    \begin{align*}
+        \Psi_I\big(s_\lambda(\bfx)\big)
+        &=
+        \Psi_I \left(
+            \det\big(e_{\lambda^\top_i+j-i}(\bfx)\big)_{i,j=1}^n
+        \right)
+        \\
+        &=
+        \Psi_I \left(
+            \sum_{\pi \in S_n}
+            \sgn(\pi)
+            h_{\pi_1+\pi(1)-1}(\bfx)
+            \cdots
+            h_{\pi_n+\pi(n)-n}(\bfx)
+        \right)
+        \\
+        &\equiv
+        \sum_{\pi \in S_n}
+        \sgn(\pi)
+        h_{\pi_1+\pi(1)-1}(\bfu)
+        \cdots
+        h_{\pi_n+\pi(n)-n}(\bfu) \mod I
+        \\
+        &\equiv
+        \frkJ_\lambda(\bfu) \mod I.
+    \end{align*}
+\end{proof}
+
+
+
+\begin{theorem}
+    If $I$ contains $I_C$, then for all $\gamma \in I_C^\perp$,
+    \[
+        \ip{
+            \prod_{i=1}^m
+            \prod_{j=n}^1
+            (1 + x_iu_j),
+            \gamma
+        }
+        =
+        \sum_\lambda
+        s_\lambda(\bfx)
+        \ip{
+        \frkJ_{\lambda^\top}(\bfu),\gamma
+        }.
+    \]
+    \begin{proof}
+    \end{proof}
+\end{theorem}
 
 \begin{theorem}
     [\cite{FG98}, \cite{BF16}]
@@ -201,7 +306,14 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
     Let $\bfx = (x_1,x_2\ldots)$ be a countable collection of commuting variables.
 \end{definition}
 
-\section{Stuff}
+\section{Applications}
+
+\section{Linear programming}
+
+Consider the positive cones $\calU_{\geq 0}$ and $\calU^\ast_{\geq 0}$.
+
+
+\section{Algebras of operators}
 
 \begin{definition}
     A \defstyle{combinatorial representation} of $\calU/I$ is
@@ -215,15 +327,31 @@ Now, if $I$ is an ideal of $\calU$, we define $I^\perp$ by
 
 \subsection{Gessel's fundamental quasisymmetric function}
 
+\begin{definition}
+    Let $\sf{w}$ be a word.
+    We define the \defstyle{fundamental quasisymmetric function} $Q_{\Des(\sf w)}$ by
+    \[
+        Q_{\Des(\sf w)}
+        \coloneq
+        \sum_{
+            \substack{
+                1 \leq i_1 \leq \cdots \leq i_n \\
+                j \in \Des(\sf w) \implies i_j < i_{j+1}
+            }
+        }
+        x_{i_1} \cdots x_{i_n}.
+    \]
+\end{definition}
+
 \subsection{The Edelman-Greene correspondence}
 
 \begin{thebibliography}{999999}
     \raggedright\footnotesize
 
     \bibitem[EC2]{EC2}
-    Sergey Fomin and Curtis Greene, 
-    \textit{Noncommutative Schur functions and their applications}, 
-    Discrete Math. \textbf{193} (1998), 179-200.
+    Richard P. Stanley, 
+    \textit{Enumerative Combinatorics. Volume 2}, 
+    Cambridge University Press 2023.
 
     \bibitem[FG98]{FG98}
     Sergey Fomin and Curtis Greene, 
