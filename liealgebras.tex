@@ -961,10 +961,6 @@ Ideals and homomorphisms
     A subspace $\frki$ of a Lie algebra $\frkg$ is called an \defstyle{ideal} of $\frkg$ if $\lb{xy} \in \frki$ for all $x \in \frkg$ and $y \in \frki$.
 \end{definition}
 
-\begin{convention}
-    I like the group theoretic notation for normal subgroups, so we write $\frkh \leq \frkg$ whenever $\frkh$ is a Lie subalgebra of $\frkg$, and $\frkh \tleq \frkg$ whenever $\frkh$ is an ideal of $\frkg$.
-\end{convention}
-
 The \defstyle{sum} and the \defstyle{bracket} of the ideals $\frki, \frkj$ are defined in the obvious way:
 \[
     \frki + \frkj
@@ -1029,10 +1025,8 @@ As a nice consequence, we have effectively shown the following:
 \end{proposition}
 
 \begin{proof}
-    Ideals of $\frkg$ are subspaces of $\frkg$.
-    By the previous theorem, it's clear that the set of ideals of $\frkg$ are a \textit{sublattice} of the set of subspaces of $\frkg$.
-
-    \todo{actually not enough of a proof here...}
+    Ideals of $\frkg$ are \textit{subspaces} of $\frkg$.
+    By the previous theorem, it's clear that the set of ideals of $\frkg$ are a \textit{sublattice} of the set of subspaces of $\frkg$--- the largest ideal contained in two ideals is their intersection, and the smallest ideal containing two ideals is their sum.
 \end{proof}
 
 \begin{definition}
@@ -1284,7 +1278,7 @@ We have a useful theorem, usually considered a consequence of the third isomorph
 
 \begin{theorem}[Correspondence theorem]
     \label{thm:CorrespondenceThm}
-    Let $\frki \trianglelefteq \frkg$.
+    Let $\frki$ be an ideal of $\frkg$.
     Then there is an order isomorphism  
     \begin{align*}
         \text{subalgebras of $\frkg$ containing $\frki$}
@@ -1299,7 +1293,6 @@ We have a useful theorem, usually considered a consequence of the third isomorph
 
 \begin{proof}
     Similarly to Proposition \ref{thm:CorrespondenceThm}, this is true on the level of a Lie algebra's vector space structure, since Lie algebra quotients are vector space quotients.
-    \todo{Need to prove this more detailed}
 \end{proof}
 
 \begin{theorem}
@@ -1382,7 +1375,7 @@ We have a useful theorem, usually considered a consequence of the third isomorph
     \[
         x \mapsto g^{-1}xg
     \]
-    and it is a homomorphism, as
+    and it is a Lie algebra homomorphism, as
     \begin{align*}
         g\lb{xy}g^{-1}
         &=
@@ -1576,6 +1569,7 @@ In group theory, solvable groups are precisely those which can be constructed wi
 \end{proof}
 
 \begin{theorem}
+    \label{thm:SolvabilityStructuralResults}
     Let $\frkg$ be a Lie algebra.
     \begin{enumerate}[label=(\alph*)]
         \item 
@@ -1673,6 +1667,7 @@ The definition of the main objects of study is now given:
 \end{definition}
 
 \begin{theorem}
+    \label{thm:NilpotencyStructuralResults}
     Let $\frkg$ be a Lie algebra.
     \begin{enumerate}[label=(\alph*)]
         \item 
@@ -1688,7 +1683,9 @@ The definition of the main objects of study is now given:
 
 We will prove \defstyle{Engel's theorem}.
 
-\begin{theorem}[Engel]
+\begin{theorem}
+    [Engel]
+    \label{thm:Engels}
     Let $\frkg$ be a Lie algebra.
     Then the following are equivalent:
     \begin{enumerate}[label=(\roman*)]
@@ -1735,7 +1732,7 @@ We will prove the following equivalent theorem:
                     x \in \frkg
                 \Big\}
             \]
-            is a Lie algebra--- it is the homomorphic image of $\frkg$ under the composition
+            is a Lie algebra--- it is the homomorphic image of $\frkg$ under the composition (recall Theorem \ref{thm:NilpotencyStructuralResults})
             \[
                 \begin{tikzcd}
                     \frkg \arrow[r, "\pi", two heads] & \frkg/\frkh \arrow[r, "\ad", two heads] & \ad \frkg/\frkh. 
@@ -1775,7 +1772,7 @@ We will prove the following equivalent theorem:
             Then it must be that $N_\frkg(\frkh) = \frkg$, as otherwise $N_\frkg(\frkh)$ would be proper subalgebra of $\frkg$ properly containing $\frkh$, a contradiction to $\frkh$'s maximality.
 
             Then $\frkh$ is a proper ideal of $\frkg$, which means $\frkg/\frkh$ has positive dimension, and so must contain a one-dimensional subalgebra.
-            By Theorem \ref{thm:CorrespondenceThm}, this one-dimensional subalgebra has the form $\frka/\frkh$, where $\frkh \tle \frka \leq \frkg$.
+            By correspondence (Theorem \ref{thm:CorrespondenceThm}), this one-dimensional subalgebra has the form $\frka/\frkh$, where $\frkh \underset{\mathrm{ideal}}{\subseteq} \frka \underset{\mathrm{subalgebra}}{\subseteq} \frkg$.
             Now, it must be that $\frka = \frkg$, as otherwise $\frka$ is again a proper subalgebra of $\frkg$ containing $\frkh$.
             Then $\frka/\frkh = \frkg/\frkh$, so $\frkg/\frkh$ is one-dimensional.
             This shows that $\frkh$ has codimension one in $\frkg$.
@@ -1816,7 +1813,8 @@ We will prove the following equivalent theorem:
 
 Now, we can prove Engel's theorem:
 
-\begin{proof}[Proof of Engel's theorem]
+\begin{proof}
+    [Proof of Theorem \ref{thm:Engels}]
     As before, the $\dim \frkg = 0$ and $\dim \frkg = 1$ cases are trivial.
     So, we induct on $\dim \frkg$.
 
@@ -1845,6 +1843,7 @@ Now, we can prove Engel's theorem:
 \end{proof}
 
 \begin{corollary}
+    \label{corr:EngelsFlag}
     If $\frkg$ is a nilpotent subalgebra of $\gl(V)$, then there exists a flag in $V$ such that $\frkg \acts V_i \subseteq V_{i-1}$ for all $i$.
 
     Namely, there exists a basis of $V$ for which all the matrices of $\frkg$ are strictly upper triangular.
@@ -1852,46 +1851,35 @@ Now, we can prove Engel's theorem:
 
 \begin{proof}
     We will prove this by induction on $\dim V$.
-    The one-dimensional case is trivial--- $L = \FF x$, where $x$ has an eigenvector.
+    The one-dimensional case is trivial--- $\frkg = \FF x$, where $x$ is a nilpotent endomorphism of $\gl(V)$.
 
     Now let $\dim V$ be a vector space of dimension $n$, $\frkg$ a nilpotent subalgebra of $\gl(V)$, and suppose the theorem holds for all vector spaces of dimension less than $n$.
+
     By Theorem \ref{thm:EngelsCommonEigenvector}, $\frkg$ has a common eigenvector, call it $v_1$.
     Put $V_0 = \varnothing$, $V_1 = \FF v_1$.
     Then $\frkg \acts V_1 = \varnothing$.
 
-    Now consider the vector space $W = V/V_1$.
-    The codimension of $V_1$ is $\dim V - 1$, so $\dim W = \dim V - 1 < \dim V$.
+    Since $\frkg \acts V_1 \subseteq V_1$, the induced action of $\frkg$ on $V/V_1$ is well-defined, and moreover gives us a nilpotent subalgebra of $\gl(V/V_1)$.
 
-    Moreover, the induced action of $\frkg$ on $W$ gives us a nilpotent subalgebra of $\gl(W)$. 
-    \todo{flag engels details}
+    Now, the induction hypothesis applies, and there exists a flag of $W = V/V_1$ that satisfies the conditions of the theorem.
 
-
-    Let $\frkg$ be a subalgebra of $\gl(V)$ and suppose $\frkg.W \subseteq W$ for some subspace $W$ of $V$.
-    Then the map $\pi: \gl(V) \to \gl(V/W)$ given by $\pi(x)(v + W) \mapsto x \acts v + W$ is a Lie algebra homomorphism.
-
-    I need to draw the diagrams for this shit
-    \todo{What is the homomorphism?}
-
-    Now, the induction hypothesis applies, and there exists a flag of $W$ that satisfies the conditions of the theorem.
-
-    Namely, this flag looks like $\varnothing = W_0 \subsetneq W_1 \subsetneq \cdots \subsetneq W_{n-1} = W$.
-    Pulled back by the projection map, we get the flag
+    Namely, this flag looks like $0 = W_0 \subsetneq W_1 \subsetneq \cdots \subsetneq W_{n-1} = W$.
+    Pulling back along the projection map, this gives us a flag
     \[
         V_1 = W_0 + V_1 \subsetneq W_1 + V_1 \subsetneq \cdots \subsetneq W_{n-1} + V_1 = W + V_1 = V
     \]
     of $V$.
-    Naturally, then, we put $V_i = W_{i-1} + V_1$ for all $i \geq 1$, which gives us the flag we need.
-    for which
+    Naturally, then, we put $V_i = W_{i-1} + V_1$ for all $i \geq 1$, which gives us the flag we need--- it's easily verified that
     \[
-        \frkg.V_i
+        \frkg \acts V_i
         =
-        \frkg.(W_{i-1} + V_1) 
+        \frkg \acts (W_{i-1} + V_1) 
         \subseteq
         W_{i-2} + V_1
         =
-        \frkg.V_{i-1}.
+        V_{i-1}.
     \]
-    \todo{flag engels}
+    \todo{this proof kinda sucks}
 
 \end{proof}
 
@@ -2089,13 +2077,71 @@ Again, we will prove it by proving an equivalent formulation in terms of the exi
 \end{proof}
 
 Now, we can carry out the proof of Lie's theorem.
+This should be compared with the proof of Corollary \ref{corr:EngelsFlag}.
 
 \begin{proof}[Proof of Lie's theorem]
-    If $\frkg$ is solvable, then it stabilizes the subspace $\FF v$, where $v$ is the eigenvector produced by Theorem (\ref{thm:SolvableAlgebraHasCommonEigenvector}).
+    If $\frkg$ is a solvable subalgebra of $\gl(V)$, then it stabilizes the subspace $V_1 = \FF v$, where $v$ is the eigenvector produced by Theorem (\ref{thm:SolvableAlgebraHasCommonEigenvector}).
 
-    Then, consider the orthogonal subspace
-    \todo{finish lie's theorem}
+    Then, again, this stabilization means that projecting $\frkg$ gives us a solvable subalgebra of $\gl(V/V_1)$.
+
+    By the induction hypothesis, we have a flag of $W = V/V_1$ that looks like
+    \[
+        0 = W_0 \subsetneq W_1 \subsetneq \cdots \subsetneq W_{n-1} = W.
+    \]
+    Pulling back along the projection map once again, we have a flag
+    \[
+        V_1
+        =
+        W_0 + V_1
+        \subsetneq
+        W_1 + V_1
+        \subsetneq
+        \cdots
+        \subsetneq
+        W_{n-1} + V_1
+        =
+        W + V_1
+        =
+        V.
+    \]
+    Define $V_i = W_{i-1} V_1$ for all $i$.
+    Finally, we check that $\frkg$ stabilizes this flag:
+    \[
+        \frkg \acts V_i
+        =
+        \frkg \acts (W_{i-1} + V_1)
+        \subseteq
+        W_{i-1} + V_1
+        =
+        V_i.
+    \]
+    \todo{
+        this proof sucks for the same reasons the proof of flag engels sucks. 
+        i want to make the argument about projections more explicit but the language that makes it easy ($\frkg$-modules, intertwining) hasn't been defined yet? 
+        i might have to offload this into some lemma somewhere
+    }
 \end{proof}
+
+As an immediate application of Lie's theorem, we compute the radical of $\sl_n$ and subsequently prove its semisimplicity.
+
+\begin{proposition}
+    \cite[Exercise 4.1]{Hum72}
+    Let $V$ be a finite dimensional vector space.
+    Then $\rad \sl(V) = Z\big(\sl(V)\big)$.
+\end{proposition}
+
+\begin{proof}
+    The main idea here is that \textit{one can take maximal solvable subalgebras consisting of upper and lower triangular matrices}.
+    Then, the radical must be contained in both subalgebras, as the radical is itself a solvable subalgebra.
+
+    Let $\frkb$ be a maximal solvable subalgebra of $\sl(V)$.
+    Then, $\frkb$ stabilizes a complete flag of $V$.
+    So, pick a basis of $V$ such that $\frkb$ consists of only upper triangular matrices: $\frkb = \sl_n(\FF) \cap \talg_n(\FF)$.
+\end{proof}
+
+\begin{corollary}
+    $\sl$ is semisimple.
+\end{corollary}
 
 \subsection{Jordan-Chevalley decomposition}
 
@@ -2169,8 +2215,6 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
                 \equiv
                 0 \mod t.
             \]
-            We will show that $p(x)$ is semisimple, so put $x_s \coloneq p(x)$.
-
             For all $i$, $t - a_i$ annihilates $x_s$ restricted to $V_i$:
             \[
                 \big(x_s - a_i\big)\big\rvert_{V_i}
@@ -2185,7 +2229,17 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
             \]
             where we have used the fact that $p(t) \equiv a_i \mod p_i(t)$ to write $p(x_i) = a_i + h(x_i)p_i(x_i)$ and that $p_i(x_i) = 0$.
 
-            \todo{finish jordan-chevalley}
+        \item[\textbf{Step 2}] 
+            \textsc{\color{Crimson} Conclude the theorem}
+
+            The above calculation shows us that $p(x)$ is semisimple.
+            Now put $q(x) = x - p(x)$.
+            We then see that $q$ is then nilpotent \todo{why?}.
+
+            If we put $x_s \coloneq p(x)$ and $x_n \coloneq q(x)$, we have now written $x = x_s + x_n$, where $x_s$ is semisimple and $x_n$ is nilpotent.
+
+            \todo{jordan-chevalley uniqueness}
+
     \end{itemize}
 
 \end{proof}
@@ -2347,6 +2401,7 @@ With this, we can prove Cartan's criterion.
     Apply Cartan's criterion to the subalgebra $\ad \frkg \subseteq \gl(\frkg)$, to conclude that $\ad \frkg$ is solvable.
     Since $\ad \frkg$ is solvable if and only $\frkg$ is solvable, $\frkg$ is solvable.
 \end{proof}
+
 
 \section{The Killing form \cite[\S 5]{Hum72}}
 
@@ -2593,18 +2648,39 @@ With this, we can prove Cartan's criterion.
 
 \end{definition}
 
+We recall the well-known \defstyle{Schur's lemma} from representation theory:
+
 \begin{theorem}[Schur's lemma]
     Let $\phi: \frkg \to \gl(V)$ be irreducible.
-    Then the only endormorphisms of $V$ commuting with all $\phi(x)$ for all $g \in \frkg$ are the scalars.
+    Then the only endormorphisms of $V$ commuting with all $\phi(g)$ for all $g \in \frkg$ are the scalars.
 \end{theorem}
 \begin{proof}
+    $V$ breaks down as a direct sum of generalized eigenspaces
+    \[
+        V
+        =
+        \bigoplus_{i=1}^k
+        \ker (x - a_iI)^{m_i}.
+    \]
+    which $x$ leaves invariant.
+    Since $x$ commutes with the action of $\frkg$, these are all $\frkg$-submodules of $V$.
+    But $V$ is irreducible, so there must be only \textit{one} such subspace:
+    \[
+        V
+        =
+        \ker (x - aI)
+    \]
+    for some $a \in \FF$.
+    We conclude that $x = aI$.
 \end{proof}
 
-We will define a representation of $\frkg$
 
-\begin{definition}
+\begin{definition}[Tensor product of $\frkg$-modules]
 
 \end{definition}
+
+We will show that for any $\frkg$-module $V$, one automatically gets a $\frkg$-module structure on $V^\ast$, and consequently, we can define a $\frkg$-module structure on $V^\ast \otimes W \simeq \Hom(V,W)$ for any two $\frkg$-modules $V, W$.
+
 
 \subsection{The trace form and the Casimir element of a representation}
 
