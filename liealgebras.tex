@@ -2260,9 +2260,10 @@ We have \defstyle{Cartan's criterion} for the solvability of a Lie algebra $\frk
     Let $M = \{x \in \gl(V) : \lb{x,B} \subseteq A\}$.
     If $x \in M$ satisfies $\tr(xy) = 0$ for all $y \in M$, then $x$ is nilpotent.
 \end{lemma}
-\begin{proof}
-    This proof makes use of the ``trace trick'', which is actually unbelievable.
 
+This proof makes use of the ``trace trick'', which is actually unbelievable to me.
+
+\begin{proof}
     Put $x = s + n$, where $s$ is semisimple and $n$ is nilpotent.
     We will show that $s=0$, hence showing that $x$ is nilpotent.
     \begin{itemize}
@@ -2655,6 +2656,9 @@ We recall the well-known \defstyle{Schur's lemma} from representation theory:
     Then the only endormorphisms of $V$ commuting with all $\phi(g)$ for all $g \in \frkg$ are the scalars.
 \end{theorem}
 \begin{proof}
+    Let $x$ be an endomorphism of $g$ commutting with the action of $\frkg$.
+    Let $a$ be an eigenvalue of $x$.
+    Then $x - a_i$ is 
     $V$ breaks down as a direct sum of generalized eigenspaces
     \[
         V
@@ -2676,7 +2680,7 @@ We recall the well-known \defstyle{Schur's lemma} from representation theory:
 
 
 \begin{definition}[Tensor product of $\frkg$-modules]
-
+    If $M$ and $N$ are two $\frkg$-modules,
 \end{definition}
 
 We will show that for any $\frkg$-module $V$, one automatically gets a $\frkg$-module structure on $V^\ast$, and consequently, we can define a $\frkg$-module structure on $V^\ast \otimes W \simeq \Hom(V,W)$ for any two $\frkg$-modules $V, W$.

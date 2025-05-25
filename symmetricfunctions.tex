@@ -32,6 +32,16 @@
 
 
 % ----- begin newcommands ------------------------------------------------------
+% Environments 
+\barenv[][subsection]{theorem}{Theorem}
+\barenv[bartheorem]{lemma}{Lemma}
+\barenv[bartheorem]{corollary}{Corollary}
+\barenv[bartheorem]{proposition}{Proposition}
+\barenv[bartheorem]{definition}{Definition}
+\barenv[bartheorem]{example}{Example}
+\barenv[bartheorem]{remark}{Remark}
+\barenv[bartheorem]{convention}{Convention}
+
 \SetKw{KwAnd}{and}
 
 % Formal Power Series
@@ -71,6 +81,7 @@
 \DeclareMathOperator{\opht}{ht}
 \DeclareMathOperator{\opheight}{height}
 \DeclareMathOperator{\type}{type}
+\DeclareMathOperator{\rowword}{rowword}
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\sort}{sort}
 
@@ -105,6 +116,9 @@
 % The symmetric group
 \DeclareMathOperator{\Sym}{Sym}
 
+% Bender-Knuth involution
+\DeclareMathOperator{\BK}{BK}
+
 %   RSK
 % ------->
 \newcommand{\rskarrow}{\ensuremath\xrightarrow{\RSK}}
@@ -127,8 +141,9 @@
 
 \section*{What is this?}
 
-These are notes based on my self-study of Chapter 7 in R.P Stanley's ``Enumerative Combinatorics'', mixed in with readings of various other expositions. 
+These are perpetually growing notes based on my self-study of Chapter 7 in Richard P Stanley's ``Enumerative Combinatorics'', William Fulton's ``Young Tableaux'', and various other expositions. 
 
+\iffalse 
 I've learned to \textit{love} this subject! At first, I thought ``Functions that remain the same change under interchange of variables? What's so interesting about that?'', but at some point between now and the end of my undergraduate life, I took it on myself to \textit{compute} with these things, to hold them with my bare hands, and lo--- I suddenly found myself baptized in the waters of symmetric polynomials.
 
 I'm not entirely sure how to write for an audience yet, so certain things might be over or under explained, and this might happen all over the place!
@@ -136,11 +151,14 @@ I guess, one has to have had some combinatorics, knowing about posets, partition
 Also experience with working with formal power series probably helps.
 
 I'll be honest and say algebra is not my strong suit, so I apologize in advance if that manifests particularly clearly in some sections.
+\fi
+
 
 \tableofcontents
 
 \section*{Notation, conventions, some facts}
 
+\iffalse
 As much as I hate to admit it, I think about notation and proof minutiae \textit{a lot}.
 I had a short ``previous life'' as a software engineer, and I always enjoyed thinking over and over again about how to rewrite code--- and the same goes for proofs.
 
@@ -149,6 +167,7 @@ I take some inspiration from Darij Grinberg's algebraic combinatorics lecture no
 
 There's a level of redundancy going on--- often notation will be defined in the parts where they're used despite being already defined here.
 This is intentional.
+\fi
 
 \addcontentsline{toc}{section}{Notation and conventions}
 
@@ -343,10 +362,9 @@ This is a specific case of a more general idea of the \defstyle{ring of invarian
     Hence, $\pring{\KK}{\bfx}^{S_n}$ is a \textit{subring} of $\pring{\KK}{\bfx}$.
 \end{remark}
 
+\subsection{Formal power series in infinitely many variables}
 
-\subsection{The ring of symmetric functions}
-
-Now, we give a formal definition for ``the ring of symmetric functions''.
+Next, we want to give a formal definition for ``the ring of symmetric functions'', which we will call $\Lambda$.
 
 More precisely, we construct the ring of symmetric functions as a certain subring of formal power series in infinitely many variables.
 The reason for this mouthful is that many interesting families of symmetric polynomials typically enjoy a \textit{stability} property: that
@@ -397,7 +415,24 @@ Indexing over all \textit{weak compositions} $\alpha$ means that all the monomia
     is an element of $\fps{\KK}{\bfx_\infty}$.
 \end{example}
 
-Next, we add another ingredient which generalizes, in a similar way, what we mean when we say ``symmetric''.
+\subsection{The homogeneous components $\Lambda_n$}
+
+To begin our construction, we will begin by taking a ``slice'' of the full ring.
+
+\begin{definition}
+    A \defstyle{homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
+    \[
+        \sum_{\alpha \in \Com_n}
+        c_\alpha \bfx^\alpha
+        \in \fps{\KK}{\bfx_\infty},
+    \]
+    where $\Com_n$ means we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar such that $c_\alpha = c_\beta$ whenever $\beta$ can be obtained by permuting the parts of $\alpha$.
+    
+    We denote the set of all such formal power series by $\Lambda_\KK^n$.
+\end{definition}
+
+These form a $\KK$-module, as a submodule of $\fps{\KK}{\bfx_\infty}$.
+Moreover, these are in fact defined correctly, meaning that these are symmetric ``functions''.
 
 \begin{definition}
     Let $S_\infty$ denote the subgroup of $S_\NN$ consisting of permutations of $\NN$ with ``finite support''.
@@ -413,25 +448,6 @@ Next, we add another ingredient which generalizes, in a similar way, what we mea
 
 This contains as a subgroup $S_n$ for all $n \in \NN$.
 Importantly, every permutation in $S_\infty$ is an extension of a permutation that lives in some finite symmetric group.
-
-\subsubsection{Homogeneous symmetric functions}
-
-Now we can start defining the ring of symmetric functions.
-
-\begin{definition}
-    A \defstyle{homogeneous symmetric function of degree $n$} over a ring $\KK$ is a formal power series
-    \[
-        \sum_{\alpha \in \Com_n}
-        c_\alpha \bfx^\alpha
-        \in \fps{\KK}{\bfx_\infty},
-    \]
-    where we are summing over all weak compositions $\alpha$ of $n$, and every $c_\alpha$ is a scalar such that $c_\alpha = c_\beta$ whenever $\beta$ can be obtained by permuting the parts of $\alpha$.
-    
-    We denote the set of all such formal power series by $\Lambda_\KK^n$.
-\end{definition}
-
-These form a $\KK$-module, as a submodule of $\fps{\KK}{\bfx_\infty}$.
-Moreover, these are in fact defined correctly, meaning that these are symmetric ``functions''.
 
 \begin{remark}
     Consider the action $S_\infty \curvearrowright \fps{\KK}{\bfx_\infty}$ given by
@@ -457,15 +473,15 @@ The following is a simple example of an element of $\Lambda_\KK^n$:
         + 10\sum_{i < j}
         x_ix_j
     \]
-    is a symmetric function that is homogeneous of degree $2$. In this case $c_\alpha = 1$ whenever $\alpha = \ldots 2 \ldots$, and $c_\alpha = 10$ whenever $\alpha = \ldots 1 \ldots 1 \ldots$.
+    is a symmetric function that is homogeneous of degree $2$. In this case $c_\alpha = 1$ whenever $\alpha = (0,\ldots,0, 2, 0,\ldots)$, and $c_\alpha = 10$ whenever $\alpha = (0,\ldots, 0, 1, 0, \ldots, 0, 1, 0, \ldots)$.
     In every other case, $c_\alpha = 0$.
 \end{example}
 
-\subsubsection{Symmetric functions}
+\subsection{The ring $\Lambda$ of symmetric functions}
 
 We note that multiplying (inside $\fps{\KK}{\bfx_\infty}$) any two homogeneous symmetric functions $f$, $g$ of degrees $m$ and $n$ respectively give us a homogeneous symmetric function of degree $m+n$.
-The following definition gives us the right subalgebra this remark hints at.
 
+This allows us to finally define $\Lambda$ as the following graded algebra:
 
 \begin{definition}
     The \defstyle{ring of symmetric functions} $\Lambda_\KK$ is the infinite direct sum
@@ -791,7 +807,7 @@ Not only is it a total order, it is actually a linear extension of dominance ord
         \lambda^\top
         \coloneq
         \left(
-            \bigcomma_{i=0}^\infty
+            \bigcomma_{i \in \NN}
             \# \text{ parts of }\lambda\text{ with size }\leq i
         \right)
     \]
@@ -812,10 +828,10 @@ Not only is it a total order, it is actually a linear extension of dominance ord
 \end{proposition}
 
 \begin{proof}
-    \todo{transposition proof}
+    \todo{Prove partition transposition}
 \end{proof}
 
-\section{Some distinguished bases of symmetric functions}
+\section{Bases}
 
 We cover some key bases of the ring of symmetric functions. These are \textit{all} indexed by partitions.
 
@@ -924,7 +940,7 @@ Now we examine the relationship between the elementaries and the monomials.
     By this finiteness, the \textit{row sums} and \textit{column sums} of a zero-one matrix are well-defined.
     So for any zero-one matrix $A = (a_{ij})_{i,j \geq 1}$, we define
     \[
-        \row A \coloneq \left(\bigcomma_{i = 1}^\infty \sum_{j \geq 1} a_{ij}\right)
+        \row A \coloneq \left(\bigcomma_{i \in \NN} \sum_{j \geq 1} a_{ij}\right)
     \]
     and $\col A$ is similarly defined.
 \end{definition}
@@ -1020,6 +1036,7 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
 \end{theorem}
 
 \begin{proof}
+    [Proof (short)]
     Matrix transposition is a bijection between the sets the two numbers count--- namely zero-one matrices with row sum $\lambda$ and column sum $\mu$, and zero-one matrices with row sum $\mu$ and column sum $\lambda$.
 \end{proof}
 
@@ -1038,7 +1055,7 @@ We establish a key fact about the numbers $M_{\lambda\mu}$.
 
 \begin{proof}
     We demonstrate this algorithmically. 
-    Let
+    
     \todo{Gale-Ryser proof}
 \end{proof}
 
@@ -1050,7 +1067,7 @@ We establish a key fact about the numbers $M_{\lambda\mu}$.
     \[
         \{K_{\lambda\mu}\}_{1^n \preceq \lambda \preceq n, 1^n \preceq \mu \preceq n}
     \]
-    is upper-triangular and has $1$'s on the diagonal, hence it is invertible in $\ZZ$. 
+    is upper triangular and has $1$'s on the diagonal, hence it is invertible in $\ZZ$. 
 \end{proof}
 
 \subsection{Complete homogeneous symmetric functions}
@@ -1184,13 +1201,57 @@ This quantity is important for enumeration with regards to cycle type.
         (w_{\rho_1+1}\cdots w_{\rho_1+\rho_2})\cdots(w_{\rho_1+\cdots+\rho_{k-1}+1}\cdots w_{\rho_1+\cdots+\rho_{k-1}+\rho_k}).
     \]
     The group action 
+    \todo{finish cycle index proof}
 \end{proof}
 
-\section{Identities}
+\section{Identities and algebraic gadgets}
 
-\subsection{Distinguished generating functions}
+We will introduce identities pertaining to the bases of $\Lambda$ we have covered so far.
+These identities are the combinatorial backbone of certain algebraic mechanisms in $\Lambda$.
 
-We define the following, natural, generating functions in the ring $\fps{\Lambda}{t}$.
+\subsection{
+    The Newton-Girard formulas
+    and $\omega$-involution
+}
+
+We have a theorem known as \defstyle{Newton's identities}, or, as we will call them, the \defstyle{Newton-Girard formulas}.
+
+\begin{theorem}[Newton-Girard formulas]
+    Let $n \in \PP$. Then
+    \begin{align}
+        \sum_{k=0}^n (-1)^k e_kh_{n-k} &= 0 \label{ng1} \\
+        \sum_{k=0}^n (-1)^{k-1} e_{n-k}p_k &= ne_n  \label{ng2} \\
+        \sum_{k=0}^n h_{n-k}p_k &= nh_n \label{eq:ng3}
+    \end{align}
+\end{theorem}
+
+These can be used to define \defstyle{$\omega$-involution} on the ring of symmetric functions, giving it a \textit{antipode}, in the language of Hopf algebras.
+
+To define it, we note that $\Lambda = \pring{\QQ}{e_1,e_2,\ldots}$, which we recall means that $\Lambda$ is freely generated by the $e_n$'s as a commutative $\QQ$-algebra, any homomorphism $\phi$ out of $\Lambda$ can be defined by specifying the images of the $e_n$'s under $\phi$, so we in fact get a well-defined map.
+
+\begin{definition}
+    We define $\omega$ to be the map 
+    \begin{align*}
+        \omega: \Lambda &\to \Lambda \\
+        e_n &\mapsto h_n.
+    \end{align*}
+\end{definition}
+
+And, this map is involutory.
+
+\begin{theorem}
+    \label{thm:OmegaIsInvolution}
+    For all $n$,
+    \[
+        \omega(h_n) = e_n.
+    \]
+    Thus, $\omega$ is an involution.
+\end{theorem}
+
+\subsubsection{Distinguished generating functions}
+
+We define the following, natural, generating functions in the ring $\Lambda \lBrack t \rBrack$.
+
 \begin{definition}
     \begin{align*}
         H(t) &\coloneq \sum_{n\geq0}h_n t^n \\
@@ -1241,18 +1302,12 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
     \end{align*}
 \end{proof}
 
-\subsection{The Newton-Girard formulas}
+\subsubsection{Proof of the Newton-Girard formulas}
 
-\begin{theorem}[Newton-Girard formulas]
-    Let $n \in \PP$. Then
-    \begin{align}
-        \sum_{k=0}^n (-1)^k e_kh_{n-k} &= 0 \label{ng1} \\
-        \sum_{k=0}^n (-1)^{k-1} e_{n-k}p_k &= ne_n  \label{ng2} \\
-        \sum_{k=0}^n h_{n-k}p_k &= nh_n \label{eq:ng3}
-    \end{align}
-\end{theorem}
+With the results of the previous subsection, we are ready to prove the Newton-Girard formulas.
 
 \begin{proof}
+    [Proof of the Newton-Girard formulas]
     These all follow from Theorem \ref{thm:HEPPowerSeries}. We have that
     \[
         H(t)E(-t) 
@@ -1308,20 +1363,173 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
     which proves the third Newton-Girard formula, \eqref{eq:ng3}.
 \end{proof}
 
-\subsection{Cauchy identities}
+\subsection{Cauchy identities and the Hall inner product}
 
-\begin{theorem}\label{CauchyIdentityForME}
-    We have that
+Next, we have a \textit{sort} of identity known in algebraic combinatorics as a \defstyle{Cauchy identity}.
+
+The classic Cauchy identity is as follows:
+
+\begin{theorem}
+    [Cauchy identity]
+    The formal power series identity
     \[
         \prod_{i,j \geq 1}
-        (1+x_iy_j)
+        (1-x_iy_j)^{-1}
         =
         \sum_{\lambda\in\Par}
-        m_\lambda(\bfx)e_\lambda(\bfy).
+        s_\lambda(\bfx)s_\lambda(\bfy)
     \]
+    holds, where $s_\lambda$ is the \defstyle{Schur function} indexed by the partition $\lambda$.
+\end{theorem}
+
+For now, we will begin with Cauchy identities for the bases we already know
+
+\begin{theorem}
+    [Cauchy identities]
+    \begin{align}
+        \prod_{i,j \geq 1}
+        (1-x_iy_j)^{-1}
+        &=
+        \sum_{\lambda\in\Par}
+        m_\lambda(\bfx)h_\lambda(\bfy)
+        \\
+        \prod_{i,j \geq 1}
+        (1+x_iy_j)
+        &=
+        \sum_{\lambda\in\Par}
+        m_\lambda(\bfx)e_\lambda(\bfy)
+        \\
+        \prod_{i,j \geq 1}
+        (1-x_iy_j)^{-1}
+        &=
+        \sum_{\lambda\in\Par}
+        z_\lambda^{-1}p_\lambda(\bfx)p_\lambda(\bfy)
+        \\
+        \prod_{i,j \geq 1}
+        (1+x_iy_j)
+        &=
+        \sum_{\lambda\in\Par}
+        z_\lambda^{-1}\varepsilon_{\lambda} p_\lambda(\bfx) p_\lambda(\bfy).
+    \end{align}
+\end{theorem}
+
+Cauchy identities will be used to define the \defstyle{Hall inner product}, named after the algebraist Philip Hall, who described them in \textit{The algebra of partitions} (1959).
+
+\begin{definition} Let $\langle -,- \rangle$ be the scalar product defined by the relationship
+    \[
+        \langle m_\lambda, h_\nu \rangle 
+        \coloneq 
+        \delta_{\lambda\nu}.
+    \]
+    Where $\delta_{\lambda\nu} \coloneq [\lambda = \nu]^?$.
+
+    This scalar product is called the \defstyle{Hall inner product}.
+    It is well defined since the $m$'s and $h$'s form a basis for $\Lambda$.
+\end{definition}
+
+\begin{theorem}
+    $\langle\cdot,\cdot\rangle$ is symmetric.
 \end{theorem}
 
 \begin{proof}
+    It suffices to prove that products of basis elements are symmetric for some basis of $\Lambda$.
+    We'll use the basis $\{h_\lambda\}_{\lambda\in\Par}$.
+    By their Cauchy identity (Theorem \ref{CauchyIdentityForMH}), we have that
+    \[
+        \langle h_\lambda, h\nu \rangle = \left\langle \sum_{\gamma\in\Par} N_{\lambda\gamma} m_\gamma, h\nu \right\rangle = N_{\lambda\nu}.
+    \]
+    Then $\langle h_\lambda, h_\nu \rangle = N_{\lambda\nu} = N_{\nu\lambda} = \langle h_\lambda, h_\nu \rangle$.
+\end{proof}
+
+\begin{theorem}\label{thm:CauchyIdentityImpliesOrthonormal}
+    Any two bases $\{u_\lambda\}_{\lambda\in\Par}$ and $\{v_\lambda\}_{\lambda\in\Par}$ of $\Lambda$ that have a Cauchy identity
+    \begin{equation}\label{eq:CauchyIdentityArbitrary}
+        \prod_{i,j \geq 1}(1 - x_iy_j)^{-1}
+        =
+        \sum_{\lambda\in\Par}
+        u_\lambda(\bfx) v_\lambda(\bfx)
+    \end{equation}
+    are orthonormal with respect to the Hall inner product.
+\end{theorem}
+
+\begin{proof}[Proof (short)]
+    We'll make use of \href{https://en.wikipedia.org/wiki/Einstein_notation}{Einstein summation} to make calculations quick.
+
+    Define the numbers $U_{\cdot,\cdot}$ and $V_{\cdot,\cdot}$ by
+    \[
+        m_\lambda = U_{\lambda\rho} u_\rho, \qquad h_\mu = V_{\mu\nu} v_\nu.
+    \]
+    Now, we will suppress the variables, so we will always take $u_\lambda$ to be $u_\lambda(\bfx)$, and similarly we will always take $v_\lambda$ to mean $v_\lambda(\bfy)$.
+    Similarly, we will take $m_\lambda$ to be in $\bfx$ and $h_\lambda$ to be in $\bfy$.
+
+    The right hand side of the Cauchy identity for the completes (Theorem \ref{CauchyIdentityForMH}) becomes
+    \begin{align*}
+        m_\lambda h_\lambda &= \Big(U_{\lambda\rho}u_\rho\Big)\Big(V_{\lambda\nu}v_\nu\Big) \\
+                                                                                &= U_{\lambda\rho}V_{\lambda\nu} \Big(u_\rho v_\nu\Big)
+    \end{align*}
+
+    Since we're assuming the Cauchy identity for the bases $\{u_\lambda\}_{\lambda\in\Par}$ and $\{v_\lambda\}_{\lambda\in\Par}$ also, we have shown that
+    \[
+        U_{\lambda\rho}V_{\lambda\nu} \Big(u_\rho v_\nu\Big) = u_\mu v_\mu
+    \]
+    hence, it must be that
+    \[
+    \]
+\end{proof}
+
+\iffalse
+\begin{proof}[Proof (detailed)]
+    Define the numbers $U_{\cdot,\cdot}$ and $V_{\cdot,\cdot}$ by
+    \[
+        m_\lambda = \sum_\rho U_{\lambda\rho} u_\rho, \qquad h_\mu = \sum_\nu V_{\mu\nu} v_\nu.
+    \]
+    Then, by linearity of the Hall inner product,
+    \[
+        \delta_{\lambda\mu} = \langle m_\lambda, h_\mu \rangle = \sum_{\rho,\nu}U_{\lambda\rho} V_{\mu\nu} \langle u_\rho, u_\nu \rangle
+    \]
+    Now, if we are to have that $\langle u_\lambda, v_\mu \rangle = \delta_{\lambda\mu}$, the above should be equivalent to 
+    \[
+        \delta_{\lambda\mu} = \sum_{\rho,\nu} U_{\lambda\rho} V_{\mu\nu} \delta_{\rho\nu}.
+    \]
+    Since $\sum_\nu V_{\mu\nu}\delta_{\rho\nu} = V_{\mu\rho}$, we find that
+    \begin{equation}\label{eq:CauchyIdentityImpliesDualBasis:1}
+        \delta_{\lambda\mu} =  \sum_\rho U_{\lambda\rho} V_{\mu\rho}.
+    \end{equation}
+    The sequence of equalities given can be run backwards, so we have to just show (\ref{eq:CauchyIdentityImpliesDualBasis:1}) and the theorem is proven.
+    By Theorem \ref{CauchyIdentityForMH}, we have that
+    \[
+        \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda m_\lambda(X) h_\lambda(Y).
+    \]
+    So 
+    \[
+        \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda \left(\sum_\rho \zeta_{\lambda\rho} u_\rho(X)\right)\left(\sum_\nu \eta_{\lambda\nu}v_\nu(Y)\right).
+    \]
+    Interchanging sums,
+    \[
+        \sum_\lambda \left(\sum_\rho \zeta_{\lambda\rho} u_\rho(X)\right)\left(\sum_\nu \eta_{\lambda\nu}v_\nu(Y)\right) = \sum_{\rho,\nu} \left(\sum_\lambda \zeta_{\lambda\rho} \eta_{\lambda\nu}\right) u_\rho(X) v_\nu(Y).
+    \]
+    By (\ref{eq:CauchyIdentityArbitrary})
+    \[
+        \sum_{\rho,\nu} \left(\sum_\lambda \zeta_{\lambda\rho} \eta_{\lambda\nu}\right) u_\rho(X) v_\nu(Y) = \sum_\mu u_\mu(X) v_\mu(Y).
+    \]
+    Since the $u_\lambda(X)v_\lambda(Y)$ are linearly independent as power series, we can compare coefficients, which gives us the desired equality.
+\end{proof}
+\fi
+
+\begin{corollary}
+    The power sums $\{p_\lambda\}$ form an orthogonal basis form $\Lambda$.
+\end{corollary}
+
+\begin{theorem}
+    $\omega$ is an isometry of $\Lambda$.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\subsubsection{Proofs of Cauchy identities}
+
+\begin{proof}
+    [Proof of the Cauchy identity for $m_\lambda$, $e_\lambda$]
     The coefficient of $\bfx^\alpha \bfy^\beta$ is obtained by taking a zero-one matrix $A$ whose row sum is $\alpha$ and whose column sum is $\beta$. Then
     \begin{align*}
         \prod_{i,j\geq1}(1+x_iy_j)
@@ -1363,15 +1571,9 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
     \end{align*}
 \end{proof}
 
-\begin{theorem}\label{CauchyIdentityForMH}
-    We have that
-    \[
-        \prod_{i,j \geq 1} (1-x_iy_j)^{-1} = \sum_{\lambda\in\Par} m_\lambda(\bfx) h_\lambda(\bfy).
-    \]
-\end{theorem}
-
 \begin{proof}
-    Exactly the same as with Theorem \ref{CauchyIdentityForME}.
+    [Proof of the Cauchy identity for $m_\lambda$, $h_\lambda$]
+    The exact same idea as the previous proof.
     \begin{align*}
         \prod_{i,j\geq1}(1-x_iy_j)^{-1} 
         &= 
@@ -1395,25 +1597,10 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
     \end{align*}
 \end{proof}
 
-\begin{theorem}\label{CauchyIdentityForPP}
-    We have that
-    \[
-        \prod_{i,j \geq 1} (1-x_iy_j)^{-1}
-        =
-        \sum_{\lambda\in\Par}
-        z_\lambda^{-1} p_\lambda(\bfx) p_\lambda(\bfy).
-    \]
-    Additionally,
-    \[
-        \prod_{i,j \geq 1}
-        (1+x_iy_j)
-        =
-        \sum_{\lambda\in\Par}
-        z_\lambda^{-1}\varepsilon_{\lambda} p_\lambda(\bfx) p_\lambda(\bfy).
-    \]
-\end{theorem}
+The next proof is more involved.
 
 \begin{proof}
+    [Proof of the Cauchy identity for $p_\lambda$]
     We apply $\log$ to the left hand side, and grind to obtain
     \begin{align*}
         \log \prod_{i,j \geq 1}
@@ -1630,162 +1817,42 @@ Note that $P(t)$ has constant term zero, while $E(t)$ and $H(t)$ have constant t
     Now we prove the second equality by again putting $t=1$.
 \end{proof}
 
-\section{Some algebraic gadgets}
+\section{Schur functions}
+\label{ch:schurs}
 
-In the development of this subject, manipulations involving certain identities were systematized, miraculously, by encoding them as algebraic structures on $\Lambda$ itself.
-In turn, these algebraic structures became massive organizing principles in the theory of symmetric functions.
+We define the Schur functions now, and these play a central role in the ring of symmetric functions.
 
-I believe these definitions were due to the algebraist Philip Hall, who described them in \textit{The algebra of partitions} (1959).
+To name a few of its algebraic avatars, Schur functions appear as
+\begin{enumerate}[label=(\alph*)]
+    \item 
+        images under the Frobenius characteristic map of irreducible characters of $S_n$,
+    \item 
+        characters of irreducible polynomial representations of $\operatorname{GL}_n$, and as
+    \item 
+        representatives in the cohomology ring of the complex Grassmannian.
+\end{enumerate}
 
-
-\subsection{\texorpdfstring{$\omega$}{w}-involution}
-
-The first gadget can be seen as a reflection of the first Newton-Girard formula \ref{ng1}, which says that for any $n \geq 0$,
-\[
-    \sum_{k=0}^n (-1)^k e_k h_{n-k} = 0.
-\]
-Since $\Lambda = \pring{\QQ}{e_1,e_2,\ldots}$, which we recall means that $\Lambda$ is freely generated by the $e_n$'s as a commutative $\QQ$-algebra, any homomorphism $\phi$ out of $\Lambda$ can be defined by specifying the images of the $e_n$'s under $\phi$.
-
-\begin{definition}
-    We define $\omega$ to be the map
-    \begin{align*}
-        \omega: \Lambda &\to \Lambda \\
-        e_n &\mapsto h_n.
-    \end{align*}
-\end{definition}
-
-\begin{theorem}
-    For all $n$,
-    \[
-        \omega(h_n) = e_n.
-    \]
-    Thus, $\omega$ is an involution.
-\end{theorem}
-
-\begin{proof}
-    \todo{Prove omega is an involution}
-\end{proof}
-
-\subsection{The Hall inner product}
-
-We define an inner product $\langle -, - \rangle$ on $\Lambda$ via the following rule:
-
-\begin{definition} Let $\langle -,- \rangle$ be the scalar product defined by the relationship
-    \[
-        \langle m_\lambda, h_\nu \rangle 
-        \coloneq 
-        \delta_{\lambda\nu}.
-    \]
-    Where $\delta_{\lambda\nu} \coloneq [\lambda = \nu]^?$.
-
-    This scalar product is called the \defstyle{Hall inner product}.
-    It is well defined since the $m$'s and $h$'s form a basis for $\Lambda$.
-\end{definition}
-
-\begin{theorem}
-    $\langle\cdot,\cdot\rangle$ is symmetric.
-\end{theorem}
-
-\begin{proof}
-    It suffices to prove that products of basis elements are symmetric for some basis of $\Lambda$.
-    We'll use the basis $\{h_\lambda\}_{\lambda\in\Par}$.
-    By their Cauchy identity (Theorem \ref{CauchyIdentityForMH}), we have that
-    \[
-        \langle h_\lambda, h\nu \rangle = \left\langle \sum_{\gamma\in\Par} N_{\lambda\gamma} m_\gamma, h\nu \right\rangle = N_{\lambda\nu}.
-    \]
-    Then $\langle h_\lambda, h_\nu \rangle = N_{\lambda\nu} = N_{\nu\lambda} = \langle h_\lambda, h_\nu \rangle$.
-\end{proof}
-
-\begin{theorem}\label{thm:CauchyIdentityImpliesOrthonormal}
-    Any two bases $\{u_\lambda\}_{\lambda\in\Par}$ and $\{v_\lambda\}_{\lambda\in\Par}$ of $\Lambda$ that have a Cauchy identity
-    \begin{equation}\label{eq:CauchyIdentityArbitrary}
-        \prod_{i,j \geq 1}(1 - x_iy_j)^{-1}
-        =
-        \sum_{\lambda\in\Par}
-        u_\lambda(\bfx) v_\lambda(\bfx)
-    \end{equation}
-    are orthonormal with respect to the Hall inner product.
-\end{theorem}
-
-\begin{proof}[Proof (short)]
-    We'll make use of \href{https://en.wikipedia.org/wiki/Einstein_notation}{Einstein summation} to make calculations quick.
-
-    Define the numbers $U_{\cdot,\cdot}$ and $V_{\cdot,\cdot}$ by
-    \[
-        m_\lambda = U_{\lambda\rho} u_\rho, \qquad h_\mu = V_{\mu\nu} v_\nu.
-    \]
-    Now, we will suppress the variables, so we will always take $u_\lambda$ to be $u_\lambda(\bfx)$, and similarly we will always take $v_\lambda$ to mean $v_\lambda(\bfy)$.
-    Similarly, we will take $m_\lambda$ to be in $\bfx$ and $h_\lambda$ to be in $\bfy$.
-
-    The right hand side of the Cauchy identity for the completes (Theorem \ref{CauchyIdentityForMH}) becomes
-    \begin{align*}
-        m_\lambda h_\lambda &= \Big(U_{\lambda\rho}u_\rho\Big)\Big(V_{\lambda\nu}v_\nu\Big) \\
-                                                                                &= U_{\lambda\rho}V_{\lambda\nu} \Big(u_\rho v_\nu\Big)
-    \end{align*}
-
-    Since we're assuming the Cauchy identity for the bases $\{u_\lambda\}_{\lambda\in\Par}$ and $\{v_\lambda\}_{\lambda\in\Par}$ also, we have shown that
-    \[
-        U_{\lambda\rho}V_{\lambda\nu} \Big(u_\rho v_\nu\Big) = u_\mu v_\mu
-    \]
-    hence, it must be that
-    \[
-    \]
-\end{proof}
-
-\begin{proof}[Proof (detailed)]
-    Define the numbers $U_{\cdot,\cdot}$ and $V_{\cdot,\cdot}$ by
-    \[
-        m_\lambda = \sum_\rho U_{\lambda\rho} u_\rho, \qquad h_\mu = \sum_\nu V_{\mu\nu} v_\nu.
-    \]
-    Then, by linearity of the Hall inner product,
-    \[
-        \delta_{\lambda\mu} = \langle m_\lambda, h_\mu \rangle = \sum_{\rho,\nu}U_{\lambda\rho} V_{\mu\nu} \langle u_\rho, u_\nu \rangle
-    \]
-    Now, if we are to have that $\langle u_\lambda, v_\mu \rangle = \delta_{\lambda\mu}$, the above should be equivalent to 
-    \[
-        \delta_{\lambda\mu} = \sum_{\rho,\nu} U_{\lambda\rho} V_{\mu\nu} \delta_{\rho\nu}.
-    \]
-    Since $\sum_\nu V_{\mu\nu}\delta_{\rho\nu} = V_{\mu\rho}$, we find that
-    \begin{equation}\label{eq:CauchyIdentityImpliesDualBasis:1}
-        \delta_{\lambda\mu} =  \sum_\rho U_{\lambda\rho} V_{\mu\rho}.
-    \end{equation}
-    The sequence of equalities given can be run backwards, so we have to just show (\ref{eq:CauchyIdentityImpliesDualBasis:1}) and the theorem is proven.
-    By Theorem \ref{CauchyIdentityForMH}, we have that
-    \[
-        \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda m_\lambda(X) h_\lambda(Y).
-    \]
-    So 
-    \[
-        \prod_{i,j}(1-x_iy_j)^{-1} = \sum_\lambda \left(\sum_\rho \zeta_{\lambda\rho} u_\rho(X)\right)\left(\sum_\nu \eta_{\lambda\nu}v_\nu(Y)\right).
-    \]
-    Interchanging sums,
-    \[
-        \sum_\lambda \left(\sum_\rho \zeta_{\lambda\rho} u_\rho(X)\right)\left(\sum_\nu \eta_{\lambda\nu}v_\nu(Y)\right) = \sum_{\rho,\nu} \left(\sum_\lambda \zeta_{\lambda\rho} \eta_{\lambda\nu}\right) u_\rho(X) v_\nu(Y).
-    \]
-    By (\ref{eq:CauchyIdentityArbitrary})
-    \[
-        \sum_{\rho,\nu} \left(\sum_\lambda \zeta_{\lambda\rho} \eta_{\lambda\nu}\right) u_\rho(X) v_\nu(Y) = \sum_\mu u_\mu(X) v_\mu(Y).
-    \]
-    Since the $u_\lambda(X)v_\lambda(Y)$ are linearly independent as power series, we can compare coefficients, which gives us the desired equality.
-\end{proof}
-
-\begin{theorem}
-    $\omega$ is an isometry of $\Lambda$.
-\end{theorem}
-
-\section{Schur functions}\label{ch:schurs}
-\subsection{Combinatorial avatars}
-\subsubsection{The definition of a Schur function}
-
-We first define a Schur function as a generating function of semistandard Young tableaux.
+And, they embody beautiful combinatorics--- that of semistandard Young tableaux.
 
 \begin{definition}
-    Let $\lambda \in \Par$. The \textit{Schur function} $s_\lambda$ is defined to be
+    Let $\lambda \in \Par$. The \defstyle{Schur function} $s_\lambda$ is defined to be
     \[
         s_\lambda(\bfx)
         \coloneq
         \sum_{T\in\SSYT_{\shape \lambda}} \bfx^{\content T}.
     \]
+\end{definition}
+
+Where $\SSYT$ is the set of all \defstyle{semistandard Young tableaux}.
+
+\subsection{Tableaux}
+
+We will recall the definition of a semistandard Young tableau, introduce the definition of a \defstyle{skew tableau}, and introduce the \defstyle{Kostka numbers}.
+
+\subsubsection{Semistandard Young tableaux}
+
+\begin{definition}
+    A \defstyle{semistandard Young tableaux} is a tableau whose columns are strongly increasing and whose rows are weakly increasing.
 \end{definition}
 
 We use the following shorthand for doing computations involving SSYT:
@@ -1833,7 +1900,8 @@ We use the following shorthand for doing computations involving SSYT:
     \]
 \end{example}
 
-\subsubsection{Skew Schur functions}
+\subsubsection{Skew tableaux}
+
 \begin{definition}
     Let $\lambda, \nu$ be partitions such that $\nu \subseteq \lambda$. Then the pair $(\lambda, \nu)$ is referred to as a \textit{skew shape} and is denoted $\lambda \setminus \nu$.
 
@@ -1889,6 +1957,10 @@ We use the following shorthand for doing computations involving SSYT:
 \end{remark}
 
 Since these notes are about symmetric functions, we have to prove the following theorem.
+
+\begin{definition}
+    A \defstyle{Bender-Knuth} involution $\BK_i$ is a map $\SYT \to \SYT$ 
+\end{definition}
 
 \begin{theorem} The skew Schurs, and therefore also the Schurs, are symmetric functions.
 \end{theorem}
@@ -2193,6 +2265,8 @@ We may pick up a sign, or the determinant might be zero entirely.
 
 \subsection{Cauchy's bialternant formula}
 
+Schur \textit{polynomials} appear as a special case of what's called the Weyl character formula, and this goes by the name of \defstyle{Cauchy's bialternant formula}.
+
 \subsubsection{The Vandermonde determinant}
 
 \begin{definition}
@@ -2204,9 +2278,6 @@ We may pick up a sign, or the determinant might be zero entirely.
         \det \left(x_j^{\gamma_i}\right)_{i,j=1}^n.
     \]
 \end{definition}
-
-Put $\delta \coloneq (n-1,n-2,\ldots,0)$.
-As a special case $\alt_\delta$ is the \defstyle{Vandermonde determinant}.
 
 \begin{definition}
     An \defstyle{alternating polynomial} is a polynomial $p$ such that
@@ -2224,7 +2295,7 @@ As a special case $\alt_\delta$ is the \defstyle{Vandermonde determinant}.
     \]
 \end{example}
 
-By properties of the determinant, it's clear that $\alt_\gamma$ is an altnernating polynomial in $x_1,\ldots,x_n$ for all $\gamma \in \NN^n$.
+Since swapping columns in matrix changes the sign of its determinant, it's clear that $\alt_\gamma$ is an alternating polynomial in $x_1,\ldots,x_n$ for all $\gamma \in \NN^n$.
 
 \begin{proposition} \label{prop:altpolyfactor}
     Any alternating polynomial $p(\bfx_n)$ is divisible by $(x_i - x_j)$ for any $1 \leq i < j \leq n$.
@@ -2234,7 +2305,10 @@ By properties of the determinant, it's clear that $\alt_\gamma$ is an altnernati
     We note that it suffices to prove this in the two variable case, as we have that $\KK[x_1,\ldots,x_n] \simeq (\KK[x_1,\ldots,\bcancel{x_i},\ldots,\bcancel{x_j},\ldots,x_n])[x_i,x_j]$.
 \end{proof}
 
-In many special case, we can replace the signed sum that appears in the definition of a determinant with a product.
+There are special cases in which a determinant, a \textit{signed sum}, can be replaced with a \textit{product}.
+
+One well known case is $\alt_\delta$, where $\delta \coloneq (n-1,n-2,\ldots,0)$.
+This is known as the \defstyle{Vandermonde determinant}.
 
 \begin{theorem}
     We have the following formula for the Vandermonde determinant
@@ -2313,6 +2387,7 @@ In many special case, we can replace the signed sum that appears in the definiti
     = 
     K_{\shape \lambda^\top, \content \mu}
     \]
+    \todo{proof of bialternant formula}
 \end{proof}
 
 \begin{corollary}
@@ -2330,6 +2405,10 @@ In many special case, we can replace the signed sum that appears in the definiti
         \langle s_\mu, s_{\lambda/\nu} \rangle.
     \]
 \end{theorem}
+
+\begin{proof}
+    \todo{prove skewing adjointness}
+\end{proof}
 
 The next theorem generalizes the statement that $\omega$ sends elementaries to completes and vice versa.
 
@@ -2589,230 +2668,9 @@ The fact that $P$ is called the insertion tableaux has to do with the fact that 
 
 \end{proof}
 
-\subsection{Some applications}
-
-
-\begin{theorem}[Cauchy identity]    We have
-    \begin{equation}\label{eq:CauchyIdentityForSchurs}
-        \prod_{i,j \geq 1}(1-x_iy_j)^{-1}
-        =
-        \sum_{\lambda\in\Par}
-        s_\lambda(\bfx)s_\lambda(\bfy).
-    \end{equation}
-\end{theorem}
-
-\begin{proof}
-    We have that
-    \begin{align*}
-        \left[\bfx^\alpha \bfy^\beta\right]
-        \left(
-            \prod_{i,j\geq1}(1-x_iy_j)^{-1}
-        \right)
-        &=
-        \left(
-            \#A \in \Mat_\infty(\NN) \text{ such that } \row A = \alpha, \col A = \beta
-        \right), \\
-        \left[\bfx^\alpha \bfy^\beta\right]
-        \left(
-            \sum_{\lambda\in\Par} 
-            s_\lambda(\bfx) s_\lambda(\bfy)
-        \right) 
-        &= 
-        \left(
-            \#(P,Q) \in \biSSYT \text{ such that } \ct P = \alpha, \ct Q = \beta
-        \right).
-    \end{align*}
-    RSK tells us that both counts are the same, hence both sides of the identity are equal as power series, since their coefficients agree for all monomials.
-\end{proof}
-
-\begin{corollary}
-    The Schurs are an orthonormal basis of $\Lambda$.
-\end{corollary}
-
-\begin{proof}
-    This follows from Theorem \ref{thm:CauchyIdentityImpliesOrthonormal}, which we recall says that \textit{any} two families of symmetric functions which satisfy a Cauchy identity are orthonormal bases of the ring of symmetric functions with respect to the Hall inner product.
-\end{proof}
-
-\begin{corollary}
-    \[
-        \sum_{\lambda \in \Par} K_{\lambda\mu}K_{\lambda\nu} = \langle h_\mu, h_\nu \rangle.
-    \]
-\end{corollary}
-
-\begin{proof}
-    Take the coefficient of $\bfx^\mu \bfy^\nu$ in (\ref{eq:CauchyIdentityForSchurs}).
-\end{proof}
-
-\begin{corollary}\label{thm:HToSIsKostka}
-    We have that
-    \[
-        h_\mu = \sum_{\lambda \in \Par} K_{\lambda\mu}s_\lambda.
-    \]
-    Equivalently,
-    \[
-        \langle s_\lambda, h_\mu \rangle = K_{\lambda\mu}.
-    \]
-\end{corollary}
-
-\cite{StanleyEC2} gives three proofs of this corollary. The first one is the slickest, since it compactifies a lot of the underlying mechanics using the Hall inner product.
-
-\begin{proof}[Proof via the Hall inner product]
-    We know that
-    \[
-        s_\lambda = \sum_{\nu\in\Par} K_{\lambda\nu} m_\nu,
-    \]
-    so 
-    \begin{align*}
-        \langle h_\mu, s_\lambda \rangle &= \left\langle h_\mu, \sum_\nu K_{\lambda\nu} m_\nu \right\rangle \\
-                                         &=\sum_{\nu} K_{\lambda\nu} \langle h_\mu, m_\nu \rangle \\
-                                         &=\sum_{\nu} K_{\lambda\nu} \delta_{\mu\nu} \\
-                                         &= K_{\lambda\mu}.
-    \end{align*}
-\end{proof}
-
-This next one is really the same thing, but packaged differently.
-
-\begin{proof}[Proof via Cauchy Identities]
-    We have that
-    \[
-        \sum_\lambda 
-        m_\lambda(\bfx) h_\lambda(\bfy) 
-        = 
-        \sum_\lambda 
-        s_\lambda(\bfx) s_\lambda(\bfy),
-    \]
-    since both equal $\prod_{i,j}(1-x_iy_j)^{-1}$.
-    So we have that
-    \begin{align*}
-        \sum_\mu 
-        m_\mu(\bfx)h_\mu(\bfy) 
-        &= 
-        \sum_\lambda 
-        \left( 
-            \sum_\mu K_{\lambda\mu} m_\mu(\bfx) 
-        \right) 
-        s_\lambda(\bfy) 
-        \\
-        &= 
-        \sum_\lambda \sum_\mu 
-        m_\mu(\bfx) K_{\lambda\mu} s_\lambda(\bfy) \\
-        &= 
-        \sum_\mu 
-        m_\mu(\bfx) 
-        \left(\sum_\lambda K_{\lambda\mu} s_\lambda(\bfy)\right).
-    \end{align*}
-    We already know that the $m_\mu(\bfx)$'s are linearly independent; we finish the proof by equating their coefficients.
-\end{proof}
-
-This last proof is purely combinatorial, but is also again really the same thing. 
-
-\begin{proof}[Proof via RSK]
-    \begin{align*}
-        h_\mu 
-        &= 
-        \sum_{\substack{A\in\Mat_\infty(\NN)\\\row A=\mu}} 
-        \bfx^{\col A}
-        \\
-        &=
-        \sum_{\substack{(P,Q)\in\biSSYT\\\content P=\mu}} 
-        \bfx^{\content Q}
-        \\
-        &=
-        \sum_{\lambda\in\Par}
-        \left(
-            \sum_{\substack{P,Q\in\SSYT_{\shape \lambda}\\\ct P=\mu}} 
-            \bfx^{\ct Q}
-        \right)
-        \\
-        &=
-        \sum_{\lambda\in\Par}
-        \left(
-            \sum_{P\in\SSYT_{\sh \lambda, \ct \mu}} 
-            \left(
-                \sum_{Q\in\SSYT_{\sh \lambda}} \bfx^{\ct Q}
-            \right)
-        \right) 
-        \\
-        &=
-        \sum_{\lambda\in\Par}
-        \left(
-            \substack{\#\text{of SSYT with}\\\text{shape $\lambda$ and content $\mu$}}
-        \right)
-        \sum_{Q\in\SSYT_{\sh \lambda}} 
-        \bfx^{\ct Q} 
-        \\
-        &= 
-        \sum_{\lambda\in\Par} 
-        K_{\sh\lambda,\ct\mu} 
-        \left(\sum_{Q\in\SSYT_{\sh \lambda}} \bfx^{\ct Q}\right) 
-        \\
-        &= \sum_{\lambda\in\Par} K_{\lambda\mu} s_\lambda.
-    \end{align*}
-\end{proof}
-
-\begin{corollary}
-    We have that
-    \[
-        h_{1^n} = \sum_{\lambda \vdash n} f^\lambda s_\lambda.
-    \]
-\end{corollary}
-
-\begin{proof}
-    Combine Corollary \ref{thm:HToSIsKostka} and the fact that $f^\lambda = K_{\lambda,1^n}$.
-\end{proof}
-
 \subsection{Standardization}
 
 \todo{Rewrite standardization}
-We can \textit{standardize} two-line arrays, which gives us another two-line array with no repeated entries.
-
-Consider a row of numbers $(i_1\: \ldots\: i_n)$. 
-We create a tableau that fills each position in the row in a corresponding box, where a box $(s,t)$ corresponds to the $t$-th appearance of $s$ from the left.
-For example, the array
-\[
-    \begin{pmatrix}
-        1 & 1 & 1 & 2 & 2 & 3 & 3 & 3 & 3
-    \end{pmatrix}
-\]
-becomes
-\[
-    \ytabnormalbox
-    \ytableaushort{123,45,6789}*{3,2,4}
-\]
-Then, we fill in all the squares with $1,\ldots,n$ going in rows.
-In our example, this is already how the rows are filled!
-To get our standardized row, $\tilde{i}_n$ will be the entry of the second tableau in the box where $n$ appears in the first tableau.
-So the standardized row from our example is actually
-\[
-    \begin{pmatrix}
-        1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9
-    \end{pmatrix}.
-\]
-It's not hard to see that this \textit{always} happens if our row is weakly increasing.
-
-Consider the row
-\[
-    \begin{pmatrix}
-        1 & 1 & 3 & 2 & 3 & 1 & 2 & 2 & 2
-    \end{pmatrix}.
-\]
-Our first tableau is now
-\[
-    \ytabnormalbox
-    \ytableaushort{126,4789,35}*{3,4,2},
-\]
-and so our second tableau is
-\[
-    \ytabnormalbox
-    \ytableaushort{123,4567,89}*{3,4,2}
-\]
-Applying standardization, we get
-\[
-    \begin{pmatrix}
-        1 & 2 & 8 & 4 & 9 & 3 & 5 & 6 & 7
-    \end{pmatrix}
-\]
-We can now define the following:
 
 \begin{definition}
     Let $w_A = \binom{i_1\cdots i_n}{j_1\cdots j_n}$ be a two-line array arising from the $\NN$-matrix $A$.
@@ -3055,6 +2913,186 @@ We can now state an important lemma that makes use of all the machinery we've ju
 
 \section{Schur functions, continued}
 
+\subsection{Cauchy identities}
+We finally return to the 
+
+\begin{theorem}
+    [Cauchy identity]    
+    We have
+    \begin{align}
+        \label{eq:CauchyIdentityForSchurs}
+        \prod_{i,j \geq 1}(1-x_iy_j)^{-1}
+        &=
+        \sum_{\lambda\in\Par}
+        s_\lambda(\bfx)s_\lambda(\bfy).
+        \\
+        \prod_{i,j \geq 1}(1+x_iy_j)
+        &=
+        \sum_{\lambda\in\Par}
+        s_\lambda(\bfx)s_{\lambda^\top}(\bfy).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    We have that
+    \begin{align*}
+        \left[\bfx^\alpha \bfy^\beta\right]
+        \left(
+            \prod_{i,j\geq1}(1-x_iy_j)^{-1}
+        \right)
+        &=
+        \left(
+            \#A \in \Mat_\infty(\NN) \text{ such that } \row A = \alpha, \col A = \beta
+        \right), \\
+        \left[\bfx^\alpha \bfy^\beta\right]
+        \left(
+            \sum_{\lambda\in\Par} 
+            s_\lambda(\bfx) s_\lambda(\bfy)
+        \right) 
+        &= 
+        \left(
+            \#(P,Q) \in \biSSYT \text{ such that } \ct P = \alpha, \ct Q = \beta
+        \right).
+    \end{align*}
+    RSK tells us that both counts are the same, hence both sides of the identity are equal as power series, since their coefficients agree for all monomials.
+\end{proof}
+
+\begin{corollary}
+    The Schurs are an orthonormal basis of $\Lambda$.
+\end{corollary}
+
+\begin{proof}
+    This follows from Theorem \ref{thm:CauchyIdentityImpliesOrthonormal}, which we recall says that \textit{any} two families of symmetric functions which satisfy a Cauchy identity are orthonormal bases of the ring of symmetric functions with respect to the Hall inner product.
+\end{proof}
+
+\begin{corollary}
+    \[
+        \sum_{\lambda \in \Par} K_{\lambda\mu}K_{\lambda\nu} = \langle h_\mu, h_\nu \rangle.
+    \]
+\end{corollary}
+
+\begin{proof}
+    Take the coefficient of $\bfx^\mu \bfy^\nu$ in (\ref{eq:CauchyIdentityForSchurs}).
+\end{proof}
+
+\begin{corollary}\label{thm:HToSIsKostka}
+    We have that
+    \[
+        h_\mu = \sum_{\lambda \in \Par} K_{\lambda\mu}s_\lambda.
+    \]
+    Equivalently,
+    \[
+        \langle s_\lambda, h_\mu \rangle = K_{\lambda\mu}.
+    \]
+\end{corollary}
+
+\cite{StanleyEC2} gives three proofs of this corollary. The first one is the slickest, since it compactifies a lot of the underlying mechanics using the Hall inner product.
+
+\begin{proof}[Proof via the Hall inner product]
+    We know that
+    \[
+        s_\lambda = \sum_{\nu\in\Par} K_{\lambda\nu} m_\nu,
+    \]
+    so 
+    \begin{align*}
+        \langle h_\mu, s_\lambda \rangle &= \left\langle h_\mu, \sum_\nu K_{\lambda\nu} m_\nu \right\rangle \\
+                                         &=\sum_{\nu} K_{\lambda\nu} \langle h_\mu, m_\nu \rangle \\
+                                         &=\sum_{\nu} K_{\lambda\nu} \delta_{\mu\nu} \\
+                                         &= K_{\lambda\mu}.
+    \end{align*}
+\end{proof}
+
+This next one is really the same thing, but packaged differently.
+
+\begin{proof}[Proof via Cauchy Identities]
+    We have that
+    \[
+        \sum_\lambda 
+        m_\lambda(\bfx) h_\lambda(\bfy) 
+        = 
+        \sum_\lambda 
+        s_\lambda(\bfx) s_\lambda(\bfy),
+    \]
+    since both sides equal $\prod_{i,j}(1-x_iy_j)^{-1}$.
+    So we have that
+    \begin{align*}
+        \sum_\mu 
+        m_\mu(\bfx)h_\mu(\bfy) 
+        &= 
+        \sum_\lambda 
+        \left( 
+            \sum_\mu K_{\lambda\mu} m_\mu(\bfx) 
+        \right) 
+        s_\lambda(\bfy) 
+        \\
+        &= 
+        \sum_\lambda \sum_\mu 
+        m_\mu(\bfx) K_{\lambda\mu} s_\lambda(\bfy) \\
+        &= 
+        \sum_\mu 
+        m_\mu(\bfx) 
+        \left(\sum_\lambda K_{\lambda\mu} s_\lambda(\bfy)\right).
+    \end{align*}
+    We already know that the $m_\mu(\bfx)$'s are linearly independent; we finish the proof by equating their coefficients.
+\end{proof}
+
+This last proof is purely combinatorial, but is also again really the same thing. 
+
+\begin{proof}[Proof via RSK]
+    \begin{align*}
+        h_\mu 
+        &= 
+        \sum_{\substack{A\in\Mat_\infty(\NN)\\\row A=\mu}} 
+        \bfx^{\col A}
+        \\
+        &=
+        \sum_{\substack{(P,Q)\in\biSSYT\\\content P=\mu}} 
+        \bfx^{\content Q}
+        \\
+        &=
+        \sum_{\lambda\in\Par}
+        \left(
+            \sum_{\substack{P,Q\in\SSYT_{\shape \lambda}\\\ct P=\mu}} 
+            \bfx^{\ct Q}
+        \right)
+        \\
+        &=
+        \sum_{\lambda\in\Par}
+        \left(
+            \sum_{P\in\SSYT_{\sh \lambda, \ct \mu}} 
+            \left(
+                \sum_{Q\in\SSYT_{\sh \lambda}} \bfx^{\ct Q}
+            \right)
+        \right) 
+        \\
+        &=
+        \sum_{\lambda\in\Par}
+        \left(
+            \substack{\#\text{of SSYT with}\\\text{shape $\lambda$ and content $\mu$}}
+        \right)
+        \sum_{Q\in\SSYT_{\sh \lambda}} 
+        \bfx^{\ct Q} 
+        \\
+        &= 
+        \sum_{\lambda\in\Par} 
+        K_{\sh\lambda,\ct\mu} 
+        \left(\sum_{Q\in\SSYT_{\sh \lambda}} \bfx^{\ct Q}\right) 
+        \\
+        &= \sum_{\lambda\in\Par} K_{\lambda\mu} s_\lambda.
+    \end{align*}
+\end{proof}
+
+\begin{corollary}
+    We have that
+    \[
+        h_{1^n} = \sum_{\lambda \vdash n} f^\lambda s_\lambda.
+    \]
+\end{corollary}
+
+\begin{proof}
+    Combine Corollary \ref{thm:HToSIsKostka} and the fact that $f^\lambda = K_{\lambda,1^n}$.
+\end{proof}
+
 \subsection{The Pieri rule}
 
 We have a special case of the forthcoming \defstyle{Littlewood-Richardson rule}, called the \defstyle{Pieri rule}.
@@ -3068,7 +3106,10 @@ We have a special case of the forthcoming \defstyle{Littlewood-Richardson rule},
     where $\mu$ ranges over all partitions obtained by adding a horizontal strip to $\lambda$, where a \defstyle{horizontal strip} is a skew diagram such that each column contains at most one box.
 \end{theorem}
 
+We have a slick algebraic proof:
+
 \begin{proof}
+    [Proof by adjointness of skewing and right-multiplying.]
     In other words, we wish to show that
     \[
         \InnerProduct{h_ns_\lambda,s_\mu}
@@ -3094,6 +3135,14 @@ We have a special case of the forthcoming \defstyle{Littlewood-Richardson rule},
     This can only be possible if $\mu$ is $\lambda$ piled with a horizontal strip of size $n$.
 \end{proof}
 
+However, this is really a manifestation of the \textit{bumping lemma} we just proved.
+
+\begin{proof}
+    [Proof using Schensted insertion]
+\end{proof}
+
+
+
 
 \subsection{The Murnaghan-Nakayama rule}
 
@@ -3110,7 +3159,23 @@ The \defstyle{Murnaghan-Nakayama rule} is an analogous rule with the $p_\lambda$
     \]
 \end{theorem}
 
-\section{The Littlewood-Richardson rule}
+\begin{proof}
+    \todo{Proof of Murnaghan-Nakayama}
+\end{proof}
+
+\section{The tableau ring}
+
+\subsection{Multiplication on tableaux}
+
+\begin{definition}
+    The \defstyle{plactic monoid} consists of the set of all semistandard Young tableaux, with the multiplication of tableau given by
+    \[
+        S \cdot T
+        \coloneq
+        S \leftarrow \rowword T.
+    \]
+\end{definition}
+
 
 \subsection{Knuth equivalence}
 
@@ -3127,6 +3192,8 @@ The \defstyle{Murnaghan-Nakayama rule} is an analogous rule with the $p_\lambda$
     where $a < b < c$.
 \end{definition}
 
+These can be pictorially remembered as the two different words which insert into the same tableaux
+
 \begin{definition}
     We say that two words $u$ and $v$ are \textit{Knuth-equivalent} whenever there is a sequence of \textit{elementary Knuth transformations} which turns one into another.
 \end{definition}
@@ -3134,323 +3201,29 @@ The \defstyle{Murnaghan-Nakayama rule} is an analogous rule with the $p_\lambda$
 We state an important property of Knuth-equivalence
 
 \begin{theorem}
-    Two permutations are Knuth equivalent if and only if their insertion tableaux coincide.
+    Two words are Knuth equivalent if and only if their insertion tableaux coincide.
 \end{theorem}
 
-\begin{proof}
-    We will induct on the number of rows.
-
-    Suppose it were true for one row.
-    Let $\lambda = (\lambda_1,\lambda_2,\ldots)$ be a partition and let $r$ be an integer such that $r \geq \lambda_1$. 
-    Consider the map $\mathfrak{R}: \SYT_{r} \times \SYT \to \SYT_{(r,\lambda_1,\lambda_2,\ldots)}$ defined
-    \[
-        \mathfrak{R}\big(R,T\big)_{ij}
-        \coloneq
-        [i=1]^? R_{1j} + \i [i>1]^? T_{i-1,j}.
-    \]
+\begin{corollary}
+    The plactic monoid is the free monoid modulo Knuth equivalence.
+\end{corollary}
 
 
-    Then, consider the map $\mathfrak{L}: \SYT_{(\lambda_1,\ldots,\lambda_k)} \to \SYT_{(\lambda_2,\ldots,\lambda_k)}$ which simply deletes the first row.
+\subsection{Jeu de taquin}
 
-    Then consider single row insertion
-    We have that
-    \[
-        T \leftarrow k
-        =
-        (\operatorname{head}_1 T \leftarrow k)
-    \]
-
-    Let $a < c < b$.
-    Then, for any positive integer $x$, either $x \leq a$, or $a < x \leq c$, or $c < x \leq b$, or $b < x$.
-
-    Then, let $(A_1,A_2,\ldots)$, $(B_1,B_2,\ldots)$, and $(C_1,C_2,\ldots)$ be letters such that
-    \begin{align*}
-        & a < A_1 \leq A_2 \leq \cdots \leq c, \\ 
-        & c < C_1 \leq C_2 \leq \cdots \leq b, \\
-        & b < B_1 \leq B_2 \leq \cdots.
-    \end{align*}
-    Namely, the $A_i$'s are letters $A$ can bump, the $B_i$'s are letters $B$ can bump, and so on.
-
-    Then we do the casework.
-    \makeatletter
-    \def\font@YT{\scriptstyle}
-    \makeatother
-    \begin{enumerate}
-        \item 
-            $\varnothing$:
-            \begin{align*}
-                \ytableausetup{aligntableaux=top, boxsize=12pt}
-                &
-                \varnothing
-                \xrightarrow{a}
-                \ytableaushort{a} 
-                \xrightarrow{b}
-                \ytableaushort{ab}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow b
-                }{\ytableaushort{ac}}
-                \\
-                &
-                \varnothing
-                \xrightarrow{b}
-                \ytableaushort{b} 
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow b
-                }{\ytableaushort{a}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow b
-                }{\ytableaushort{ac}}
-            \end{align*}
-        \item 
-            $A_1 A_2 \cdots A_j$:
-            \begin{align*}
-                &
-                \ytableaushort{{A_1}{A_2}\cdots{A_j}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow A_1
-                }{\ytableaushort{a{A_2}\cdots{A_j}}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow A_1
-                }{\ytableaushort{a{A_2}\cdots{A_j}b}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow A_1b
-                }{\ytableaushort{a{A_2}\cdots{A_j}c}}
-                \\
-                &
-                \ytableaushort{{A_1}{A_2}\cdots{A_j}}
-                \xrightarrow{b}
-                \ytableaushort{{A_1}{A_2}\cdots{A_j}b}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow A_1
-                }{\ytableaushort{a{A_2}\cdots{A_j}b}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow A_1b
-                }{\ytableaushort{a{A_2}\cdots{A_j}c}}
-            \end{align*}
-        \item 
-            $C_1$:
-            \begin{align*}
-                &
-                \ytableaushort{{C_1}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow C_1
-                }{\ytableaushort{a}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow C_1
-                }{\ytableaushort{ab}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow C_1b
-                }{\ytableaushort{ac}}
-                \\
-                &
-                \ytableaushort{{C_1}}
-                \xrightarrow{b}
-                \ytableaushort{{C_1}b} 
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow C_1
-                }{\ytableaushort{ab}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow C_1b
-                }{\ytableaushort{ac}}
-            \end{align*}
-        \item 
-            $C_1 C_2 \cdots C_j$:
-            \begin{align*}
-                &
-                \ytableaushort{{C_1}{C_2}\cdots{C_j}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow C_1
-                }{
-                    \ytableaushort{a{C_2}\cdots{C_j}}
-                }
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow C_1 
-                }{
-                    \ytableaushort{a{C_2}\cdots{C_j}b}
-                }
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow C_1 C_2
-                }{
-                    \ytableaushort{ac\cdots{C_j}b}
-                } \\
-                &
-                \ytableaushort{{C_1}{C_2}\cdots{C_j}}
-                \xrightarrow{b}
-                \ytableaushort{{C_1}{C_2}\cdots{C_j}b}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow C_1 
-                }{
-                    \ytableaushort{a{C_2}\cdots{C_j}b}
-                }
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow C_1 C_2
-                }{
-                    \ytableaushort{ac\cdots{C_j}b}
-                }
-            \end{align*}
-        \item 
-            $B_1$:
-            \begin{align*}
-                &
-                \ytableaushort{{B_1}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow B_1
-                }{\ytableaushort{a}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow B_1
-                }{\ytableaushort{ab}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow B_1 b
-                }{\ytableaushort{ac}}
-                \\
-                &
-                \ytableaushort{{B_1}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow B_1
-                }{\ytableaushort{b}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow B_1 b
-                }{\ytableaushort{a}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow B_1 b
-                }{\ytableaushort{ac}}
-            \end{align*}
-        \item 
-            $B_1 B_2 \cdots B_j$:
-            \begin{align*}
-                &
-                \ytableaushort{{B_1}{B_2}\cdots{B_j}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow B_1
-                }{\ytableaushort{a{B_2}\cdots{B_j}}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow B_1B_2
-                }{\ytableaushort{ab\cdots{B_j}}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow B_1B_2b
-                }{\ytableaushort{ac\cdots{B_j}}}
-                \\
-                &
-                \ytableaushort{{B_1}{B_2}\cdots{B_j}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow B_1
-                }{\ytableaushort{b{B_2}\cdots{B_j}}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow B_1b
-                }{\ytableaushort{a{B_2}\cdots{B_j}}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow B_1bB_2
-                }{\ytableaushort{ac\cdots{B_j}}}
-            \end{align*}
-        \item 
-            $A_1B_1$:
-            \begin{align*}
-                &
-                \ytableaushort{{A_1}{B_1}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow A_1
-                }{\ytableaushort{a{B_1}}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow A_1B_1
-                }{\ytableaushort{ab}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow A_1B_1c
-                }{\ytableaushort{ac}}
-                \\
-                &
-                \ytableaushort{{A_1}{B_1}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow B_1
-                }
-                {\ytableaushort{{A_1}b}}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow B_1A_1
-                }{\ytableaushort{ab}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow B_1A_1c
-                }{\ytableaushort{acb}}
-            \end{align*}
-        \item 
-            $AC$:
-            \begin{align*}
-                &
-                \ytableaushort{AC}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow A
-                }{\ytableaushort{aC}}
-                \xrightarrow{b}
-                \underset{
-                    \hookleftarrow A
-                }{\ytableaushort{aCb}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow AC
-                }{\ytableaushort{acb}}
-                \\
-                &
-                \ytableaushort{AC}
-                \xrightarrow{b}
-                \ytableaushort{ACb}
-                \xrightarrow{a}
-                \underset{
-                    \hookleftarrow A
-                }{\ytableaushort{aCb}}
-                \xrightarrow{c}
-                \underset{
-                    \hookleftarrow AC
-                }{\ytableaushort{acb}}
-            \end{align*}
-        \item 
-            $ACB$
-    \end{enumerate}
-    Then, if we insert into $A$
-\end{proof}
-
-\subsection{Jeu-de-taquin}
+\begin{definition}
+    A \defstyle{jeu-de-taquin slide} is
+\end{definition}
 
 \subsection{The Littlewood-Richardson rule}
 
-\begin{theorem}
-\end{theorem}
-
 \section{Representation theory of the symmetric group}
+
+\section{Schubert calculus of the Grassmannian}
+
+\subsection{Basic definitions}
+
+
 
 
 
@@ -3677,16 +3450,28 @@ By stars and bars, this is the same as the number of strong compositions of $n$.
     \raggedright\footnotesize
 
     \bibitem[StanleyEC2]{StanleyEC2}
-    Richard P. Stanley, \textit{Enumerative Combinatorics. Volume 2}, Cambridge University Press 2023.
+    Richard P. Stanley, 
+    \textit{Enumerative Combinatorics. Volume 2}, 
+    Cambridge University Press 2023.
+
+    \bibitem[Fulton]{Fulton}
+    William Fulton, 
+    \textit{Young Tableaux}, 
 
     \bibitem[GrinbergAC]{DarijAC}
-    Darij Grinberg, \textit{An Introduction to Algebraic Combinatorics}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
+    Darij Grinberg, 
+    \textit{An Introduction to Algebraic Combinatorics}, 
+    \url{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
 
     \bibitem[GrinbergSGA]{DarijSGA}
-    Darij Grinberg, \textit{An introduction to the symmetric group algebra}, \url{http://www.cip.ifi.lmu.de/~grinberg/t/24s/sga.pdf}
+    Darij Grinberg, 
+    \textit{An introduction to the symmetric group algebra}, 
+    \url{http://www.cip.ifi.lmu.de/~grinberg/t/24s/sga.pdf}
 
     \bibitem[WildonSymFuncs]{WildonSymFuncs}
-    Mark Wildon, \textit{An Involutive Introduction to Symmetric Functions}, \url{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
+    Mark Wildon, 
+    \textit{An Involutive Introduction to Symmetric Functions},
+    \url{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
 \end{thebibliography}
 
 \end{document}
