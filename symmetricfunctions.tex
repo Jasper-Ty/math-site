@@ -89,6 +89,8 @@
 \DeclareMathOperator{\Par}{Par}
 % The set of all compositions 
 \DeclareMathOperator{\Com}{Comp}
+% The set of Young tableaux
+\DeclareMathOperator{\YT}{YT}
 % The set of standard Young tableaux
 \DeclareMathOperator{\SYT}{SYT}
 % The set of semistandard Young tableaux
@@ -141,7 +143,7 @@
 
 \section*{What is this?}
 
-These are perpetually growing notes based on my self-study of Chapter 7 in Richard P Stanley's ``Enumerative Combinatorics'', William Fulton's ``Young Tableaux'', and various other expositions. 
+These are perpetually growing notes based on my self-study of Chapter 7 in Richard P. Stanley's ``Enumerative Combinatorics'', William Fulton's ``Young Tableaux'', Ian G. Macdonald's ``Symmetric Functions and Hall Polynomials'', and various other expositions. 
 
 \iffalse 
 I've learned to \textit{love} this subject! At first, I thought ``Functions that remain the same change under interchange of variables? What's so interesting about that?'', but at some point between now and the end of my undergraduate life, I took it on myself to \textit{compute} with these things, to hold them with my bare hands, and lo--- I suddenly found myself baptized in the waters of symmetric polynomials.
@@ -415,7 +417,7 @@ Indexing over all \textit{weak compositions} $\alpha$ means that all the monomia
     is an element of $\fps{\KK}{\bfx_\infty}$.
 \end{example}
 
-\subsection{The homogeneous components $\Lambda_n$}
+\subsection{Homogeneous components}
 
 To begin our construction, we will begin by taking a ``slice'' of the full ring.
 
@@ -504,7 +506,7 @@ For example, the following demonstrates a symmetric function that arises from an
 
 \section{Partitions, compositions and tableaux}
 
-\subsection{The definition of partitions and compositions}
+\subsection{Definitions}
 
 A partition is, as it's well known, just a way of writing down $n$ as a sum of positive integers.
 And, a composition is an integer partition in which we care about the particular order the positive integers are summed.
@@ -885,13 +887,13 @@ The following theorem has to be stated for thoroughness's sake.
     The monomial symmetric funtions form a basis for $\Lambda$.
 \end{theorem}
 
-\begin{proof}[Proof (short)]
+\begin{proof}
     It's impossible to form a nontrivial linear combination of monomial symmetric functions that sum to zero.
 \end{proof}
 
 \subsection{Elementary symmetric functions}
 
-Our next basis will be the \defstyle{elementary symmetric functions}, which we will refer to as the \defstyle{elementaries} or the $e$'s.
+Our next basis will be the \textit{elementary symmetric functions}, which we will refer to as the \defstyle{elementaries} or the $e$'s.
 
 \begin{definition}
     Let $n\in\NN$. 
@@ -930,8 +932,10 @@ Now we examine the relationship between the elementaries and the monomials.
     \[
         e_\lambda = \sum_{\alpha \in \Com} M_{\lambda\alpha} x^\alpha.
     \]
-    We will also sometimes write $M_{\shape \lambda, \content \alpha}$, for reasons that will be clearer later.
+    We will also sometimes write $M_{\shape \lambda, \content \alpha}$, in light of Proposition \ref{prop:eTableauInterpretation}.
 \end{definition}
+
+We will give a combinatorial interpretation of these coefficients in terms of counting certain matrices.
 
 \begin{definition}
     A \defstyle{zero-one matrix} is an infinite two-dimensional array $(a_{ij})_{i,j \geq 1}$ whose entries are either zero or one, and for which \textit{all but finitely many entries are zero}.
@@ -949,7 +953,7 @@ Now we examine the relationship between the elementaries and the monomials.
     The coefficient $M_{\lambda\mu}$ is counted by zero-one matrices whose row-sums are $\lambda$ and whose column sums are $\mu$.
 \end{theorem}
 
-\begin{proof}[Proof (short)]
+\begin{proof}
     Consider what is going on when we compute the terms of $e_\lambda$,
     \[
         e_\lambda = e_{\lambda_1}e_{\lambda_2}\ldots.
@@ -969,64 +973,6 @@ The exponent of a given variable $x_j$ appearing in a monomial only depends on h
 This manifests as the $j$-th column sum being equal to $\mu_i$.
 \end{proof}
 
-\begin{proof}[Proof (verbose)]
-    $e_\lambda = e_{\lambda_1}e_{\lambda_2}\cdots$ is \footnote{The definition which quantifies over $i_1 < \cdots < i_{\lambda_j}$ is actually just a slick way to pick $\lambda_j$ distinct integers--- what the definition ``morally'' is.
-    In this proof we decode this once, but it will not be done again in subsequent proofs, and it'll be implicitly understood}
-    \[
-        \left(\sum_{i_1<\ldots<i_{\lambda_1}} x_{i_1}\cdots x_{i_{\lambda_1}}\right)
-        \left(\sum_{j_1<\ldots<j_{\lambda_2}} x_{j_1}\cdots x_{j_{\lambda_2}}\right)\cdots
-    \]
-    Consider the first sum.
-    It must be that each $i_k$ is distinct for $1 \leq k \leq \lambda_1$, so in fact we are picking $\lambda_1$ distinct positive integers--- this is a subset of $\NN$ of size $\lambda_1$.
-    Using this to continue the calculation, we have that
-    \[
-        e_\lambda 
-        =
-        \left(\sum_{\substack{S:\lambda_1\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in S]^?}x_2^{[2\in S]^?}\cdots\right)
-        \left(\sum_{\substack{T:\lambda_2\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in T]^?}x_2^{[2\in T]^?}\cdots\right)
-        \cdots
-    \]
-    Where we have used the Iverson bracket to pick out the $x$'s we need.
-
-    Recall that subsets of a set $X$ are in bijection with \textit{indicator functions}, functions $X \to \{0,1\}$ which encode membership.
-    In this case, such an indicator function for a subset of $\NN$ is just a zero-one sequence: a function $\NN \to \{0,1\}$.
-
-    Then, we can further recast the product to be
-    \[
-        e_\lambda 
-        =
-        \left(\sum_{\substack{(a_i)_{i\geq 1}\text{ is a}\\\text{zero-one sequence} \\ \sum_i a_i = \lambda_1}}x_1^{a_1}x_2^{a_2}\cdots\right)
-        \left(\sum_{\substack{(b_i)_{i\geq 1}\text{ is a}\\\text{zero-one sequence} \\ \sum_i b_i = \lambda_2}}x_1^{b_1}x_2^{b_2}\cdots\right)
-        \cdots
-    \]
-    We're almost there.
-    Next, we expand this product, and we will use suggestive notation: to name a term in this product, we pick out a zero-one sequence $(a_{i,j})$ for each factor $e_{\lambda_j}$, of which there are $\len(\lambda)$ many, so if we let $m=\len(\lambda)$, we can pick out sequences
-    \[
-        \Big((a_{i,1})_{i\geq1},\ldots,(a_{i,m})_{i\geq1}\Big)
-    \]
-    where $\sum_i (a_{i,j}) = \lambda_j$.
-    And, if we stack these together, treating each sequence as a row, we have a two-dimensional array
-    \[
-        (a_{ij})_{i,j \geq 1}
-    \]
-    where we have padded the columns past $m$ with zero sequences.
-    This is a zero-one matrix!
-    Then, the condition that $\sum_i (a_{i,j}) = \lambda_j$ becomes $\row(a_{ij}) = \lambda$.
-
-    Our product is now expressed as
-    \begin{align*}
-        e_\lambda 
-        &=
-        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} (x_1^{a_{11}}x_2^{a_{21}}\cdots)(x_1^{a_{21}}x_2^{a_{22}}\cdots)\cdots \\
-        &= 
-        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} x_1^{\left(\sum_i a_{i1}\right)}x_2^{\left(\sum_i a_{i2}\right)} \cdots \\
-        &= 
-        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} \bfx^{\col(a_{ij})}
-    \end{align*}
-    And now we're almost there.
-    It's clear that if we pick out the coefficient of $\mu$ in the above sum, it must have come from a zero-one matrix whose column sum is $\mu$.
-    This completes the proof.
-\end{proof}
 
 \begin{theorem} \label{thm:e2msymmetric}
     Let $\lambda,\mu \in \Par$, then
@@ -1036,16 +982,16 @@ This manifests as the $j$-th column sum being equal to $\mu_i$.
 \end{theorem}
 
 \begin{proof}
-    [Proof (short)]
     Matrix transposition is a bijection between the sets the two numbers count--- namely zero-one matrices with row sum $\lambda$ and column sum $\mu$, and zero-one matrices with row sum $\mu$ and column sum $\lambda$.
 \end{proof}
 
 We have a tableau interpretation for $e_\lambda$.
 
-\begin{theorem}
+\begin{proposition}
+    \label{prop:eTableauInterpretation}
     $M_{\lambda\mu}$ is the number of \textit{column strict} tableau of shape $\lambda^\top$ and content $\mu$.
     In particular, $M_{n\mu}$ is the number of column strict tableau of shape $1^n$ and content $\mu$.
-\end{theorem}
+\end{proposition}
 
 \subsubsection{The fundamental theorem of symmetric functions}
 
@@ -1059,7 +1005,9 @@ We establish a key fact about the numbers $M_{\lambda\mu}$.
     \todo{Gale-Ryser proof}
 \end{proof}
 
-\begin{theorem}[Fundamental theorem of symmetric functions] The $e$'s form a $\ZZ$-basis for the ring of symmetric functions.
+\begin{theorem}
+    [Fundamental theorem of symmetric functions] 
+    The $e_\lambda$'s form a $\ZZ$-basis for the ring of symmetric functions, as $\lambda$ ranges over all partitions.
 \end{theorem}
 
 \begin{proof}
@@ -1072,7 +1020,7 @@ We establish a key fact about the numbers $M_{\lambda\mu}$.
 
 \subsection{Complete homogeneous symmetric functions}
 
-The \textit{complete homogeneous symmetric functions}, or the \textit{completes}, or the $h$'s, have a very similar definition as the elementaries, but with distinctness relaxed.
+The \textit{complete homogeneous symmetric functions}, or the \defstyle{completes}, or the $h$'s, have a very similar definition as the elementaries, but with distinctness relaxed.
 
 \begin{definition}
     Let $n\in\NN$. The \defstyle{complete homogeneous symmetric function} $h_n$ is defined to be
@@ -1091,7 +1039,7 @@ As with the elementaries and $M_{\lambda\mu}$, we define a set of monomial coeff
     Let $\lambda \in \Par$ and $\alpha \in \Com$. Define $N_{\lambda\alpha}$ be the coefficient of $x^\alpha$ in $h_\lambda$.
 \end{definition}
 
-These numbers satisfy some analogous theorems.
+These numbers satisfy analogous theorems.
 
 \begin{theorem} \label{thm:h2mCombInterpretation}
     Let $\lambda, \mu$ be partitions. Then $N_{\lambda\mu}$ is counted by $\NN$-matrices with row sums $\lambda$ and column sums $\mu$.
@@ -1104,12 +1052,17 @@ These numbers satisfy some analogous theorems.
     \]
 \end{theorem}
 
-\begin{proof}[Proof of Theorems \ref{thm:h2mSymmetric} and \ref{thm:h2mCombInterpretation} (short)]
+\begin{theorem}
+    \label{thm:hAreBasis}
+    The $h_\lambda$'s form a $\ZZ$-basis for the ring of symmetric functions, as $\lambda$ ranges over all partitions.
+\end{theorem}
+
+\begin{proof}[Proof of Theorems \ref{thm:h2mSymmetric} and \ref{thm:h2mCombInterpretation}]
     These are proved almost exactly the same way as Theorems \ref{thm:e2mCombInterpretation} and \ref{thm:e2msymmetric}.
 \end{proof}
 
-However, we do not have an analogue of the proof of Theorem \ref{thm:galeryser} for $N_{\lambda\mu}$.
-But at the very least, we have another tableau mnemonic for $N_{\lambda\mu}$.
+We do not have an analogous proof of Theorem \ref{thm:galeryser} for $N_{\lambda\mu}$, yet.
+At the very least, we have another tableau mnemonic for $N_{\lambda\mu}$.
 
 \begin{theorem}
     $N_{\lambda\mu}$ is the number of tableaux of shape $\lambda$ and content $\mu$ with nondecreasing rows. 
@@ -1119,7 +1072,7 @@ But at the very least, we have another tableau mnemonic for $N_{\lambda\mu}$.
 
 \subsection{Power sum symmetric functions}
 
-We have one more simple basis for $\Lambda$, which has many not-so-simple theorems.
+We have one more basis for $\Lambda$, which has roots closer to the representation theory of $S_n$ than the elementaries or completes.
 
 \begin{definition}
     Let $n\in\NN$. The \defstyle{power sum symmetric function} $p_n$ is defined to be
@@ -1247,6 +1200,13 @@ And, this map is involutory.
     \]
     Thus, $\omega$ is an involution.
 \end{theorem}
+
+Finally, we can give a proof of \ref{thm:hAreBasis}
+
+\begin{proof}
+    [Proof of Theorem \ref{thm:hAreBasis}]
+
+\end{proof}
 
 \subsubsection{Distinguished generating functions}
 
@@ -1452,7 +1412,7 @@ Cauchy identities will be used to define the \defstyle{Hall inner product}, name
     are orthonormal with respect to the Hall inner product.
 \end{theorem}
 
-\begin{proof}[Proof (short)]
+\begin{proof}
     We'll make use of \href{https://en.wikipedia.org/wiki/Einstein_notation}{Einstein summation} to make calculations quick.
 
     Define the numbers $U_{\cdot,\cdot}$ and $V_{\cdot,\cdot}$ by
@@ -1835,15 +1795,15 @@ To name a few of its algebraic avatars, Schur functions appear as
 And, they embody beautiful combinatorics--- that of semistandard Young tableaux.
 
 \begin{definition}
-    Let $\lambda \in \Par$. The \defstyle{Schur function} $s_\lambda$ is defined to be
+    Let $\lambda$ be a partition. 
+    The \defstyle{Schur function} $s_\lambda$ is defined to be
     \[
         s_\lambda(\bfx)
         \coloneq
         \sum_{T\in\SSYT_{\shape \lambda}} \bfx^{\content T}.
     \]
+    Where $\SSYT$ is the set of all semistandard Young tableaux.
 \end{definition}
-
-Where $\SSYT$ is the set of all \defstyle{semistandard Young tableaux}.
 
 \subsection{Tableaux}
 
@@ -1924,7 +1884,7 @@ We use the following shorthand for doing computations involving SSYT:
 
 \begin{definition}
     Let $\lambda \in \Par$ and let $\alpha \in \Com$.
-    Then we define
+    Then we define the \defstyle{Kostka number} $K_{\lambda,\alpha}$ to be
     \[
         K_{\lambda,\alpha} \coloneq \#\SSYT_{\shape \lambda, \content \alpha}.
     \]
@@ -1956,11 +1916,14 @@ We use the following shorthand for doing computations involving SSYT:
     \]
 \end{remark}
 
-Since these notes are about symmetric functions, we have to prove the following theorem.
+\subsection{Symmetry of Schur functions}
+
 
 \begin{definition}
     A \defstyle{Bender-Knuth} involution $\BK_i$ is a map $\SYT \to \SYT$ 
 \end{definition}
+
+Since these notes are about symmetric functions, we have to prove the following theorem.
 
 \begin{theorem} The skew Schurs, and therefore also the Schurs, are symmetric functions.
 \end{theorem}
@@ -2715,7 +2678,7 @@ where $\widetilde{j_i}$ is $j_i$ standardized.
     If $A \rskarrow (P,Q),$ then $A^\top \rskarrow (Q,P).$
 \end{theorem}
 
-The first proof given in \cite{StanleyEC2} makes use of the \textit{inversion poset} of a permutation.
+The first proof given in \cite{Stanley} makes use of the \textit{inversion poset} of a permutation.
 
 \begin{definition}
     Consider the two-line array
@@ -2986,7 +2949,7 @@ We finally return to the
     \]
 \end{corollary}
 
-\cite{StanleyEC2} gives three proofs of this corollary. The first one is the slickest, since it compactifies a lot of the underlying mechanics using the Hall inner product.
+\cite{Stanley} gives three proofs of this corollary. The first one is the slickest, since it compactifies a lot of the underlying mechanics using the Hall inner product.
 
 \begin{proof}[Proof via the Hall inner product]
     We know that
@@ -3219,244 +3182,196 @@ We state an important property of Knuth-equivalence
 
 \section{Representation theory of the symmetric group}
 
+\subsection{The symmetric group action on tableaux}
+
+\begin{definition}
+    An \defstyle{$n$-tableau} is a tableau whose multiset of entries are precisely the numbers $\{1,\ldots,n\}$.
+    We will denote the set of all $n$-tableaux by $\YT(n)$.
+    Specifically, we have defined
+    \[
+        \YT(n)
+        \coloneq
+        \{\text{$T$ tableau} : \content T = 1^n\}.
+    \]
+\end{definition}
+
+Let $T \in \YT(n)$.
+Recall that $T$ can viewed as a bijective function $\sh T \to [n]$.
+Then, if $\pi \in S_n$, we can define the left action of $\pi$ by (literal) composition $\pi \circ T$--- we obtain another another tableau of the same shape and content.
+What this all means is that, given a box of $T$ with the letter $i$ in it, we replace it with the letter $\pi(i)$, which defines the following:
+
+\begin{definition}
+    The symmetric group $S_n$ has a left action on the set of $n$--tableaux $\YT(n)$ defined by putting $(\pi \cdot T)_{ij} = \pi (T_{ij})$.
+    This means that the entry in box $i,j$ of $\pi \circ T$ is the entry in box $i,j$ of $T$ under the permutation $\pi$.
+\end{definition}
+
+\subsection{Young modules}
+
+\begin{definition}
+    Let $T \in \YT(n)$.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+    The \defstyle{row subgroup} $R_T$ of $S_n$ is the subgroup consisting of permutations $\sigma$ which leave the content of each row of $T$ invariant.
+        \item 
+            Similarly, the \defstyle{column subgroup} $C_T$ of $S_n$ is the subgroup consisting of permutations $\sigma$ which leave the content of each column of $T$ invariant.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    We say that two tableaux $S,T \in \YT(n)$ of the same shape are \defstyle{row equivalent} if $S = \sigma T$ for some $\sigma \in R(T)$.
+    We define \defstyle{column equivalence} the same way.
+\end{definition}
+
+
+\begin{definition}
+    A \defstyle{tabloid} is an \textit{equivalence class} of tableau up to row equivalence.
+    The action of $S_n$ on tabloids is induced by the action of $S_n$ on tableaux.
+
+    If $T$ is a tableau, its tabloid equivalence class will be denoted $\overline{T}$.
+\end{definition}
+
+This action is well-defined--- if $S,T$ are row-equivalent, then so are $\sigma S, \sigma T$.
+
+\begin{definition}
+    For any $\lambda \vdash n$, we define the \defstyle{Young module} $M^\lambda$ to be the $\CC S_n$-module with basis are tabloids of shape $\lambda$.
+\end{definition}
+
+\subsection{Specht modules}
+
+\begin{definition}
+    Let $T \in \YT(n)$.
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            The \defstyle{row symmetrizer} $\nabla_{\row T}$ is defined by
+            \[
+                \nabla_{\row T}
+                \coloneq
+                \sum_{\sigma \in R(T)}
+                \sigma.
+            \]
+        \item 
+            The \defstyle{column anti-symmetrizer} $\nabla_{\col T}$ is defined by
+            \[
+                \nabla_{\col T}^-
+                \coloneq
+                \sum_{\sigma \in C(T)}
+                \sigma.
+            \]
+        \item 
+            The \defstyle{Young symmetrizer} $\Delta_T$ is the product $\nabla_{\col T}^- \nabla_{\row T}$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    Let $\lambda$ be a partition.
+    The \defstyle{Specht module} $S^\lambda$ is defined to be the subspace of $M^\lambda$ given by
+    \[
+        S^\lambda
+        \coloneq
+        \operatorname{span}\
+        \left\{
+            \nabla_{\col T}^- \cdot \overline{T} :
+            \overline{T} \in M^\lambda
+        \right\}.
+    \]
+\end{definition}
+
+\subsection{The Frobenius characteristic isometry}
+
+\section{Representation theory of the general linear group}
+
+\subsection{Schur functors}
+
 \section{Schubert calculus of the Grassmannian}
 
 \subsection{Basic definitions}
 
+\begin{definition}
+    A \defstyle{flag}
+\end{definition}
 
+\section{Appendix}
 
-
-
-\iffalse 
-
-\section{Solutions to Exercises}
-
-\begin{exercise}
-    $[1]$
-    True or false: The Ferrers diagram of the partition $(4,4,3)$ is given by
-    \[
-        \begin{matrix}
-            . & . & . & . \\
-            . & . & . & . \\
-            . & . & . & .
-        \end{matrix}
-    \]
-\end{exercise}
-
-True! The bottom-right-most dot is in fact the sentence's period. (I hate this book!)
-
-\begin{exercise}
-    Let $\Par(n)$ denote the set of all partitions of $n$ with the dominance ordering.
-    \begin{enumerate}[label=(\alph*)]
-        \item $[2]$ Show that $\Par(n)$ is a lattice.
-        \item $[2+]$ Show that $\Par(n)$ is self-dual.
-        \item $[2+]$ Find the smallest value of $n$ for which $\Par(n)$ is not graded.
-        \item $[2+]$ Show that the maximum number of elements covered by an element of $\Par(n)$ is $\lfloor \frac{1}{2}(\sqrt{1+8n}-3)\rfloor$.
-        \item $[2+]$ Show that the shortest maximal chain in $\Par(n)$ has length $2n-4$ for $n \geq 3$.
-        \item $[3-]$ Show that the longest maximal chain in $\Par(n)$ has length
-            \[
-                \frac{1}{3}m(m^2+3r-1) \sim \frac{1}{3}(2n)^{3/2},
-            \]
-            where $n = \binom{m+1}{2} + 2,\:0 \leq r \leq m$.
-    \end{enumerate}
-\end{exercise}
-
-Consider dividing a partition's diagram into rectangles of parts of the same size. For example, if $\lambda = \ydiagram{4,3,3,1}$, we divide it into the three rectangles $r_1 = 4^1, r_2 = 3^2, r_3 = 1^1$.
-\[
-    \ytabnormalbox
-    \ytableaushort[r_]{1111,222,222,3}
-\]
-Given a partition $\lambda$ with rectangles $(r_1, \ldots)$, we define a a new partition from a \textit{tap} of rectangle $r_i$, where $i > 1$, to be taking the bottom-right-most box of $r_i$ and adding it to the first row of $r_{i-1}$.
-
-For example, if we tapped $r_2$ in the above diagram, we get
-\[
-    \ytableaushort{}*{4,3,3,1}*[*(green)]{4}*[*(yellow)]{0,3,3}
-    \xrightarrow{\text{tap second rectangle}} 
-    \ytableaushort{}*{0,0,0,1}*[*(green)]{4}*[*(yellow)]{4+1,3,2}
-\]
-Evidently, this breaks the rectangular division of $\lambda$, so we obtain new rectangles.
-
-\begin{lemma}
-    Suppose $\lambda$ and $\mu$ agree on the first $t$ rows. Then they both agree with $\lambda \wedge \mu$ on the first $t$ rows. Moreover, let $\lambda'$ and $\mu'$ be the respective partitions with the first $t$ rows removed. Then $\lambda \wedge \mu$ is $\lambda' \wedge \mu'$ prepended with the $t$ removed rows.
-\end{lemma}
-\begin{proof}
-    Suppose $\lambda_1 = \mu_1, \ldots, \lambda_t = \mu_t$.
-    Let $\nu \geq \lambda$ and $\nu \geq \mu$.
-    Suppose $\nu$ disagrees with $\mu$ and $\lambda$ at $s$-th row, where $s < t$.
-    It must be that $\nu_s > \lambda_s$, since $\nu \geq \lambda$. 
-\end{proof}
-
-Now let $\lambda, \mu$ be two partitions of $n$. 
-We give an explicit construction for $\nu \coloneq \lambda \wedge \mu$, which we construct by stabilizing one row at a time.
-
-Put $\lambda^{(0)} \coloneq \lambda$ and $\mu^{(0)} \coloneq \mu$. We will construct two sequences of partitions $(\lambda^{(j)})$ and $(\mu^{(j)})$ such that $\nu_i = \lambda^{(i)}_i = \mu^{(i)}_i$.
-
-
-Suppose $\lambda^{(0)}, \ldots, \lambda^{(j-1)}$, $\mu^{(0)}$, \ldots, $\mu^{(j-1)}$ have been constructed. 
-To construct $\lambda^{(j)}, \mu^{(j)}$, we consider three cases
-\begin{itemize}
-    \item Case $1$: $\lambda_j = \mu_j$. We put 
-        \begin{align*}
-            \nu_j &= \nu_{j-1}, \\
-            \lambda^{(j)} &= \lambda^{(j-1)}, \\
-            \mu^{(j)} &= \mu^{(j-1)}.
-        \end{align*}
-    \item Case $2$: $\lambda_j > \mu_j$. We put 
-        \begin{align*}
-            \nu_j &= \lambda_j, \\
-            \lambda^{(j)} &= \lambda^{(j-1)}, \\
-            \mu^{(j)} &= \overline{\mu^{(j-1)}},
-        \end{align*}
-        where $\overline{\mu^{(j-1)}}$ is the tableau obtained by tapping the the nearest rectangle to the $j$-th row of $\mu$ until the $j$-th row has $\lambda_j$ squares.
-    \item Case $3$: $\lambda_j < \mu_j$. We put 
-        \begin{align*}
-            \nu_j &= \mu_j, \\
-            \lambda^{(j)} &= \overline{\lambda^{(j-1)}}, \\
-            \mu^{(j)} &= \mu^{(j-1)},
-        \end{align*}
-        where $\overline{\lambda^{(j-1)}}$ is defined similarly as above.
-\end{itemize}
-
-We claim that, not only are the above sequences, and therefore $\nu$, are well defined, we also have that $\nu = \lambda \wedge \mu$ as desired.
-
-We now have a smaller tableau of size $n - |\mu_1 - \lambda_1|$.
-
-
-\begin{exercise}
-    $[2+]$
-    Expand the power series $\prod_{i\geq1}(1+x_i+x_i^2)$ in terms of the elementary symmetric functions.
-\end{exercise}
-
-Let $f$ be the above power series. 
-Picking a term of $f$ amounts to choosing some composition $\alpha$ with parts $0,1,2$. Hence
-\[
-    f = \sum_{p,q \geq 0} m_{1^p,2^q}
-\]
-We 
-
-\begin{exercise}
-    $[2+]$
-    Show that
-    \[
-        h_r(x_1,\ldots,x_n) = \sum_{k=1}^n x_k^{n-1+r}\prod_{i\neq k}(x_k-x_i)^{-1}.
-    \]
-\end{exercise}
+\subsection{Detailed proofs}
 
 \begin{proof}
-    Each addend is some rational function--- let's put them all under a common denominator.
-
-    It's clear that the least common denominator in this case has to be $a_\delta = \prod_{i\leq j}(x_i-x_j)^{-1}$, since each term in $a_\delta$ appears in some addend's denominator, and the addends' denominators consist of only terms which are, up to a sign, $(x_i-x_j)^{-1}$ where $i<j$.
-
-    There is a sign picked up since the addends contain terms in the ``wrong'' direction, namely those $(x_k - x_i)^{-1}$ where $i < k$.
-    Hence, when such a factor get moved out, the addends pick up a $(-1)$ as a correction. There are exactly $k-1$ such $i$, so our sign term is $(-1)^{k-1}$.
-
-    The terms of $a_\delta$ that do \textit{not} appear in each addend are the $(x_i-x_j)^{-1}$ terms which do not contain $k$.
-
-    Finally, we have that
+    [Detailed proof of Theorem \ref{thm:e2mCombInterpretation}]
+    $e_\lambda = e_{\lambda_1}e_{\lambda_2}\cdots$ is \footnote{The definition which quantifies over $i_1 < \cdots < i_{\lambda_j}$ is actually just a slick way to pick $\lambda_j$ distinct integers--- what the definition ``morally'' is.
+    In this proof we decode this once, but it will not be done again in subsequent proofs, and it'll be implicitly understood}
     \[
-        \sum_{k=1}^n x_k^{n-1+r}\prod_{i\neq k}(x_k-x_i)^{-1}
+        \left(\sum_{i_1<\ldots<i_{\lambda_1}} x_{i_1}\cdots x_{i_{\lambda_1}}\right)
+        \left(\sum_{j_1<\ldots<j_{\lambda_2}} x_{j_1}\cdots x_{j_{\lambda_2}}\right)\cdots
+    \]
+    Consider the first sum.
+    It must be that each $i_k$ is distinct for $1 \leq k \leq \lambda_1$, so in fact we are picking $\lambda_1$ distinct positive integers--- this is a subset of $\NN$ of size $\lambda_1$.
+    Using this to continue the calculation, we have that
+    \[
+        e_\lambda 
         =
-        \frac{\displaystyle\sum_{k=1}^n (-1)^{k-1}x_k^{n-1+r}\prod_{\substack{i<j\\i,j\neq k}}(x_i-x_j)}{a_\delta}.
+        \left(\sum_{\substack{S:\lambda_1\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in S]^?}x_2^{[2\in S]^?}\cdots\right)
+        \left(\sum_{\substack{T:\lambda_2\text{ sized}\\\text{subset of }\NN}}x_1^{[1\in T]^?}x_2^{[2\in T]^?}\cdots\right)
+        \cdots
     \]
-    We note that the products picked up in the numerator are \textit{smaller} Vandermonde determinants. In this case, we interpret them as minors, as we notice that the numerator is the Laplace expansion along the first column for the determinant
-    \[
-        \begin{vmatrix}
-            x_1^{n-1+r} & x_1^{n-2} & \cdots & x_1^0 \\
-            x_2^{n-1+r} & x_2^{n-2} & \cdots & x_1^0 \\
-            \vdots & \vdots & \ddots & \vdots  \\
-            x_n^{n-1+r} & x_n^{n-2} & \cdots & x_n^0 \\
-        \end{vmatrix},
-    \]
-    which is $a_{\lambda + \delta}$ where $\lambda = (r,0,\ldots,0)$.
+    Where we have used the Iverson bracket to pick out the $x$'s we need.
 
-    Then, we have manipulated the right hand side into the bialternant formula,
-    \[
-        \frac{a_{\delta + (r,0,0,\ldots,0)}}{a_\delta} = s_r(x_1,\ldots,x_n).
-    \]
+    Recall that subsets of a set $X$ are in bijection with \textit{indicator functions}, functions $X \to \{0,1\}$ which encode membership.
+    In this case, such an indicator function for a subset of $\NN$ is just a zero-one sequence: a function $\NN \to \{0,1\}$.
 
-    We complete the proof by noting that $s_r(x_1,\ldots,x_n) = h_r(x_1,\ldots,x_n)$.
+    Then, we can further recast the product to be
+    \[
+        e_\lambda 
+        =
+        \left(\sum_{\substack{(a_i)_{i\geq 1}\text{ is a}\\\text{zero-one sequence} \\ \sum_i a_i = \lambda_1}}x_1^{a_1}x_2^{a_2}\cdots\right)
+        \left(\sum_{\substack{(b_i)_{i\geq 1}\text{ is a}\\\text{zero-one sequence} \\ \sum_i b_i = \lambda_2}}x_1^{b_1}x_2^{b_2}\cdots\right)
+        \cdots
+    \]
+    We're almost there.
+    Next, we expand this product, and we will use suggestive notation: to name a term in this product, we pick out a zero-one sequence $(a_{i,j})$ for each factor $e_{\lambda_j}$, of which there are $\len(\lambda)$ many, so if we let $m=\len(\lambda)$, we can pick out sequences
+    \[
+        \Big((a_{i,1})_{i\geq1},\ldots,(a_{i,m})_{i\geq1}\Big)
+    \]
+    where $\sum_i (a_{i,j}) = \lambda_j$.
+    And, if we stack these together, treating each sequence as a row, we have a two-dimensional array
+    \[
+        (a_{ij})_{i,j \geq 1}
+    \]
+    where we have padded the columns past $m$ with zero sequences.
+    This is a zero-one matrix!
+    Then, the condition that $\sum_i (a_{i,j}) = \lambda_j$ becomes $\row(a_{ij}) = \lambda$.
+
+    Our product is now expressed as
+    \begin{align*}
+        e_\lambda 
+        &=
+        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} (x_1^{a_{11}}x_2^{a_{21}}\cdots)(x_1^{a_{21}}x_2^{a_{22}}\cdots)\cdots \\
+        &= 
+        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} x_1^{\left(\sum_i a_{i1}\right)}x_2^{\left(\sum_i a_{i2}\right)} \cdots \\
+        &= 
+        \sum_{\substack{(a_{ij})\in\Mat_\infty(01)\\\row(a_{ij}) = \lambda}} \bfx^{\col(a_{ij})}
+    \end{align*}
+    And now we're almost there.
+    It's clear that if we pick out the coefficient of $\mu$ in the above sum, it must have come from a zero-one matrix whose column sum is $\mu$.
+    This completes the proof.
 \end{proof}
-
-\begin{exercise}
-    $[2+]$
-    \begin{enumerate}[label=(\alph*)]
-        \item $[2+]$ Prove the identity
-            \begin{equation}\label{eq:124}
-                \left(1-\sum_{n\geq1}p_nt^n\right)^{-1} = \frac{\sum_{n\geq0}h_nt^n}{1-\sum_{n\geq1}(n-1)h_nt^n}
-            \end{equation}
-        \item $[2+]$ Let $Y_n$ denote the coefficient of $t^n$ in the expansion of either side of equation (\ref{eq:124}), so $Y_n \in \Lambda^n$. Show that
-            \[
-                Y_n = \sum_w p_{\rho(w)},
-            \]
-            where $w$ ranges over all permutations in $S_n$ satisfying $w(i) \geq i-1$ for all $i$.
-    \end{enumerate}
-\end{exercise}
-
-We use the Newton-Girard formulas, specifically Equation \ref{eq:ng3}:
-\[
-    P(t) = t\frac{\frac{d}{dt}H(t)}{H(t)}.
-\]
-First, we compute $\sum_{n\geq1}(n-1)h_nt^n$ in terms of $H(t)$:
-\begin{align*}
-    H(t) &= h_0 + h_1t + h_2t^2 + \cdots \\
-    \frac{d}{dt}H(t) &= h_1 + 2h_2t + 3h_3t^2 + \cdots \\
-    t\frac{d}{dt}H(t) &= h_1t + 2h_2t^2 + 3h_3t^3 + \cdots \\
-    t\frac{d}{dt}H(t) - H(t) &= (-h_0) + (h_1t-h_1t) + (2h_2t^2 - h_2t^2) + (3h_3t^3 - h_3t^3) + \cdots \\
-    &= -h_0 + 0h_1t + 1h_2t^3 + 2h_3t^3 + \cdots \\
-    1 + t\frac{d}{dt}H(t) - H(t) &= 0h_1t + 1h_2t^2 + 2h_3t^3 + \cdots \\
-                                &= \sum_{n\geq 1} (n-1) h_nt^n
-\end{align*}
-
-Then, we may write equation \ref{eq:124} as
-\[
-    \frac{1}{1-P(t)} = \frac{H(t)}{1 - (1 + t\frac{d}{dt}H(t) - H(t))}.
-\]
-We simplify the right-hand side to
-\[
-    \frac{H(t)}{H(t) - t\frac{d}{dt}H(t)}
-\]
-and note that both the numerator and denominator are divisible by $H(t)$, which allows us to further simplify it into
-\[
-    \frac{1}{1 - t\frac{\frac{d}{dt}H(t)}{H(t)}}.
-\]
-Now apply the Newton-Girard formula:
-\[
-    \frac{1}{1 - P(t)}.
-\]
-Now, let's compute $Y_n$.
-
-\begin{align*}
-    \frac{1}{1-P(t)} &= \sum_{k=0}^\infty[P(t)]^k \\
-                     &= \sum_{k=0}^\infty \left[\sum_{n=1}^\infty p_nt^n\right]^k \\
-                     &= \sum_{k=0}^\infty \left[\sum_{n=1}^\infty\sum_{\substack{a_1,a_2,\ldots,a_k \geq 1 \\ a_1+a_2+\cdots+a_k = n}} p_{a_1a_2\cdots a_k}t^n\right] \\
-                     &= \sum_{n=1}^\infty \left[\sum_{k=0}^\infty\sum_{\substack{a_1,a_2,\ldots,a_k \geq 1 \\ a_1+a_2+\cdots+a_k = n}} p_{a_1a_2\cdots a_k}\right]t^n \\
-                     &= \sum_{n=1}^\infty \left[\sum_{\substack{\alpha \text{ is a strong} \\ \text{composition of } n}}p_\alpha\right]t^n.
-\end{align*}
-
-We will now show that strong compositions of $n$ are in bijection with the cycle types of permutations $w \in S_n$ such that $w(i) \geq i-1$.
-We claim that any such $w$ is made up of cycles made up of one big jump up and several steps down by one.
-Then $w$ is specified by parenthesizing $123\cdots n$.
-By stars and bars, this is the same as the number of strong compositions of $n$.
-
-\begin{exercise}
-    $[2+]$
-    Let $w \in S_n$ have cycle type $\lambda$. Give a direct bijective proof of 
-\end{exercise}
-
-\fi 
 
 
 \begin{thebibliography}{999999}
     \raggedright\footnotesize
 
-    \bibitem[StanleyEC2]{StanleyEC2}
+    \bibitem[Stanley]{Stanley}
     Richard P. Stanley, 
     \textit{Enumerative Combinatorics. Volume 2}, 
-    Cambridge University Press 2023.
+    Cambridge University Press 2023
 
     \bibitem[Fulton]{Fulton}
     William Fulton, 
     \textit{Young Tableaux}, 
+    Cambridge University Press 1996
+
+    \bibitem[Macdonald]{Macdonald}
+    Ian G. Macdonald,
+    \textit{Symmetric functions and Hall polynomials}, 
+    Oxford University Press 1995
 
     \bibitem[GrinbergAC]{DarijAC}
     Darij Grinberg, 
@@ -3468,7 +3383,7 @@ By stars and bars, this is the same as the number of strong compositions of $n$.
     \textit{An introduction to the symmetric group algebra}, 
     \url{http://www.cip.ifi.lmu.de/~grinberg/t/24s/sga.pdf}
 
-    \bibitem[WildonSymFuncs]{WildonSymFuncs}
+    \bibitem[Wildon]{Wildon}
     Mark Wildon, 
     \textit{An Involutive Introduction to Symmetric Functions},
     \url{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
