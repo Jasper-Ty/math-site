@@ -62,14 +62,14 @@ We will set up a minimal framework for stating theorems of the form
 \begin{quote}
     Suppose the relations \rule{1cm}{0.15mm} hold among the variables \rule{1cm}{0.15mm}, then \rule{1cm}{0.15mm}.
 \end{quote}
-where, paradoxically, we will \textit{distinguish} two obviously isomorphic objects:
+where we will work with two obviously isomorphic objects:
 \begin{itemize}
     \item
         noncommutative monomials, and
     \item
         words,
 \end{itemize}
-which sacrifices only a little bit of generality for plenty of conceptual clarity--- the particular isomorphism here is very important!
+which sacrifices only a little bit of generality for plenty of conceptual clarity.
 
 \subsection{Noncommutative monomials}
 
@@ -88,7 +88,7 @@ We begin our construction from the ``variables'' side.
     \end{enumerate}
 \end{definition}
 
-As one would expect, $\calU$ is simply the unital $\ZZ$-algebra whose basis consists of elements
+As one would expect, $\calU$ is simply the associative unital $\ZZ$-algebra whose basis consists of elements
 \[
     u_{i_1} \cdots u_{i_k} \in \langle \bfu \rangle
 \]
@@ -109,22 +109,11 @@ Next, continue from the ``words'' side.
         \item 
             The \defstyle{monoid of words} $\mathbb{W}$ is the free monoid on the generating set $[N]$.
         \item 
-            The \defstyle{free associative ring} $\calU^\ast$ is the monoid ring $\ZZ\mathbb{W}$.
+            We define $\calU^\ast$ to be the monoid ring $\ZZ\mathbb{W}$.
     \end{enumerate}
 \end{definition}
 
-As before, $\calU^\ast$ is simply the unital $\ZZ$-algebra whose basis consists of elements
-\[
-    u_{i_1} \cdots u_{i_k} \in \langle \bfu \rangle
-\]
-for some list of integers $(i_1,\ldots,i_k)$, and whose multiplication on basis elements is given by
-\[
-    (u_{i_1} \cdots u_{i_k}) \cdot (u_{i_1} \cdots u_{j_\ell})
-    =
-    u_{i_1} \cdots u_{i_k} u_{i_1} \cdots u_{j_\ell}.
-\]
-
-\subsection{Ideals}
+$\calU^\ast$ is the associative unital $\ZZ$-algebra whose basis consists of words $\sfw = \sfw_1\cdots\sfw_k \in \WW$ and whose multiplication is given by concatenation.
 
 We will define an inner product $\ip{\wc,\wc}$ given by making noncommutative monomials dual to words, that is, $\langle \bfu \rangle$ and $\WW$ are orthonormal bases under $\ip{\wc,\wc}$.
 
@@ -137,6 +126,8 @@ We will define an inner product $\ip{\wc,\wc}$ given by making noncommutative mo
     \]
     for all $\bfu_\sfv \in \calU$ and $\sfw \in \calU^\ast$.
 \end{definition}
+
+\subsection{Ideals}
 
 Now, if $I$ is a ideal of $\calU$, we define $I^\perp$ by
 \[
