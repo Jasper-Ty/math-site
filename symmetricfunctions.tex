@@ -121,6 +121,9 @@
 % Bender-Knuth involution
 \DeclareMathOperator{\BK}{BK}
 
+\DeclareMathOperator{\Knuth}{Knuth}
+\DeclareMathOperator{\jdt}{jdt}
+
 %   RSK
 % ------->
 \newcommand{\rskarrow}{\ensuremath\xrightarrow{\RSK}}
@@ -514,18 +517,20 @@ And, a composition is an integer partition in which we care about the particular
 We give formalizations of these ideas that are convenient in developing the theory of symmetric functions.
 
 \begin{definition}
-    A \defstyle{weak composition}, which we will often refer to simply as a \textit{composition}, $\alpha$ of $n \in \NN$ is a sequence of nonnegative integers 
+    A \defstyle{weak composition}, which we will often refer to simply as a \defstyle{composition}, $\alpha$ of $n \in \NN$ is a sequence of nonnegative integers 
     \[
         (\alpha_1,\alpha_2,\ldots)
     \]
-    such that 
+    such that the sum
     \[
         |\lambda|
         \coloneq
-        \sum_{i\in\NN}\alpha
+        \sum_{i\in\NN}
+        \alpha_i
         =
-        n.
+        n
     \]
+    is finite.
     The nonzero entries of $\alpha$ are called the \defstyle{parts} of $\alpha$.
 \end{definition}
 
@@ -563,7 +568,7 @@ We put notation for talking about partitions and compositions.
 
     We denote the set of all partitions by $\Par$.
     The set of all partitions $\lambda$ such that $\lambda \vdash n$ will be denoted $\Par(n)$.
-    The set of all partitions with $n$ parts will be denoted $\Par_{n}$.
+    The set of all partitions with $k$ parts will be denoted $\Par_k$.
 
     We denote the set of all compositions by $\Com$.
     If $\lambda \in \Par$, we denote the set of all compositions with parts $\lambda$ to be $\Com(\lambda)$.
@@ -648,7 +653,7 @@ The fact that Young diagrams are made up of boxes is nice--- because we can put 
 
 Typically, our entries will either be positive integers or elements of a family indexed by positive integers.
 
-This allows us to encode the entries in a convenient way
+This allows us to encode the entries in a crucial way:
 
 \begin{definition}
     Let $T$ be a Young tableau filled in with \textit{positive integers}.
@@ -782,6 +787,7 @@ Next, we have a \textit{total order} on partitions.
 Not only is it a total order, it is actually a linear extension of dominance order.
 
 \begin{theorem}
+    \label{thm:LexIsLinearExtensionOfDominance}
     If $\lambda \geq \mu$, then $\lambda \succeq \mu$.
 \end{theorem}
 
@@ -949,7 +955,8 @@ We will give a combinatorial interpretation of these coefficients in terms of co
     and $\col A$ is similarly defined.
 \end{definition}
 
-\begin{theorem} \label{thm:e2mCombInterpretation}
+\begin{theorem} 
+    \label{thm:e2mCombInterpretation}
     The coefficient $M_{\lambda\mu}$ is counted by zero-one matrices whose row-sums are $\lambda$ and whose column sums are $\mu$.
 \end{theorem}
 
@@ -1920,12 +1927,17 @@ We use the following shorthand for doing computations involving SSYT:
 
 
 \begin{definition}
-    A \defstyle{Bender-Knuth} involution $\BK_i$ is a map $\SYT \to \SYT$ 
+    Let $\lambda \vdash n$.
+    The \defstyle{Bender-Knuth} involution $\BK_i$ is the map $\SSYT_{\sh \lambda} \to \SSYT_{\sh \lambda}$ defined as follows:
+
+    If $T$ is a tableau, let $T'$ be the subtableau given by
+    
 \end{definition}
 
 Since these notes are about symmetric functions, we have to prove the following theorem.
 
-\begin{theorem} The skew Schurs, and therefore also the Schurs, are symmetric functions.
+\begin{theorem} 
+    The skew Schurs, and therefore also the Schurs, are symmetric functions.
 \end{theorem}
 
 \begin{proof}
@@ -2014,6 +2026,13 @@ Since these notes are about symmetric functions, we have to prove the following 
     \]
 
 As a consequence,
+
+We may also prove this via RSK
+
+\begin{proof}
+    [Proof of Schur function symmetry via RSK]
+\end{proof}
+
 \begin{corollary}
     Let $\lambda\setminus\nu$ be a skew shape. Then
     \[
@@ -2758,7 +2777,7 @@ Given an inversion poset $I$, we may partition it into antichains $I_1, \ldots, 
 
 Moreover, considering the definition of the inversion poset's order, we may define an order on its antichains, given by $(a,b) < (c,d)$ whenever $a < c$ and $b > d$.
 
-This defines a total order on any antichain of $I$ (check it!).
+This defines a total order on any antichain of $I$.
 
 \begin{example}
     Continuing Example \ref{ex:invposetantichains}, the order internal to each antichain (going east to west from least to greatest) is
@@ -2804,6 +2823,15 @@ We can now state an important lemma that makes use of all the machinery we've ju
         Q_{1,r} = \text{the bottom number of }\max I_r.
     \]
 \end{lemma}
+
+\begin{proof}
+    Let's examine $P$.
+    I claim that the entry in the $j$-th column of $P$ must come from $I_j$.
+    We will prove this by induction.
+    The biletter $i_1j_1$ must be a minimal element of $I$, so $i_1j_t \in I_1$.
+    Then, the only letters which can bump 
+    If $j_t$ is to bump $j_i$, it must be that $i_t > 1$.
+\end{proof}
 
 \begin{example}
     Completing the example, we compute the top and bottom numbers of the least and greatest elements of each antichain.
@@ -2899,22 +2927,27 @@ We finally return to the
 \begin{proof}
     We have that
     \begin{align*}
-        \left[\bfx^\alpha \bfy^\beta\right]
+        &\left[\bfx^\alpha \bfy^\beta\right]
         \left(
             \prod_{i,j\geq1}(1-x_iy_j)^{-1}
         \right)
+        \\
         &=
+        \#
         \left(
-            \#A \in \Mat_\infty(\NN) \text{ such that } \row A = \alpha, \col A = \beta
-        \right), \\
-        \left[\bfx^\alpha \bfy^\beta\right]
+            A \in \Mat_\infty(\NN) \text{ such that } \row A = \alpha, \col A = \beta
+        \right), 
+        \\
+        &\left[\bfx^\alpha \bfy^\beta\right]
         \left(
             \sum_{\lambda\in\Par} 
             s_\lambda(\bfx) s_\lambda(\bfy)
         \right) 
+        \\
         &= 
+        \#
         \left(
-            \#(P,Q) \in \biSSYT \text{ such that } \ct P = \alpha, \ct Q = \beta
+            (P,Q) \in \SSYT \text{ such that } \ct P = \alpha, \ct Q = \beta \sh P = \sh Q
         \right).
     \end{align*}
     RSK tells us that both counts are the same, hence both sides of the identity are equal as power series, since their coefficients agree for all monomials.
@@ -3135,7 +3168,7 @@ The \defstyle{Murnaghan-Nakayama rule} is an analogous rule with the $p_\lambda$
     \[
         S \cdot T
         \coloneq
-        S \leftarrow \rowword T.
+        S \leftarrow \rowword (T).
     \]
 \end{definition}
 
@@ -3143,25 +3176,103 @@ The \defstyle{Murnaghan-Nakayama rule} is an analogous rule with the $p_\lambda$
 \subsection{Knuth equivalence}
 
 \begin{definition}
-    Given a word, an \textit{elementary Knuth transformation} is a replacement of a substring of three consecutive letters given by the following rules
+    Given a word, an \defstyle{elementary Knuth transformation} is a replacement of a substring of three consecutive letters given by the following rules
     \[
         \begin{cases}
-            abc \equiv bac, \\
-            cab \equiv cba, \\
-            baa \equiv aba, \\
-            bba \equiv bab,
+            \mathsf{abc} \equiv \mathsf{bac}, \\
+            \mathsf{cab} \equiv \mathsf{cba}, \\
+            \mathsf{baa} \equiv \mathsf{aba}, \\
+            \mathsf{bba} \equiv \mathsf{bab},
         \end{cases}
     \]
-    where $a < b < c$.
+    where $\sfa < \sfb < \sfc$.
 \end{definition}
 
 These can be pictorially remembered as the two different words which insert into the same tableaux
 
 \begin{definition}
-    We say that two words $u$ and $v$ are \textit{Knuth-equivalent} whenever there is a sequence of \textit{elementary Knuth transformations} which turns one into another.
+    We say that two words $\sfw$ and $\sfv$ are \defstyle{Knuth-equivalent} whenever there is a sequence of \textit{elementary Knuth transformations} which turns one into another.
 \end{definition}
 
+\subsection{Greene's theorem}
+
+\begin{definition}
+    Let $\sfw$ be a word.
+\end{definition}
+
+\begin{lemma}
+\end{lemma}
+
+We have a generalization of \defstyle{Dilworth's theorem}, called \defstyle{Greene's theorem}.
+
+Define the 
+\begin{theorem}
+    [Dilworth's theorem]
+    \label{thm:Dilworth}
+    If $P$ is a finite poset, then 
+    \[
+        \max_\text{$A$: antichain of $P$}
+        |A|
+        =
+        \min_\text{$\bfC$: chain decomposition of $P$}
+        |\bfC|.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \hyperref[pf:Dilworth]{Appendix}.
+\end{proof}
+
+\begin{corollary}
+    Let $\sfw$ be a word that inserts into a tableau of shape $\lambda$.
+    Then 
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            $\lambda_1$ is the length of the longest non-decreasing subsequence of $\sfw$.
+        \item 
+            $\ell(\lambda)$ is the length of the longest decreasing subsequence of $\sfw$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    Let $P$ be the inversion poset of $\sfw$.
+    Then, a decreasing subsequence is an antichain, namely, a collection of biletters $a_ib_i$ such that if $i < j$.
+    The minimum size of a union of $k$ increasing sequences.
+\end{proof}
+
+\begin{theorem}
+    [Greene's theorem]
+    \label{thm:Greene}
+\end{theorem}
+
+\begin{corollary}
+    Let $\sfw$ be a word which inserts into a tableau $T$.
+    Then
+    \[
+        \Big(
+            I_1(\sfw), I_2(\sfw), \ldots
+        \Big)
+        =
+        \shape T.
+    \]
+\end{corollary}
+
+\begin{proof}
+    
+\end{proof}
+
+
+\begin{corollary}
+    For all words $\sfw$, there exists a unique tableau $T \in \SSYT$ such that $\sfw \overset\Knuth\sim \rowword(T)$.
+\end{corollary}
+
+\begin{proof}
+\end{proof}
+
 We state an important property of Knuth-equivalence
+
+\begin{theorem}
+\end{theorem}
 
 \begin{theorem}
     Two words are Knuth equivalent if and only if their insertion tableaux coincide.
@@ -3171,12 +3282,18 @@ We state an important property of Knuth-equivalence
     The plactic monoid is the free monoid modulo Knuth equivalence.
 \end{corollary}
 
-
 \subsection{Jeu de taquin}
 
 \begin{definition}
     A \defstyle{jeu-de-taquin slide} is
 \end{definition}
+
+\begin{theorem}
+    Let $S, T$ be two semistandard tableaux.
+    If $S \overset\jdt\sim T$, then $\rowword (S) \overset\Knuth\sim \rowword (T)$.
+\end{theorem}
+
+
 
 \subsection{The Littlewood-Richardson rule}
 
@@ -3185,30 +3302,30 @@ We state an important property of Knuth-equivalence
 \subsection{The symmetric group action on tableaux}
 
 \begin{definition}
-    An \defstyle{$n$-tableau} is a tableau whose multiset of entries are precisely the numbers $\{1,\ldots,n\}$.
-    We will denote the set of all $n$-tableaux by $\YT(n)$.
+    An \defstyle{$n$-tableau} is a standard tableau whose entries are precisely the numbers $\{1,\ldots,n\}$.
+    We will denote the set of all $n$-tableaux by $\SYT(n)$.
     Specifically, we have defined
     \[
-        \YT(n)
+        \SYT(n)
         \coloneq
-        \{\text{$T$ tableau} : \content T = 1^n\}.
+        \{T \in \SYT : \content T = 1^n\}.
     \]
 \end{definition}
 
-Let $T \in \YT(n)$.
+Let $T \in \SYT(n)$.
 Recall that $T$ can viewed as a bijective function $\sh T \to [n]$.
 Then, if $\pi \in S_n$, we can define the left action of $\pi$ by (literal) composition $\pi \circ T$--- we obtain another another tableau of the same shape and content.
 What this all means is that, given a box of $T$ with the letter $i$ in it, we replace it with the letter $\pi(i)$, which defines the following:
 
 \begin{definition}
-    The symmetric group $S_n$ has a left action on the set of $n$--tableaux $\YT(n)$ defined by putting $(\pi \cdot T)_{ij} = \pi (T_{ij})$.
+    The symmetric group $S_n$ has a left action on the set of $n$--tableaux $\SYT(n)$ defined by putting $(\pi \cdot T)_{ij} = \pi (T_{ij})$.
     This means that the entry in box $i,j$ of $\pi \circ T$ is the entry in box $i,j$ of $T$ under the permutation $\pi$.
 \end{definition}
 
 \subsection{Young modules}
 
 \begin{definition}
-    Let $T \in \YT(n)$.
+    Let $T \in \SYT(n)$.
     \begin{enumerate}[label=(\alph*)]
         \item 
     The \defstyle{row subgroup} $R_T$ of $S_n$ is the subgroup consisting of permutations $\sigma$ which leave the content of each row of $T$ invariant.
@@ -3218,7 +3335,7 @@ What this all means is that, given a box of $T$ with the letter $i$ in it, we re
 \end{definition}
 
 \begin{definition}
-    We say that two tableaux $S,T \in \YT(n)$ of the same shape are \defstyle{row equivalent} if $S = \sigma T$ for some $\sigma \in R(T)$.
+    We say that two tableaux $S,T \in \SYT(n)$ of the same shape are \defstyle{row equivalent} if $S = \sigma T$ for some $\sigma \in R(T)$.
     We define \defstyle{column equivalence} the same way.
 \end{definition}
 
@@ -3290,7 +3407,10 @@ This action is well-defined--- if $S,T$ are row-equivalent, then so are $\sigma 
     A \defstyle{flag}
 \end{definition}
 
+\section{Macdonald polynomials}
+
 \section{Appendix}
+
 
 \subsection{Detailed proofs}
 
@@ -3354,36 +3474,72 @@ This action is well-defined--- if $S,T$ are row-equivalent, then so are $\sigma 
     This completes the proof.
 \end{proof}
 
+\begin{proof}
+    [Proof of Dilworth's theorem (Theorem \ref{thm:Dilworth})]
+    \label{pf:Dilworth}
+    Let $A$ be an antichain of $P$, and let $\bfC$ be chain decomposition of $P$.
+    Then
+    \[
+        |A|
+        \leq
+        |\bfC|.
+    \]
+    This is because $A$ acts as a system of representatives for some subset of $\bfC$.
+    Let $A = \{a_1,\ldots,a_k\}$.
+    I claim that there exist disjoint chains $C_1, \ldots, C_k \in \bfC$ such that $a_i \in C_i$ for all $i$.
+    That each $a_i$ belongs to \textit{some} $C_i$ simply follows from $\bfC$ being a chain decomposition of $P$.
+    That they are distinct follows from the fact that, since $A$ is an antichain, $a_i$ and $a_j$ are incomparable if $i \neq j$, and hence they cannot belong to the same chain--- $C_i \neq C_j$.
+    Then, 
+    \[
+        |A| = |\{C_1,\ldots,C_k\}| \leq |\bfC|.
+    \]
+    Taking max and min on both sides, we have that
+    \[
+        \max_\text{$A$: antichain of $P$}
+        |A|
+        \leq
+        \min_\text{$\bfC$: chain decomposition of $P$}
+        |\bfC|
+        .
+    \]
+    We will complete the proof by witnessing equality.
+    Let $x$ be a maximal element of $P$.
+\end{proof}
 
 \begin{thebibliography}{999999}
     \raggedright\footnotesize
 
-    \bibitem[Stanley]{Stanley}
+    \bibitem[SteLR]{SteLR}
+    John R. Stembridge, 
+    \textit{A Concise Proof of the Littlewood-Richardson Rule}, 
+    Electron. J. Combin. \textbf{9} (2002), N5.
+
+    \bibitem[Sta]{Stanley}
     Richard P. Stanley, 
     \textit{Enumerative Combinatorics. Volume 2}, 
     Cambridge University Press 2023
 
-    \bibitem[Fulton]{Fulton}
+    \bibitem[Ful]{Fulton}
     William Fulton, 
     \textit{Young Tableaux}, 
     Cambridge University Press 1996
 
-    \bibitem[Macdonald]{Macdonald}
+    \bibitem[Mac]{Macdonald}
     Ian G. Macdonald,
     \textit{Symmetric functions and Hall polynomials}, 
     Oxford University Press 1995
 
-    \bibitem[GrinbergAC]{DarijAC}
+    \bibitem[GriAC]{DarijAC}
     Darij Grinberg, 
     \textit{An Introduction to Algebraic Combinatorics}, 
     \url{http://www.cip.ifi.lmu.de/~grinberg/t/21s/lecs.pdf}
 
-    \bibitem[GrinbergSGA]{DarijSGA}
+    \bibitem[GriSGA]{DarijSGA}
     Darij Grinberg, 
     \textit{An introduction to the symmetric group algebra}, 
     \url{http://www.cip.ifi.lmu.de/~grinberg/t/24s/sga.pdf}
 
-    \bibitem[Wildon]{Wildon}
+    \bibitem[Wil]{Wildon}
     Mark Wildon, 
     \textit{An Involutive Introduction to Symmetric Functions},
     \url{http://www.ma.rhul.ac.uk/~uvah099/Maths/Sym/SymFuncs2020.pdf}
