@@ -3220,7 +3220,7 @@ Define the
 \end{theorem}
 
 \begin{proof}
-    \hyperref[pf:Dilworth]{Appendix}.
+    See appendix.
 \end{proof}
 
 \begin{corollary}
@@ -3240,9 +3240,35 @@ Define the
     The minimum size of a union of $k$ increasing sequences.
 \end{proof}
 
+\begin{definition}
+    Let $P$ be a finite poset
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            A \defstyle{$k$-antichain} $A$ of $P$ is a subset such that no $k+1$ elements of $A$ form a chain.
+        \item 
+            
+    \end{enumerate}
+\end{definition}
+
 \begin{theorem}
-    [Greene's theorem]
+    [Greene-Kleitman]
     \label{thm:Greene}
+    Let $P$ be a finite poset.
+    Then
+    \[
+        \max_\text{$\bfA$:  $P$}
+        \left\lvert
+        \bigcup_{i=1}^k
+        A_k
+        \right\rvert
+        =
+        \min_\text{$\bfC$: chain decomposition of $P$}
+        \left\lvert
+        \bigcup_{i=1}^k
+        A_k
+        \right\rvert
+        |\bfC|.
+    \]
 \end{theorem}
 
 \begin{corollary}
@@ -3302,30 +3328,30 @@ We state an important property of Knuth-equivalence
 \subsection{The symmetric group action on tableaux}
 
 \begin{definition}
-    An \defstyle{$n$-tableau} is a standard tableau whose entries are precisely the numbers $\{1,\ldots,n\}$.
-    We will denote the set of all $n$-tableaux by $\SYT(n)$.
+    An \defstyle{$n$-tableau} is a tableau whose entries are precisely the numbers $\{1,\ldots,n\}$.
+    We will denote the set of all $n$-tableaux by $\YT(n)$.
     Specifically, we have defined
     \[
-        \SYT(n)
+        \YT(n)
         \coloneq
-        \{T \in \SYT : \content T = 1^n\}.
+        \{\text{$T$ is a tableau} : \content T = 1^n\}.
     \]
 \end{definition}
 
-Let $T \in \SYT(n)$.
+Let $T \in \YT(n)$.
 Recall that $T$ can viewed as a bijective function $\sh T \to [n]$.
 Then, if $\pi \in S_n$, we can define the left action of $\pi$ by (literal) composition $\pi \circ T$--- we obtain another another tableau of the same shape and content.
 What this all means is that, given a box of $T$ with the letter $i$ in it, we replace it with the letter $\pi(i)$, which defines the following:
 
 \begin{definition}
-    The symmetric group $S_n$ has a left action on the set of $n$--tableaux $\SYT(n)$ defined by putting $(\pi \cdot T)_{ij} = \pi (T_{ij})$.
+    The symmetric group $S_n$ has a left action on the set of $n$--tableaux $\YT(n)$ defined by putting $(\pi \cdot T)_{ij} = \pi (T_{ij})$.
     This means that the entry in box $i,j$ of $\pi \circ T$ is the entry in box $i,j$ of $T$ under the permutation $\pi$.
 \end{definition}
 
 \subsection{Young modules}
 
 \begin{definition}
-    Let $T \in \SYT(n)$.
+    Let $T \in \YT(n)$.
     \begin{enumerate}[label=(\alph*)]
         \item 
     The \defstyle{row subgroup} $R_T$ of $S_n$ is the subgroup consisting of permutations $\sigma$ which leave the content of each row of $T$ invariant.
@@ -3335,7 +3361,7 @@ What this all means is that, given a box of $T$ with the letter $i$ in it, we re
 \end{definition}
 
 \begin{definition}
-    We say that two tableaux $S,T \in \SYT(n)$ of the same shape are \defstyle{row equivalent} if $S = \sigma T$ for some $\sigma \in R(T)$.
+    We say that two tableaux $S,T \in \YT(n)$ of the same shape are \defstyle{row equivalent} if $S = \sigma T$ for some $\sigma \in R(T)$.
     We define \defstyle{column equivalence} the same way.
 \end{definition}
 
@@ -3482,17 +3508,9 @@ This action is well-defined--- if $S,T$ are row-equivalent, then so are $\sigma 
     \[
         |A|
         \leq
-        |\bfC|.
+        |\bfC|
     \]
-    This is because $A$ acts as a system of representatives for some subset of $\bfC$.
-    Let $A = \{a_1,\ldots,a_k\}$.
-    I claim that there exist disjoint chains $C_1, \ldots, C_k \in \bfC$ such that $a_i \in C_i$ for all $i$.
-    That each $a_i$ belongs to \textit{some} $C_i$ simply follows from $\bfC$ being a chain decomposition of $P$.
-    That they are distinct follows from the fact that, since $A$ is an antichain, $a_i$ and $a_j$ are incomparable if $i \neq j$, and hence they cannot belong to the same chain--- $C_i \neq C_j$.
-    Then, 
-    \[
-        |A| = |\{C_1,\ldots,C_k\}| \leq |\bfC|.
-    \]
+    since no two elements of $A$ can belong to the same chain.
     Taking max and min on both sides, we have that
     \[
         \max_\text{$A$: antichain of $P$}
@@ -3503,7 +3521,22 @@ This action is well-defined--- if $S,T$ are row-equivalent, then so are $\sigma 
         .
     \]
     We will complete the proof by witnessing equality.
-    Let $x$ be a maximal element of $P$.
+    Let $x$ be a maximal element of $P$, and put $P' = P \setminus \{x\}$.
+    Let $\{C_1, \ldots, C_k\}$ be a minimal disjoint chain decomposition of $P'$.
+    For each $1 \leq i \leq k$, let $a_i$ be the largest element of $C_i$ that belongs to a $k$-element antichain.
+
+    Then, $A = \{a_1,\ldots,a_k\}$ is an antichain, by how we defined it:
+    Suppose $a_i < a_j$.
+    Let $a_i \in A_i$ and $A_j$, where $A_i$ and $A_j$ are $k$-element antichains in $P'$.
+    Put $A_j \cap C_i = \{a\}$.
+    If $a \leq a_i$, we have that $a < a_j$ by transitivity, contradicting the fact that $A_j$ is an antichain.
+    If $a > a_i$, we contradict the maximality of $a_i$.
+
+    Now, if $A \cap \{x\}$ is an antichain, we have that $C_1,\ldots,C_k,\{x\}$ is a chain decomposition of $P$ into $|A \cap \{x\}| = k+1$ chains.
+
+    If it isn't, then $x > a_i$ for some $i$, by $x$'s maximality.
+    The set $K = \{x\} \cap \{a \in C_i : a \leq a_i\}$ is a chain in $P$, and $P \setminus K$ can be covered by $k-1$ antichains.
+    Then $P$ is covered by $k$ antichains.
 \end{proof}
 
 \begin{thebibliography}{999999}
