@@ -2,9 +2,6 @@
 
 \usepackage[garamond, tableau]{jaspercommon}
 
-\newcommand\arxiv[1]{\href{http://www.arxiv.org/abs/#1}{\texttt{arXiv:#1}}}
-
-\newcommand*\Mat{\mathrm{Mat}}
 \newcommand*\Sym{\mathrm{Sym}}
 \newcommand*\RCF{\mathsf{RCF}}
 \newcommand*\OrdField{\mathsf{OrdField}}
@@ -28,35 +25,37 @@
 
 This are notes I took while reading ``An elementary and constructive solution to Hilbert's 17th Problem for matrices'' by Christopher J. Hillar and Jiawang Nie \cite{HN06}.
 
+This was for the class ``Positive Polynomials and Sums of Squares'' I took Winter 2024.
+
 \tableofcontents
 
 \section*{Notation}
 
-Let $\bfx = (x_1,\ldots,x_m)$ be a collection of indeterminates, and let $F[\bfx]$ and $F(\bfx)$ denote the polynomial ring and the ring of rational functions in the field $F$ respectively.
+Let $\bfx = (x_1,\ldots,x_m)$ be a collection of indeterminates, and let $F[\bfx]$ and $F(\bfx)$ denote the polynomial ring and the ring of rational functions with coefficients in the field $F$ respectively.
 
-For any commutative ring $R$, let $\Sigma R^2$ denote the \defstyle{sums of squares} of $R$, i.e
+For any subset $S$ of a commutative ring $R$, let $\Sigma S^2$ denote the \defstyle{sums of squares} of $S$, i.e
 \[
-    \Sigma R^2
+    \Sigma S^2
     \coloneq
     \left\{
-        \sum_{i=1}^k r_i^2: r_1,\ldots,r_k \in R
+        \sum_{i=1}^k r_i^2: r_1,\ldots,r_k \in S
     \right\}.
 \]
 Similarly, let $R^2$ denote the \defstyle{squares} of $R$.
 
-Let $\Mat_d(R)$ denote the set of $d \times d$ matrices in the ring $R$. And, let $\Sym_d(R)$ denote the subset of $\Mat_d(R)$ consisting of symmetric matrices.
+Let $R^{d \times d}$ denote the set of $d \times d$ matrices in the ring $R$. And, let $\Sym_d(R)$ denote the subset of $R^{d \times d}$ consisting of symmetric matrices.
 
 If $A$ is a matrix and $J \subseteq \{1,\ldots,n\}$, let $A[J]$ denote the principal submatrix with indices picked out by $J$.
 
 \section{Introduction}
 
-We seek to give a proof for the main result in \cite{HN06}.
+We seek to exposit the proof given in \cite{HN06} of the following result:
 
 \begin{theorem}[Procesi-Schacher, Gondard-Ribenboim]
     \label{thm:1} 
-    Let $A \in \Sym_d(\RR[\bfx])$.
+    Let $A \in \RR^{d \times d}[\bfx]$ be symmetric.
     Let $A(\bfx_0)$ denote $A$ with all entries evaluated at $\bfx_0 \in \RR^d$.
-    If $A(\bfx_0) \in \Sym_d(\RR)$ is positive semidefinite for all choices of $\bfx_0 \in \RR^m$, then $A \in \Sigma \big[\Sym_d(\RR(\bfx))\big]^2$
+    If $A(\bfx_0)$ is positive semidefinite for all choices of $\bfx_0 \in \RR^m$, then $A$ is a sum of squares of 
 \end{theorem}
 
 This generalizes Artin's celebrated, classical result on nonnegative polynomials with real coefficients. 
@@ -85,7 +84,7 @@ Then $A \in \Sigma \big[\Sym_d(F)\big]^2$.
     Let $A \in \Sym_d(\RR[\bfx])$.
 
     We will first show that all principal minors of $A$ are in fact non-negative polynomials.
-    We note that for all matrices $H \in \Mat_d(\RR[\bfx])$, $(\det H)(\bfx_0)=\det\big(H(\bfx_0)\big)$ and $H[J](\bfx_0) = H(\bfx_0)[J]$ for all $J \subseteq [n]$.
+    We note that for all matrices $H \in \RR[\bfx]^{d \times d}$, $(\det H)(\bfx_0)=\det\big(H(\bfx_0)\big)$ and $H[J](\bfx_0) = H(\bfx_0)[J]$ for all $J \subseteq [n]$.
     In other words, \textit{taking determinants and taking submatrices commutes with evaluation}.
     So, if $J \subseteq [n]$,
     \[
@@ -108,7 +107,20 @@ First, a small digression about ordering.
 The data involving the order in an ordered field can be encoded as a set that names all the positive elements.
 
 \begin{definition}
-    An \defstyle{ordering} of a field $F$ is a set of elements $P \subseteq F$ such that $P+P\subseteq P$, $P \cdot P \subseteq P$, $F^2 \subseteq P$, $-1\notin P$, and $P \cup -P = F$.
+    Let $P$ be a subset of $F$.
+    We say that $P$ is a \defstyle{ordering} of $F$ if
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+            $P + P \subseteq P$,
+        \item 
+            $P \cdot P \subseteq P$,
+        \item 
+            $F^2 \subseteq P$,
+        \item
+            $-1 \notin P$, and
+        \item 
+            $P \cup -P = F$.
+    \end{enumerate}
 \end{definition}
 
 If one has an ordered field $F$, then one has an ordering $P$ by considering all the elements $p \in F$ such that $p \geq 0$.
@@ -119,7 +131,7 @@ Now, we discuss real closed fields.
 \begin{definition}
 The \defstyle{first order language of ordered fields} $\OrdField$ consists of well-formed sentences involving the usual logical symbols and connectives, as well as the non-logical symbols $+$, $\cdot$, $0$, $1$, $\ ^{-1}$, $\leq$.
 
-    A \defstyle{real closed field} is an ordered field for which a sentence $\psi$ in $\OrdField$ is true if and only if it is true in $\RR$.
+    A \defstyle{real closed field} is an ordered field for which a sentence $\psi$ in $\OrdField$ is true if and only if it is true over $\RR$.
 \end{definition}
 
 This is not the usual definition of a real closed field.
@@ -391,15 +403,15 @@ We are now ready to prove the main theorem.
     Tim Netzer, 
     \textit{Real Algebra and Geometry}, 
     Universit\"at Innsbruck, 
-
     \url{https://www.uibk.ac.at/mathematik/algebra/media/teaching/ragen.pdf}.
 
     \bibitem[S]{SchweighoferRAG}
     Markus Schweighofer, 
     \textit{Real Algebraic Geometry, Positivity and Convexity}, 
     Universit\"at Konstanz, 
+    \url{https://cloud.uni-konstanz.de/index.php/s/3bcgdnT2eXR9EKF}.
 
-    \url{https://www.uibk.ac.at/mathematik/algebra/media/teaching/ragen.pdf}.
+    Also available as \arxiv{2205.04211}.
 
     \bibitem[HN06]{HN06}
     Christopher Hillar and Jiewang Nie,
