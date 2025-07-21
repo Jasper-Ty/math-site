@@ -2431,6 +2431,7 @@ Now we define the tableau that results from row insertion, $(P \leftarrow t)$.
 We state a property of insertion paths that will allow us to prove that row insertion gives us SSYT.
 
 \begin{theorem}
+    [Bumping lemma]
     Let $P$ be a SSYT of shape $\lambda$, let $t \in \PP$, and let $I(P\leftarrow t) = [j_1,j_2,\ldots,j_M]$. Then $I(P\leftarrow t)$ is weakly decreasing.
 \end{theorem}
 
@@ -2445,6 +2446,7 @@ We state a property of insertion paths that will allow us to prove that row inse
     By the definition of row insertion, the rows are weakly increasing. Consider inserting a bumped number. By the previous theorem, it can only be moved down or down left, which means that it will always be inserted below a smaller number. This continues for the whole insertion path.
 \end{proof}
 
+\iffalse
 \subsection{Biwords}
 
 \begin{definition}
@@ -2690,7 +2692,7 @@ where $\widetilde{j_i}$ is $j_i$ standardized.
     Standardization commutes with RSK.
     Meaning, if you keep track of the map of entries going from $w_A$ to $\widetilde{w}_A$, then reversing this map on $\widetilde{P},\widetilde{Q}$ gives you $P,Q$ respectively.
 \end{lemma}
-
+\fi
 \subsection{Symmetry}
 
 \begin{theorem}\label{thm:rsksymmetry}
