@@ -2656,30 +2656,18 @@ With this, we can prove Cartan's criterion.
 We recall the well-known \defstyle{Schur's lemma} from representation theory:
 
 \begin{theorem}[Schur's lemma]
-    Let $\phi: \frkg \to \gl(V)$ be irreducible.
-    Then the only endormorphisms of $V$ commuting with all $\phi(g)$ for all $g \in \frkg$ are the scalars.
+    Let $V$ be an \textit{irreducible} $\frkg$-module.
+    The only $\frkg$-module homomorphisms in $\End V$ are scalar multiples of the identity.
 \end{theorem}
 \begin{proof}
-    Let $x$ be an endomorphism of $g$ commutting with the action of $\frkg$.
-    Let $a$ be an eigenvalue of $x$.
-    Then $x - a_i$ is 
-    $V$ breaks down as a direct sum of generalized eigenspaces
-    \[
-        V
-        =
-        \bigoplus_{i=1}^k
-        \ker (x - a_iI)^{m_i}.
-    \]
-    which $x$ leaves invariant.
-    Since $x$ commutes with the action of $\frkg$, these are all $\frkg$-submodules of $V$.
-    But $V$ is irreducible, so there must be only \textit{one} such subspace:
-    \[
-        V
-        =
-        \ker (x - aI)
-    \]
-    for some $a \in \FF$.
-    We conclude that $x = aI$.
+    Let $x \in \End V$ be a $\frkg$-module homomorphism.
+    Since we are working over an algebraically closed field, we have at least one eigenvalue $\lambda$.
+    
+    Consider $x - \lambda I \in \gl(V)$.
+    Since this is the sum of two $\frkg$-module homomorphisms, it is still a $\frkg$-module homomorphism.
+    We have that $\ker (x - \lambda I) \neq 0$, as $(x - \lambda I) \acts v = 0$.
+    Then $\ker (x - \lambda I) = V$, as a nonzero $\frkg$-submodule of the irreducible $\frkg$-module $V$.
+    But this tells us that $x = \lambda I$, as desired.
 \end{proof}
 
 
