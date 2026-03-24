@@ -16,6 +16,8 @@
 \newcommand*\tge{\ensuremath{\mathrel{\rhd}}}
 \newcommand*\tgeq{\ensuremath{\mathrel{\unrhd}}}
 
+\newcommand*\defeq{\ \overset{\mathrm{def}}{=}\ }
+
 % Wildcard
 \newcommand{\innerproduct}[2]{\ensuremath{\left\langle #1 , #2 \right\rangle}}
 \newcommand\ip[1]{\left\langle{#1}\right\rangle}
@@ -2163,6 +2165,9 @@ We say that an endomorphism $x \in \End V$ where $V$ is a vector space over an a
     \end{enumerate}
 \end{theorem}
 
+\begin{proof}
+\end{proof}
+
 \iffalse
 \begin{proof}
     We will explicitly construct $x_s$ as a certain polynomial in $x$.
@@ -2838,6 +2843,93 @@ Note that the Killing form $\kappa$ of a Lie algebra $\frkg$ is $\ip{\wc,\wc}_{\
 }
 
 We describe all irreducible representations of $\frkg = \sl_2(\FF)$.
+First, we fix the standard basis of $\sl_2$:
+\[
+    e 
+    \defeq
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0 
+    \end{pmatrix}, \quad
+    f 
+    \defeq
+    \begin{pmatrix}
+        0 & 0 \\
+        1 & 0 
+    \end{pmatrix}, \quad
+    h 
+    \defeq
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & -1 
+    \end{pmatrix}.
+\]
+The bracket of $\sl_2$ is then determined by the relations
+\[
+    \lb{ef} = h, \quad
+    \lb{he} = 2e, \quad
+    \lb{hf} = -2f.
+\]
+Let $V$ be \textit{any} $\sl_2$-module.
+Then the action of $h$ on $V$ is diagonal--- there exists a basis of $V$ for which the matrix representing the action of $h$ is a diagonal matrix.
+
+This follows from the semisimplicity of $h$.
+
+\begin{definition}
+    For any $V$ be an $\sl_2$-module and $\lambda \in \FF$, we define the subspace $V_\lambda$ of $V$ by $V_\lambda = \{x \in V: h.x = \lambda x\}$.
+
+    We call $V_\lambda$ a \defstyle{weight space}, corresponding to the \defstyle{weight} $\lambda$, if it is nonzero.
+\end{definition}
+
+Since, as noted, $h$ acts diagonally on $V$, it breaks up as a direct sum of weight spaces, that is, 
+\[
+    V
+    =
+    \bigoplus_\lambda
+    V_\lambda
+\]
+where $\lambda$ runs over the weights $\lambda$ of $V$.
+
+\begin{lemma}
+    Let $V$ be an $\sl_2$-module and let $\lambda \in \FF$.
+    If $x \in V_\lambda$, then $e.x \in V_{\lambda+2}$ and $f.x \in V_{\lambda-2}$.
+\end{lemma}
+\begin{proof}
+    \begin{align*}
+        h.e.x
+        &=
+        h.e.x - e.h.x + e.h.x
+        \\
+        &=
+        \lb{he}.x + e.h.x
+        \\
+        &=
+        (2e).x + e.(\lambda x)
+        \\
+        &=
+        (\lambda+2)(e.x).
+    \end{align*}
+    Similarly for $f$.
+\end{proof}
+
+Since $V$ is finite dimensional, there are only \emph{finitely} many such weight spaces.
+There exists, then, a weight space $V_\lambda \neq 0$ for which $V_{\lambda+2} = 0$.
+If $x \in V_\lambda$, it must be that $e.x = 0$.
+We call $x$ a \defstyle{maximal vector}.
+
+\begin{lemma}
+    Let $V$ be an irreducible $\sl_2$-module, and let $x \in V_\lambda$ be a maximal vector.
+    \begin{enumerate}
+        [label=(\roman*)]
+        \item
+        \item 
+        \item 
+    \end{enumerate}
+\end{lemma}
+
+\begin{theorem}
+\end{theorem}
+
 
 \section{The root space decomposition}
 

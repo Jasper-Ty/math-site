@@ -48,6 +48,9 @@
 \newcommand{\lrBrack}[1]{[\kern-1.2pt[ {#1} ]\kern-1.2pt]}
 \newcommand{\fps}[2]{#1 \lrBrack{#2}}
 
+% Def
+\newcommand*\defeq{\ \overset{\mathrm{def}}{=}\ }
+
 % Polynomial Ring
 \newcommand{\pring}[2]{#1 [ {#2} ]}
 % Big Comma (yes, a big comma)
@@ -1040,7 +1043,7 @@ We establish a key fact about the numbers $M_{\lambda\mu}$.
 
 \subsection{Complete homogeneous symmetric functions}
 
-The \textit{complete homogeneous symmetric functions}, or the \defstyle{completes}, or the $h$'s, have a very similar definition as the elementaries, but with distinctness relaxed.
+The \defstyle{complete homogeneous symmetric functions}, or the \defstyle{completes}, have a very similar definition as the elementaries, but with distinctness relaxed.
 
 \begin{definition}
     Let $n\in\NN$. The \defstyle{complete homogeneous symmetric function} $h_n$ is defined to be
@@ -1056,7 +1059,7 @@ The \textit{complete homogeneous symmetric functions}, or the \defstyle{complete
 As with the elementaries and $M_{\lambda\mu}$, we define a set of monomial coefficients for the completes.
 
 \begin{definition}
-    Let $\lambda \in \Par$ and $\alpha \in \Com$. Define $N_{\lambda\alpha}$ be the coefficient of $x^\alpha$ in $h_\lambda$.
+    For all $\lambda \in \Par$ and $\alpha \in \Com$, we define $N_{\lambda\alpha}$ to be the coefficient of $x^\alpha$ in $h_\lambda$.
 \end{definition}
 
 These numbers satisfy analogous theorems.
@@ -1224,7 +1227,59 @@ Finally, we can give a proof of \ref{thm:hAreBasis}
 
 \begin{proof}
     [Proof of Theorem \ref{thm:hAreBasis}]
-
+    Since $h_0 = e_0$, the statement clearly holds for $n=0$.
+    Now, let $n > 0$, and suppose that $\omega(h_k) = e_k$ for all $k < n$.
+    Then
+    \begin{align*}
+        \omega(h_n)
+        &=
+        \omega(h_n)
+        + \left(
+            \sum_{k=0}^n 
+            (-1)^k h_ke_{n-k}
+        \right)
+        \\
+        &=
+        \omega(h_n)
+        + \left(
+            h_0 e_n
+            + \sum_{k=1}^n 
+            (-1)^k h_ke_{n-k}
+        \right)
+        \\
+        &=
+        e_n
+        + \left(
+            h_0 \omega(h_n)
+            + \sum_{k=1}^n 
+            (-1)^k h_k\omega(h_{n-k})
+        \right)
+        \\
+        &=
+        e_n
+        + \left(
+            \sum_{k=0}^n 
+            (-1)^k h_k\omega(h_{n-k})
+        \right)
+        \\
+        &=
+        e_n
+        + \left(
+            \sum_{k=0}^n 
+            (-1)^k \omega(e_k)\omega(h_{n-k})
+        \right)
+        \\
+        &=
+        e_n
+        + \omega \left(
+            \sum_{k=0}^n 
+            (-1)^k e_k h_{n-k}
+        \right)
+        \\
+        &=
+        e_n,
+    \end{align*}
+    so $\omega(h_n) = e_n$.
 \end{proof}
 
 \subsubsection{Distinguished generating functions}
@@ -1432,28 +1487,6 @@ Cauchy identities will be used to define the \defstyle{Hall inner product}, name
 \end{theorem}
 
 \begin{proof}
-    We'll make use of \href{https://en.wikipedia.org/wiki/Einstein_notation}{Einstein summation} to make calculations quick.
-
-    Define the numbers $U_{\cdot,\cdot}$ and $V_{\cdot,\cdot}$ by
-    \[
-        m_\lambda = U_{\lambda\rho} u_\rho, \qquad h_\mu = V_{\mu\nu} v_\nu.
-    \]
-    Now, we will suppress the variables, so we will always take $u_\lambda$ to be $u_\lambda(\bfx)$, and similarly we will always take $v_\lambda$ to mean $v_\lambda(\bfy)$.
-    Similarly, we will take $m_\lambda$ to be in $\bfx$ and $h_\lambda$ to be in $\bfy$.
-
-    The right hand side of the Cauchy identity for the completes (Theorem \ref{CauchyIdentityForMH}) becomes
-    \begin{align*}
-        m_\lambda h_\lambda &= \Big(U_{\lambda\rho}u_\rho\Big)\Big(V_{\lambda\nu}v_\nu\Big) \\
-                                                                                &= U_{\lambda\rho}V_{\lambda\nu} \Big(u_\rho v_\nu\Big)
-    \end{align*}
-
-    Since we're assuming the Cauchy identity for the bases $\{u_\lambda\}_{\lambda\in\Par}$ and $\{v_\lambda\}_{\lambda\in\Par}$ also, we have shown that
-    \[
-        U_{\lambda\rho}V_{\lambda\nu} \Big(u_\rho v_\nu\Big) = u_\mu v_\mu
-    \]
-    hence, it must be that
-    \[
-    \]
 \end{proof}
 
 \iffalse
@@ -1620,7 +1653,7 @@ The next proof is more involved.
         \exp \sum_{n \geq 1} 
         \frac{1}{n} p_n(\bfx) p_n(\bfy).
     \]
-    Then, we apply the \textit{permutation version of the exponential formula}, which tells us that, for any function $f: \PP \to \KK$ where $\KK$ is some commutative ring,
+    Then, we apply the \defstyle{permutation version of the exponential formula}, which tells us that, for any function $f: \PP \to \KK$ where $\KK$ is some commutative ring,
     \[
         \exp
         \left(
@@ -1818,7 +1851,7 @@ And, they embody beautiful combinatorics--- that of semistandard Young tableaux.
     The \defstyle{Schur function} $s_\lambda$ is defined to be
     \[
         s_\lambda(\bfx)
-        \coloneq
+        \defeq
         \sum_{T\in\SSYT_{\shape \lambda}} \bfx^{\content T}.
     \]
     Where $\SSYT$ is the set of all semistandard Young tableaux.
@@ -1840,7 +1873,7 @@ We use the following shorthand for doing computations involving SSYT:
     Let $T$ be a tableau. Then define $x^T$ to be the monomial
     \[
         \bfx^T
-        \coloneq 
+        \defeq
         \bfx^{\content T}.
     \]
 \end{definition}
